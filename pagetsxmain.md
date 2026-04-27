@@ -1,5 +1,3 @@
-//version 1
-
 // "use client";
 
 // import { useEffect, useRef, useState } from "react";
@@ -2961,6 +2959,13 @@ const SERVICES = [
   },
 ];
 
+const STATS = [
+  { value: "150+", label: "Products shipped" },
+  { value: "98%", label: "Client retention" },
+  { value: "12+", label: "Years building" },
+  { value: "40+", label: "Engineers" },
+];
+
 const PROCESS = [
   {
     num: "01",
@@ -3047,13 +3052,8 @@ export default function HomePage() {
   // Capabilities section — stacked cards
   const capabilitiesRef = useRef<HTMLElement>(null);
   const [activeCapability, setActiveCapability] = useState(0);
-  const [showCapabilityInterlude, setShowCapabilityInterlude] = useState(false);
   const capScrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const capProgrammaticScrollRef = useRef(false);
-  const marqueeLeftRef = useRef<HTMLDivElement>(null);
-  const marqueeRightRef = useRef<HTMLDivElement>(null);
-  const marqueeLeftTweenRef = useRef<gsap.core.Tween | null>(null);
-  const marqueeRightTweenRef = useRef<gsap.core.Tween | null>(null);
 
   // Responsive: mobile vs desktop for the capabilities section.
   // The desktop experience (pinned slats, GSAP scrub) and the mobile
@@ -3174,12 +3174,12 @@ export default function HomePage() {
     const onEnter = () => {
       ring.style.width = "48px";
       ring.style.height = "48px";
-      ring.style.borderColor = "rgba(255,255,255,0.95)";
+      ring.style.borderColor = "rgba(0,0,0,0.6)";
     };
     const onLeave = () => {
       ring.style.width = "32px";
       ring.style.height = "32px";
-      ring.style.borderColor = "rgba(255,255,255,0.95)";
+      ring.style.borderColor = "rgba(0,0,0,0.2)";
     };
     const interactive = document.querySelectorAll("a, button, [data-cursor]");
     interactive.forEach((el) => {
@@ -3303,6 +3303,19 @@ export default function HomePage() {
         { opacity: 0, x: -10 },
         { opacity: 1, x: 0, duration: 0.4, stagger: 0.12, ease: "power2.out" },
         0.65
+      );
+
+      heroTl.fromTo(
+        ".hero-stats-divider",
+        { scaleX: 0, transformOrigin: "left center" },
+        { scaleX: 1, duration: 1, ease: "power3.inOut" },
+        1.0
+      );
+      heroTl.fromTo(
+        ".hero-stat-col",
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.7, stagger: 0.08, ease: "power2.out" },
+        1.1
       );
 
       heroTl.fromTo(
@@ -3456,12 +3469,6 @@ export default function HomePage() {
           },
           onUpdate: (self) => {
             const rawPos = self.progress * (slatCount - 1);
-            const distToNearestCapability = Math.abs(rawPos - Math.round(rawPos));
-            const interludeVisible =
-              distToNearestCapability > 0.42 && distToNearestCapability < 0.58;
-            setShowCapabilityInterlude((prev) =>
-              prev === interludeVisible ? prev : interludeVisible
-            );
 
             slatEls.forEach((el, i) => {
               const dist = Math.abs(i - rawPos);
@@ -3573,53 +3580,6 @@ export default function HomePage() {
     return () => ctx.revert();
   }, []);
 
-  // Tech marquee: GSAP-driven loop so hover speed changes stay smooth.
-  useEffect(() => {
-    const left = marqueeLeftRef.current;
-    const right = marqueeRightRef.current;
-    if (!left || !right) return;
-
-    gsap.set(left, { xPercent: 0 });
-    gsap.set(right, { xPercent: -50 });
-
-    const leftTween = gsap.to(left, {
-      xPercent: -50,
-      duration: 55,
-      ease: "none",
-      repeat: -1,
-    });
-    const rightTween = gsap.to(right, {
-      xPercent: 0,
-      duration: 60,
-      ease: "none",
-      repeat: -1,
-    });
-
-    marqueeLeftTweenRef.current = leftTween;
-    marqueeRightTweenRef.current = rightTween;
-
-    return () => {
-      marqueeLeftTweenRef.current = null;
-      marqueeRightTweenRef.current = null;
-      leftTween.kill();
-      rightTween.kill();
-    };
-  }, []);
-
-  const handleTechMarqueeEnter = () => {
-    const leftTween = marqueeLeftTweenRef.current;
-    const rightTween = marqueeRightTweenRef.current;
-    if (leftTween) gsap.to(leftTween, { timeScale: 0.35, duration: 0.45, ease: "power2.out" });
-    if (rightTween) gsap.to(rightTween, { timeScale: 0.35, duration: 0.45, ease: "power2.out" });
-  };
-
-  const handleTechMarqueeLeave = () => {
-    const leftTween = marqueeLeftTweenRef.current;
-    const rightTween = marqueeRightTweenRef.current;
-    if (leftTween) gsap.to(leftTween, { timeScale: 1, duration: 0.45, ease: "power2.out" });
-    if (rightTween) gsap.to(rightTween, { timeScale: 1, duration: 0.45, ease: "power2.out" });
-  };
-
   // Refresh ScrollTrigger once fonts have loaded
   useEffect(() => {
     if (typeof document === "undefined" || !(document as any).fonts?.ready) return;
@@ -3635,18 +3595,17 @@ export default function HomePage() {
         ref={cursorDot}
         style={{
           position: "fixed", top: 0, left: 0, width: 6, height: 6,
-          background: "#fff", borderRadius: "50%", pointerEvents: "none",
-          zIndex: 9999, willChange: "transform", mixBlendMode: "difference",
+          background: "#000", borderRadius: "50%", pointerEvents: "none",
+          zIndex: 9999, willChange: "transform",
         }}
       />
       <div
         ref={cursorRing}
         style={{
           position: "fixed", top: 0, left: 0, width: 32, height: 32,
-          border: "1px solid rgba(255,255,255,0.95)", borderRadius: "50%",
+          border: "1px solid rgba(0,0,0,0.2)", borderRadius: "50%",
           pointerEvents: "none", zIndex: 9998, willChange: "transform",
           transition: "width 0.3s ease, height 0.3s ease, border-color 0.3s ease",
-          mixBlendMode: "difference",
         }}
       />
 
@@ -3719,23 +3678,13 @@ export default function HomePage() {
               ref={heroGlyphRef}
               className="hero-glyph"
               style={{
-                width: "clamp(360px, 46vw, 700px)",
-                userSelect: "none",
+                fontFamily: "var(--font-display)", fontWeight: 500,
+                fontSize: "clamp(400px, 50vw, 720px)", color: "rgba(0,0,0,0.035)",
+                lineHeight: 0.8, letterSpacing: "-0.06em", userSelect: "none",
                 willChange: "transform",
               }}
             >
-              <img
-                src="/images/hero-section.png"
-                alt=""
-                aria-hidden
-                draggable={false}
-                style={{
-                  display: "block",
-                  width: "100%",
-                  height: "auto",
-                  opacity: 0.1,
-                }}
-              />
+              tb
             </div>
           </div>
 
@@ -3902,6 +3851,20 @@ export default function HomePage() {
                     <span style={{ position: "relative", zIndex: 2 }}>Start a project</span>
                     <span aria-hidden style={{ position: "relative", zIndex: 2, display: "inline-block" }}>→</span>
                   </a>
+                  <a
+                    href="#process"
+                    className="magnetic ghost-btn"
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 10,
+                      padding: "15px 28px", border: "1px solid rgba(0,0,0,0.18)",
+                      color: "rgba(0,0,0,0.8)", textDecoration: "none",
+                      fontSize: 14, fontWeight: 500, borderRadius: 999,
+                      transition: "background 0.2s, border-color 0.2s",
+                      background: "rgba(255,255,255,0.5)", willChange: "transform",
+                    }}
+                  >
+                    Explore our process
+                  </a>
                 </div>
               </div>
 
@@ -4048,6 +4011,46 @@ export default function HomePage() {
               </div>
             </div>
 
+            {/* Stats row */}
+            <div style={{ position: "relative", paddingTop: 28 }}>
+              <div
+                className="hero-stats-divider"
+                aria-hidden
+                style={{
+                  position: "absolute", top: 0, left: 0, right: 0, height: 1,
+                  background: "rgba(0,0,0,0.12)", transformOrigin: "left center",
+                }}
+              />
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0 }} className="hero-stats-grid">
+                {STATS.map((s, i) => (
+                  <div
+                    key={i}
+                    className="hero-stat-col"
+                    style={{
+                      padding: "4px 0", opacity: 0,
+                      borderRight: i < STATS.length - 1 ? "1px solid rgba(0,0,0,0.08)" : "none",
+                      paddingLeft: i === 0 ? 0 : 32,
+                    }}
+                  >
+                    <div
+                      className="stat-num"
+                      data-val={s.value}
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: "clamp(28px, 3.2vw, 44px)", fontWeight: 500,
+                        lineHeight: 1, letterSpacing: "-0.03em",
+                        fontVariantNumeric: "tabular-nums",
+                      }}
+                    >
+                      {s.value}
+                    </div>
+                    <div style={{ fontSize: 12, color: "rgba(0,0,0,0.5)", marginTop: 10, fontWeight: 500 }}>
+                      {s.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Scroll hint */}
@@ -4163,8 +4166,6 @@ export default function HomePage() {
                       display: "flex", alignItems: "center", gap: 14,
                       fontSize: 11, letterSpacing: "0.14em", color: "rgba(0,0,0,0.4)",
                       fontWeight: 600, textTransform: "uppercase",
-                      transform: activeCapability >= 1 ? "translateX(0)" : "translateX(172px)",
-                      transition: "transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)",
                     }}
                   >
                     <span>Scroll to explore</span>
@@ -4242,37 +4243,8 @@ export default function HomePage() {
                   display: "flex", gap: 12,
                   alignItems: "stretch",
                   minHeight: 0,
-                  position: "relative",
                 }}
               >
-                <div
-                  aria-hidden
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    zIndex: 6,
-                    pointerEvents: "none",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    opacity: showCapabilityInterlude ? 1 : 0,
-                    transition: "opacity 220ms ease",
-                  }}
-                >
-                  <img
-                    src="/images/product-land.png"
-                    alt=""
-                    draggable={false}
-                    style={{
-                      width: "min(66vw, 900px)",
-                      maxWidth: "100%",
-                      height: "auto",
-                      opacity: 0.36,
-                      filter: "brightness(1.12) contrast(1.12)",
-                      userSelect: "none",
-                    }}
-                  />
-                </div>
                 {SERVICES.map((s, i) => {
                   const isActive = activeCapability === i;
                   return (
@@ -5024,12 +4996,7 @@ export default function HomePage() {
         </section>
 
         {/* ── TECH MARQUEE ── */}
-        <section
-          className="tech-marquee"
-          onMouseEnter={handleTechMarqueeEnter}
-          onMouseLeave={handleTechMarqueeLeave}
-          style={{ padding: "90px 0", borderTop: "1px solid rgba(0,0,0,0.06)", overflow: "hidden" }}
-        >
+        <section style={{ padding: "90px 0", borderTop: "1px solid rgba(0,0,0,0.06)", overflow: "hidden" }}>
           <div style={{ maxWidth: 1320, margin: "0 auto 56px", padding: "0 20px", display: "flex", justifyContent: "space-between", alignItems: "end", gap: 40, flexWrap: "wrap" }}>
             <div>
               <h2
@@ -5049,7 +5016,7 @@ export default function HomePage() {
 
           <div style={{ position: "relative" }}>
             <div style={{ overflow: "hidden" }}>
-              <div ref={marqueeLeftRef} className="marquee-track marquee-left" style={{ display: "flex", width: "max-content", gap: 0 }}>
+              <div className="marquee-track marquee-left" style={{ display: "flex", width: "max-content", gap: 0 }}>
                 {[...TECH, ...TECH].map((t, i) => (
                   <div
                     key={i}
@@ -5061,7 +5028,7 @@ export default function HomePage() {
                     <span
                       style={{
                         fontFamily: "var(--font-display)",
-                        fontSize: "clamp(20px, 2.4vw, 34px)",
+                        fontSize: "clamp(28px, 3.4vw, 48px)",
                         fontWeight: 500, color: "#0a0a0a",
                         letterSpacing: "-0.025em",
                       }}
@@ -5080,7 +5047,7 @@ export default function HomePage() {
               </div>
             </div>
             <div style={{ overflow: "hidden", marginTop: 20 }}>
-              <div ref={marqueeRightRef} className="marquee-track marquee-right" style={{ display: "flex", width: "max-content", gap: 0 }}>
+              <div className="marquee-track marquee-right" style={{ display: "flex", width: "max-content", gap: 0 }}>
                 {[...TECH.slice().reverse(), ...TECH.slice().reverse()].map((t, i) => (
                   <div
                     key={i}
@@ -5092,7 +5059,7 @@ export default function HomePage() {
                     <span
                       style={{
                         fontFamily: "var(--font-display)",
-                        fontSize: "clamp(20px, 2.4vw, 34px)",
+                        fontSize: "clamp(28px, 3.4vw, 48px)",
                         fontWeight: 400, fontStyle: "italic",
                         color: "transparent",
                         WebkitTextStroke: "1px rgba(0,0,0,0.2)",
@@ -5149,22 +5116,13 @@ export default function HomePage() {
               aria-hidden
               style={{
                 position: "absolute", right: 40, bottom: -40,
-                width: "clamp(260px, 28vw, 440px)",
-                opacity: 0.28,
-                userSelect: "none",
+                fontFamily: "var(--font-display)", fontWeight: 500,
+                fontSize: 420, color: "rgba(255,255,255,0.025)",
+                lineHeight: 0.8, letterSpacing: "-0.06em", userSelect: "none",
                 pointerEvents: "none",
               }}
             >
-              <img
-                src="/images/product-land.png"
-                alt=""
-                draggable={false}
-                style={{
-                  display: "block",
-                  width: "100%",
-                  height: "auto",
-                }}
-              />
+              tb
             </div>
 
             <div style={{ position: "relative", zIndex: 1, maxWidth: 820 }}>
@@ -5226,7 +5184,7 @@ export default function HomePage() {
                 {[
                   { k: "Response time", v: "Within 24h" },
                   { k: "Typical project", v: "8–16 weeks" },
-                  { k: "Based in", v: "Houston, US" },
+                  { k: "Based in", v: "Karachi, PK" },
                 ].map((it) => (
                   <div key={it.k}>
                     <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8 }}>
@@ -5247,6 +5205,22 @@ export default function HomePage() {
           <div style={{ maxWidth: 1320, margin: "0 auto" }}>
             <div
               style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(80px, 15vw, 240px)", fontWeight: 500,
+                letterSpacing: "-0.05em", lineHeight: 0.85,
+                marginBottom: 60, color: "#0a0a0a",
+                display: "flex", alignItems: "baseline", justifyContent: "space-between",
+                flexWrap: "wrap", gap: 20,
+              }}
+            >
+              <span>techbinaries</span>
+              <span style={{ fontSize: "0.15em", fontWeight: 500, color: "rgba(0,0,0,0.35)", letterSpacing: "0.02em" }}>
+                ↗ hello@techbinaries.com
+              </span>
+            </div>
+
+            <div
+              style={{
                 display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr",
                 gap: 60, paddingTop: 40,
                 borderTop: "1px solid rgba(0,0,0,0.08)",
@@ -5254,38 +5228,9 @@ export default function HomePage() {
               className="footer-grid"
             >
               <div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8, marginBottom: 18 }}>
-                  <div
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: "clamp(28px, 3.4vw, 48px)",
-                      fontWeight: 500,
-                      letterSpacing: "-0.055em",
-                      lineHeight: 0.9,
-                      color: "#0a0a0a",
-                    }}
-                  >
-                    techbinaries
-                  </div>
-                  <a
-                    href="mailto:hello@techbinaries.com"
-                    className="footer-link"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 7,
-                      fontSize: 13,
-                      fontWeight: 500,
-                      color: "rgba(0,0,0,0.5)",
-                      textDecoration: "none",
-                      letterSpacing: "-0.01em",
-                      transition: "color 0.2s",
-                    }}
-                  >
-                    <span aria-hidden>↗</span>
-                    hello@techbinaries.com
-                  </a>
-                </div>
+                <p style={{ fontSize: 14, color: "rgba(0,0,0,0.6)", lineHeight: 1.65, margin: "0 0 16px", maxWidth: 340 }}>
+                  A software engineering studio building durable products for ambitious teams. Karachi · Remote · Global.
+                </p>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#16a34a", boxShadow: "0 0 0 3px rgba(22,163,74,0.15)" }} />
                   <span style={{ fontSize: 12, color: "rgba(0,0,0,0.55)" }}>Accepting Q2 engagements</span>
@@ -5346,7 +5291,16 @@ export default function HomePage() {
         ::selection { background: #0a0a0a; color: #fafaf9; }
 
         /* Marquee */
-        .marquee-left, .marquee-right { will-change: transform; }
+        @keyframes marquee-left {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        @keyframes marquee-right {
+          from { transform: translateX(-50%); }
+          to   { transform: translateX(0); }
+        }
+        .marquee-left  { animation: marquee-left 55s linear infinite; will-change: transform; }
+        .marquee-right { animation: marquee-right 60s linear infinite; will-change: transform; }
 
         @keyframes pulse-ring {
           0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.45); }
