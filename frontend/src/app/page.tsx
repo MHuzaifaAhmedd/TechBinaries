@@ -205,13 +205,13 @@ export default function HomePage() {
         : 0;
 
   // Smoothly scroll past the entire pinned capabilities section and land on
-  // the Process section. Used by the "Skip" affordance — lets users who don't
+  // the market-signals section. Used by the "Skip" affordance — lets users who don't
   // want to scroll through all 6 capabilities jump ahead without losing the
   // smooth-scroll feel of the rest of the site.
-  const skipToProcess = () => {
+  const skipToSignals = () => {
     if (typeof window === "undefined") return;
-    const processEl = document.getElementById("process");
-    if (!processEl) return;
+    const signalsEl = document.getElementById("studio");
+    if (!signalsEl) return;
 
     // Disable the cap-section's snap-to-capability behavior during this
     // programmatic scroll so it doesn't fight our destination.
@@ -220,9 +220,9 @@ export default function HomePage() {
       capProgrammaticScrollRef.current = false;
     };
 
-    // Land exactly at the process section's top edge.
+    // Land exactly at the signals section's top edge.
     const targetY =
-      processEl.getBoundingClientRect().top + window.scrollY;
+      signalsEl.getBoundingClientRect().top + window.scrollY;
 
     // Distance-aware duration — long skips get a slightly longer ride so the
     // motion reads as intentional, not teleportation. Capped at 1.4s.
@@ -1289,7 +1289,7 @@ export default function HomePage() {
           {!isMobile && (
             // ─────────────────────────────────────────────────────────
             // DESKTOP — pinned viewport with horizontal accordion slats.
-            // Unchanged layout. Only addition: "Skip to process" button
+            // Unchanged layout. Only addition: "Skip to signals" button
             // in the header right cluster.
             // ─────────────────────────────────────────────────────────
             <div
@@ -1376,9 +1376,9 @@ export default function HomePage() {
                       so the layout doesn't shift; pure CSS transition. */}
                   <button
                     type="button"
-                    onClick={skipToProcess}
+                    onClick={skipToSignals}
                     className="cap-skip-btn"
-                    aria-label="Skip to process section"
+                    aria-label="Skip to market signals section"
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
@@ -1408,7 +1408,7 @@ export default function HomePage() {
                       Skip
                     </span>
                     <span style={{ width: 1, height: 12, background: "rgba(0,0,0,0.12)" }} />
-                    <span>Jump to our process</span>
+                    <span>Jump to signals</span>
                     <svg
                       aria-hidden
                       width="12" height="12" viewBox="0 0 12 12"
@@ -1778,18 +1778,18 @@ export default function HomePage() {
                 </h2>
                 <p className="cap-mobile__lead">
                   Tap any capability to see what it includes. Or jump straight
-                  ahead to how we work.
+                  ahead to signals.
                 </p>
                 <button
                   type="button"
-                  onClick={skipToProcess}
+                  onClick={skipToSignals}
                   className="cap-mobile__skip"
                 >
                   <span style={{ opacity: 0.55, letterSpacing: "0.12em", textTransform: "uppercase", fontSize: 10, fontWeight: 600 }}>
                     Skip
                   </span>
                   <span style={{ width: 1, height: 10, background: "rgba(0,0,0,0.12)" }} />
-                  <span>Jump to our process</span>
+                  <span>Jump to signals</span>
                   <svg aria-hidden width="11" height="11" viewBox="0 0 12 12">
                     <path
                       d="M6 2.5v7M3 6.5 6 9.5 9 6.5"
@@ -1873,6 +1873,7 @@ export default function HomePage() {
           )}
         </section>
 
+        <div style={{ display: "flex", flexDirection: "column" }}>
         {/* ── PROCESS (HORIZONTAL PINNED SCROLL) ── */}
         <section
           id="process"
@@ -1881,6 +1882,7 @@ export default function HomePage() {
             padding: 0, background: "#0a0a0a", color: "#fafaf9",
             height: "100vh", overflow: "hidden", position: "relative",
             display: "flex", flexDirection: "column",
+            order: 2,
           }}
         >
           <div
@@ -2074,6 +2076,7 @@ export default function HomePage() {
             color: "#0a0a0a",
             position: "relative",
             overflow: "hidden",
+            order: 1,
           }}
         >
           <div
@@ -2196,6 +2199,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        </div>
 
         {/* ── TESTIMONIALS ── */}
         <section
@@ -2669,12 +2673,11 @@ export default function HomePage() {
 
               {[
                 {
-                  heading: "Capabilities",
+                  heading: "Services",
                   links: [
-                    { label: "Services", href: "#services", ext: false },
-                    { label: "Process", href: "#process", ext: false },
-                    { label: "Growth OS", href: "#studio", ext: false },
-                    { label: "Contact", href: "#contact", ext: false },
+                    { label: "Growth & Performance Engineering", href: "#services", ext: false },
+                    { label: "Search Visibility & Digital Authority", href: "#services", ext: false },
+                    { label: "Custom Software & Digital Solutions", href: "#services", ext: false },
                   ],
                 },
                 {
@@ -2830,6 +2833,24 @@ export default function HomePage() {
                     icon: (
                       <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
                         <path d="M12 .5C5.65.5.5 5.66.5 12.02c0 5.09 3.3 9.4 7.88 10.93.58.1.79-.25.79-.56v-2.17c-3.2.7-3.88-1.54-3.88-1.54-.52-1.34-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.78 2.7 1.27 3.36.97.1-.75.4-1.27.73-1.56-2.56-.3-5.25-1.29-5.25-5.74 0-1.27.45-2.3 1.2-3.12-.12-.3-.52-1.52.11-3.17 0 0 .98-.31 3.2 1.19a11.1 11.1 0 015.82 0c2.22-1.5 3.2-1.2 3.2-1.2.63 1.66.23 2.88.12 3.18.74.81 1.2 1.85 1.2 3.12 0 4.46-2.7 5.44-5.27 5.73.41.35.78 1.05.78 2.12v3.15c0 .31.2.67.8.55A11.53 11.53 0 0023.5 12C23.5 5.66 18.35.5 12 .5z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    label: "Instagram",
+                    href: "https://www.instagram.com",
+                    icon: (
+                      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
+                        <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.8A3.95 3.95 0 003.8 7.75v8.5a3.95 3.95 0 003.95 3.95h8.5a3.95 3.95 0 003.95-3.95v-8.5a3.95 3.95 0 00-3.95-3.95h-8.5zm8.95 1.45a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.8A3.2 3.2 0 1015.2 12 3.2 3.2 0 0012 8.8z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    label: "Facebook",
+                    href: "https://www.facebook.com",
+                    icon: (
+                      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
+                        <path d="M13.5 21v-7.2H16l.4-3h-2.9V8.9c0-.87.24-1.47 1.49-1.47H16.5V4.74c-.27-.04-1.2-.12-2.28-.12-2.26 0-3.82 1.38-3.82 3.92v2.26H8v3h2.4V21h3.1z" />
                       </svg>
                     ),
                   },
