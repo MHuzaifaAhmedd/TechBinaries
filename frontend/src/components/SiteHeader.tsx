@@ -2131,6 +2131,7 @@ export default function SiteHeader() {
                       aria-haspopup="true"
                       aria-expanded={megaOpen}
                       onClick={() => setMegaOpen((v) => !v)}
+                      suppressHydrationWarning
                     >
                       {item.label}
                       <svg
@@ -2191,6 +2192,7 @@ export default function SiteHeader() {
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((v) => !v)}
               data-open={mobileOpen ? "true" : "false"}
+              suppressHydrationWarning
             >
               <span />
               <span />
@@ -2384,6 +2386,7 @@ export default function SiteHeader() {
                       className="site-drawer__link"
                       onClick={() => setMobileServicesOpen((v) => !v)}
                       aria-expanded={mobileServicesOpen}
+                      suppressHydrationWarning
                     >
                       <span>{item.label}</span>
                       <span
@@ -2409,6 +2412,7 @@ export default function SiteHeader() {
                               onClick={() =>
                                 setMobileCategoryOpen(isOpen ? -1 : idx)
                               }
+                              suppressHydrationWarning
                             >
                               <span
                                 className="site-drawer__cat-dot"

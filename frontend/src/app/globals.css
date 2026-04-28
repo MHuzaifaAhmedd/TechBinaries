@@ -9,7 +9,7 @@ html,
 body {
   background: #fff;
   color: #000;
-  cursor: none;
+  cursor: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 } */
