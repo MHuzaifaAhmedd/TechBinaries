@@ -2063,72 +2063,136 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── STUDIO / PHILOSOPHY ── */}
-        <section id="studio" style={{ padding: "160px 20px", borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-          <div style={{ maxWidth: 1320, margin: "0 auto" }}>
+        {/* ── GROWTH STRATEGY / BINARY ENGINE ── */}
+        <section
+          id="studio"
+          className="growth-binary-section"
+          style={{
+            padding: "140px 20px",
+            borderTop: "1px solid rgba(0,0,0,0.06)",
+            background: "#fafaf9",
+            color: "#0a0a0a",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            aria-hidden
+            className="growth-orbit-bg"
+            style={{
+              position: "absolute",
+              top: "50%",
+              right: "max(-120px, -8vw)",
+              width: "min(620px, 54vw)",
+              aspectRatio: "1",
+              borderRadius: "50%",
+              border: "1px solid rgba(10,10,10,0.06)",
+              transform: "translateY(-50%)",
+              pointerEvents: "none",
+            }}
+          />
+          <div
+            aria-hidden
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "radial-gradient(circle at 78% 38%, rgba(15,23,42,0.07), transparent 32%), radial-gradient(circle at 18% 85%, rgba(148,163,184,0.16), transparent 34%)",
+              pointerEvents: "none",
+            }}
+          />
 
-            <div className="sh" style={{ opacity: 0 }}>
-              <p
+          <div className="growth-binary-grid" style={{ maxWidth: 1320, margin: "0 auto", position: "relative", zIndex: 1 }}>
+            <div>
+              <h2
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: "clamp(28px, 3.4vw, 52px)", fontWeight: 400,
-                  lineHeight: 1.25, letterSpacing: "-0.02em", margin: 0,
-                  maxWidth: 1100,
+                  fontSize: "clamp(32px, 3.8vw, 56px)",
+                  fontWeight: 500,
+                  letterSpacing: "-0.032em",
+                  lineHeight: 1.02,
+                  margin: "0 0 18px",
+                  maxWidth: 760,
                 }}
               >
-                We believe the best software is built by small, senior teams who give a
-                damn. No handoffs, no juniors at the helm, no theatre —{" "}
-                <span style={{ fontStyle: "italic", color: "rgba(0,0,0,0.5)" }}>
-                  just people who care, shipping work they&apos;re proud of.
+                We turn market signals into{" "}
+                <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(10,10,10,0.48)" }}>
+                  measurable growth.
                 </span>
+              </h2>
+              <p style={{ fontSize: "clamp(16px, 1.6vw, 20px)", lineHeight: 1.65, color: "rgba(10,10,10,0.62)", maxWidth: 650, margin: 0 }}>
+                Tech Binaries is built on the simplest operating principle in technology:
+                keep the signal, remove the waste. We map your funnel, instrument the
+                truth, ship experiments, and turn the winning moves into systems your
+                business can repeat.
               </p>
+
+              <div className="growth-binary-stats" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, marginTop: 44, maxWidth: 700 }}>
+                {[
+                  { value: "01", label: "Signal map", note: "Audience, funnel, offer" },
+                  { value: "10", label: "Binary loop", note: "Build, measure, scale" },
+                  { value: "99+", label: "Compounding", note: "Systems over hacks" },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="growth-stat-card"
+                    style={{
+                      border: "1px solid rgba(10,10,10,0.1)",
+                      background: "#fff",
+                      borderRadius: 20,
+                      padding: "20px 18px",
+                      minHeight: 142,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      backdropFilter: "blur(18px)",
+                    }}
+                  >
+                    <div style={{ fontFamily: "var(--font-display)", fontSize: 34, letterSpacing: "-0.04em", color: "#0a0a0a" }}>
+                      {item.value}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "#0a0a0a", marginBottom: 5 }}>{item.label}</div>
+                      <div style={{ fontSize: 12.5, lineHeight: 1.45, color: "rgba(10,10,10,0.48)" }}>{item.note}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div
-              style={{
-                marginTop: 100, display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)", gap: 0,
-                borderTop: "1px solid rgba(0,0,0,0.1)",
-              }}
-              className="principles-grid"
-            >
-              {[
-                { n: "I.", t: "Senior by default", d: "Every engineer you talk to has shipped products at scale. No layers, no account managers." },
-                { n: "II.", t: "Ship weekly", d: "Real demos every week. You stay close to the work. We stay accountable." },
-                { n: "III.", t: "Built to last", d: "Architecture decisions made for the next 5 years, not the next sprint." },
-              ].map((p, i) => (
-                <div
-                  key={p.n}
-                  style={{
-                    padding: "40px 32px 40px 0",
-                    borderRight: i < 2 ? "1px solid rgba(0,0,0,0.08)" : "none",
-                    paddingLeft: i > 0 ? 32 : 0,
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: 13, color: "rgba(0,0,0,0.35)",
-                      fontWeight: 500, marginBottom: 24,
-                      letterSpacing: "0.04em",
-                    }}
-                  >
-                    {p.n}
-                  </div>
-                  <h3
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: 22, fontWeight: 500, margin: "0 0 14px",
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    {p.t}
-                  </h3>
-                  <p style={{ fontSize: 14.5, color: "rgba(0,0,0,0.58)", lineHeight: 1.65, margin: 0 }}>
-                    {p.d}
-                  </p>
+            <div className="growth-engine-card">
+              <div className="growth-logo-system" aria-hidden>
+                <div className="growth-binary-mark">
+                  <span>1</span>
+                  <span>0</span>
                 </div>
-              ))}
+                <div className="growth-orbit growth-orbit-one" />
+                <div className="growth-orbit growth-orbit-two" />
+                <div className="growth-signal-line growth-signal-line-one" />
+                <div className="growth-signal-line growth-signal-line-two" />
+              </div>
+
+              <div className="growth-terminal">
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingBottom: 14, borderBottom: "1px solid rgba(10,10,10,0.08)", marginBottom: 16 }}>
+                  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(10,10,10,0.42)" }}>
+                    growth.run()
+                  </span>
+                  <span style={{ fontSize: 11, color: "#334155", fontFamily: "var(--font-mono)" }}>signal: live</span>
+                </div>
+                {[
+                  { key: "01", label: "Decode demand", desc: "Find the users, channels, and conversion leaks worth attacking first." },
+                  { key: "10", label: "Engineer the loop", desc: "Landing pages, analytics, SEO, paid tests, and automation wired as one system." },
+                  { key: "11", label: "Scale what wins", desc: "Double down on proven signals, kill weak bets, and keep shipping weekly." },
+                ].map((step) => (
+                  <div key={step.key} className="growth-terminal-row">
+                    <span>{step.key}</span>
+                    <div>
+                      <strong>{step.label}</strong>
+                      <p>{step.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -2598,8 +2662,8 @@ export default function HomePage() {
                   <span className="footer-email-arrow" style={{ transition: "transform 0.25s, color 0.25s", color: "rgba(10,10,10,0.45)" }}>↗</span>
                 </a>
                 <p style={{ color: "rgba(10,10,10,0.62)", lineHeight: 1.65, fontSize: 16, maxWidth: 380 }}>
-                  Built in-house with care. Small senior team, direct collaboration,
-                  fast execution.
+                  Growth strategy, conversion systems, and product engineering built
+                  around measurable business outcomes.
                 </p>
               </div>
 
@@ -2609,14 +2673,14 @@ export default function HomePage() {
                   links: [
                     { label: "Services", href: "#services", ext: false },
                     { label: "Process", href: "#process", ext: false },
-                    { label: "Studio", href: "#studio", ext: false },
+                    { label: "Growth OS", href: "#studio", ext: false },
                     { label: "Contact", href: "#contact", ext: false },
                   ],
                 },
                 {
-                  heading: "Studio",
+                  heading: "Growth",
                   links: [
-                    { label: "Manifesto", href: "#studio", ext: false },
+                    { label: "Strategy OS", href: "#studio", ext: false },
                     { label: "Testimonials", href: "#testimonials", ext: false },
                     { label: "Stack", href: "#tech-stack", ext: false },
                   ],
@@ -2663,8 +2727,8 @@ export default function HomePage() {
                     The Dispatch
                   </div>
                   <p style={{ color: "rgba(10,10,10,0.65)", fontSize: 16, lineHeight: 1.6, marginBottom: 18 }}>
-                    Monthly notes on product bets, technical architecture, and what we&apos;re
-                    shipping in the studio.
+                    Monthly notes on growth bets, technical architecture, and what
+                    we&apos;re shipping next.
                   </p>
                   <form
                     className="footer-newsletter-form"
@@ -2898,6 +2962,203 @@ export default function HomePage() {
           background: rgba(255,255,255,0.05) !important;
         }
 
+        /* ── GROWTH BINARY SECTION ── */
+        .growth-binary-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.08fr) minmax(380px, 0.92fr);
+          gap: clamp(42px, 6vw, 86px);
+          align-items: center;
+        }
+        .growth-orbit-bg::before,
+        .growth-orbit-bg::after {
+          content: "";
+          position: absolute;
+          border-radius: 50%;
+          border: 1px solid rgba(10,10,10,0.06);
+          inset: 12%;
+        }
+        .growth-orbit-bg::after {
+          inset: 28%;
+          border-color: rgba(15,23,42,0.08);
+        }
+        .growth-live-dot {
+          box-shadow: 0 0 0 0 rgba(51,65,85,0.35);
+          animation: growth-pulse 1.8s ease-out infinite;
+        }
+        .growth-stat-card {
+          transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                      border-color 0.35s,
+                      background 0.35s;
+        }
+        .growth-stat-card:hover {
+          transform: translateY(-6px);
+          border-color: rgba(15,23,42,0.22) !important;
+          background: #f8fafc !important;
+        }
+        .growth-engine-card {
+          position: relative;
+          min-height: 620px;
+          border: 1px solid rgba(10,10,10,0.1);
+          border-radius: 34px;
+          background:
+            linear-gradient(145deg, rgba(255,255,255,0.92), rgba(245,245,244,0.74)),
+            #fff;
+          overflow: hidden;
+          box-shadow: 0 38px 90px -64px rgba(15,23,42,0.55);
+          backdrop-filter: blur(22px);
+        }
+        .growth-logo-system {
+          position: absolute;
+          inset: 38px 34px auto;
+          height: 330px;
+          display: grid;
+          place-items: center;
+        }
+        .growth-logo-system::before {
+          content: "";
+          position: absolute;
+          width: min(330px, 78%);
+          aspect-ratio: 1;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(15,23,42,0.08), transparent 62%);
+          filter: blur(4px);
+        }
+        .growth-binary-mark {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          align-items: center;
+          gap: clamp(18px, 3vw, 34px);
+          font-family: var(--font-display);
+          font-size: clamp(94px, 13vw, 168px);
+          font-weight: 500;
+          letter-spacing: -0.11em;
+          line-height: 0.8;
+          color: #0a0a0a;
+          text-shadow: 0 18px 52px rgba(15,23,42,0.14);
+        }
+        .growth-binary-mark span:first-child {
+          animation: growth-one 4.8s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+        }
+        .growth-binary-mark span:last-child {
+          color: rgba(10,10,10,0.18);
+          -webkit-text-stroke: 1px rgba(10,10,10,0.22);
+          animation: growth-zero 4.8s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+        }
+        .growth-orbit {
+          position: absolute;
+          border-radius: 50%;
+          border: 1px solid rgba(10,10,10,0.12);
+        }
+        .growth-orbit::after {
+          content: "";
+          position: absolute;
+          top: -5px;
+          left: 50%;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: #334155;
+          box-shadow: 0 0 18px rgba(15,23,42,0.28);
+        }
+        .growth-orbit-one {
+          width: min(310px, 76%);
+          aspect-ratio: 1;
+          animation: growth-spin 12s linear infinite;
+        }
+        .growth-orbit-two {
+          width: min(410px, 96%);
+          aspect-ratio: 1;
+          border-color: rgba(100,116,139,0.18);
+          animation: growth-spin 18s linear infinite reverse;
+        }
+        .growth-orbit-two::after {
+          background: #64748b;
+          box-shadow: 0 0 18px rgba(100,116,139,0.28);
+        }
+        .growth-signal-line {
+          position: absolute;
+          left: 10%;
+          right: 10%;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(15,23,42,0.42), transparent);
+          opacity: 0.55;
+          transform-origin: center;
+        }
+        .growth-signal-line-one {
+          top: 38%;
+          animation: growth-scan 3.8s ease-in-out infinite;
+        }
+        .growth-signal-line-two {
+          top: 58%;
+          background: linear-gradient(90deg, transparent, rgba(100,116,139,0.38), transparent);
+          animation: growth-scan 4.8s ease-in-out infinite reverse;
+        }
+        .growth-terminal {
+          position: absolute;
+          left: 24px;
+          right: 24px;
+          bottom: 24px;
+          border: 1px solid rgba(10,10,10,0.09);
+          border-radius: 24px;
+          background: rgba(255,255,255,0.82);
+          padding: 22px;
+          backdrop-filter: blur(18px);
+        }
+        .growth-terminal-row {
+          display: grid;
+          grid-template-columns: 42px 1fr;
+          gap: 16px;
+          padding: 16px 0;
+          border-bottom: 1px solid rgba(10,10,10,0.07);
+        }
+        .growth-terminal-row:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+        .growth-terminal-row > span {
+          font-family: var(--font-mono);
+          font-size: 12px;
+          color: #334155;
+          padding-top: 3px;
+        }
+        .growth-terminal-row strong {
+          display: block;
+          font-family: var(--font-display);
+          font-size: 19px;
+          font-weight: 500;
+          letter-spacing: -0.02em;
+          color: #0a0a0a;
+          margin-bottom: 6px;
+        }
+        .growth-terminal-row p {
+          margin: 0;
+          font-size: 13.5px;
+          line-height: 1.55;
+          color: rgba(10,10,10,0.56);
+        }
+
+        @keyframes growth-pulse {
+          0% { box-shadow: 0 0 0 0 rgba(51,65,85,0.32); }
+          70% { box-shadow: 0 0 0 10px rgba(51,65,85,0); }
+          100% { box-shadow: 0 0 0 0 rgba(51,65,85,0); }
+        }
+        @keyframes growth-spin {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes growth-one {
+          0%, 100% { transform: translateX(0); color: #0a0a0a; }
+          45%, 55% { transform: translateX(10px); color: #334155; }
+        }
+        @keyframes growth-zero {
+          0%, 100% { transform: translateX(0) scale(1); opacity: 0.72; }
+          45%, 55% { transform: translateX(-10px) scale(1.04); opacity: 1; }
+        }
+        @keyframes growth-scan {
+          0%, 100% { transform: translateY(-24px) scaleX(0.54); opacity: 0.2; }
+          50% { transform: translateY(24px) scaleX(1); opacity: 0.68; }
+        }
+
         .footer-link:hover { color: #0a0a0a !important; }
         .client-logo:hover { color: #0a0a0a !important; }
         .link-underline:hover { color: #0a0a0a !important; }
@@ -2962,9 +3223,8 @@ export default function HomePage() {
 
         /* ── RESPONSIVE ── */
         @media (max-width: 1100px) {
-          .principles-grid { grid-template-columns: 1fr !important; }
-          .principles-grid > div { border-right: none !important; border-bottom: 1px solid rgba(0,0,0,0.08); padding-left: 0 !important; padding-right: 0 !important; }
-          .principles-grid > div:last-child { border-bottom: none; }
+          .growth-binary-grid { grid-template-columns: 1fr !important; }
+          .growth-engine-card { min-height: 560px; }
           .hero-main-grid { grid-template-columns: 1fr !important; gap: 56px !important; }
           .footer-grid {
             grid-template-columns: minmax(280px, 360px) max-content !important;
@@ -3219,6 +3479,12 @@ export default function HomePage() {
         @media (max-width: 768px) {
           html, body { cursor: auto !important; }
           section, footer { padding-left: 14px !important; padding-right: 14px !important; }
+          .growth-binary-section { padding-top: 92px !important; padding-bottom: 92px !important; }
+          .growth-binary-stats { grid-template-columns: 1fr !important; }
+          .growth-engine-card { min-height: 620px; border-radius: 24px !important; }
+          .growth-logo-system { inset: 28px 18px auto !important; height: 300px !important; }
+          .growth-terminal { left: 14px !important; right: 14px !important; bottom: 14px !important; padding: 18px !important; }
+          .growth-terminal-row { grid-template-columns: 34px 1fr !important; gap: 12px !important; }
           /* On small screens let the headline wrap naturally */
           .hero-line-3 { white-space: normal !important; }
           #cta-inner { padding: 72px 32px !important; border-radius: 20px !important; }
