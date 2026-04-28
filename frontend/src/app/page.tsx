@@ -826,6 +826,7 @@ export default function HomePage() {
       <div
         ref={cursorDot}
         style={{
+          display: "none",
           position: "fixed", top: 0, left: 0, width: 4, height: 4,
           background: "#ffffff", borderRadius: "50%", pointerEvents: "none",
           zIndex: 9999, willChange: "transform",
@@ -835,6 +836,7 @@ export default function HomePage() {
       <div
         ref={cursorRing}
         style={{
+          display: "none",
           position: "fixed", top: 0, left: 0, width: 18, height: 18,
           border: "1px solid rgba(255,255,255,0.85)", borderRadius: "50%",
           pointerEvents: "none", zIndex: 9998, willChange: "transform",
@@ -861,7 +863,6 @@ export default function HomePage() {
           color: "#0a0a0a",
           fontFamily: "var(--font-body)",
           overflowX: "hidden",
-          cursor: "none",
         }}
       >
         {/* ── HEADER (reusable component) ── */}
@@ -2164,35 +2165,35 @@ export default function HomePage() {
             </div>
 
             <div className="growth-engine-card">
-              <div className="growth-logo-system" aria-hidden>
-                <div className="growth-binary-mark">
+              <div className="growth-engine-meta">
+                <span>Signal OS</span>
+                <span>
+                  <span className="growth-live-dot" />
+                  live loop
+                </span>
+              </div>
+
+              <div className="growth-logo-system">
+                <div className="growth-binary-mark" aria-hidden>
                   <span>1</span>
                   <span>0</span>
                 </div>
-                <div className="growth-orbit growth-orbit-one" />
-                <div className="growth-orbit growth-orbit-two" />
-                <div className="growth-signal-line growth-signal-line-one" />
-                <div className="growth-signal-line growth-signal-line-two" />
-              </div>
+                <div className="growth-orbit growth-orbit-one" aria-hidden />
+                <div className="growth-orbit growth-orbit-two" aria-hidden />
+                <div className="growth-signal-line growth-signal-line-one" aria-hidden />
+                <div className="growth-signal-line growth-signal-line-two" aria-hidden />
 
-              <div className="growth-terminal">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingBottom: 14, borderBottom: "1px solid rgba(10,10,10,0.08)", marginBottom: 16 }}>
-                  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(10,10,10,0.42)" }}>
-                    growth.run()
-                  </span>
-                  <span style={{ fontSize: 11, color: "#334155", fontFamily: "var(--font-mono)" }}>signal: live</span>
-                </div>
                 {[
-                  { key: "01", label: "Decode demand", desc: "Find the users, channels, and conversion leaks worth attacking first." },
-                  { key: "10", label: "Engineer the loop", desc: "Landing pages, analytics, SEO, paid tests, and automation wired as one system." },
-                  { key: "11", label: "Scale what wins", desc: "Double down on proven signals, kill weak bets, and keep shipping weekly." },
+                  { key: "01", label: "Decode demand", desc: "Find demand leaks first.", className: "growth-orbit-message-one" },
+                  { key: "10", label: "Engineer the loop", desc: "Wire SEO, ads, analytics, and pages.", className: "growth-orbit-message-two" },
+                  { key: "11", label: "Scale what wins", desc: "Ship the proven signals weekly.", className: "growth-orbit-message-three" },
                 ].map((step) => (
-                  <div key={step.key} className="growth-terminal-row">
-                    <span>{step.key}</span>
-                    <div>
+                  <div key={step.key} className={`growth-orbit-message ${step.className}`}>
+                    <span className="growth-orbit-dot">{step.key}</span>
+                    <span className="growth-orbit-copy">
                       <strong>{step.label}</strong>
-                      <p>{step.desc}</p>
-                    </div>
+                      <span>{step.desc}</span>
+                    </span>
                   </div>
                 ))}
               </div>
@@ -2240,6 +2241,7 @@ export default function HomePage() {
               <button
                 aria-label="Previous testimonial"
                 onClick={slideTestimonialsPrev}
+                suppressHydrationWarning
                 style={{
                   width: 42,
                   height: 42,
@@ -2338,6 +2340,7 @@ export default function HomePage() {
               <button
                 aria-label="Next testimonial"
                 onClick={slideTestimonialsNext}
+                suppressHydrationWarning
                 style={{
                   width: 42,
                   height: 42,
@@ -2761,6 +2764,7 @@ export default function HomePage() {
                       name="email"
                       required
                       placeholder="you@company.com"
+                      suppressHydrationWarning
                       style={{
                         flex: 1,
                         border: "none",
@@ -2774,6 +2778,7 @@ export default function HomePage() {
                     <button
                       className="footer-newsletter-btn"
                       type="submit"
+                      suppressHydrationWarning
                       style={{
                         border: "none",
                         borderRadius: 999,
@@ -2906,7 +2911,7 @@ export default function HomePage() {
       {/* ── GLOBAL STYLES ── */}
       <style>{`
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { cursor: none !important; background: #fafaf9; -webkit-font-smoothing: antialiased; }
+        html, body { cursor: auto !important; background: #fafaf9; -webkit-font-smoothing: antialiased; }
         ::selection { background: #0a0a0a; color: #fafaf9; }
 
         /* Marquee */
@@ -3003,6 +3008,11 @@ export default function HomePage() {
           border-color: rgba(15,23,42,0.08);
         }
         .growth-live-dot {
+          display: inline-block;
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #334155;
           box-shadow: 0 0 0 0 rgba(51,65,85,0.35);
           animation: growth-pulse 1.8s ease-out infinite;
         }
@@ -3022,26 +3032,54 @@ export default function HomePage() {
           border: 1px solid rgba(10,10,10,0.1);
           border-radius: 34px;
           background:
-            linear-gradient(145deg, rgba(255,255,255,0.92), rgba(245,245,244,0.74)),
+            radial-gradient(circle at 50% 20%, rgba(255,255,255,0.95), transparent 38%),
+            linear-gradient(145deg, rgba(255,255,255,0.94), rgba(245,245,244,0.76)),
             #fff;
           overflow: hidden;
           box-shadow: 0 38px 90px -64px rgba(15,23,42,0.55);
           backdrop-filter: blur(22px);
         }
+        .growth-engine-card::before {
+          content: "";
+          position: absolute;
+          inset: 18px;
+          border: 1px solid rgba(10,10,10,0.055);
+          border-radius: 26px;
+          pointer-events: none;
+        }
+        .growth-engine-meta {
+          position: absolute;
+          top: 24px;
+          left: 24px;
+          right: 24px;
+          z-index: 4;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-family: var(--font-mono);
+          font-size: 10px;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.4);
+        }
+        .growth-engine-meta span {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
         .growth-logo-system {
           position: absolute;
-          inset: 38px 34px auto;
-          height: 330px;
+          inset: 56px 34px 34px;
           display: grid;
           place-items: center;
         }
         .growth-logo-system::before {
           content: "";
           position: absolute;
-          width: min(330px, 78%);
+          width: min(330px, 76%);
           aspect-ratio: 1;
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(15,23,42,0.08), transparent 62%);
+          background: radial-gradient(circle, rgba(15,23,42,0.075), transparent 64%);
           filter: blur(4px);
         }
         .growth-binary-mark {
@@ -3051,12 +3089,12 @@ export default function HomePage() {
           align-items: center;
           gap: clamp(18px, 3vw, 34px);
           font-family: var(--font-display);
-          font-size: clamp(94px, 13vw, 168px);
+          font-size: clamp(108px, 12vw, 176px);
           font-weight: 500;
           letter-spacing: -0.11em;
           line-height: 0.8;
           color: #0a0a0a;
-          text-shadow: 0 18px 52px rgba(15,23,42,0.14);
+          text-shadow: 0 22px 58px rgba(15,23,42,0.15);
         }
         .growth-binary-mark span:first-child {
           animation: growth-one 4.8s cubic-bezier(0.76, 0, 0.24, 1) infinite;
@@ -3081,6 +3119,7 @@ export default function HomePage() {
           border-radius: 50%;
           background: #334155;
           box-shadow: 0 0 18px rgba(15,23,42,0.28);
+          display: none;
         }
         .growth-orbit-one {
           width: min(310px, 76%);
@@ -3115,48 +3154,66 @@ export default function HomePage() {
           background: linear-gradient(90deg, transparent, rgba(100,116,139,0.38), transparent);
           animation: growth-scan 4.8s ease-in-out infinite reverse;
         }
-        .growth-terminal {
+        .growth-orbit-message {
           position: absolute;
-          left: 24px;
-          right: 24px;
-          bottom: 24px;
-          border: 1px solid rgba(10,10,10,0.09);
-          border-radius: 24px;
-          background: rgba(255,255,255,0.82);
-          padding: 22px;
-          backdrop-filter: blur(18px);
+          top: 50%;
+          left: 50%;
+          z-index: 5;
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          width: min(220px, 38vw);
+          transform-origin: 0 0;
+          pointer-events: none;
         }
-        .growth-terminal-row {
-          display: grid;
-          grid-template-columns: 42px 1fr;
-          gap: 16px;
-          padding: 16px 0;
-          border-bottom: 1px solid rgba(10,10,10,0.07);
-        }
-        .growth-terminal-row:last-child {
-          border-bottom: none;
-          padding-bottom: 0;
-        }
-        .growth-terminal-row > span {
+        .growth-orbit-dot {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border: 1px solid rgba(10,10,10,0.12);
+          border-radius: 50%;
+          background: #0a0a0a;
+          color: #fafaf9;
           font-family: var(--font-mono);
           font-size: 12px;
-          color: #334155;
-          padding-top: 3px;
+          letter-spacing: 0.02em;
+          box-shadow: 0 18px 34px -20px rgba(15,23,42,0.78);
+          flex: 0 0 auto;
         }
-        .growth-terminal-row strong {
-          display: block;
+        .growth-orbit-copy {
+          display: grid;
+          gap: 3px;
+          max-width: 160px;
+          border: 1px solid rgba(10,10,10,0.09);
+          border-radius: 16px;
+          background: rgba(255,255,255,0.82);
+          padding: 10px 12px;
+          box-shadow: 0 24px 48px -36px rgba(15,23,42,0.62);
+          backdrop-filter: blur(16px);
+        }
+        .growth-orbit-copy strong {
           font-family: var(--font-display);
-          font-size: 19px;
+          font-size: 15px;
           font-weight: 500;
           letter-spacing: -0.02em;
           color: #0a0a0a;
-          margin-bottom: 6px;
+          line-height: 1.1;
         }
-        .growth-terminal-row p {
-          margin: 0;
-          font-size: 13.5px;
-          line-height: 1.55;
+        .growth-orbit-copy span {
+          font-size: 11.5px;
+          line-height: 1.35;
           color: rgba(10,10,10,0.56);
+        }
+        .growth-orbit-message-one {
+          animation: growth-orbit-message-one 15s linear infinite;
+        }
+        .growth-orbit-message-two {
+          animation: growth-orbit-message-two 15s linear infinite;
+        }
+        .growth-orbit-message-three {
+          animation: growth-orbit-message-three 15s linear infinite;
         }
 
         @keyframes growth-pulse {
@@ -3178,6 +3235,21 @@ export default function HomePage() {
         @keyframes growth-scan {
           0%, 100% { transform: translateY(-24px) scaleX(0.54); opacity: 0.2; }
           50% { transform: translateY(24px) scaleX(1); opacity: 0.68; }
+        }
+        @keyframes growth-orbit-message-one {
+          0% { transform: rotate(-24deg) translateX(clamp(118px, 13vw, 156px)) rotate(24deg) translate(-50%, -50%); }
+          50% { transform: rotate(156deg) translateX(clamp(118px, 13vw, 156px)) rotate(-156deg) translate(-50%, -50%); }
+          100% { transform: rotate(336deg) translateX(clamp(118px, 13vw, 156px)) rotate(-336deg) translate(-50%, -50%); }
+        }
+        @keyframes growth-orbit-message-two {
+          0% { transform: rotate(104deg) translateX(clamp(96px, 11vw, 132px)) rotate(-104deg) translate(-50%, -50%); }
+          50% { transform: rotate(284deg) translateX(clamp(96px, 11vw, 132px)) rotate(-284deg) translate(-50%, -50%); }
+          100% { transform: rotate(464deg) translateX(clamp(96px, 11vw, 132px)) rotate(-464deg) translate(-50%, -50%); }
+        }
+        @keyframes growth-orbit-message-three {
+          0% { transform: rotate(222deg) translateX(clamp(118px, 13vw, 156px)) rotate(-222deg) translate(-50%, -50%); }
+          50% { transform: rotate(402deg) translateX(clamp(118px, 13vw, 156px)) rotate(-402deg) translate(-50%, -50%); }
+          100% { transform: rotate(582deg) translateX(clamp(118px, 13vw, 156px)) rotate(-582deg) translate(-50%, -50%); }
         }
 
         .footer-link:hover { color: #0a0a0a !important; }
@@ -3245,7 +3317,7 @@ export default function HomePage() {
         /* ── RESPONSIVE ── */
         @media (max-width: 1100px) {
           .growth-binary-grid { grid-template-columns: 1fr !important; }
-          .growth-engine-card { min-height: 560px; }
+          .growth-engine-card { min-height: 640px; }
           .hero-main-grid { grid-template-columns: 1fr !important; gap: 56px !important; }
           .footer-grid {
             grid-template-columns: minmax(280px, 360px) max-content !important;
@@ -3502,10 +3574,16 @@ export default function HomePage() {
           section, footer { padding-left: 14px !important; padding-right: 14px !important; }
           .growth-binary-section { padding-top: 92px !important; padding-bottom: 92px !important; }
           .growth-binary-stats { grid-template-columns: 1fr !important; }
-          .growth-engine-card { min-height: 620px; border-radius: 24px !important; }
-          .growth-logo-system { inset: 28px 18px auto !important; height: 300px !important; }
-          .growth-terminal { left: 14px !important; right: 14px !important; bottom: 14px !important; padding: 18px !important; }
-          .growth-terminal-row { grid-template-columns: 34px 1fr !important; gap: 12px !important; }
+          .growth-engine-card { min-height: 560px; border-radius: 24px !important; }
+          .growth-engine-card::before { inset: 12px !important; border-radius: 18px !important; }
+          .growth-engine-meta { top: 20px !important; left: 18px !important; right: 18px !important; }
+          .growth-logo-system { inset: 58px 16px 24px !important; }
+          .growth-binary-mark { font-size: clamp(86px, 28vw, 128px) !important; }
+          .growth-orbit-message { width: min(210px, 58vw) !important; gap: 8px !important; }
+          .growth-orbit-dot { width: 34px !important; height: 34px !important; font-size: 10.5px !important; }
+          .growth-orbit-copy { max-width: 150px !important; padding: 8px 10px !important; }
+          .growth-orbit-copy strong { font-size: 13px !important; }
+          .growth-orbit-copy span { font-size: 10.5px !important; }
           /* On small screens let the headline wrap naturally */
           .hero-line-3 { white-space: normal !important; }
           #cta-inner { padding: 72px 32px !important; border-radius: 20px !important; }
