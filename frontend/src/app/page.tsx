@@ -110,6 +110,20 @@ const TESTIMONIALS = [
     title: "VP Engineering, ShipFast",
     initials: "PN",
   },
+  {
+    quote:
+      "The migration was seamless. Their team modernized our stack while keeping business continuity intact, and we saw page performance improve by 43% within the first month.",
+    name: "Daniel Kim",
+    title: "Head of Product, NovaRetail",
+    initials: "DK",
+  },
+  {
+    quote:
+      "From strategy to execution, they worked like an extension of our engineering org. We launched two major features ahead of schedule with measurable customer impact.",
+    name: "Elena Rodriguez",
+    title: "Director of Engineering, CloudAxis",
+    initials: "ER",
+  },
 ];
 
 const TECH = [
@@ -134,7 +148,6 @@ const BUILDING_NOW = [
 export default function HomePage() {
   const cursorDot = useRef<HTMLDivElement>(null);
   const cursorRing = useRef<HTMLDivElement>(null);
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   // Hero-specific refs & state
   const heroRef = useRef<HTMLElement>(null);
@@ -163,8 +176,33 @@ export default function HomePage() {
   const [isMobile, setIsMobile] = useState(false);
   // Which capability is open on mobile (accordion). Null = all closed.
   const [mobileOpenCap, setMobileOpenCap] = useState<number | null>(0);
+  const [testimonialStartIndex, setTestimonialStartIndex] = useState(0);
+  const [testimonialSlideDirection, setTestimonialSlideDirection] = useState<"next" | "prev" | null>(null);
+  const [testimonialAnimate, setTestimonialAnimate] = useState(false);
 
   const lenisRef = useRef<Lenis | null>(null);
+  const testimonialVisibleCount = isMobile ? 1 : 3;
+  const testimonialCanSlide = TESTIMONIALS.length > testimonialVisibleCount;
+  const getTestimonialAt = (index: number) =>
+    TESTIMONIALS[(index + TESTIMONIALS.length) % TESTIMONIALS.length];
+  const visibleTestimonials = testimonialCanSlide
+    ? Array.from({ length: testimonialVisibleCount + 1 }, (_, i) =>
+        getTestimonialAt(
+          testimonialStartIndex +
+            i +
+            (testimonialSlideDirection === "prev" ? -1 : 0)
+        )
+      )
+    : TESTIMONIALS;
+  const testimonialStepPercent = 100 / testimonialVisibleCount;
+  const testimonialTranslate =
+    testimonialSlideDirection === "prev"
+      ? testimonialAnimate
+        ? 0
+        : -testimonialStepPercent
+      : testimonialSlideDirection === "next" && testimonialAnimate
+        ? -testimonialStepPercent
+        : 0;
 
   // Smoothly scroll past the entire pinned capabilities section and land on
   // the Process section. Used by the "Skip" affordance — lets users who don't
@@ -227,6 +265,48 @@ export default function HomePage() {
     }, 2600);
     return () => clearInterval(id);
   }, []);
+
+  useEffect(() => {
+    setTestimonialAnimate(false);
+    setTestimonialSlideDirection(null);
+    setTestimonialStartIndex(0);
+  }, [testimonialVisibleCount]);
+
+  useEffect(() => {
+    if (TESTIMONIALS.length <= testimonialVisibleCount) return;
+    const id = setInterval(() => {
+      if (testimonialSlideDirection) return;
+      setTestimonialSlideDirection("next");
+      setTestimonialAnimate(false);
+      requestAnimationFrame(() => setTestimonialAnimate(true));
+    }, 3800);
+    return () => clearInterval(id);
+  }, [testimonialSlideDirection, testimonialVisibleCount]);
+
+  const slideTestimonialsNext = () => {
+    if (!testimonialCanSlide || testimonialSlideDirection) return;
+    setTestimonialSlideDirection("next");
+    setTestimonialAnimate(false);
+    requestAnimationFrame(() => setTestimonialAnimate(true));
+  };
+
+  const slideTestimonialsPrev = () => {
+    if (!testimonialCanSlide || testimonialSlideDirection) return;
+    setTestimonialSlideDirection("prev");
+    setTestimonialAnimate(false);
+    requestAnimationFrame(() => setTestimonialAnimate(true));
+  };
+
+  const handleTestimonialTransitionEnd = () => {
+    if (!testimonialSlideDirection) return;
+    setTestimonialAnimate(false);
+    setTestimonialStartIndex((prev) =>
+      testimonialSlideDirection === "next"
+        ? (prev + 1) % TESTIMONIALS.length
+        : (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length
+    );
+    setTestimonialSlideDirection(null);
+  };
 
   // Smooth scroll (Lenis)
   useEffect(() => {
@@ -2054,84 +2134,161 @@ export default function HomePage() {
         </section>
 
         {/* ── TESTIMONIALS ── */}
-        <section style={{ padding: "160px 20px", background: "#f5f5f4", borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-          <div style={{ maxWidth: 1020, margin: "0 auto" }}>
-            <div style={{ position: "relative", minHeight: 340 }}>
-              <div
-                aria-hidden
-                style={{
-                  position: "absolute", top: -60, left: -30,
-                  fontFamily: "var(--font-display)",
-                  fontSize: 240, lineHeight: 1, color: "rgba(0,0,0,0.05)",
-                  fontWeight: 500, pointerEvents: "none",
-                }}
-              >
-                &ldquo;
-              </div>
-
-              {TESTIMONIALS.map((t, i) => (
-                <div
-                  key={i}
+        <section
+          id="testimonials"
+          style={{
+            padding: "140px 20px",
+            background: "#f5f5f4",
+            borderTop: "1px solid rgba(0,0,0,0.06)",
+          }}
+        >
+          <div style={{ maxWidth: 1220, margin: "0 auto" }}>
+            <div
+              style={{
+                display: "flex",
+                marginBottom: 42,
+              }}
+            >
+              <div style={{ maxWidth: 720, marginLeft: -6 }}>
+                <h2
                   style={{
-                    position: i === 0 ? "relative" : "absolute",
-                    top: 0, left: 0, right: 0,
-                    opacity: activeTestimonial === i ? 1 : 0,
-                    transform: `translateY(${activeTestimonial === i ? 0 : 12}px)`,
-                    transition: "opacity 0.6s ease, transform 0.6s ease",
-                    pointerEvents: activeTestimonial === i ? "auto" : "none",
+                    fontFamily: "var(--font-display)",
+                    fontSize: "clamp(32px, 3.8vw, 56px)",
+                    fontWeight: 500,
+                    letterSpacing: "-0.032em",
+                    lineHeight: 1.02,
+                    margin: "0 0 16px",
                   }}
                 >
-                  <blockquote
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: "clamp(22px, 2.6vw, 34px)", fontWeight: 400,
-                      lineHeight: 1.4, color: "rgba(0,0,0,0.82)",
-                      margin: "0 0 56px", letterSpacing: "-0.015em",
-                      position: "relative", zIndex: 1,
-                    }}
-                  >
-                    {t.quote}
-                  </blockquote>
-                  <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <div
-                      style={{
-                        width: 44, height: 44, background: "#0a0a0a", color: "#fafaf9",
-                        borderRadius: "50%", display: "flex", alignItems: "center",
-                        justifyContent: "center", fontSize: 12, fontWeight: 500,
-                        letterSpacing: "0.04em", flexShrink: 0,
-                        fontFamily: "var(--font-display)",
-                      }}
-                    >
-                      {t.initials}
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 14.5, fontWeight: 500, letterSpacing: "-0.005em" }}>{t.name}</div>
-                      <div style={{ fontSize: 13, color: "rgba(0,0,0,0.5)", marginTop: 2 }}>{t.title}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  What our <span style={{ color: "rgba(0,0,0,0.52)", fontWeight: 400, fontStyle: "italic" }}>clients</span> say
+                </h2>
+                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: "rgba(0,0,0,0.58)", maxWidth: 620 }}>
+                  Real feedback from teams we have partnered with across product, platform, and AI delivery.
+                </p>
+              </div>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 80, paddingTop: 28, borderTop: "1px solid rgba(0,0,0,0.1)" }}>
-              <div style={{ display: "flex", gap: 10 }}>
-                {TESTIMONIALS.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveTestimonial(i)}
-                    aria-label={`View testimonial ${i + 1}`}
-                    style={{
-                      width: activeTestimonial === i ? 28 : 10, height: 3,
-                      background: activeTestimonial === i ? "#0a0a0a" : "rgba(0,0,0,0.15)",
-                      border: "none", cursor: "pointer", padding: 0,
-                      transition: "all 0.35s ease", borderRadius: 2,
-                    }}
-                  />
-                ))}
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <button
+                aria-label="Previous testimonial"
+                onClick={slideTestimonialsPrev}
+                style={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: "50%",
+                  border: "1px solid rgba(0,0,0,0.2)",
+                  background: "#fff",
+                  color: "#111",
+                  fontSize: 20,
+                  lineHeight: 1,
+                  cursor: "pointer",
+                  flexShrink: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 0,
+                }}
+              >
+                &lt;
+              </button>
+
+              <div style={{ overflow: "hidden", flex: 1 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    transform: `translateX(${testimonialTranslate}%)`,
+                    transition: testimonialSlideDirection && testimonialAnimate
+                      ? "transform 0.65s cubic-bezier(0.22, 1, 0.36, 1)"
+                      : "none",
+                  }}
+                  onTransitionEnd={handleTestimonialTransitionEnd}
+                >
+                  {visibleTestimonials.map((t, i) => (
+                    <div
+                      key={`${t.initials}-${i}`}
+                      style={{
+                        flex: `0 0 ${100 / testimonialVisibleCount}%`,
+                        padding: "0 9px",
+                      }}
+                    >
+                      <article
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                          border: "1px solid rgba(0,0,0,0.1)",
+                          background: "#fafaf9",
+                          padding: "28px 26px",
+                          minHeight: 300,
+                          height: "100%",
+                        }}
+                      >
+                        <blockquote
+                          style={{
+                            margin: 0,
+                            fontFamily: "var(--font-display)",
+                            fontSize: "clamp(17px, 1.65vw, 22px)",
+                            lineHeight: 1.45,
+                            letterSpacing: "-0.014em",
+                            color: "rgba(0,0,0,0.85)",
+                          }}
+                        >
+                          &ldquo;{t.quote}&rdquo;
+                        </blockquote>
+
+                        <div style={{ marginTop: 28, paddingTop: 20, borderTop: "1px solid rgba(0,0,0,0.09)", display: "flex", alignItems: "center", gap: 14 }}>
+                          <div
+                            style={{
+                              width: 42,
+                              height: 42,
+                              borderRadius: "50%",
+                              background: "#0a0a0a",
+                              color: "#fafaf9",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: 12,
+                              fontWeight: 500,
+                              letterSpacing: "0.05em",
+                              fontFamily: "var(--font-display)",
+                              flexShrink: 0,
+                            }}
+                          >
+                            {t.initials}
+                          </div>
+                          <div>
+                            <div style={{ fontSize: 14.5, fontWeight: 500, letterSpacing: "-0.005em", color: "#111" }}>{t.name}</div>
+                            <div style={{ fontSize: 13, color: "rgba(0,0,0,0.5)", marginTop: 2 }}>{t.title}</div>
+                          </div>
+                        </div>
+                      </article>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div style={{ fontSize: 12, color: "rgba(0,0,0,0.45)", fontVariantNumeric: "tabular-nums", letterSpacing: "0.04em" }}>
-                {String(activeTestimonial + 1).padStart(2, "0")} <span style={{ opacity: 0.35 }}>/</span> {String(TESTIMONIALS.length).padStart(2, "0")}
-              </div>
+
+              <button
+                aria-label="Next testimonial"
+                onClick={slideTestimonialsNext}
+                style={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: "50%",
+                  border: "1px solid rgba(0,0,0,0.2)",
+                  background: "#fff",
+                  color: "#111",
+                  fontSize: 20,
+                  lineHeight: 1,
+                  cursor: "pointer",
+                  flexShrink: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 0,
+                }}
+              >
+                &gt;
+              </button>
             </div>
           </div>
         </section>
