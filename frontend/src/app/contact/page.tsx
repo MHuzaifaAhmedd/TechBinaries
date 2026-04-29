@@ -3,6 +3,7 @@
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 const CONTACT_SERVICE_OPTIONS = [
   "Paid Media Conversion",
@@ -289,6 +290,7 @@ export default function ContactPage() {
             </form>
           </section>
         </main>
+        <SiteFooter />
       </div>
 
     </>
