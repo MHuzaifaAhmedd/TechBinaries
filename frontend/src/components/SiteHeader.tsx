@@ -1871,6 +1871,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -2040,6 +2042,7 @@ const NAV: NavItem[] = [
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function SiteHeader() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -2091,17 +2094,20 @@ export default function SiteHeader() {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setMegaOpen(false), 140);
   };
+  const darkHeroRoute = pathname === "/services/custom-software-digital-solutions";
+  const headerTheme = darkHeroRoute && !scrolled ? "dark" : "light";
 
   return (
     <>
       <header
         className="site-header"
         data-scrolled={scrolled ? "true" : "false"}
+        data-theme={headerTheme}
         onMouseLeave={scheduleCloseMega}
       >
         <div className="site-header__inner">
           {/* ── Logo ── */}
-          <a href="/" className="site-header__brand" aria-label="TechBinaries — home">
+          <Link href="/" className="site-header__brand" aria-label="TechBinaries — home">
             <span className="site-header__brand-logo-wrap" aria-hidden>
               <Image
                 src="/images/header-logo.png"
@@ -2112,7 +2118,7 @@ export default function SiteHeader() {
                 priority
               />
             </span>
-          </a>
+          </Link>
 
           {/* ── Primary nav (desktop) ── */}
           <nav className="site-header__nav" aria-label="Primary">
@@ -2165,7 +2171,7 @@ export default function SiteHeader() {
 
           {/* ── Right cluster: CTA + mobile trigger ── */}
           <div className="site-header__right">
-            <a href="/contact" className="site-header__cta">
+            <Link href="/contact" className="site-header__cta">
               <span>Contact us</span>
               <svg
                 aria-hidden
@@ -2183,7 +2189,7 @@ export default function SiteHeader() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </Link>
 
             <button
               type="button"
@@ -2529,6 +2535,20 @@ export default function SiteHeader() {
           border-bottom-color: var(--color-line);
         }
 
+        /* On the dark hero route, show frosted glass immediately */
+        .site-header[data-theme="dark"][data-scrolled="false"] {
+          /* Reduce blur/reflection on reload */
+          background: rgba(250, 250, 249, 0.9);
+          backdrop-filter: saturate(180%) blur(12px);
+          -webkit-backdrop-filter: saturate(180%) blur(12px);
+          border-bottom-color: var(--color-line);
+          transition:
+            height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+            background 0.15s ease,
+            backdrop-filter 0.15s ease,
+            border-color 0.35s ease;
+        }
+
         .site-header__inner {
           max-width: 1320px;
           height: 100%;
@@ -2560,6 +2580,9 @@ export default function SiteHeader() {
           object-position: center;
           filter: brightness(0) saturate(100%);
         }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__brand-logo {
+          filter: brightness(0) saturate(100%) invert(1);
+        }
 
         /* ── Primary nav ── */
         .site-header__nav {
@@ -2587,11 +2610,19 @@ export default function SiteHeader() {
           cursor: pointer;
           transition: color 0.2s ease, background 0.2s ease;
         }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__nav-link {
+          color: rgba(255, 255, 255, 0.78);
+        }
         .site-header__nav-link:hover,
         .site-header__nav-link:focus-visible {
           color: var(--color-ink);
           background: rgba(10, 10, 10, 0.04);
           outline: none;
+        }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__nav-link:hover,
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__nav-link:focus-visible {
+          color: #fafaf9;
+          background: rgba(255, 255, 255, 0.1);
         }
         .site-header__chevron {
           transition: transform 0.25s ease;
@@ -2625,6 +2656,14 @@ export default function SiteHeader() {
           transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background 0.2s;
         }
         .site-header__cta:hover { background: #1a1a1a; }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__cta {
+          background: rgba(255, 255, 255, 0.06);
+          color: #fafaf9;
+          border: 1px solid rgba(255, 255, 255, 0.24);
+        }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__cta:hover {
+          background: rgba(255, 255, 255, 0.14);
+        }
         .site-header__cta:hover .site-header__cta-arrow {
           transform: translateX(2px);
         }
@@ -2650,6 +2689,45 @@ export default function SiteHeader() {
           transition: transform 0.35s cubic-bezier(0.22,1,0.36,1),
                       opacity 0.2s ease,
                       top 0.35s cubic-bezier(0.22,1,0.36,1);
+        }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__burger {
+          border-color: rgba(255, 255, 255, 0.24);
+          background: rgba(255, 255, 255, 0.06);
+        }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__burger span {
+          background: #fafaf9;
+        }
+
+        /*
+          On the custom-software-digital-solutions hero route:
+          we keep the frosted-glass header background, but we want the initial
+          header content to be dark/black (same look as the "scrolled" state).
+        */
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__brand-logo {
+          filter: brightness(0) saturate(100%);
+        }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__nav-link {
+          color: rgba(10, 10, 10, 0.6);
+        }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__nav-link:hover,
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__nav-link:focus-visible {
+          color: var(--color-ink);
+          background: rgba(10, 10, 10, 0.04);
+        }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__cta {
+          background: var(--color-ink);
+          color: var(--color-paper);
+          border: 0;
+        }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__cta:hover {
+          background: #1a1a1a;
+        }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__burger {
+          border-color: var(--color-line);
+          background: rgba(255, 255, 255, 0.6);
+        }
+        .site-header[data-theme="dark"][data-scrolled="false"] .site-header__burger span {
+          background: var(--color-ink);
         }
         .site-header__burger span:nth-child(1) { top: 13px; }
         .site-header__burger span:nth-child(2) { top: 19px; }
