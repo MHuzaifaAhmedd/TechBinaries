@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import Lenis from "@studio-freight/lenis";
+import Link from "next/link";
 import Image from "next/image";
 import SiteHeader from "@/components/SiteHeader";
 
@@ -151,7 +152,6 @@ export default function HomePage() {
 
   // Hero-specific refs & state
   const heroRef = useRef<HTMLElement>(null);
-  const heroParallaxLayerRef = useRef<HTMLDivElement>(null);
   const heroGlyphRef = useRef<HTMLDivElement>(null);
   const heroDotsRef = useRef<HTMLDivElement>(null);
   const heroTerminalRef = useRef<HTMLDivElement>(null);
@@ -267,9 +267,12 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    setTestimonialAnimate(false);
-    setTestimonialSlideDirection(null);
-    setTestimonialStartIndex(0);
+    const frame = requestAnimationFrame(() => {
+      setTestimonialAnimate(false);
+      setTestimonialSlideDirection(null);
+      setTestimonialStartIndex(0);
+    });
+    return () => cancelAnimationFrame(frame);
   }, [testimonialVisibleCount]);
 
   useEffect(() => {
@@ -421,32 +424,6 @@ export default function HomePage() {
 
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
-  // Hero magnetic buttons
-  useEffect(() => {
-    const buttons = document.querySelectorAll<HTMLElement>(".magnetic");
-    const handlers: Array<[HTMLElement, (e: MouseEvent) => void, () => void]> = [];
-    buttons.forEach((btn) => {
-      const move = (e: MouseEvent) => {
-        const rect = btn.getBoundingClientRect();
-        const mx = e.clientX - (rect.left + rect.width / 2);
-        const my = e.clientY - (rect.top + rect.height / 2);
-        gsap.to(btn, { x: mx * 0.25, y: my * 0.3, duration: 0.4, ease: "power3.out" });
-      };
-      const leave = () => {
-        gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.5)" });
-      };
-      btn.addEventListener("mousemove", move);
-      btn.addEventListener("mouseleave", leave);
-      handlers.push([btn, move, leave]);
-    });
-    return () => {
-      handlers.forEach(([btn, m, l]) => {
-        btn.removeEventListener("mousemove", m);
-        btn.removeEventListener("mouseleave", l);
-      });
-    };
   }, []);
 
   // GSAP animations
@@ -765,6 +742,48 @@ export default function HomePage() {
     return () => ctx.revert();
   }, []);
 
+  // Browser back/forward can restore this animation-heavy page from history
+  // with stale scroll, pinned spacers, and scrubbed transforms. Treat a landing
+  // page restore like a fresh load so the hero and pinned sections start clean.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+
+    const resetLandingPageView = () => {
+      capProgrammaticScrollRef.current = false;
+      setActiveCapability(0);
+      setShowCapabilityInterlude(false);
+
+      const lenis = lenisRef.current;
+      lenis?.stop();
+      window.scrollTo(0, 0);
+      lenis?.scrollTo(0, { immediate: true, force: true });
+      lenis?.resize();
+
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh(true);
+        ScrollTrigger.update();
+        lenis?.start();
+      });
+    };
+
+    resetLandingPageView();
+
+    const handlePageShow = () => resetLandingPageView();
+    const handlePageHide = () => lenisRef.current?.stop();
+
+    window.addEventListener("pageshow", handlePageShow);
+    window.addEventListener("pagehide", handlePageHide);
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener("pagehide", handlePageHide);
+      window.history.scrollRestoration = previousScrollRestoration;
+    };
+  }, []);
+
   // Tech marquee: GSAP-driven loop so hover speed changes stay smooth.
   useEffect(() => {
     const left = marqueeLeftRef.current;
@@ -814,8 +833,9 @@ export default function HomePage() {
 
   // Refresh ScrollTrigger once fonts have loaded
   useEffect(() => {
-    if (typeof document === "undefined" || !(document as any).fonts?.ready) return;
-    (document as any).fonts.ready.then(() => {
+    const fonts = "fonts" in document ? document.fonts : undefined;
+    if (!fonts?.ready) return;
+    fonts.ready.then(() => {
       ScrollTrigger.refresh();
     });
   }, []);
@@ -1082,20 +1102,35 @@ export default function HomePage() {
                   className="hero-intro-col hero-cta"
                   style={{ display: "flex", gap: 12, opacity: 0, flexWrap: "wrap" }}
                 >
-                  <a
-                    href="mailto:hello@techbinaries.com"
-                    className="magnetic hero-cta-primary"
+                  <Link
+                    href="/contact"
+                    className="hero-cta-primary"
                     style={{
-                      display: "inline-flex", alignItems: "center", gap: 10,
+                      display: "inline-flex", alignItems: "center", gap: 8,
                       padding: "15px 28px", background: "#0a0a0a", color: "#fafaf9",
                       textDecoration: "none", fontSize: 14, fontWeight: 500,
                       borderRadius: 999, position: "relative", overflow: "hidden",
-                      willChange: "transform",
                     }}
                   >
                     <span style={{ position: "relative", zIndex: 2 }}>Start a project</span>
-                    <span aria-hidden style={{ position: "relative", zIndex: 2, display: "inline-block" }}>→</span>
-                  </a>
+                    <svg
+                      aria-hidden
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      className="hero-cta-arrow"
+                      style={{ position: "relative", zIndex: 2, flexShrink: 0 }}
+                    >
+                      <path
+                        d="M2.5 6h7M6 2.5L9.5 6 6 9.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </Link>
                 </div>
               </div>
 
@@ -1161,7 +1196,7 @@ export default function HomePage() {
                     </div>
                     <div className="hero-terminal-line" style={{ opacity: 0, display: "flex", gap: 14 }}>
                       <span style={{ color: "rgba(255,255,255,0.25)", width: 14, textAlign: "right" }}>06</span>
-                      <span>  <span style={{ color: "#a3e635" }}>ship</span>: <span style={{ color: "#ec4899" }}>async</span> () =&gt; <span style={{ color: "rgba(255,255,255,0.5)" }}>/* every week */</span></span>
+                      <span>  <span style={{ color: "#a3e635" }}>ship</span>: <span style={{ color: "#ec4899" }}>async</span> () =&gt; <span style={{ color: "rgba(255,255,255,0.5)" }}>{"/"}* every week *{"/"}</span></span>
                     </div>
                     <div className="hero-terminal-line" style={{ opacity: 0, display: "flex", gap: 14 }}>
                       <span style={{ color: "rgba(255,255,255,0.25)", width: 14, textAlign: "right" }}>07</span>
@@ -1876,7 +1911,7 @@ export default function HomePage() {
 
         <div style={{ display: "flex", flexDirection: "column" }}>
         {/* ── PROCESS (HORIZONTAL PINNED SCROLL) ── */}
-        <section
+        {false && <section
           id="process"
           className="process-pin"
           style={{
@@ -2064,7 +2099,7 @@ export default function HomePage() {
           >
             04 phases
           </div>
-        </section>
+        </section>}
 
         {/* ── GROWTH STRATEGY / BINARY ENGINE ── */}
         <section
@@ -2365,7 +2400,7 @@ export default function HomePage() {
         </section>
 
         {/* ── TECH MARQUEE ── */}
-        <section
+        {false && <section
           className="tech-marquee"
           onMouseEnter={handleTechMarqueeEnter}
           onMouseLeave={handleTechMarqueeLeave}
@@ -2455,15 +2490,15 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </section>
+        </section>}
 
         {/* ── CTA ── */}
-        <section id="contact" style={{ padding: "0 20px 80px", borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 80 }}>
+        <section id="contact" style={{ padding: "0 20px 64px", borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 64 }}>
           <div
             id="cta-inner"
             style={{
-              borderRadius: 32, overflow: "hidden",
-              padding: "120px 72px", position: "relative",
+              borderRadius: 28, overflow: "hidden",
+              padding: "92px 56px", position: "relative",
               background: "#0a0a0a", color: "#fafaf9",
               opacity: 0, maxWidth: 1320, margin: "0 auto",
             }}
@@ -2508,13 +2543,13 @@ export default function HomePage() {
               />
             </div>
 
-            <div style={{ position: "relative", zIndex: 1, maxWidth: 820 }}>
+            <div style={{ position: "relative", zIndex: 1, maxWidth: 760 }}>
               <h2
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: "clamp(48px, 7vw, 108px)", fontWeight: 500,
+                  fontSize: "clamp(40px, 6.2vw, 88px)", fontWeight: 500,
                   letterSpacing: "-0.04em", lineHeight: 0.92,
-                  margin: "0 0 36px",
+                  margin: "0 0 28px",
                 }}
               >
                 Have a product<br />
@@ -2523,18 +2558,18 @@ export default function HomePage() {
                   Let&apos;s talk.
                 </span>
               </h2>
-              <p style={{ fontSize: 16, color: "rgba(255,255,255,0.58)", maxWidth: 520, lineHeight: 1.65, margin: "0 0 48px" }}>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.58)", maxWidth: 500, lineHeight: 1.62, margin: "0 0 36px" }}>
                 Free 30-minute discovery call. You&apos;ll talk directly with an engineer
                 and a strategist. No sales pitch, just a real conversation about your
                 problem.
               </p>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <a
                   href="mailto:hello@techbinaries.com"
                   style={{
                     display: "inline-flex", alignItems: "center", gap: 10,
-                    padding: "15px 28px", background: "#fafaf9", color: "#0a0a0a",
-                    textDecoration: "none", fontSize: 14, fontWeight: 500,
+                    padding: "13px 24px", background: "#fafaf9", color: "#0a0a0a",
+                    textDecoration: "none", fontSize: 13, fontWeight: 500,
                     borderRadius: 999, transition: "transform 0.2s",
                   }}
                 >
@@ -2545,10 +2580,10 @@ export default function HomePage() {
                   href="mailto:hello@techbinaries.com"
                   style={{
                     display: "inline-flex", alignItems: "center", gap: 10,
-                    padding: "15px 28px",
+                    padding: "13px 24px",
                     border: "1px solid rgba(255,255,255,0.2)",
                     color: "rgba(255,255,255,0.85)",
-                    textDecoration: "none", fontSize: 14, fontWeight: 500,
+                    textDecoration: "none", fontSize: 13, fontWeight: 500,
                     borderRadius: 999, transition: "background 0.2s, border-color 0.2s",
                   }}
                   className="ghost-btn-dark"
@@ -2559,9 +2594,9 @@ export default function HomePage() {
 
               <div
                 style={{
-                  marginTop: 80, paddingTop: 32,
+                  marginTop: 56, paddingTop: 24,
                   borderTop: "1px solid rgba(255,255,255,0.08)",
-                  display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32,
+                  display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24,
                 }}
               >
                 {[
@@ -2570,10 +2605,10 @@ export default function HomePage() {
                   { k: "Based in", v: "Houston, US" },
                 ].map((it) => (
                   <div key={it.k}>
-                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8 }}>
+                    <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 6 }}>
                       {it.k}
                     </div>
-                    <div style={{ fontSize: 17, color: "#fafaf9", fontFamily: "var(--font-display)", fontWeight: 500, letterSpacing: "-0.01em" }}>
+                    <div style={{ fontSize: 15, color: "#fafaf9", fontFamily: "var(--font-display)", fontWeight: 500, letterSpacing: "-0.01em" }}>
                       {it.v}
                     </div>
                   </div>
@@ -2619,7 +2654,7 @@ export default function HomePage() {
               }}
             >
               <div>
-                <a
+                <Link
                   href="/"
                   aria-label="TechBinaries homepage"
                   style={{
@@ -2649,7 +2684,7 @@ export default function HomePage() {
                       }}
                     />
                   </span>
-                </a>
+                </Link>
                 <a
                   href="mailto:hello@techbinaries.com"
                   className="footer-email"
@@ -2684,11 +2719,13 @@ export default function HomePage() {
                   ],
                 },
                 {
-                  heading: "Growth",
+                  heading: "Explore",
                   links: [
-                    { label: "Strategy OS", href: "#studio", ext: false },
-                    { label: "Testimonials", href: "#testimonials", ext: false },
-                    { label: "Stack", href: "#tech-stack", ext: false },
+                    { label: "place", href: "/place", ext: false },
+                    { label: "about us", href: "/about", ext: false },
+                    { label: "contact", href: "/contact", ext: false },
+                    { label: "Blogs", href: "/blogs", ext: false },
+                    { label: "careers", href: "/careers", ext: false },
                   ],
                 },
               ].map((col) => (
@@ -2953,6 +2990,10 @@ export default function HomePage() {
           z-index: 1;
         }
         .hero-cta-primary:hover::before { transform: translateX(0); }
+        .hero-cta-primary:hover .hero-cta-arrow {
+          transform: translateX(2px);
+        }
+        .hero-cta-arrow { transition: transform 0.25s ease; }
 
         .hero-terminal { transition: filter 0.4s; }
         .hero-terminal:hover { filter: drop-shadow(0 10px 30px rgba(0,0,0,0.15)); }
@@ -3586,7 +3627,7 @@ export default function HomePage() {
           .growth-orbit-copy span { font-size: 10.5px !important; }
           /* On small screens let the headline wrap naturally */
           .hero-line-3 { white-space: normal !important; }
-          #cta-inner { padding: 72px 32px !important; border-radius: 20px !important; }
+          #cta-inner { padding: 64px 26px !important; border-radius: 18px !important; }
           .hero-cta { justify-content: flex-start !important; }
 
           .hero-stats-grid { grid-template-columns: repeat(2, 1fr) !important; row-gap: 24px; }
