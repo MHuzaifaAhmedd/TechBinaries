@@ -2382,6 +2382,2356 @@
 
 //version 2
 
+// "use client";
+
+// import { useEffect, useRef, useState } from "react";
+// import gsap from "gsap";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
+// import Lenis from "@studio-freight/lenis";
+// import Link from "next/link";
+// import SiteHeader from "@/components/SiteHeader";
+// import SiteFooter from "@/components/SiteFooter";
+
+// gsap.registerPlugin(ScrollTrigger);
+
+// // ── DATA ──────────────────────────────────────────────────────────────────────
+
+// const SUB_SERVICES = [
+//   {
+//     num: "01",
+//     bin: "0001",
+//     title: "Custom Web Application Development",
+//     desc: "Production-grade web apps built for performance, scale, and long-term maintainability.",
+//     href: "/services/custom-software-digital-solutions/custom-web-application-development",
+//     accent: "#d4d4d8",
+//     tags: ["Next.js", "React", "Node", "Postgres"],
+//   },
+//   {
+//     num: "02",
+//     bin: "0010",
+//     title: "Mobile App Development",
+//     desc: "Native and cross-platform iOS & Android apps that feel fast and ship on schedule.",
+//     href: "/services/custom-software-digital-solutions/mobile-app-development-ios-android",
+//     accent: "#a3a3a3",
+//     tags: ["iOS", "Android", "React Native", "Swift"],
+//   },
+//   {
+//     num: "03",
+//     bin: "0011",
+//     title: "SaaS Product Development",
+//     desc: "Multi-tenant SaaS platforms with billing, auth, analytics, and growth loops baked in.",
+//     href: "/services/custom-software-digital-solutions/saas-product-development",
+//     accent: "#e5e5e5",
+//     tags: ["Multi-tenant", "Billing", "Auth", "Analytics"],
+//   },
+//   {
+//     num: "04",
+//     bin: "0100",
+//     title: "UI/UX Design Systems",
+//     desc: "Design systems, component libraries, and product UX engineered for consistency at scale.",
+//     href: "/services/custom-software-digital-solutions/ui-ux-design-systems",
+//     accent: "#737373",
+//     tags: ["Design Systems", "Figma", "Tokens", "A11y"],
+//   },
+//   {
+//     num: "05",
+//     bin: "0101",
+//     title: "CMS & Admin Panel Development",
+//     desc: "Content systems and internal tools that empower teams without slowing them down.",
+//     href: "/services/custom-software-digital-solutions/cms-admin-panel-development",
+//     accent: "#bdbdbd",
+//     tags: ["Headless CMS", "Admin UI", "RBAC", "Workflows"],
+//   },
+//   {
+//     num: "06",
+//     bin: "0110",
+//     title: "High-Performance Landing Pages",
+//     desc: "Pixel-perfect, conversion-tuned landing pages with sub-second load and SEO baked in.",
+//     href: "/services/custom-software-digital-solutions/high-performance-landing-pages",
+//     accent: "#8a8a8a",
+//     tags: ["Core Web Vitals", "SEO", "A/B Ready", "CRO"],
+//   },
+// ];
+
+// // "What We Build" — concrete product types, paired with binary IDs.
+// // Visual treatment: left column = text, right column = animated browser/device frames.
+// const WE_BUILD = [
+//   { id: "saas",      bin: "01", label: "SaaS Platforms",       desc: "Multi-tenant products with billing, dashboards, and integrations." },
+//   { id: "dashboard", bin: "10", label: "Business Dashboards",  desc: "Real-time analytics surfaces wired to your live data." },
+//   { id: "mobile",    bin: "11", label: "Mobile Apps",          desc: "Native iOS, Android, and cross-platform consumer apps." },
+//   { id: "internal",  bin: "00", label: "Internal Tools",       desc: "Admin panels and ops tooling that replace spreadsheets." },
+//   { id: "mvp",       bin: "01", label: "MVPs",                 desc: "Ship-fast prototypes built on architecture that can scale." },
+//   { id: "market",    bin: "10", label: "Marketplaces",         desc: "Two-sided platforms with payments, search, and trust systems." },
+// ];
+
+// const VALUE_PROPS = [
+//   {
+//     id: "performance",
+//     metric: "98%+",
+//     metricLabel: "Avg Lighthouse",
+//     title: "Performance that keeps users engaged",
+//     desc: "We build with runtime budgets in mind: fast pages, stable interactions, and measurable improvements (Lighthouse, Core Web Vitals, and real device testing).",
+//   },
+//   {
+//     id: "architecture",
+//     metric: "10×",
+//     metricLabel: "Growth headroom",
+//     title: "Architecture that scales as you grow",
+//     desc: "We design clean boundaries and observable systems so you can ship new features without rework. Fewer incidents, faster iteration, and less tech debt over time.",
+//   },
+//   {
+//     id: "design-system",
+//     metric: "1 system",
+//     metricLabel: "Design coverage",
+//     title: "Design systems that reduce UX friction",
+//     desc: "Tokens, reusable components, and consistent patterns across web, mobile, and internal tools. Your product stays coherent while teams move faster.",
+//   },
+//   {
+//     id: "delivery",
+//     metric: "Weekly",
+//     metricLabel: "Shipped iterations",
+//     title: "Delivery cadence that accelerates momentum",
+//     desc: "Weekly demos, feature-flagged deploys, and post-launch support. You learn faster, reduce rollout risk, and keep growth moving.",
+//   },
+// ];
+
+// // Process — kept identical to landing page treatment, extended to 6 phases.
+// const PROCESS = [
+//   { num: "01", title: "Discovery",   desc: "Deep-dive into your business, users, and technical landscape to uncover what actually needs to be built.", points: ["Stakeholder interviews", "Technical audit", "Opportunity mapping"] },
+//   { num: "02", title: "Design",      desc: "We design the experience — flows, wireframes, and high-fidelity UI — before a single line of production code is written.", points: ["UX flows & wireframes", "High-fidelity UI", "Design tokens"] },
+//   { num: "03", title: "Development", desc: "Agile sprints with weekly demos. You stay close to the work. We ship fast without cutting corners.", points: ["Weekly demos", "CI/CD pipeline", "Code review"] },
+//   { num: "04", title: "Testing",     desc: "Automated and manual QA across devices, browsers, and edge cases. Performance, accessibility, and security baked in.", points: ["Automated test suites", "Cross-device QA", "Performance budgets"] },
+//   { num: "05", title: "Launch",      desc: "Phased rollout with monitoring, observability, and rollback plans. We don't ship and pray.", points: ["Phased rollout", "Monitoring & alerts", "Rollback ready"] },
+//   { num: "06", title: "Support",     desc: "Post-launch support, iteration, and growth. We don't disappear after go-live.", points: ["SLA-backed support", "Continuous improvement", "Roadmap planning"] },
+// ];
+
+// const TECH = [
+//   "React", "Next.js", "TypeScript", "Vue", "Svelte", "Tailwind",
+//   "Node.js", "Python", "Go", "Rust", "GraphQL", "PostgreSQL",
+//   "Swift", "Kotlin", "React Native", "Flutter",
+//   "AWS", "GCP", "Kubernetes", "Docker", "Terraform", "Redis",
+// ];
+
+// // Results — outcomes, paired with the project shape so each card tells a story.
+// const RESULTS = [
+//   { metric: "43%",  label: "Faster page loads", project: "FinEdge · Trading dashboard",       desc: "Migrated from a legacy SPA to an edge-rendered Next.js stack. LCP dropped from 3.4s to 1.9s in the first sprint." },
+//   { metric: "2.4×", label: "Conversion lift",   project: "NovaRetail · Checkout flow",        desc: "Re-architected the checkout funnel with progressive enhancement and inline validation. Cart-to-purchase rate doubled." },
+//   { metric: "$4M",  label: "Annual savings",    project: "ShipFast · Logistics engine",       desc: "Replaced a hand-tuned routing heuristic with an ML-powered optimization service. Fuel + ops costs cut in year one." },
+//   { metric: "2M+",  label: "Users served",      project: "MedCore · Patient platform",        desc: "Designed a multi-region, HIPAA-compliant architecture from scratch. Scaled to 2M+ MAU without a single major incident." },
+// ];
+
+// const FAQS = [
+//   { q: "How much does custom software development cost?",          a: "Most projects fall between $40K and $250K depending on scope, team size, and timeline. We provide fixed-price proposals after a paid discovery sprint so there are no surprises mid-build. For exploratory MVPs, we also offer time-and-materials engagements with weekly cost ceilings." },
+//   { q: "How long does it take to build a custom application?",     a: "MVPs typically take 8–12 weeks. Full production builds run 16–24 weeks. We share a detailed Gantt during the proposal phase, with weekly milestones you can hold us to. Tight deadlines are doable when scope is clear — we'll tell you honestly what fits." },
+//   { q: "What technologies do you specialize in?",                  a: "Our default stack is TypeScript end-to-end (React, Next.js, Node), Postgres, and AWS or GCP. For mobile we ship native (Swift, Kotlin) when performance matters and React Native when speed-to-market wins. We choose tooling based on your problem, not because it's trendy." },
+//   { q: "Do you handle the entire process or just one part?",       a: "Both. We can own discovery → design → engineering → launch → support end-to-end, or we can plug into your existing team in any of those phases. Most clients start with a discovery sprint and expand the engagement based on what's working." },
+//   { q: "What happens after the product launches?",                 a: "We offer SLA-backed maintenance retainers covering monitoring, security patches, bug fixes, and small feature work. Many clients keep us on as a fractional engineering team. You're never locked in — all code, infrastructure, and credentials transfer to you." },
+//   { q: "Can you work with our existing team or codebase?",         a: "Yes. We do legacy modernization, codebase audits, and team augmentation. We're comfortable inheriting messy code, untangling architecture, and shipping alongside your engineers. No ego, no rewrites for the sake of rewriting." },
+//   { q: "How do you handle data security and compliance?",          a: "SOC 2-aligned engineering practices by default. We've shipped HIPAA, PCI-DSS, and GDPR-compliant systems. Security reviews, penetration testing, and threat modeling are part of our standard delivery, not an upsell." },
+//   { q: "Do you sign NDAs before discovery calls?",                 a: "Of course. Send us your NDA before the call and we'll have it back signed within the day. We also have a mutual NDA template if you'd prefer to use ours." },
+// ];
+
+// // ── COMPONENT ─────────────────────────────────────────────────────────────────
+
+// export default function CustomSoftwarePage() {
+//   // FAQ accordion
+//   const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+//   // Mobile breakpoint
+//   const [isMobile, setIsMobile] = useState(false);
+
+//   // "What we build" hover state — drives which device mockup is highlighted
+//   // in the right column. Keyboard-accessible via tab focus.
+//   const [hoveredBuild, setHoveredBuild] = useState<number>(0);
+
+//   // Prevent hover-driven re-renders while the page is scrolling.
+//   // When the pointer stays in place, as sections move under it React can
+//   // fire multiple mouseenter events quickly -> causes jank.
+//   const isLenisScrollingRef = useRef(false);
+//   const hoverLockTimeoutRef = useRef<number | null>(null);
+//   const pendingHoveredBuildRef = useRef<number | null>(null);
+
+//   // Tech marquee refs
+//   const marqueeLeftRef = useRef<HTMLDivElement>(null);
+//   const marqueeRightRef = useRef<HTMLDivElement>(null);
+//   const marqueeLeftTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const marqueeRightTweenRef = useRef<gsap.core.Tween | null>(null);
+
+//   // Lenis
+//   const lenisRef = useRef<Lenis | null>(null);
+
+//   // Mobile detector
+//   useEffect(() => {
+//     if (typeof window === "undefined") return;
+//     const mq = window.matchMedia("(max-width: 900px)");
+//     const update = () => setIsMobile(mq.matches);
+//     update();
+//     mq.addEventListener("change", update);
+//     return () => mq.removeEventListener("change", update);
+//   }, []);
+
+//   // Lenis smooth scroll
+//   useEffect(() => {
+//     const lenis = new Lenis({
+//       duration: 1.1,
+//       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+//       wheelMultiplier: 1,
+//       touchMultiplier: 1.4,
+//       smoothWheel: true,
+//     });
+//     lenisRef.current = lenis;
+//     lenis.on("scroll", () => {
+//       isLenisScrollingRef.current = true;
+//       if (hoverLockTimeoutRef.current) window.clearTimeout(hoverLockTimeoutRef.current);
+//       hoverLockTimeoutRef.current = window.setTimeout(() => {
+//         const next = pendingHoveredBuildRef.current;
+//         pendingHoveredBuildRef.current = null;
+//         isLenisScrollingRef.current = false;
+//         if (typeof next === "number") {
+//           setHoveredBuild((prev) => (prev === next ? prev : next));
+//         }
+//       }, 150);
+//       ScrollTrigger.update();
+//     });
+//     const ticker = (time: number) => lenis.raf(time * 1000);
+//     gsap.ticker.add(ticker);
+//     gsap.ticker.lagSmoothing(0);
+//     return () => {
+//       gsap.ticker.remove(ticker);
+//       if (hoverLockTimeoutRef.current) window.clearTimeout(hoverLockTimeoutRef.current);
+//       lenis.destroy();
+//       lenisRef.current = null;
+//     };
+//   }, []);
+
+//   // GSAP animations
+//   useEffect(() => {
+//     const ctx = gsap.context(() => {
+//       // ── HERO: split-character intro ──
+//       const heroTl = gsap.timeline({ delay: 0.1 });
+//       const headlineChars = gsap.utils.toArray<HTMLElement>(".csd-h1-char");
+//       heroTl.fromTo(
+//         headlineChars,
+//         { yPercent: 110, opacity: 0 },
+//         { yPercent: 0, opacity: 1, duration: 0.85, stagger: { each: 0.018 }, ease: "power4.out" },
+//         0
+//       );
+//       heroTl.fromTo(
+//         ".csd-hero-fade",
+//         { opacity: 0, y: 20 },
+//         { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" },
+//         0.55
+//       );
+//       heroTl.fromTo(
+//         ".csd-hero-binary-frame",
+//         { opacity: 0, scale: 0.97 },
+//         { opacity: 1, scale: 1, duration: 1.1, ease: "power3.out" },
+//         0.4
+//       );
+
+//       // Batched reveals reduce per-element ScrollTrigger load and keep scroll smooth.
+//       const setupBatchReveal = (
+//         selector: string,
+//         fromVars: gsap.TweenVars,
+//         toVars: gsap.TweenVars,
+//         start: string
+//       ) => {
+//         const items = gsap.utils.toArray<HTMLElement>(selector);
+//         if (!items.length) return;
+//         gsap.set(items, fromVars);
+//         ScrollTrigger.batch(items, {
+//           start,
+//           once: true,
+//           onEnter: (batch) => {
+//             gsap.to(batch, {
+//               ...toVars,
+//               stagger: 0.08,
+//               overwrite: true,
+//             });
+//           },
+//         });
+//       };
+
+//       setupBatchReveal(".csd-sh", { opacity: 0, y: 38 }, { opacity: 1, y: 0, duration: 0.95, ease: "power3.out" }, "top 88%");
+//       setupBatchReveal(".csd-svc-card", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 90%");
+//       setupBatchReveal(".csd-build-row", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, "top 92%");
+//       setupBatchReveal(".csd-vp-card", { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 88%");
+//       setupBatchReveal(".csd-result-card", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 90%");
+//       setupBatchReveal(".csd-faq-row", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, "top 92%");
+
+//       // ── Process: horizontal pin (desktop only) ──
+//       const processTrack = document.querySelector<HTMLElement>(".csd-process-track");
+//       const processPin = document.querySelector<HTMLElement>(".csd-process-pin");
+//       const mm = gsap.matchMedia();
+//       mm.add("(min-width: 769px)", () => {
+//         if (!processTrack || !processPin) return;
+//         const getScrollDistance = () => processTrack.scrollWidth - window.innerWidth + 80;
+//         gsap.to(processTrack, {
+//           x: () => -getScrollDistance(),
+//           ease: "none",
+//           scrollTrigger: {
+//             trigger: processPin,
+//             start: "top top",
+//             end: () => `+=${getScrollDistance()}`,
+//             pin: true,
+//             pinSpacing: true,
+//             anticipatePin: 1,
+//             scrub: 0.8,
+//             invalidateOnRefresh: true,
+//           },
+//         });
+//       });
+
+//       // ── CTA fade ──
+//       gsap.fromTo(".csd-cta-inner",
+//         { opacity: 0, y: 50 },
+//         { opacity: 1, y: 0, duration: 1, ease: "power3.out",
+//           scrollTrigger: { trigger: ".csd-cta-inner", start: "top 85%" } });
+//     });
+//     return () => ctx.revert();
+//   }, []);
+
+//   // Tech marquee
+//   useEffect(() => {
+//     const left = marqueeLeftRef.current;
+//     const right = marqueeRightRef.current;
+//     if (!left || !right) return;
+
+//     gsap.set(left, { xPercent: 0 });
+//     gsap.set(right, { xPercent: -50 });
+
+//     const leftTween = gsap.to(left, { xPercent: -50, duration: 55, ease: "none", repeat: -1 });
+//     const rightTween = gsap.to(right, { xPercent: 0, duration: 60, ease: "none", repeat: -1 });
+//     marqueeLeftTweenRef.current = leftTween;
+//     marqueeRightTweenRef.current = rightTween;
+
+//     return () => {
+//       marqueeLeftTweenRef.current = null;
+//       marqueeRightTweenRef.current = null;
+//       leftTween.kill();
+//       rightTween.kill();
+//     };
+//   }, []);
+
+//   const handleTechMarqueeEnter = () => {
+//     const lt = marqueeLeftTweenRef.current;
+//     const rt = marqueeRightTweenRef.current;
+//     if (lt) gsap.to(lt, { timeScale: 0.35, duration: 0.45, ease: "power2.out" });
+//     if (rt) gsap.to(rt, { timeScale: 0.35, duration: 0.45, ease: "power2.out" });
+//   };
+//   const handleTechMarqueeLeave = () => {
+//     const lt = marqueeLeftTweenRef.current;
+//     const rt = marqueeRightTweenRef.current;
+//     if (lt) gsap.to(lt, { timeScale: 1, duration: 0.45, ease: "power2.out" });
+//     if (rt) gsap.to(rt, { timeScale: 1, duration: 0.45, ease: "power2.out" });
+//   };
+
+//   // Refresh ScrollTrigger after fonts load
+//   useEffect(() => {
+//     const fonts = "fonts" in document ? document.fonts : undefined;
+//     if (!fonts?.ready) return;
+//     fonts.ready.then(() => { ScrollTrigger.refresh(); });
+//   }, []);
+
+//   return (
+//     <>
+//       {/* GRAIN OVERLAY */}
+//       <div
+//         aria-hidden
+//         style={{
+//           position: "fixed", inset: 0, pointerEvents: "none", zIndex: 9997,
+//           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+//           backgroundSize: "180px 180px", opacity: 0.028, mixBlendMode: "multiply",
+//         }}
+//       />
+
+//       <div style={{ background: "#fafaf9", color: "#0a0a0a", fontFamily: "var(--font-body)", overflowX: "hidden" }}>
+//         <SiteHeader />
+
+//         {/* SECTION 1 - HERO */}
+//         <section className="csd-hero">
+//           <div aria-hidden className="csd-hero-grid-bg" />
+//           <div aria-hidden className="csd-hero-orb csd-hero-orb-a" />
+//           <div aria-hidden className="csd-hero-orb csd-hero-orb-b" />
+
+//           <div className="csd-hero-inner">
+//             <div className="csd-hero-main">
+//               <div className="csd-hero-left">
+//                 <h1 className="csd-hero-title">
+//                   <div className="csd-h1-line">
+//                     {"Software".split("").map((c, i) => (
+//                       <span key={`l1-${i}`} className="csd-h1-char">{c === " " ? "\u00A0" : c}</span>
+//                     ))}
+//                   </div>
+//                   <div className="csd-h1-line">
+//                     {"built around".split("").map((c, i) => (
+//                       <span key={`l2-${i}`} className="csd-h1-char" style={{ whiteSpace: "pre" }}>{c === " " ? "\u00A0" : c}</span>
+//                     ))}
+//                   </div>
+//                   <div className="csd-h1-line">
+//                     <span className="csd-h1-italic">
+//                       {"your workflow.".split("").map((c, i) => (
+//                         <span key={`l3i-${i}`} className="csd-h1-char">{c}</span>
+//                       ))}
+//                     </span>
+//                   </div>
+//                 </h1>
+
+//                 <p className="csd-hero-fade csd-hero-lead" style={{ opacity: 0 }}>
+//                   We design, build, and modernize web apps, mobile apps, SaaS platforms,
+//                   admin panels, and customer-facing systems that match your operations,
+//                   integrate with your stack, and stay maintainable after launch.
+//                 </p>
+
+//                 <div className="csd-hero-fade csd-hero-cta-row" style={{ opacity: 0 }}>
+//                   <Link href="/contact" className="csd-cta-primary">
+//                     <span style={{ position: "relative", zIndex: 2 }}>Plan my build</span>
+//                     <svg aria-hidden width="12" height="12" viewBox="0 0 12 12" className="csd-cta-arrow" style={{ position: "relative", zIndex: 2 }}>
+//                       <path d="M2.5 6h7M6 2.5L9.5 6 6 9.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+//                     </svg>
+//                   </Link>
+//                   <a href="#capabilities" className="csd-cta-ghost">
+//                     <span>Explore capabilities</span>
+//                     <svg aria-hidden width="12" height="12" viewBox="0 0 12 12">
+//                       <path d="M6 2.5v7M3 6.5 6 9.5 9 6.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+//                     </svg>
+//                   </a>
+//                 </div>
+
+//               </div>
+
+//               <div className="csd-hero-right">
+//                 <div className="csd-hero-binary-frame" style={{ opacity: 0 }}>
+//                   <div className="csd-hero-card-head">
+//                     <div>
+//                       <span className="csd-hero-card-eyebrow">Delivery Blueprint</span>
+//                       <h2>From business need to shipped product</h2>
+//                     </div>
+//                   </div>
+
+//                   <div className="csd-hero-blueprint">
+//                     <div className="csd-hero-blueprint-main">
+//                       {[
+//                         ["01", "Map", "Users, workflows, data, constraints"],
+//                         ["02", "Model", "Architecture, UX flows, delivery plan"],
+//                         ["03", "Build", "Frontend, backend, integrations, QA"],
+//                         ["04", "Launch", "Monitoring, handoff, iteration"],
+//                       ].map(([num, title, body]) => (
+//                         <div key={num} className="csd-hero-step">
+//                           <span>{num}</span>
+//                           <div>
+//                             <strong>{title}</strong>
+//                             <p>{body}</p>
+//                           </div>
+//                         </div>
+//                       ))}
+//                     </div>
+//                   </div>
+
+//                   {/* Footer caption */}
+//                   <div className="csd-hero-binary-footer">
+//                     <div>
+//                       <div className="csd-hero-binary-foot-k">PRINCIPLE</div>
+//                       <div className="csd-hero-binary-foot-v">Every product is a series of binary decisions made well.</div>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+
+//           </div>
+//         </section>
+
+//         {/* ═══════════════════════════════════════════════════════════════
+//             SECTION 2 — SERVICES SNAPSHOT
+//             DIFFERENT treatment: each service is a wide HORIZONTAL ROW,
+//             not a card grid. Binary code on the left, large display title,
+//             description + tags, and a hover line that fills.
+//             Reads like a manifest of capabilities, not a generic service grid.
+//         ═══════════════════════════════════════════════════════════════ */}
+//         <section id="capabilities" className="csd-cap-section">
+//           <div className="csd-cap-inner">
+//             <div className="csd-sh csd-cap-header">
+//               <div>
+//                 <h2 className="csd-cap-h2">
+//                   Six disciplines.{" "}
+//                   <span className="csd-italic-mute">One senior team.</span>
+//                 </h2>
+//               </div>
+//             </div>
+
+//             <div className="csd-cap-list">
+//               {SUB_SERVICES.map((s) => (
+//                 <Link
+//                   key={s.num}
+//                   id={`cap-${s.num}`}
+//                   href={s.href}
+//                   className="csd-svc-card csd-cap-row"
+//                   style={{ ["--svc-accent" as never]: s.accent }}
+//                 >
+//                   {/* Hover sweep */}
+//                   <span className="csd-cap-row-sweep" aria-hidden />
+
+//                   <div className="csd-cap-row-bin">
+//                     <span className="csd-cap-row-dot" style={{ background: s.accent }} />
+//                     <span>{s.bin}</span>
+//                   </div>
+
+//                   <div className="csd-cap-row-num">{s.num}</div>
+
+//                   <div className="csd-cap-row-body">
+//                     <h3 className="csd-cap-row-title">{s.title}</h3>
+//                   </div>
+
+//                   <div className="csd-cap-row-arrow" aria-hidden>
+//                     <svg width="20" height="20" viewBox="0 0 20 20">
+//                       <path d="M5 10h10M10 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+//                     </svg>
+//                   </div>
+//                 </Link>
+//               ))}
+//             </div>
+//           </div>
+//         </section>
+
+//         {/* ═══════════════════════════════════════════════════════════════
+//             SECTION 5 — PROCESS
+//         ═══════════════════════════════════════════════════════════════ */}
+//         <section
+//           className="csd-process-pin"
+//           style={{
+//             padding: 0, background: "#0a0a0a", color: "#fafaf9",
+//             height: isMobile ? "auto" : "100vh",
+//             overflow: isMobile ? "visible" : "hidden",
+//             position: "relative", display: "flex", flexDirection: "column",
+//           }}
+//         >
+//           <div
+//             aria-hidden
+//             style={{
+//               position: "absolute", inset: 0,
+//               backgroundImage:
+//                 "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
+//               backgroundSize: "60px 60px", pointerEvents: "none",
+//             }}
+//           />
+//           <div
+//             style={{
+//               position: "relative", zIndex: 2, flexShrink: 0,
+//               padding: "clamp(80px, 12vh, 140px) 20px clamp(20px, 3vh, 40px)",
+//               display: "flex", justifyContent: "space-between", alignItems: "flex-end",
+//               gap: 40, flexWrap: "wrap",
+//             }}
+//           >
+//             <div>
+//               <h2
+//                 style={{
+//                   fontFamily: "var(--font-display)",
+//                   fontSize: "clamp(32px, 4.5vw, 72px)", fontWeight: 500,
+//                   letterSpacing: "-0.035em", lineHeight: 0.95, margin: 0,
+//                 }}
+//               >
+//                 Our <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(255,255,255,0.6)" }}>process.</span>
+//               </h2>
+//             </div>
+//             <p style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", maxWidth: 320, lineHeight: 1.65, margin: 0, textAlign: "right", flexShrink: 0 }}>
+//               Six phases. One team. A way of working refined<br />across 150+ shipped products.
+//             </p>
+//           </div>
+
+//           <div style={{ flex: 1, minHeight: 0, display: "flex", alignItems: "center", position: "relative", zIndex: 1 }}>
+//             <div
+//               className="csd-process-track"
+//               style={{
+//                 display: "flex", gap: 20,
+//                 paddingLeft: 20, paddingRight: 112,
+//                 willChange: "transform", alignItems: "stretch",
+//               }}
+//             >
+//               {PROCESS.map((step, i) => (
+//                 <div
+//                   key={i}
+//                   className="csd-process-card"
+//                   style={{
+//                     width: "clamp(320px, 28vw, 440px)", flexShrink: 0,
+//                     padding: "clamp(28px, 3.5vh, 44px) 36px",
+//                     border: "1px solid rgba(255,255,255,0.08)",
+//                     borderRadius: 20, background: "rgba(255,255,255,0.02)",
+//                     display: "flex", flexDirection: "column", justifyContent: "space-between",
+//                     height: "clamp(340px, 58vh, 500px)",
+//                   }}
+//                 >
+//                   <div>
+//                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "clamp(24px, 4vh, 48px)" }}>
+//                       <span
+//                         style={{
+//                           fontFamily: "var(--font-display)",
+//                           fontSize: "clamp(48px, 6vh, 72px)", fontWeight: 500,
+//                           color: "rgba(255,255,255,0.12)",
+//                           lineHeight: 1, letterSpacing: "-0.04em",
+//                           fontVariantNumeric: "tabular-nums",
+//                         }}
+//                       >
+//                         {step.num}
+//                       </span>
+//                       <span
+//                         style={{
+//                           padding: "5px 12px", borderRadius: 999,
+//                           border: "1px solid rgba(255,255,255,0.15)",
+//                           fontSize: 11, fontWeight: 500,
+//                           color: "rgba(255,255,255,0.65)", letterSpacing: "0.04em",
+//                         }}
+//                       >
+//                         Phase {step.num}
+//                       </span>
+//                     </div>
+//                     <h3
+//                       style={{
+//                         fontFamily: "var(--font-display)",
+//                         fontSize: "clamp(26px, 3.2vh, 40px)", fontWeight: 500,
+//                         margin: "0 0 clamp(10px, 2vh, 20px)",
+//                         letterSpacing: "-0.02em", lineHeight: 1,
+//                       }}
+//                     >
+//                       {step.title}
+//                     </h3>
+//                     <p style={{ fontSize: "clamp(13px, 1.6vh, 15px)", color: "rgba(255,255,255,0.6)", lineHeight: 1.65, margin: 0 }}>
+//                       {step.desc}
+//                     </p>
+//                   </div>
+//                   <ul style={{ listStyle: "none", padding: 0, margin: 0, borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "clamp(14px, 2.5vh, 24px)" }}>
+//                     {step.points.map((p) => (
+//                       <li
+//                         key={p}
+//                         style={{
+//                           fontSize: 13, color: "rgba(255,255,255,0.7)",
+//                           padding: "clamp(5px, 1vh, 8px) 0",
+//                           display: "flex", alignItems: "center", gap: 12,
+//                         }}
+//                       >
+//                         <span style={{ width: 14, height: 1, background: "rgba(255,255,255,0.2)", flexShrink: 0 }} />
+//                         {p}
+//                       </li>
+//                     ))}
+//                   </ul>
+//                 </div>
+//               ))}
+//               <div
+//                 style={{
+//                   width: 300, flexShrink: 0,
+//                   padding: "clamp(28px, 3.5vh, 44px) 36px",
+//                   display: "flex", flexDirection: "column", justifyContent: "center",
+//                   height: "clamp(340px, 58vh, 500px)",
+//                 }}
+//               >
+//                 <h3
+//                   style={{
+//                     fontFamily: "var(--font-display)",
+//                     fontSize: "clamp(22px, 2.8vh, 32px)", fontWeight: 500,
+//                     margin: "0 0 20px",
+//                     letterSpacing: "-0.025em", lineHeight: 1.1,
+//                   }}
+//                 >
+//                   Every project. <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(255,255,255,0.6)" }}>No exceptions.</span>
+//                 </h3>
+//                 <Link
+//                   href="/contact"
+//                   style={{
+//                     display: "inline-flex", alignItems: "center", gap: 10,
+//                     padding: "12px 22px", background: "#fafaf9", color: "#0a0a0a",
+//                     borderRadius: 999, fontSize: 13, fontWeight: 500,
+//                     textDecoration: "none", alignSelf: "flex-start", marginTop: 4,
+//                   }}
+//                 >
+//                   Start yours →
+//                 </Link>
+//               </div>
+//             </div>
+//           </div>
+
+//           {!isMobile && (
+//             <>
+//               <div style={{ position: "absolute", bottom: 20, left: 32, fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", display: "flex", alignItems: "center", gap: 10 }}>
+//                 <span style={{ display: "inline-block", width: 28, height: 1, background: "rgba(255,255,255,0.25)" }} />
+//                 Scroll
+//               </div>
+//               <div style={{ position: "absolute", bottom: 20, right: 32, fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", fontVariantNumeric: "tabular-nums" }}>
+//                 06 phases
+//               </div>
+//             </>
+//           )}
+//         </section>
+
+//         {/* ═══════════════════════════════════════════════════════════════
+//             SECTION 3 — WHAT WE BUILD
+//             Image RIGHT, text LEFT. Left = numbered hover list of product
+//             types. Right = animated device frame (browser/dashboard/phone)
+//             that switches based on which row is hovered/focused.
+//         ═══════════════════════════════════════════════════════════════ */}
+//         <section className="csd-build-section">
+//           <div className="csd-build-inner">
+//             <div className="csd-build-grid">
+//               {/* LEFT — text + interactive list */}
+//               <div className="csd-build-left">
+//                 <div className="csd-sh">
+//                   <h2 className="csd-h2">
+//                     Real products,{" "}
+//                     <span className="csd-italic-mute">not slides.</span>
+//                   </h2>
+//                   <p className="csd-h2-lead csd-build-lead">
+//                     Service categories are abstract. Here&apos;s what they
+//                     actually become in production — hover any row to see it.
+//                   </p>
+//                 </div>
+
+//                 <ul className="csd-build-list" role="list">
+//                   {WE_BUILD.map((b, i) => {
+//                     const active = hoveredBuild === i;
+//                     return (
+//                       <li
+//                         key={b.id}
+//                         className="csd-build-row"
+//                         data-active={active ? "true" : "false"}
+//                         onMouseEnter={() => {
+//                           if (isLenisScrollingRef.current) {
+//                             pendingHoveredBuildRef.current = i;
+//                             return;
+//                           }
+//                           setHoveredBuild((prev) => (prev === i ? prev : i));
+//                         }}
+//                         onFocus={() => {
+//                           setHoveredBuild((prev) => (prev === i ? prev : i));
+//                         }}
+//                         tabIndex={0}
+//                       >
+//                         <span className="csd-build-row-bin">
+//                           <span style={{ fontFamily: "var(--font-mono)" }}>{b.bin}</span>
+//                         </span>
+//                         <span className="csd-build-row-label">{b.label}</span>
+//                         <span className="csd-build-row-desc">{b.desc}</span>
+//                         <span className="csd-build-row-line" />
+//                       </li>
+//                     );
+//                   })}
+//                 </ul>
+//               </div>
+
+//               {/* RIGHT — animated device viz tied to hover state */}
+//               <div className="csd-build-right">
+//                 <div className="csd-build-stage" aria-hidden>
+//                   {/* Background grid */}
+//                   <div className="csd-build-stage-grid" />
+
+//                   {/* Floating frames */}
+//                   <BuildFrame index={0} active={hoveredBuild === 0} variant="saas"      label="SaaS" />
+//                   <BuildFrame index={1} active={hoveredBuild === 1} variant="dashboard" label="Dashboard" />
+//                   <BuildFrame index={2} active={hoveredBuild === 2} variant="mobile"    label="Mobile" />
+//                   <BuildFrame index={3} active={hoveredBuild === 3} variant="internal"  label="Internal" />
+//                   <BuildFrame index={4} active={hoveredBuild === 4} variant="mvp"       label="MVP" />
+//                   <BuildFrame index={5} active={hoveredBuild === 5} variant="market"    label="Market" />
+
+//                   {/* Active label badge */}
+//                   <div className="csd-build-stage-badge">
+//                     <span className="csd-build-stage-badge-bin">{WE_BUILD[hoveredBuild].bin}</span>
+//                     <span>{WE_BUILD[hoveredBuild].label}</span>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </section>
+
+//         {/* ═══════════════════════════════════════════════════════════════
+//             SECTION 4 — WHY TEAMS CHOOSE US
+//             Clean, minimal cards that explain how we drive growth.
+//         ═══════════════════════════════════════════════════════════════ */}
+//         <section className="csd-vp-section" aria-labelledby="csd-vp-title">
+//           <div className="csd-vp-inner">
+//             <div className="csd-vp-grid">
+//               <div className="csd-vp-left">
+//                 <div className="csd-sh">
+//                   <h2 id="csd-vp-title" className="csd-h2 csd-h2-light">
+//                     Why teams <span className="csd-italic-light">choose us</span>.
+//                   </h2>
+
+//                   <p className="csd-h2-lead csd-h2-lead-light">
+//                     We help businesses grow through reliable delivery: faster performance, scalable architecture,
+//                     consistent UX, and a cadence your team can trust.
+//                   </p>
+//                 </div>
+//               </div>
+
+//               <div className="csd-vp-right" role="list" aria-label="What drives growth">
+//                 {VALUE_PROPS.map((v) => (
+//                   <div key={v.id} className="csd-vp-card" role="listitem">
+//                     <div className="csd-vp-card-pill" aria-hidden>
+//                       <span className="csd-vp-card-pill-value">{v.metric}</span>
+//                       <span className="csd-vp-card-pill-label">{v.metricLabel}</span>
+//                     </div>
+//                     <h3 className="csd-vp-card-title">{v.title}</h3>
+//                     <p className="csd-vp-card-desc">{v.desc}</p>
+//                   </div>
+//                 ))}
+//               </div>
+//             </div>
+//           </div>
+//         </section>
+
+//         {/* ═══════════════════════════════════════════════════════════════
+//             SECTION 6 — TECH STACK (UNCHANGED — same marquee as landing)
+//         ═══════════════════════════════════════════════════════════════ */}
+//         <section
+//           className="csd-tech-marquee"
+//           onMouseEnter={handleTechMarqueeEnter}
+//           onMouseLeave={handleTechMarqueeLeave}
+//           style={{ padding: "120px 0", borderTop: "1px solid rgba(0,0,0,0.06)", overflow: "hidden", background: "#fafaf9" }}
+//         >
+//           <div className="csd-sh" style={{ maxWidth: 1320, margin: "0 auto 56px", padding: "0 20px", display: "flex", justifyContent: "space-between", alignItems: "end", gap: 40, flexWrap: "wrap" }}>
+//             <div>
+//               <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(32px, 3.8vw, 56px)", fontWeight: 500, letterSpacing: "-0.03em", lineHeight: 1, margin: 0 }}>
+//                 Tools we <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(0,0,0,0.55)" }}>trust.</span>
+//               </h2>
+//             </div>
+//             <p style={{ fontSize: 14, color: "rgba(0,0,0,0.55)", maxWidth: 380, lineHeight: 1.65, margin: 0 }}>
+//               Mature, battle-tested tooling — picked for your problem, not because it&apos;s new.
+//             </p>
+//           </div>
+//           <div style={{ position: "relative" }}>
+//             <div style={{ overflow: "hidden" }}>
+//               <div ref={marqueeLeftRef} className="marquee-track" style={{ display: "flex", width: "max-content", gap: 0 }}>
+//                 {[...TECH, ...TECH].map((t, i) => (
+//                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 28, padding: "0 24px", flexShrink: 0 }}>
+//                     <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(20px, 2.4vw, 34px)", fontWeight: 500, color: "#0a0a0a", letterSpacing: "-0.025em" }}>{t}</span>
+//                     <span aria-hidden style={{ width: 8, height: 8, background: "#0a0a0a", borderRadius: "50%", opacity: 0.2 }} />
+//                   </div>
+//                 ))}
+//               </div>
+//             </div>
+//             <div style={{ overflow: "hidden", marginTop: 20 }}>
+//               <div ref={marqueeRightRef} className="marquee-track" style={{ display: "flex", width: "max-content", gap: 0 }}>
+//                 {[...TECH.slice().reverse(), ...TECH.slice().reverse()].map((t, i) => (
+//                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 28, padding: "0 24px", flexShrink: 0 }}>
+//                     <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(20px, 2.4vw, 34px)", fontWeight: 400, fontStyle: "italic", color: "transparent", WebkitTextStroke: "1px rgba(0,0,0,0.2)", letterSpacing: "-0.025em" }}>{t}</span>
+//                     <span aria-hidden style={{ width: 8, height: 8, border: "1px solid rgba(0,0,0,0.2)", borderRadius: "50%" }} />
+//                   </div>
+//                 ))}
+//               </div>
+//             </div>
+//           </div>
+//         </section>
+
+//         {/* ═══════════════════════════════════════════════════════════════
+//             SECTION 7 — RESULTS / IMPACT
+//             Image LEFT (the metric, huge), text RIGHT (project + story).
+//             Each result is a wide horizontal panel with the number doing
+//             the heavy visual lifting. Reads as evidence, not a stat grid.
+//         ═══════════════════════════════════════════════════════════════ */}
+//         <section className="csd-results-section">
+//           <div className="csd-results-inner">
+//             <div className="csd-sh csd-results-header">
+//               <div>
+//                 <h2 className="csd-h2">
+//                   We don&apos;t just build software.{" "}
+//                   <span className="csd-italic-mute">We deliver results.</span>
+//                 </h2>
+//               </div>
+//               <p className="csd-h2-lead">
+//                 Selected outcomes from recent engagements. Numbers measured
+//                 in production, not extrapolated from pitch decks.
+//               </p>
+//             </div>
+
+//             <div className="csd-results-list">
+//               {RESULTS.map((r, i) => (
+//                 <div key={r.label} className="csd-result-card">
+//                   {/* Left = the number */}
+//                   <div className="csd-result-num-wrap">
+//                     <div className="csd-result-index">
+//                       <span style={{ fontFamily: "var(--font-mono)" }}>R-{String(i + 1).padStart(2, "0")}</span>
+//                     </div>
+//                     <div className="csd-result-metric">{r.metric}</div>
+//                     <div className="csd-result-label">{r.label}</div>
+//                   </div>
+//                   {/* Right = the story */}
+//                   <div className="csd-result-story">
+//                     <div className="csd-result-project">
+//                       <span className="csd-result-project-dot" />
+//                       {r.project}
+//                     </div>
+//                     <p className="csd-result-desc">{r.desc}</p>
+//                   </div>
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+//         </section>
+
+//         {/* ═══════════════════════════════════════════════════════════════
+//             SECTION 8 — FAQs
+//         ═══════════════════════════════════════════════════════════════ */}
+//         <section className="csd-faq-section">
+//           <div className="csd-faq-layout">
+//             <div className="csd-faq-aside csd-sh">
+//               <h2 className="csd-h2">
+//                 Frequently <span className="csd-italic-mute">asked.</span>
+//               </h2>
+//               <p className="csd-h2-lead csd-faq-lead">
+//                 Real questions from real prospects. If yours isn&apos;t here,
+//                 send us a note — we answer every inquiry within 24 hours.
+//               </p>
+//               <Link href="/contact" className="csd-faq-cta">
+//                 Ask us anything
+//                 <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
+//                   <path d="M2.5 6h7M6 2.5L9.5 6 6 9.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+//                 </svg>
+//               </Link>
+//             </div>
+
+//             <div className="csd-faq-list">
+//               {FAQS.map((f, i) => {
+//                 const isOpen = openFaq === i;
+//                 return (
+//                   <div key={i} className="csd-faq-row" data-open={isOpen ? "true" : "false"}>
+//                     <button
+//                       type="button" className="csd-faq-q"
+//                       onClick={() => setOpenFaq(isOpen ? null : i)}
+//                       aria-expanded={isOpen}
+//                       suppressHydrationWarning
+//                     >
+//                       <span className="csd-faq-q-num">{String(i + 1).padStart(2, "0")}</span>
+//                       <span className="csd-faq-q-text">{f.q}</span>
+//                       <span className="csd-faq-q-icon" aria-hidden>
+//                         <svg width="14" height="14" viewBox="0 0 14 14">
+//                           <path d="M3 7h8 M7 3v8" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+//                         </svg>
+//                       </span>
+//                     </button>
+//                     <div className="csd-faq-a">
+//                       <div className="csd-faq-a-inner">{f.a}</div>
+//                     </div>
+//                   </div>
+//                 );
+//               })}
+//             </div>
+//           </div>
+//         </section>
+
+//         {/* ═══════════════════════════════════════════════════════════════
+//             SECTION 9 — FINAL CTA
+//         ═══════════════════════════════════════════════════════════════ */}
+//         <section style={{ padding: "0 20px 64px", borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 64 }}>
+//           <div
+//             className="csd-cta-inner"
+//             style={{
+//               borderRadius: 28, overflow: "hidden",
+//               padding: "92px 56px", position: "relative",
+//               background: "#0a0a0a", color: "#fafaf9",
+//               opacity: 0, maxWidth: 1320, margin: "0 auto",
+//             }}
+//           >
+//             <div aria-hidden style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)", backgroundSize: "48px 48px", pointerEvents: "none" }} />
+//             <div aria-hidden style={{ position: "absolute", top: "-20%", right: "-10%", width: 560, height: 560, background: "radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%)", pointerEvents: "none" }} />
+
+//             {/* Big floating binary mark in CTA — ties the page back to the hero */}
+//             <div aria-hidden className="csd-cta-mark">
+//               <span>1</span><span>0</span>
+//             </div>
+
+//             <div style={{ position: "relative", zIndex: 1, maxWidth: 760 }}>
+//               <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(40px, 6vw, 84px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 0.94, margin: "0 0 28px" }}>
+//                 Ready to build something{" "}
+//                 <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(255,255,255,0.6)" }}>that lasts?</span>
+//               </h2>
+//               <p style={{ fontSize: 15, color: "rgba(255,255,255,0.58)", maxWidth: 540, lineHeight: 1.62, margin: "0 0 36px" }}>
+//                 Free 30-minute discovery call. You&apos;ll talk directly with an engineer
+//                 and a strategist. No sales pitch — just a real conversation about your
+//                 problem, your timeline, and whether we&apos;re the right team for it.
+//               </p>
+//               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+//                 <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 26px", background: "#fafaf9", color: "#0a0a0a", textDecoration: "none", fontSize: 14, fontWeight: 500, borderRadius: 999, transition: "transform 0.2s" }}>
+//                   Book a discovery call <span aria-hidden>→</span>
+//                 </Link>
+//                 <a href="mailto:hello@techbinaries.com" className="csd-ghost-dark" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 26px", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.85)", textDecoration: "none", fontSize: 14, fontWeight: 500, borderRadius: 999, transition: "background 0.2s, border-color 0.2s" }}>
+//                   hello@techbinaries.com
+//                 </a>
+//               </div>
+//               <div style={{ marginTop: 56, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.08)", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+//                 {[
+//                   { k: "Response time",   v: "Within 24h" },
+//                   { k: "Typical project", v: "8–24 weeks" },
+//                   { k: "Engagement type", v: "Fixed or T&M" },
+//                 ].map((it) => (
+//                   <div key={it.k}>
+//                     <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 6 }}>{it.k}</div>
+//                     <div style={{ fontSize: 15, color: "#fafaf9", fontFamily: "var(--font-display)", fontWeight: 500, letterSpacing: "-0.01em" }}>{it.v}</div>
+//                   </div>
+//                 ))}
+//               </div>
+//             </div>
+//           </div>
+//         </section>
+//         <SiteFooter />
+//       </div>
+
+//       <style>{`
+//         /* ═══════════════════════════════════════════════════════════════
+//            SHARED PRIMITIVES
+//         ═══════════════════════════════════════════════════════════════ */
+//         .csd-eyebrow {
+//           display: inline-flex;
+//           align-items: center;
+//           gap: 10px;
+//           margin-bottom: 18px;
+//           font-size: 11px;
+//           font-weight: 600;
+//           letter-spacing: 0.16em;
+//           text-transform: uppercase;
+//           color: rgba(10,10,10,0.5);
+//         }
+//         .csd-eyebrow-line {
+//           width: 24px;
+//           height: 1px;
+//           background: rgba(10,10,10,0.3);
+//         }
+//         .csd-eyebrow-light {
+//           color: rgba(255,255,255,0.55);
+//         }
+//         .csd-eyebrow-light .csd-eyebrow-line {
+//           background: rgba(255,255,255,0.3);
+//         }
+//         .csd-h2 {
+//           font-family: var(--font-display);
+//           font-size: clamp(32px, 4.4vw, 64px);
+//           font-weight: 500;
+//           letter-spacing: -0.032em;
+//           line-height: 1.02;
+//           margin: 0 0 16px;
+//           max-width: 760px;
+//         }
+//         .csd-h2-light { color: #fafaf9; }
+//         .csd-italic-mute {
+//           font-style: italic;
+//           font-weight: 400;
+//           color: rgba(10,10,10,0.55);
+//         }
+//         .csd-italic-light {
+//           font-style: italic;
+//           font-weight: 400;
+//           color: rgba(255,255,255,0.6);
+//         }
+//         .csd-h2-lead {
+//           font-size: 15px;
+//           color: rgba(10,10,10,0.58);
+//           line-height: 1.65;
+//           margin: 0;
+//           max-width: 460px;
+//         }
+//         .csd-h2-lead-light { color: rgba(255,255,255,0.6); }
+
+//         .csd-cta-primary {
+//           display: inline-flex;
+//           align-items: center;
+//           gap: 8px;
+//           padding: 15px 28px;
+//           background: #0a0a0a;
+//           color: #fafaf9;
+//           text-decoration: none;
+//           font-size: 14px;
+//           font-weight: 500;
+//           border-radius: 999px;
+//           position: relative;
+//           overflow: hidden;
+//         }
+//         .csd-cta-primary::before {
+//           content: "";
+//           position: absolute; inset: 0;
+//           background: linear-gradient(90deg, #262626, #0a0a0a);
+//           transform: translateX(-101%);
+//           transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+//           z-index: 1;
+//         }
+//         .csd-cta-primary:hover::before { transform: translateX(0); }
+//         .csd-cta-primary:hover .csd-cta-arrow { transform: translateX(2px); }
+//         .csd-cta-arrow { transition: transform 0.25s ease; }
+
+//         .csd-cta-ghost {
+//           display: inline-flex;
+//           align-items: center;
+//           gap: 8px;
+//           padding: 15px 26px;
+//           border: 1px solid rgba(255,255,255,0.18);
+//           color: rgba(255,255,255,0.85);
+//           text-decoration: none;
+//           font-size: 14px;
+//           font-weight: 500;
+//           border-radius: 999px;
+//           background: transparent;
+//           transition: border-color 0.2s, background 0.2s, color 0.2s;
+//         }
+//         .csd-cta-ghost:hover {
+//           border-color: rgba(255,255,255,0.45);
+//           background: rgba(255,255,255,0.05);
+//           color: #fafaf9;
+//         }
+//         .csd-ghost-dark:hover {
+//           border-color: rgba(255,255,255,0.45) !important;
+//           background: rgba(255,255,255,0.05) !important;
+//         }
+
+//         /* ═══════════════════════════════════════════════════════════════
+//            SECTION 1 - HERO
+//         ═══════════════════════════════════════════════════════════════ */
+//         .csd-hero {
+//           position: relative;
+//           min-height: 100vh;
+//           background:
+//             radial-gradient(circle at 84% 18%, rgba(212,212,216,0.18), transparent 28%),
+//             linear-gradient(135deg, #f8f8f7 0%, #efefed 48%, #e7e5e4 100%);
+//           color: #0a0a0a;
+//           padding: 132px 20px 72px;
+//           overflow: hidden;
+//         }
+//         .csd-hero-grid-bg {
+//           position: absolute;
+//           inset: 0;
+//           background-image:
+//             linear-gradient(rgba(10,10,10,0.045) 1px, transparent 1px),
+//             linear-gradient(90deg, rgba(10,10,10,0.045) 1px, transparent 1px);
+//           background-size: 72px 72px;
+//           mask-image: radial-gradient(ellipse 85% 72% at 50% 28%, black 0%, transparent 88%);
+//           -webkit-mask-image: radial-gradient(ellipse 85% 72% at 50% 28%, black 0%, transparent 88%);
+//           pointer-events: none;
+//         }
+//         .csd-hero-orb {
+//           position: absolute;
+//           border-radius: 999px;
+//           pointer-events: none;
+//           filter: blur(10px);
+//         }
+//         .csd-hero-orb-a {
+//           width: 340px;
+//           height: 340px;
+//           right: 5%;
+//           top: 14%;
+//           background: rgba(255,255,255,0.72);
+//           border: 1px solid rgba(10,10,10,0.06);
+//         }
+//         .csd-hero-orb-b {
+//           width: 220px;
+//           height: 220px;
+//           left: -70px;
+//           bottom: 12%;
+//           background: rgba(10,10,10,0.04);
+//         }
+
+//         .csd-hero-inner {
+//           position: relative;
+//           z-index: 1;
+//           max-width: 1320px;
+//           margin: 0 auto;
+//           display: flex;
+//           flex-direction: column;
+//           min-height: calc(100vh - 204px);
+//         }
+
+//         .csd-hero-meta {
+//           display: inline-flex;
+//           align-items: center;
+//           gap: 12px;
+//           align-self: flex-start;
+//           margin-bottom: 54px;
+//           padding: 9px 14px;
+//           border: 1px solid rgba(10,10,10,0.09);
+//           border-radius: 999px;
+//           background: rgba(255,255,255,0.62);
+//           backdrop-filter: blur(12px);
+//           font-size: 11px;
+//           font-weight: 700;
+//           letter-spacing: 0.14em;
+//           text-transform: uppercase;
+//           color: rgba(10,10,10,0.52);
+//         }
+//         .csd-hero-back {
+//           color: rgba(10,10,10,0.72);
+//           text-decoration: none;
+//           transition: color 0.2s ease;
+//         }
+//         .csd-hero-back:hover { color: #0a0a0a; }
+//         .csd-hero-meta-divider {
+//           width: 4px;
+//           height: 4px;
+//           border-radius: 50%;
+//           background: rgba(10,10,10,0.28);
+//         }
+
+//         .csd-hero-main {
+//           display: grid;
+//           grid-template-columns: minmax(0, 1.02fr) minmax(420px, 0.98fr);
+//           gap: clamp(44px, 6vw, 84px);
+//           align-items: center;
+//           flex: 1;
+//         }
+
+//         .csd-hero-kicker {
+//           display: inline-flex;
+//           align-items: center;
+//           gap: 10px;
+//           margin-bottom: 22px;
+//           font-size: 12px;
+//           font-weight: 700;
+//           letter-spacing: 0.16em;
+//           text-transform: uppercase;
+//           color: rgba(10,10,10,0.56);
+//         }
+//         .csd-hero-kicker-dot {
+//           width: 9px;
+//           height: 9px;
+//           border-radius: 999px;
+//           background: #0a0a0a;
+//           box-shadow: 0 0 0 6px rgba(10,10,10,0.08);
+//         }
+//         .csd-hero-title {
+//           font-family: var(--font-display);
+//           font-size: clamp(48px, 6.6vw, 106px);
+//           font-weight: 500;
+//           line-height: 0.93;
+//           letter-spacing: -0.048em;
+//           margin: 0 0 34px;
+//           color: #0a0a0a;
+//         }
+//         .csd-h1-line {
+//           overflow: hidden;
+//           padding-bottom: 0.075em;
+//           display: block;
+//           white-space: nowrap;
+//         }
+//         .csd-h1-char {
+//           display: inline-block;
+//           will-change: transform;
+//         }
+//         .csd-h1-italic {
+//           font-style: italic;
+//           font-weight: 400;
+//           color: rgba(10,10,10,0.52);
+//           display: inline-flex;
+//         }
+
+//         .csd-hero-lead {
+//           font-size: 17px;
+//           color: rgba(10,10,10,0.62);
+//           max-width: 620px;
+//           line-height: 1.72;
+//           margin: 0 0 32px;
+//         }
+//         .csd-hero-cta-row {
+//           display: flex;
+//           gap: 12px;
+//           flex-wrap: wrap;
+//         }
+//         .csd-hero .csd-cta-ghost {
+//           border-color: rgba(10,10,10,0.14);
+//           color: rgba(10,10,10,0.72);
+//           background: rgba(255,255,255,0.56);
+//         }
+//         .csd-hero .csd-cta-ghost:hover {
+//           border-color: rgba(10,10,10,0.28);
+//           background: #fff;
+//           color: #0a0a0a;
+//         }
+
+//         .csd-hero-right { position: relative; }
+//         .csd-hero-binary-frame {
+//           position: relative;
+//           overflow: hidden;
+//           border: 1px solid rgba(10,10,10,0.08);
+//           border-radius: 24px;
+//           background: #fff;
+//           box-shadow: 0 24px 60px -48px rgba(10,10,10,0.32);
+//         }
+//         .csd-hero-binary-frame::before {
+//           content: none;
+//           position: absolute;
+//           inset: 0;
+//           background-image:
+//             linear-gradient(rgba(10,10,10,0.035) 1px, transparent 1px),
+//             linear-gradient(90deg, rgba(10,10,10,0.035) 1px, transparent 1px);
+//           background-size: 34px 34px;
+//           pointer-events: none;
+//           mask-image: linear-gradient(180deg, black, transparent 78%);
+//           -webkit-mask-image: linear-gradient(180deg, black, transparent 78%);
+//         }
+//         .csd-hero-card-head {
+//           position: relative;
+//           z-index: 1;
+//           display: flex;
+//           justify-content: space-between;
+//           align-items: flex-start;
+//           gap: 20px;
+//           padding: 22px 24px 16px;
+//           border-bottom: 1px solid rgba(10,10,10,0.08);
+//         }
+//         .csd-hero-card-eyebrow {
+//           display: block;
+//           margin-bottom: 9px;
+//           font-size: 10px;
+//           font-weight: 800;
+//           letter-spacing: 0.16em;
+//           text-transform: uppercase;
+//           color: rgba(10,10,10,0.42);
+//         }
+//         .csd-hero-card-head h2 {
+//           font-family: var(--font-display);
+//           font-size: clamp(24px, 2.6vw, 34px);
+//           font-weight: 500;
+//           letter-spacing: -0.03em;
+//           line-height: 1.06;
+//           margin: 0;
+//           max-width: 430px;
+//         }
+
+//         .csd-hero-blueprint {
+//           position: relative;
+//           z-index: 1;
+//           padding: 16px 20px 20px;
+//         }
+//         .csd-hero-blueprint-main {
+//           display: grid;
+//           gap: 4px;
+//         }
+//         .csd-hero-step {
+//           display: grid;
+//           grid-template-columns: 38px 1fr;
+//           gap: 12px;
+//           align-items: start;
+//           padding: 14px 0;
+//           border-bottom: 1px solid rgba(10,10,10,0.08);
+//         }
+//         .csd-hero-step:last-child { border-bottom: none; }
+//         .csd-hero-step > span {
+//           display: grid;
+//           place-items: center;
+//           width: 32px;
+//           height: 32px;
+//           border-radius: 9px;
+//           border: 1px solid rgba(10,10,10,0.12);
+//           background: rgba(10,10,10,0.03);
+//           color: rgba(10,10,10,0.72);
+//           font-family: var(--font-mono);
+//           font-size: 10px;
+//           letter-spacing: 0.08em;
+//         }
+//         .csd-hero-step strong {
+//           display: block;
+//           margin-bottom: 2px;
+//           font-family: var(--font-display);
+//           font-size: 18px;
+//           font-weight: 500;
+//           letter-spacing: -0.02em;
+//           color: #0a0a0a;
+//         }
+//         .csd-hero-step p {
+//           margin: 0;
+//           font-size: 13px;
+//           line-height: 1.45;
+//           color: rgba(10,10,10,0.56);
+//         }
+//         .csd-hero-binary-footer {
+//           position: relative;
+//           z-index: 1;
+//           display: flex;
+//           align-items: center;
+//           justify-content: space-between;
+//           gap: 20px;
+//           padding: 14px 24px 18px;
+//           border-top: 1px solid rgba(10,10,10,0.08);
+//           background: rgba(10,10,10,0.015);
+//         }
+//         .csd-hero-binary-foot-k {
+//           font-size: 10px;
+//           font-weight: 800;
+//           letter-spacing: 0.16em;
+//           text-transform: uppercase;
+//           color: rgba(10,10,10,0.42);
+//           margin-bottom: 4px;
+//         }
+//         .csd-hero-binary-foot-v {
+//           max-width: 430px;
+//           font-size: 13px;
+//           line-height: 1.4;
+//           color: rgba(10,10,10,0.64);
+//         }
+
+//         /* ═══════════════════════════════════════════════════════════════
+//            SECTION 2 — CAPABILITIES (horizontal rows)
+//         ═══════════════════════════════════════════════════════════════ */
+//         .csd-cap-h2 {
+//           font-family: var(--font-display);
+//           font-size: clamp(26px, 3.2vw, 40px);
+//           font-weight: 500;
+//           letter-spacing: -0.03em;
+//           line-height: 1.06;
+//           margin: 0;
+//           max-width: 760px;
+//         }
+//         .csd-cap-section {
+//           padding: 84px 20px;
+//           background: #fafaf9;
+//           border-top: 1px solid rgba(0,0,0,0.06);
+//         }
+//         .csd-cap-inner { max-width: 1320px; margin: 0 auto; }
+//         .csd-cap-header {
+//           display: flex;
+//           justify-content: flex-start;
+//           align-items: flex-end;
+//           gap: 16px;
+//           flex-wrap: wrap;
+//           margin-bottom: 24px;
+//         }
+
+//         .csd-cap-list {
+//           display: flex;
+//           flex-direction: column;
+//           border-top: 1px solid rgba(10,10,10,0.1);
+//         }
+//         .csd-cap-row {
+//           display: grid;
+//           grid-template-columns: 80px 56px 1fr 40px;
+//           gap: 18px;
+//           align-items: center;
+//           padding: 20px 16px;
+//           border-bottom: 1px solid rgba(10,10,10,0.1);
+//           text-decoration: none;
+//           color: #0a0a0a;
+//           position: relative;
+//           overflow: hidden;
+//           transition: background 0.3s ease;
+//         }
+//         .csd-cap-row-sweep {
+//           position: absolute;
+//           left: 0; top: 0; bottom: 0;
+//           width: 4px;
+//           background: var(--svc-accent);
+//           transform: scaleY(0);
+//           transform-origin: top center;
+//           transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+//         }
+//         .csd-cap-row:hover {
+//           background: rgba(10,10,10,0.025);
+//         }
+//         .csd-cap-row:hover .csd-cap-row-sweep {
+//           transform: scaleY(1);
+//         }
+//         .csd-cap-row-bin {
+//           display: inline-flex;
+//           align-items: center;
+//           gap: 8px;
+//           font-family: var(--font-mono);
+//           font-size: 11px;
+//           font-weight: 500;
+//           color: rgba(10,10,10,0.55);
+//           letter-spacing: 0.04em;
+//         }
+//         .csd-cap-row-dot {
+//           width: 8px; height: 8px;
+//           border-radius: 50%;
+//         }
+//         .csd-cap-row-num {
+//           font-family: var(--font-display);
+//           font-size: 26px;
+//           font-weight: 500;
+//           letter-spacing: -0.04em;
+//           color: transparent;
+//           -webkit-text-stroke: 1px rgba(10,10,10,0.3);
+//           font-variant-numeric: tabular-nums;
+//           line-height: 1;
+//           transition: color 0.3s, -webkit-text-stroke-color 0.3s;
+//         }
+//         .csd-cap-row:hover .csd-cap-row-num {
+//           color: #0a0a0a;
+//           -webkit-text-stroke-color: transparent;
+//         }
+//         .csd-cap-row-title {
+//           font-family: var(--font-display);
+//           font-size: clamp(18px, 2.2vw, 26px);
+//           font-weight: 500;
+//           letter-spacing: -0.022em;
+//           line-height: 1.18;
+//           margin: 0;
+//         }
+//         .csd-cap-row-desc {
+//           font-size: 14px;
+//           color: rgba(10,10,10,0.6);
+//           line-height: 1.55;
+//           margin: 0;
+//           max-width: 580px;
+//         }
+//         .csd-cap-row-tags {
+//           display: flex;
+//           flex-wrap: wrap;
+//           gap: 5px;
+//           justify-content: flex-end;
+//         }
+//         .csd-cap-row-tags span {
+//           padding: 4px 10px;
+//           border: 1px solid rgba(10,10,10,0.12);
+//           border-radius: 999px;
+//           font-size: 11px;
+//           font-weight: 500;
+//           color: rgba(10,10,10,0.7);
+//           letter-spacing: 0.02em;
+//           background: #fff;
+//         }
+//         .csd-cap-row-arrow {
+//           color: rgba(10,10,10,0.35);
+//           transition: transform 0.3s, color 0.3s;
+//         }
+//         .csd-cap-row:hover .csd-cap-row-arrow {
+//           color: #0a0a0a;
+//           transform: translateX(4px);
+//         }
+
+//         /* ═══════════════════════════════════════════════════════════════
+//            SECTION 3 — WHAT WE BUILD
+//         ═══════════════════════════════════════════════════════════════ */
+//         .csd-build-section {
+//           padding: 140px 20px;
+//           background: #f5f5f4;
+//           border-top: 1px solid rgba(0,0,0,0.06);
+//         }
+//         .csd-build-inner { max-width: 1320px; margin: 0 auto; }
+//         .csd-build-grid {
+//           display: grid;
+//           grid-template-columns: 1fr 1.1fr;
+//           gap: 80px;
+//           align-items: stretch;
+//         }
+//         .csd-build-lead { margin-bottom: 40px; }
+
+//         .csd-build-list {
+//           list-style: none;
+//           padding: 0;
+//           margin: 0;
+//           border-top: 1px solid rgba(10,10,10,0.1);
+//         }
+//         .csd-build-row {
+//           display: grid;
+//           grid-template-columns: 60px 1fr;
+//           column-gap: 18px;
+//           row-gap: 6px;
+//           align-items: baseline;
+//           padding: 22px 0 22px;
+//           border-bottom: 1px solid rgba(10,10,10,0.1);
+//           position: relative;
+//           cursor: pointer;
+//           outline: none;
+//           transition: padding-left 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+//         }
+//         .csd-build-row:focus-visible {
+//           padding-left: 8px;
+//         }
+//         .csd-build-row[data-active="true"] {
+//           padding-left: 8px;
+//         }
+//         .csd-build-row-bin {
+//           font-family: var(--font-mono);
+//           font-size: 13px;
+//           color: rgba(10,10,10,0.4);
+//           letter-spacing: 0.04em;
+//           padding-top: 6px;
+//           transition: color 0.25s;
+//         }
+//         .csd-build-row[data-active="true"] .csd-build-row-bin {
+//           color: #d4d4d8;
+//         }
+//         .csd-build-row-label {
+//           font-family: var(--font-display);
+//           font-size: clamp(22px, 2.6vw, 32px);
+//           font-weight: 500;
+//           letter-spacing: -0.024em;
+//           line-height: 1.1;
+//           color: #0a0a0a;
+//         }
+//         .csd-build-row-desc {
+//           grid-column: 2;
+//           font-size: 14px;
+//           color: rgba(10,10,10,0.6);
+//           line-height: 1.55;
+//           max-width: 520px;
+//         }
+//         .csd-build-row-line {
+//           position: absolute;
+//           left: 0; bottom: -1px;
+//           width: 0;
+//           height: 2px;
+//           background: #d4d4d8;
+//           transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+//         }
+//         .csd-build-row[data-active="true"] .csd-build-row-line {
+//           width: 100%;
+//         }
+
+//         /* Right stage */
+//         .csd-build-right {
+//           position: relative;
+//           min-height: 560px;
+//           display: flex;
+//           align-items: center;
+//           justify-content: center;
+//         }
+//         .csd-build-stage {
+//           position: relative;
+//           width: 100%;
+//           aspect-ratio: 0.95 / 1;
+//           background: #0a0a0a;
+//           border-radius: 28px;
+//           overflow: hidden;
+//           box-shadow: 0 40px 90px -50px rgba(0,0,0,0.5);
+//         }
+//         .csd-build-stage-grid {
+//           position: absolute;
+//           inset: 0;
+//           background-image:
+//             linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+//             linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+//           background-size: 32px 32px;
+//         }
+
+//         .csd-build-frame {
+//           position: absolute;
+//           background: rgba(255,255,255,0.04);
+//           border: 1px solid rgba(255,255,255,0.1);
+//           border-radius: 12px;
+//           padding: 14px;
+//           opacity: 0.35;
+//           contain: layout paint;
+//           will-change: transform, opacity;
+//           transform: scale(0.95) translateY(0);
+//           transition:
+//             opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+//             transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+//           /* backdrop-filter is expensive; only enable it for the active frame */
+//           backdrop-filter: none;
+//         }
+//         .csd-build-frame[data-active="true"] {
+//           opacity: 1;
+//           z-index: 5;
+//           transform: scale(1.03) translateY(-4px);
+//           border-color: rgba(212,212,216,0.5);
+//           background: rgba(212,212,216,0.04);
+//           box-shadow: 0 24px 48px -20px rgba(212,212,216,0.35);
+//           backdrop-filter: blur(6px);
+//         }
+//         .csd-build-frame-head {
+//           display: flex;
+//           align-items: center;
+//           justify-content: space-between;
+//           gap: 8px;
+//           margin-bottom: 10px;
+//         }
+//         .csd-build-frame-dots {
+//           display: flex;
+//           gap: 4px;
+//         }
+//         .csd-build-frame-dots span {
+//           width: 6px; height: 6px;
+//           border-radius: 50%;
+//           background: rgba(255,255,255,0.2);
+//         }
+//         .csd-build-frame-name {
+//           font-family: var(--font-mono);
+//           font-size: 9px;
+//           color: rgba(255,255,255,0.4);
+//           letter-spacing: 0.12em;
+//           text-transform: uppercase;
+//         }
+//         .csd-build-frame-body {
+//           display: flex;
+//           flex-direction: column;
+//           gap: 6px;
+//         }
+
+//         /* Frame variants */
+//         .csd-build-frame-saas      { top: 8%;  left: 5%;  width: 48%; }
+//         .csd-build-frame-dashboard { top: 12%; right: 4%; width: 44%; }
+//         .csd-build-frame-mobile    { top: 38%; left: 38%; width: 26%; aspect-ratio: 0.5; padding: 10px; }
+//         .csd-build-frame-internal  { bottom: 8%; left: 6%;  width: 42%; }
+//         .csd-build-frame-mvp       { bottom: 18%; right: 6%; width: 38%; }
+//         .csd-build-frame-market    { bottom: 4%; right: 22%; width: 36%; }
+
+//         .csd-bf-bar {
+//           height: 6px;
+//           background: rgba(255,255,255,0.12);
+//           border-radius: 2px;
+//         }
+//         .csd-bf-bar-pink {
+//           height: 6px;
+//           background: linear-gradient(90deg, #d4d4d8, rgba(212,212,216,0.3));
+//           border-radius: 2px;
+//         }
+//         .csd-bf-grid {
+//           display: grid;
+//           grid-template-columns: repeat(3, 1fr);
+//           gap: 4px;
+//         }
+//         .csd-bf-grid > div {
+//           aspect-ratio: 1.4;
+//           background: rgba(255,255,255,0.08);
+//           border-radius: 3px;
+//         }
+//         .csd-bf-grid > div:nth-child(2) { background: rgba(212,212,216,0.4); }
+//         .csd-bf-chart {
+//           display: flex;
+//           align-items: flex-end;
+//           gap: 3px;
+//           height: 50px;
+//         }
+//         .csd-bf-chart > span {
+//           flex: 1;
+//           background: rgba(255,255,255,0.14);
+//           border-radius: 2px 2px 0 0;
+//         }
+//         .csd-bf-chart > span:nth-child(odd) {
+//           background: rgba(212,212,216,0.5);
+//         }
+//         .csd-bf-mobile-bar {
+//           height: 4px;
+//           background: rgba(255,255,255,0.12);
+//           border-radius: 2px;
+//         }
+//         .csd-bf-mobile-circle {
+//           width: 28px; height: 28px;
+//           border-radius: 50%;
+//           background: rgba(212,212,216,0.4);
+//           border: 2px solid rgba(212,212,216,0.7);
+//           margin: 8px auto;
+//         }
+
+//         .csd-build-stage-badge {
+//           position: absolute;
+//           bottom: 22px;
+//           left: 22px;
+//           z-index: 10;
+//           display: inline-flex;
+//           align-items: center;
+//           gap: 12px;
+//           padding: 10px 16px 10px 12px;
+//           background: rgba(10,10,10,0.85);
+//           border: 1px solid rgba(255,255,255,0.15);
+//           border-radius: 999px;
+//           backdrop-filter: blur(10px);
+//           font-family: var(--font-display);
+//           font-size: 14px;
+//           color: #fafaf9;
+//           letter-spacing: -0.01em;
+//         }
+//         .csd-build-stage-badge-bin {
+//           font-family: var(--font-mono);
+//           font-size: 10px;
+//           padding: 3px 8px;
+//           background: rgba(212,212,216,0.18);
+//           color: #d4d4d8;
+//           border-radius: 999px;
+//           letter-spacing: 0.1em;
+//         }
+
+//         /* ═══════════════════════════════════════════════════════════════
+//            SECTION 4 — WHY TEAMS CHOOSE US
+//            Clean, minimal layout (no heavy binary visuals).
+//         ═══════════════════════════════════════════════════════════════ */
+//         .csd-vp-section {
+//           padding: 110px 20px;
+//           background: #fafaf9;
+//           color: #0a0a0a;
+//           position: relative;
+//           overflow: hidden;
+//           border-top: 1px solid rgba(0,0,0,0.06);
+//         }
+
+//         .csd-vp-section::before {
+//           content: "";
+//           position: absolute;
+//           inset: 0;
+//           background-image:
+//             linear-gradient(rgba(10,10,10,0.02) 1px, transparent 1px),
+//             linear-gradient(90deg, rgba(10,10,10,0.02) 1px, transparent 1px);
+//           background-size: 72px 72px;
+//           pointer-events: none;
+//           mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 85%);
+//           -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 85%);
+//         }
+
+//         /* Light-theme typography inside the section */
+//         .csd-vp-section .csd-h2-light { color: #0a0a0a; }
+//         .csd-vp-section .csd-italic-light { color: rgba(10,10,10,0.6); }
+//         .csd-vp-section .csd-h2-lead-light { color: rgba(10,10,10,0.58); }
+
+//         .csd-vp-inner {
+//           max-width: 1320px;
+//           margin: 0 auto;
+//           position: relative;
+//           z-index: 1;
+//         }
+
+//         .csd-vp-grid {
+//           display: grid;
+//           grid-template-columns: 0.95fr 1.05fr;
+//           gap: 64px;
+//           align-items: start;
+//         }
+
+//         .csd-vp-left {
+//           display: flex;
+//           flex-direction: column;
+//           gap: 18px;
+//         }
+
+//         .csd-vp-right {
+//           display: grid;
+//           grid-template-columns: 1fr 1fr;
+//           gap: 16px;
+//           align-content: start;
+//         }
+
+//         .csd-vp-card {
+//           padding: 22px 22px 24px;
+//           border: 1px solid rgba(0,0,0,0.08);
+//           border-radius: 16px;
+//           background: rgba(255,255,255,0.9);
+//           display: flex;
+//           flex-direction: column;
+//           gap: 10px;
+//           min-height: 0;
+//           transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+//         }
+
+//         .csd-vp-card:hover {
+//           transform: translateY(-2px);
+//           border-color: rgba(0,0,0,0.18);
+//           box-shadow: 0 14px 32px rgba(10,10,10,0.08);
+//           background: #fff;
+//         }
+
+//         .csd-vp-card-pill {
+//           display: flex;
+//           align-items: baseline;
+//           justify-content: space-between;
+//           gap: 12px;
+//           padding: 10px 12px;
+//           border-radius: 999px;
+//           border: 1px solid rgba(0,0,0,0.08);
+//           background: rgba(10,10,10,0.02);
+//         }
+
+//         .csd-vp-card-pill-value {
+//           font-family: var(--font-display);
+//           font-size: 22px;
+//           font-weight: 500;
+//           letter-spacing: -0.03em;
+//           line-height: 1;
+//           color: #0a0a0a;
+//         }
+
+//         .csd-vp-card-pill-label {
+//           font-size: 11px;
+//           font-weight: 700;
+//           letter-spacing: 0.14em;
+//           text-transform: uppercase;
+//           color: rgba(10,10,10,0.45);
+//           white-space: nowrap;
+//         }
+
+//         .csd-vp-card-title {
+//           font-family: var(--font-display);
+//           font-size: 20px;
+//           font-weight: 500;
+//           letter-spacing: -0.02em;
+//           line-height: 1.25;
+//           margin: 0;
+//           color: #0a0a0a;
+//         }
+
+//         .csd-vp-card-desc {
+//           font-size: 14.5px;
+//           line-height: 1.7;
+//           color: rgba(10,10,10,0.62);
+//           margin: 0;
+//         }
+
+//         /* ═══════════════════════════════════════════════════════════════
+//            SECTION 7 — RESULTS
+//         ═══════════════════════════════════════════════════════════════ */
+//         .csd-results-section {
+//           padding: 140px 20px;
+//           background: #f5f5f4;
+//           border-top: 1px solid rgba(0,0,0,0.06);
+//         }
+//         .csd-results-inner { max-width: 1320px; margin: 0 auto; }
+//         .csd-results-header {
+//           display: flex;
+//           justify-content: space-between;
+//           align-items: end;
+//           gap: 40px;
+//           flex-wrap: wrap;
+//           margin-bottom: 56px;
+//         }
+
+//         .csd-results-list {
+//           display: grid;
+//           grid-template-columns: 1fr 1fr;
+//           gap: 16px;
+//         }
+//         .csd-result-card {
+//           display: grid;
+//           grid-template-columns: 240px 1fr;
+//           gap: 24px;
+//           padding: 32px 32px 36px;
+//           background: #fff;
+//           border: 1px solid rgba(10,10,10,0.1);
+//           border-radius: 22px;
+//           align-items: start;
+//           transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+//           position: relative;
+//           overflow: hidden;
+//         }
+//         .csd-result-card::before {
+//           content: "";
+//           position: absolute;
+//           top: 0; left: 0; bottom: 0;
+//           width: 3px;
+//           background: #f472b6;
+//           transform: scaleY(0);
+//           transform-origin: top;
+//           transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+//         }
+//         .csd-result-card:hover {
+//           transform: translateY(-4px);
+//           border-color: rgba(10,10,10,0.22);
+//           box-shadow: 0 24px 50px -28px rgba(10,10,10,0.22);
+//         }
+//         .csd-result-card:hover::before {
+//           transform: scaleY(1);
+//         }
+//         .csd-result-num-wrap {
+//           display: flex;
+//           flex-direction: column;
+//           gap: 8px;
+//         }
+//         .csd-result-index {
+//           font-size: 11px;
+//           color: rgba(10,10,10,0.4);
+//           letter-spacing: 0.12em;
+//           margin-bottom: 8px;
+//         }
+//         .csd-result-metric {
+//           font-family: var(--font-display);
+//           font-size: clamp(56px, 7vw, 96px);
+//           font-weight: 500;
+//           letter-spacing: -0.045em;
+//           line-height: 0.92;
+//           color: #0a0a0a;
+//           font-variant-numeric: tabular-nums;
+//         }
+//         .csd-result-label {
+//           font-family: var(--font-display);
+//           font-size: 16px;
+//           font-weight: 500;
+//           letter-spacing: -0.012em;
+//           color: rgba(10,10,10,0.65);
+//           margin-top: 4px;
+//         }
+//         .csd-result-story {
+//           padding-top: 28px;
+//         }
+//         .csd-result-project {
+//           display: inline-flex;
+//           align-items: center;
+//           gap: 8px;
+//           font-size: 11px;
+//           font-weight: 600;
+//           letter-spacing: 0.14em;
+//           text-transform: uppercase;
+//           color: rgba(10,10,10,0.55);
+//           margin-bottom: 14px;
+//           padding: 5px 12px;
+//           border: 1px solid rgba(10,10,10,0.12);
+//           border-radius: 999px;
+//           background: rgba(10,10,10,0.02);
+//         }
+//         .csd-result-project-dot {
+//           width: 6px; height: 6px;
+//           border-radius: 50%;
+//           background: #f472b6;
+//         }
+//         .csd-result-desc {
+//           font-size: 14.5px;
+//           line-height: 1.65;
+//           color: rgba(10,10,10,0.62);
+//           margin: 0;
+//         }
+
+//         /* ═══════════════════════════════════════════════════════════════
+//            SECTION 8 — FAQs
+//         ═══════════════════════════════════════════════════════════════ */
+//         .csd-faq-section {
+//           padding: 140px 20px;
+//           background: #fafaf9;
+//           border-top: 1px solid rgba(0,0,0,0.06);
+//         }
+//         .csd-faq-layout {
+//           max-width: 1320px;
+//           margin: 0 auto;
+//           display: grid;
+//           grid-template-columns: 360px 1fr;
+//           gap: 80px;
+//           align-items: start;
+//         }
+//         .csd-faq-aside { position: sticky; top: 120px; }
+//         .csd-faq-lead { margin-bottom: 28px; }
+//         .csd-faq-cta {
+//           display: inline-flex;
+//           align-items: center;
+//           gap: 8px;
+//           padding: 12px 22px;
+//           border: 1px solid rgba(0,0,0,0.85);
+//           color: #0a0a0a;
+//           text-decoration: none;
+//           font-size: 13px;
+//           font-weight: 500;
+//           border-radius: 999px;
+//           transition: background 0.2s, color 0.2s;
+//         }
+//         .csd-faq-cta:hover {
+//           background: #0a0a0a;
+//           color: #fafaf9;
+//         }
+//         .csd-faq-list {
+//           display: flex;
+//           flex-direction: column;
+//           border-top: 1px solid rgba(10,10,10,0.1);
+//         }
+//         .csd-faq-row { border-bottom: 1px solid rgba(10,10,10,0.1); }
+//         .csd-faq-q {
+//           width: 100%;
+//           display: grid;
+//           grid-template-columns: 50px 1fr 30px;
+//           align-items: center;
+//           gap: 16px;
+//           padding: 24px 0;
+//           background: transparent;
+//           border: 0;
+//           cursor: pointer;
+//           text-align: left;
+//           color: #0a0a0a;
+//           font-family: var(--font-display);
+//         }
+//         .csd-faq-q-num {
+//           font-family: var(--font-mono);
+//           font-size: 12px;
+//           font-weight: 500;
+//           color: rgba(10,10,10,0.4);
+//           letter-spacing: 0.06em;
+//         }
+//         .csd-faq-q-text {
+//           font-family: var(--font-display);
+//           font-size: clamp(17px, 1.6vw, 21px);
+//           font-weight: 500;
+//           letter-spacing: -0.018em;
+//           line-height: 1.3;
+//         }
+//         .csd-faq-q-icon {
+//           width: 30px; height: 30px;
+//           display: inline-flex;
+//           align-items: center;
+//           justify-content: center;
+//           border: 1px solid rgba(10,10,10,0.18);
+//           border-radius: 50%;
+//           color: #0a0a0a;
+//           transition: transform 0.35s cubic-bezier(0.22,1,0.36,1),
+//                       background 0.25s, color 0.25s, border-color 0.25s;
+//         }
+//         .csd-faq-row[data-open="true"] .csd-faq-q-icon {
+//           transform: rotate(45deg);
+//           background: #0a0a0a;
+//           color: #fafaf9;
+//           border-color: #0a0a0a;
+//         }
+//         .csd-faq-a {
+//           display: grid;
+//           grid-template-rows: 0fr;
+//           transition: grid-template-rows 0.4s cubic-bezier(0.22,1,0.36,1);
+//         }
+//         .csd-faq-row[data-open="true"] .csd-faq-a {
+//           grid-template-rows: 1fr;
+//         }
+//         .csd-faq-a-inner {
+//           overflow: hidden;
+//           padding-left: 66px;
+//           font-family: var(--font-body);
+//           font-size: 15px;
+//           line-height: 1.7;
+//           color: rgba(10,10,10,0.65);
+//           padding-bottom: 0;
+//           transition: padding-bottom 0.4s cubic-bezier(0.22,1,0.36,1);
+//         }
+//         .csd-faq-row[data-open="true"] .csd-faq-a-inner {
+//           padding-bottom: 28px;
+//         }
+
+//         /* CTA mark */
+//         .csd-cta-mark {
+//           position: absolute;
+//           right: 8%;
+//           bottom: -6%;
+//           display: flex;
+//           align-items: center;
+//           gap: clamp(8px, 1.4vw, 18px);
+//           font-family: var(--font-display);
+//           font-size: clamp(180px, 22vw, 380px);
+//           font-weight: 500;
+//           letter-spacing: -0.1em;
+//           line-height: 0.8;
+//           opacity: 0.07;
+//           pointer-events: none;
+//           z-index: 0;
+//         }
+//         .csd-cta-mark span:first-child { color: #fafaf9; }
+//         .csd-cta-mark span:last-child {
+//           color: transparent;
+//           -webkit-text-stroke: 2px rgba(255,255,255,0.6);
+//         }
+
+//         /* Marquee */
+//         .marquee-track { will-change: transform; }
+
+//         /* ═══════════════════════════════════════════════════════════════
+//            RESPONSIVE
+//         ═══════════════════════════════════════════════════════════════ */
+//         @media (max-width: 1100px) {
+//           .csd-cap-row {
+//             grid-template-columns: 60px 50px 1fr 30px;
+//             gap: 18px;
+//           }
+//           .csd-cap-row-tags { display: none; }
+
+//           .csd-build-grid { grid-template-columns: 1fr; gap: 56px; }
+//           .csd-build-right { min-height: 480px; }
+
+//           .csd-vp-grid { grid-template-columns: 1fr; gap: 48px; }
+//           .csd-vp-tape { min-height: 240px; }
+
+//           .csd-results-list { grid-template-columns: 1fr; }
+//           .csd-result-card { grid-template-columns: 200px 1fr; }
+
+//           .csd-faq-layout { grid-template-columns: 1fr; gap: 48px; }
+//           .csd-faq-aside { position: static; }
+//         }
+//         @media (max-width: 900px) {
+//           .csd-hero-main { grid-template-columns: 1fr; gap: 56px; }
+//           .csd-hero-right { max-width: 760px; }
+//         }
+//         @media (max-width: 768px) {
+//           .csd-hero { padding: 120px 14px 60px; min-height: auto; }
+//           .csd-hero-inner { min-height: auto; }
+//           .csd-hero-meta {
+//             max-width: 100%;
+//             align-items: flex-start;
+//             border-radius: 18px;
+//             line-height: 1.35;
+//           }
+//           .csd-hero-title { font-size: clamp(40px, 13vw, 62px); }
+//           .csd-hero-main { gap: 40px; }
+//           .csd-hero-card-head,
+//           .csd-hero-binary-footer {
+//             padding-left: 20px;
+//             padding-right: 20px;
+//           }
+//           .csd-hero-blueprint { grid-template-columns: 1fr; padding: 18px; }
+//           .csd-hero-binary-footer {
+//             align-items: flex-start;
+//             flex-direction: column;
+//           }
+//           .csd-hero-binary-foot-v { text-align: left; }
+
+//           .csd-cap-section,
+//           .csd-build-section,
+//           .csd-vp-section,
+//           .csd-results-section,
+//           .csd-faq-section {
+//             padding-left: 14px;
+//             padding-right: 14px;
+//             padding-top: 90px;
+//             padding-bottom: 90px;
+//           }
+
+//           /* Make just the 6-sub-service section more compact */
+//           .csd-cap-section {
+//             padding-top: 70px;
+//             padding-bottom: 70px;
+//           }
+
+//           .csd-cap-row {
+//             grid-template-columns: 1fr 30px;
+//             gap: 12px;
+//             padding: 22px 14px;
+//           }
+//           .csd-cap-row-bin,
+//           .csd-cap-row-num { display: none; }
+//           .csd-cap-row-title { font-size: 19px; }
+
+//           .csd-build-list { border-top: none; }
+//           .csd-build-row {
+//             grid-template-columns: 40px 1fr;
+//             padding: 18px 0;
+//           }
+//           .csd-build-row-bin { font-size: 11px; padding-top: 4px; }
+//           .csd-build-row-label { font-size: 19px; }
+//           .csd-build-row-desc { font-size: 13px; }
+
+//           .csd-build-right { min-height: 360px; }
+//           .csd-build-frame-saas      { width: 56%; }
+//           .csd-build-frame-dashboard { width: 50%; }
+//           .csd-build-frame-mobile    { width: 30%; }
+//           .csd-build-frame-internal  { width: 50%; }
+//           .csd-build-frame-mvp       { width: 44%; }
+//           .csd-build-frame-market    { width: 42%; }
+
+//           .csd-vp-right { grid-template-columns: 1fr; }
+//           .csd-vp-card { min-height: auto; }
+//           .csd-vp-tape { min-height: 200px; }
+
+//           .csd-result-card {
+//             grid-template-columns: 1fr;
+//             padding: 26px 22px 28px;
+//             gap: 12px;
+//           }
+//           .csd-result-story { padding-top: 4px; }
+
+//           .csd-faq-q { grid-template-columns: 36px 1fr 26px; gap: 12px; padding: 20px 0; }
+//           .csd-faq-q-icon { width: 26px; height: 26px; }
+//           .csd-faq-a-inner { padding-left: 48px; font-size: 14px; }
+//           .csd-faq-row[data-open="true"] .csd-faq-a-inner { padding-bottom: 22px; }
+
+//           .csd-process-pin {
+//             height: auto !important;
+//             overflow: visible !important;
+//           }
+//           .csd-process-pin > div:first-of-type { padding: 80px 14px 32px !important; }
+//           .csd-process-track {
+//             flex-direction: column !important;
+//             padding: 0 14px 60px !important;
+//             transform: none !important;
+//             gap: 16px !important;
+//             width: 100% !important;
+//           }
+//           .csd-process-track > div { flex: 1 1 auto !important; }
+//           .csd-process-card {
+//             width: 100% !important;
+//             height: auto !important;
+//             min-height: 320px !important;
+//           }
+//           .csd-cta-inner { padding: 64px 26px !important; border-radius: 18px !important; }
+//           .csd-cta-inner > div > div[style*="repeat(3, 1fr)"] {
+//             grid-template-columns: 1fr !important;
+//             gap: 18px !important;
+//           }
+//         }
+//       `}</style>
+//     </>
+//   );
+// }
+
+// // ────────────────────────────────────────────────────────────────────────────
+// // BuildFrame — small device/window mockup component used inside the
+// // "What we build" stage. Kept inline to this file so the page is one drop-in.
+// // ────────────────────────────────────────────────────────────────────────────
+// type BuildVariant = "saas" | "dashboard" | "mobile" | "internal" | "mvp" | "market";
+
+// function BuildFrame({
+//   index,
+//   active,
+//   variant,
+//   label,
+// }: {
+//   index: number;
+//   active: boolean;
+//   variant: BuildVariant;
+//   label: string;
+// }) {
+//   return (
+//     <div
+//       className={`csd-build-frame csd-build-frame-${variant}`}
+//       data-active={active ? "true" : "false"}
+//       style={{ ["--idx" as never]: index }}
+//     >
+//       <div className="csd-build-frame-head">
+//         <div className="csd-build-frame-dots">
+//           <span /><span /><span />
+//         </div>
+//         <span className="csd-build-frame-name">{label}</span>
+//       </div>
+//       <div className="csd-build-frame-body">
+//         {variant === "saas" && (
+//           <>
+//             <div className="csd-bf-bar-pink" style={{ width: "70%" }} />
+//             <div className="csd-bf-bar" style={{ width: "100%" }} />
+//             <div className="csd-bf-bar" style={{ width: "85%" }} />
+//             <div className="csd-bf-bar" style={{ width: "60%" }} />
+//           </>
+//         )}
+//         {variant === "dashboard" && (
+//           <>
+//             <div className="csd-bf-grid">
+//               <div /><div /><div />
+//               <div /><div /><div />
+//             </div>
+//             <div className="csd-bf-chart">
+//               <span style={{ height: "30%" }} />
+//               <span style={{ height: "60%" }} />
+//               <span style={{ height: "45%" }} />
+//               <span style={{ height: "80%" }} />
+//               <span style={{ height: "55%" }} />
+//               <span style={{ height: "90%" }} />
+//               <span style={{ height: "65%" }} />
+//             </div>
+//           </>
+//         )}
+//         {variant === "mobile" && (
+//           <>
+//             <div className="csd-bf-mobile-circle" />
+//             <div className="csd-bf-mobile-bar" style={{ width: "80%", margin: "0 auto" }} />
+//             <div className="csd-bf-mobile-bar" style={{ width: "60%", margin: "4px auto 0" }} />
+//             <div style={{ height: 8 }} />
+//             <div className="csd-bf-bar-pink" style={{ width: "100%" }} />
+//           </>
+//         )}
+//         {variant === "internal" && (
+//           <>
+//             <div className="csd-bf-bar" style={{ width: "100%" }} />
+//             <div className="csd-bf-bar" style={{ width: "100%" }} />
+//             <div className="csd-bf-bar-pink" style={{ width: "55%" }} />
+//             <div className="csd-bf-bar" style={{ width: "100%" }} />
+//             <div className="csd-bf-bar" style={{ width: "75%" }} />
+//           </>
+//         )}
+//         {variant === "mvp" && (
+//           <>
+//             <div className="csd-bf-bar-pink" style={{ width: "40%" }} />
+//             <div className="csd-bf-bar" style={{ width: "100%" }} />
+//             <div className="csd-bf-bar" style={{ width: "100%" }} />
+//           </>
+//         )}
+//         {variant === "market" && (
+//           <div className="csd-bf-grid">
+//             <div /><div /><div />
+//             <div /><div /><div />
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+//version 3
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -2390,6 +4740,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -2452,8 +4803,63 @@ const SUB_SERVICES = [
   },
 ];
 
-// "What We Build" — concrete product types, paired with binary IDs.
-// Visual treatment: left column = text, right column = animated browser/device frames.
+// ── NEW: Why apps fail data (research-backed) ──
+// Stats sourced from widely-cited industry research:
+// - Standish Group CHAOS report: ~66% of software projects fail or are challenged
+// - McKinsey: 70% of digital transformations fall short of objectives
+// - Google/SOASTA: 53% of mobile users leave a site that takes >3s to load
+// - Failory startup post-mortems: technical debt + wrong product are top failure modes
+const FAILURE_MODES = [
+  {
+    num: "01",
+    stat: "70%",
+    statLabel: "of digital projects fall short",
+    title: "Built without a real architecture",
+    problem: "Most failed apps share a common root cause: code shipped before the system was designed. Teams optimize for the demo, not the second year. By month 18, every new feature breaks two old ones.",
+    fix: "We design boundaries, data flow, and integration contracts before writing production code. The system you have at month 24 should still be the system you launched.",
+  },
+  {
+    num: "02",
+    stat: "53%",
+    statLabel: "abandon if load > 3 seconds",
+    title: "Performance treated as an afterthought",
+    problem: "Slow apps don't fail loudly — they bleed users. Bundle bloat, unindexed queries, and waterfall network calls compound until your funnel quietly collapses and nobody can pinpoint why.",
+    fix: "Every build ships with performance budgets, real-device testing, and Core Web Vitals enforced in CI. If a PR regresses LCP or TTI, it doesn't merge.",
+  },
+  {
+    num: "03",
+    stat: "60%",
+    statLabel: "of features go unused",
+    title: "Designed without users in the room",
+    problem: "When founders or stakeholders design alone, the product becomes a collection of opinions instead of a tool that solves a job. You ship more, users use less, and the roadmap gets longer every quarter.",
+    fix: "Discovery sprints with real users. Click-tested prototypes before engineering starts. Telemetry on every feature so you ship the next thing knowing what's working.",
+  },
+  {
+    num: "04",
+    stat: "$85B",
+    statLabel: "lost yearly to tech debt",
+    title: "Tech debt left to compound silently",
+    problem: "Shortcuts taken in week one become outages in year two. Without a maintenance plan, dependency drift, missing tests, and one-off hacks accumulate until shipping anything new requires a rewrite.",
+    fix: "Every engagement includes a debt ledger, dependency upgrade cadence, and a refactor budget baked into each sprint. Debt is a line item, not a surprise.",
+  },
+  {
+    num: "05",
+    stat: "1 in 3",
+    statLabel: "apps die from poor scaling",
+    title: "Scaled for the demo, not for traction",
+    problem: "The app works for 100 users. Then growth hits, the database melts, and you're rewriting the foundation under live traffic. By the time scale matters, it's already too late to plan for it.",
+    fix: "We design for the load you'll have in two years — caching layers, queue-based workflows, observability, and database patterns that don't need to be torn out when traffic 10x's.",
+  },
+  {
+    num: "06",
+    stat: "Day 1",
+    statLabel: "abandonment after launch",
+    title: "Launched, then abandoned",
+    problem: "Most agencies vanish after go-live. Bugs sit, metrics decay, and the product ossifies. What launched as a v1 becomes the v1 forever — until a competitor ships their v2.",
+    fix: "SLA-backed support, monitored uptime, monthly roadmap reviews, and an engineering team you can call. We measure success at month 12, not at handoff.",
+  },
+];
+
 const WE_BUILD = [
   { id: "saas",      bin: "01", label: "SaaS Platforms",       desc: "Multi-tenant products with billing, dashboards, and integrations." },
   { id: "dashboard", bin: "10", label: "Business Dashboards",  desc: "Real-time analytics surfaces wired to your live data." },
@@ -2494,7 +4900,6 @@ const VALUE_PROPS = [
   },
 ];
 
-// Process — kept identical to landing page treatment, extended to 6 phases.
 const PROCESS = [
   { num: "01", title: "Discovery",   desc: "Deep-dive into your business, users, and technical landscape to uncover what actually needs to be built.", points: ["Stakeholder interviews", "Technical audit", "Opportunity mapping"] },
   { num: "02", title: "Design",      desc: "We design the experience — flows, wireframes, and high-fidelity UI — before a single line of production code is written.", points: ["UX flows & wireframes", "High-fidelity UI", "Design tokens"] },
@@ -2511,7 +4916,6 @@ const TECH = [
   "AWS", "GCP", "Kubernetes", "Docker", "Terraform", "Redis",
 ];
 
-// Results — outcomes, paired with the project shape so each card tells a story.
 const RESULTS = [
   { metric: "43%",  label: "Faster page loads", project: "FinEdge · Trading dashboard",       desc: "Migrated from a legacy SPA to an edge-rendered Next.js stack. LCP dropped from 3.4s to 1.9s in the first sprint." },
   { metric: "2.4×", label: "Conversion lift",   project: "NovaRetail · Checkout flow",        desc: "Re-architected the checkout funnel with progressive enhancement and inline validation. Cart-to-purchase rate doubled." },
@@ -2533,33 +4937,24 @@ const FAQS = [
 // ── COMPONENT ─────────────────────────────────────────────────────────────────
 
 export default function CustomSoftwarePage() {
-  // FAQ accordion
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-
-  // Mobile breakpoint
   const [isMobile, setIsMobile] = useState(false);
-
-  // "What we build" hover state — drives which device mockup is highlighted
-  // in the right column. Keyboard-accessible via tab focus.
   const [hoveredBuild, setHoveredBuild] = useState<number>(0);
 
-  // Prevent hover-driven re-renders while the page is scrolling.
-  // When the pointer stays in place, as sections move under it React can
-  // fire multiple mouseenter events quickly -> causes jank.
+  // NEW: Active failure mode (for the why-fail section interactivity)
+  const [activeFailure, setActiveFailure] = useState<number>(0);
+
   const isLenisScrollingRef = useRef(false);
   const hoverLockTimeoutRef = useRef<number | null>(null);
   const pendingHoveredBuildRef = useRef<number | null>(null);
 
-  // Tech marquee refs
   const marqueeLeftRef = useRef<HTMLDivElement>(null);
   const marqueeRightRef = useRef<HTMLDivElement>(null);
   const marqueeLeftTweenRef = useRef<gsap.core.Tween | null>(null);
   const marqueeRightTweenRef = useRef<gsap.core.Tween | null>(null);
 
-  // Lenis
   const lenisRef = useRef<Lenis | null>(null);
 
-  // Mobile detector
   useEffect(() => {
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(max-width: 900px)");
@@ -2569,7 +4964,6 @@ export default function CustomSoftwarePage() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // Lenis smooth scroll
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.1,
@@ -2603,7 +4997,6 @@ export default function CustomSoftwarePage() {
     };
   }, []);
 
-  // GSAP animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       // ── HERO: split-character intro ──
@@ -2622,13 +5015,24 @@ export default function CustomSoftwarePage() {
         0.55
       );
       heroTl.fromTo(
-        ".csd-hero-binary-frame",
-        { opacity: 0, scale: 0.97 },
-        { opacity: 1, scale: 1, duration: 1.1, ease: "power3.out" },
+        ".csd-hero-stage",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" },
         0.4
       );
+      heroTl.fromTo(
+        ".csd-hero-stage-card",
+        { opacity: 0, y: 16, scale: 0.96 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.12, ease: "power3.out" },
+        0.7
+      );
+      heroTl.fromTo(
+        ".csd-hero-marquee-row",
+        { opacity: 0 },
+        { opacity: 1, duration: 1, ease: "power2.out" },
+        1.1
+      );
 
-      // Batched reveals reduce per-element ScrollTrigger load and keep scroll smooth.
       const setupBatchReveal = (
         selector: string,
         fromVars: gsap.TweenVars,
@@ -2642,23 +5046,19 @@ export default function CustomSoftwarePage() {
           start,
           once: true,
           onEnter: (batch) => {
-            gsap.to(batch, {
-              ...toVars,
-              stagger: 0.08,
-              overwrite: true,
-            });
+            gsap.to(batch, { ...toVars, stagger: 0.08, overwrite: true });
           },
         });
       };
 
       setupBatchReveal(".csd-sh", { opacity: 0, y: 38 }, { opacity: 1, y: 0, duration: 0.95, ease: "power3.out" }, "top 88%");
       setupBatchReveal(".csd-svc-card", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 90%");
+      setupBatchReveal(".csd-fail-row", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 90%");
       setupBatchReveal(".csd-build-row", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, "top 92%");
       setupBatchReveal(".csd-vp-card", { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 88%");
       setupBatchReveal(".csd-result-card", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 90%");
       setupBatchReveal(".csd-faq-row", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, "top 92%");
 
-      // ── Process: horizontal pin (desktop only) ──
       const processTrack = document.querySelector<HTMLElement>(".csd-process-track");
       const processPin = document.querySelector<HTMLElement>(".csd-process-pin");
       const mm = gsap.matchMedia();
@@ -2681,7 +5081,6 @@ export default function CustomSoftwarePage() {
         });
       });
 
-      // ── CTA fade ──
       gsap.fromTo(".csd-cta-inner",
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, duration: 1, ease: "power3.out",
@@ -2690,7 +5089,6 @@ export default function CustomSoftwarePage() {
     return () => ctx.revert();
   }, []);
 
-  // Tech marquee
   useEffect(() => {
     const left = marqueeLeftRef.current;
     const right = marqueeRightRef.current;
@@ -2725,7 +5123,6 @@ export default function CustomSoftwarePage() {
     if (rt) gsap.to(rt, { timeScale: 1, duration: 0.45, ease: "power2.out" });
   };
 
-  // Refresh ScrollTrigger after fonts load
   useEffect(() => {
     const fonts = "fonts" in document ? document.fonts : undefined;
     if (!fonts?.ready) return;
@@ -2747,14 +5144,39 @@ export default function CustomSoftwarePage() {
       <div style={{ background: "#fafaf9", color: "#0a0a0a", fontFamily: "var(--font-body)", overflowX: "hidden" }}>
         <SiteHeader />
 
-        {/* SECTION 1 - HERO */}
+        {/* ═══════════════════════════════════════════════════════════════
+            SECTION 1 — HERO (REDESIGNED)
+            Light theme. Cinematic, confidence-first.
+            Layout:
+              - Top breadcrumb pill
+              - Massive headline (3 lines, last italic)
+              - Lead + dual CTA + key proof points (inline)
+              - Right side: a "live system" stage with 3 stacked product
+                surface cards (web app, mobile, dashboard) — feels like
+                you're peeking at real shipped work, not abstract diagrams
+              - Bottom strip: trust marquee with metrics + technology badges
+        ═══════════════════════════════════════════════════════════════ */}
         <section className="csd-hero">
+          {/* Background layers */}
           <div aria-hidden className="csd-hero-grid-bg" />
-          <div aria-hidden className="csd-hero-orb csd-hero-orb-a" />
-          <div aria-hidden className="csd-hero-orb csd-hero-orb-b" />
+          <div aria-hidden className="csd-hero-gradient-orb csd-hero-orb-a" />
+          <div aria-hidden className="csd-hero-gradient-orb csd-hero-orb-b" />
+          <div aria-hidden className="csd-hero-corner csd-hero-corner-tl" />
+          <div aria-hidden className="csd-hero-corner csd-hero-corner-tr" />
+          <div aria-hidden className="csd-hero-corner csd-hero-corner-bl" />
+          <div aria-hidden className="csd-hero-corner csd-hero-corner-br" />
 
           <div className="csd-hero-inner">
+            {/* Breadcrumb pill */}
+            <div className="csd-hero-fade csd-hero-crumb" style={{ opacity: 0 }}>
+              <span className="csd-hero-crumb-dot" />
+              <Link href="/services" className="csd-hero-crumb-link">Services</Link>
+              <span className="csd-hero-crumb-sep">/</span>
+              <span>Custom Software &amp; Digital Solutions</span>
+            </div>
+
             <div className="csd-hero-main">
+              {/* LEFT — headline + CTAs + inline proof */}
               <div className="csd-hero-left">
                 <h1 className="csd-hero-title">
                   <div className="csd-h1-line">
@@ -2763,13 +5185,13 @@ export default function CustomSoftwarePage() {
                     ))}
                   </div>
                   <div className="csd-h1-line">
-                    {"built around".split("").map((c, i) => (
+                    {"engineered to".split("").map((c, i) => (
                       <span key={`l2-${i}`} className="csd-h1-char" style={{ whiteSpace: "pre" }}>{c === " " ? "\u00A0" : c}</span>
                     ))}
                   </div>
                   <div className="csd-h1-line">
                     <span className="csd-h1-italic">
-                      {"your workflow.".split("").map((c, i) => (
+                      {"compound value.".split("").map((c, i) => (
                         <span key={`l3i-${i}`} className="csd-h1-char">{c}</span>
                       ))}
                     </span>
@@ -2778,8 +5200,8 @@ export default function CustomSoftwarePage() {
 
                 <p className="csd-hero-fade csd-hero-lead" style={{ opacity: 0 }}>
                   We design, build, and modernize web apps, mobile apps, SaaS platforms,
-                  admin panels, and customer-facing systems that match your operations,
-                  integrate with your stack, and stay maintainable after launch.
+                  and internal tools that ship on schedule, scale cleanly, and stay
+                  maintainable years after launch.
                 </p>
 
                 <div className="csd-hero-fade csd-hero-cta-row" style={{ opacity: 0 }}>
@@ -2789,7 +5211,7 @@ export default function CustomSoftwarePage() {
                       <path d="M2.5 6h7M6 2.5L9.5 6 6 9.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </Link>
-                  <a href="#capabilities" className="csd-cta-ghost">
+                  <a href="#capabilities" className="csd-cta-ghost-light">
                     <span>Explore capabilities</span>
                     <svg aria-hidden width="12" height="12" viewBox="0 0 12 12">
                       <path d="M6 2.5v7M3 6.5 6 9.5 9 6.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
@@ -2797,57 +5219,128 @@ export default function CustomSoftwarePage() {
                   </a>
                 </div>
 
+                {/* Inline proof strip */}
+                <div className="csd-hero-fade csd-hero-proof" style={{ opacity: 0 }}>
+                  {[
+                    { k: "150+", v: "Products shipped" },
+                    { k: "98", v: "Avg Lighthouse" },
+                    { k: "8 wk", v: "Time to MVP" },
+                    { k: "24h", v: "Reply window" },
+                  ].map((p) => (
+                    <div key={p.k} className="csd-hero-proof-item">
+                      <div className="csd-hero-proof-k">{p.k}</div>
+                      <div className="csd-hero-proof-v">{p.v}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
+              {/* RIGHT — visual stage with stacked product surfaces */}
               <div className="csd-hero-right">
-                <div className="csd-hero-binary-frame" style={{ opacity: 0 }}>
-                  <div className="csd-hero-card-head">
-                    <div>
-                      <span className="csd-hero-card-eyebrow">Delivery Blueprint</span>
-                      <h2>From business need to shipped product</h2>
+                <div className="csd-hero-stage" style={{ opacity: 0 }}>
+                  {/* Background pattern inside stage */}
+                  <div className="csd-hero-stage-bg" aria-hidden />
+
+                  {/* Top status bar */}
+                  <div className="csd-hero-stage-status" aria-hidden>
+                    <div className="csd-hero-stage-status-left">
+                      <span className="csd-hero-stage-status-dot" />
+                      <span className="csd-hero-stage-status-text">Live · production builds</span>
+                    </div>
+                    <div className="csd-hero-stage-status-right">
+                      <span>v4.2.1</span>
                     </div>
                   </div>
 
-                  <div className="csd-hero-blueprint">
-                    <div className="csd-hero-blueprint-main">
-                      {[
-                        ["01", "Map", "Users, workflows, data, constraints"],
-                        ["02", "Model", "Architecture, UX flows, delivery plan"],
-                        ["03", "Build", "Frontend, backend, integrations, QA"],
-                        ["04", "Launch", "Monitoring, handoff, iteration"],
-                      ].map(([num, title, body]) => (
-                        <div key={num} className="csd-hero-step">
-                          <span>{num}</span>
-                          <div>
-                            <strong>{title}</strong>
-                            <p>{body}</p>
-                          </div>
+                  {/* Card 1 — SaaS dashboard */}
+                  <div className="csd-hero-stage-card csd-hero-stage-card-1">
+                    <div className="csd-hero-stage-card-head">
+                      <div className="csd-hero-stage-card-dots">
+                        <span /><span /><span />
+                      </div>
+                      <span className="csd-hero-stage-card-title">analytics.app</span>
+                    </div>
+                    <div className="csd-hero-stage-card-body">
+                      <div className="csd-hero-stage-metric-row">
+                        <div>
+                          <div className="csd-hero-stage-metric-label">MRR</div>
+                          <div className="csd-hero-stage-metric-value">$48.2K</div>
+                          <div className="csd-hero-stage-metric-delta">↑ 12.4%</div>
                         </div>
-                      ))}
+                        <div>
+                          <div className="csd-hero-stage-metric-label">Active</div>
+                          <div className="csd-hero-stage-metric-value">2,847</div>
+                          <div className="csd-hero-stage-metric-delta">↑ 8.1%</div>
+                        </div>
+                      </div>
+                      <div className="csd-hero-stage-chart">
+                        {[35, 52, 41, 68, 55, 78, 62, 88, 71, 94].map((h, i) => (
+                          <span key={i} style={{ height: `${h}%` }} />
+                        ))}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Footer caption */}
-                  <div className="csd-hero-binary-footer">
+                  {/* Card 2 — mobile app frame */}
+                  <div className="csd-hero-stage-card csd-hero-stage-card-2">
+                    <div className="csd-hero-stage-mobile-notch" />
+                    <div className="csd-hero-stage-mobile-body">
+                      <div className="csd-hero-stage-mobile-greeting">Welcome back</div>
+                      <div className="csd-hero-stage-mobile-user">Sarah K.</div>
+                      <div className="csd-hero-stage-mobile-card">
+                        <div className="csd-hero-stage-mobile-card-label">Balance</div>
+                        <div className="csd-hero-stage-mobile-card-value">$12,840</div>
+                      </div>
+                      <div className="csd-hero-stage-mobile-list">
+                        <div /><div /><div />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card 3 — code/terminal snippet */}
+                  <div className="csd-hero-stage-card csd-hero-stage-card-3">
+                    <div className="csd-hero-stage-card-head">
+                      <div className="csd-hero-stage-card-dots">
+                        <span /><span /><span />
+                      </div>
+                      <span className="csd-hero-stage-card-title">deploy.ts</span>
+                    </div>
+                    <div className="csd-hero-stage-code">
+                      <div><span className="csd-code-mute">$</span> <span className="csd-code-cmd">build</span> <span className="csd-code-flag">--prod</span></div>
+                      <div className="csd-code-mute">→ Compiled in 8.4s</div>
+                      <div className="csd-code-mute">→ 0 errors · 0 warnings</div>
+                      <div><span className="csd-code-ok">✓</span> <span className="csd-code-mute">deployed to edge</span></div>
+                    </div>
+                  </div>
+
+                  {/* Floating accent badge */}
+                  <div className="csd-hero-stage-badge" aria-hidden>
+                    <div className="csd-hero-stage-badge-pulse" />
                     <div>
-                      <div className="csd-hero-binary-foot-k">PRINCIPLE</div>
-                      <div className="csd-hero-binary-foot-v">Every product is a series of binary decisions made well.</div>
+                      <div className="csd-hero-stage-badge-k">UPTIME</div>
+                      <div className="csd-hero-stage-badge-v">99.98%</div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* Bottom marquee strip — trust signal */}
+            <div className="csd-hero-marquee-row csd-hero-fade" style={{ opacity: 0 }}>
+              <div className="csd-hero-marquee-label">
+                <span className="csd-hero-marquee-label-dot" />
+                Trusted stack
+              </div>
+              <div className="csd-hero-marquee-track">
+                {["Next.js", "TypeScript", "PostgreSQL", "AWS", "React Native", "Kubernetes", "GraphQL", "Swift", "Tailwind"].map((t) => (
+                  <span key={t} className="csd-hero-marquee-item">{t}</span>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            SECTION 2 — SERVICES SNAPSHOT
-            DIFFERENT treatment: each service is a wide HORIZONTAL ROW,
-            not a card grid. Binary code on the left, large display title,
-            description + tags, and a hover line that fills.
-            Reads like a manifest of capabilities, not a generic service grid.
-        ═══════════════════════════════════════════════════════════════ */}
+        {/* SECTION 2 - CAPABILITIES */}
         <section id="capabilities" className="csd-cap-section">
           <div className="csd-cap-inner">
             <div className="csd-sh csd-cap-header">
@@ -2868,20 +5361,15 @@ export default function CustomSoftwarePage() {
                   className="csd-svc-card csd-cap-row"
                   style={{ ["--svc-accent" as never]: s.accent }}
                 >
-                  {/* Hover sweep */}
                   <span className="csd-cap-row-sweep" aria-hidden />
-
                   <div className="csd-cap-row-bin">
                     <span className="csd-cap-row-dot" style={{ background: s.accent }} />
                     <span>{s.bin}</span>
                   </div>
-
                   <div className="csd-cap-row-num">{s.num}</div>
-
                   <div className="csd-cap-row-body">
                     <h3 className="csd-cap-row-title">{s.title}</h3>
                   </div>
-
                   <div className="csd-cap-row-arrow" aria-hidden>
                     <svg width="20" height="20" viewBox="0 0 20 20">
                       <path d="M5 10h10M10 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
@@ -2894,8 +5382,115 @@ export default function CustomSoftwarePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════
-            SECTION 5 — PROCESS
+            NEW SECTION — WHY APPS FAIL
+            Dark theme for visual contrast against light sections above/below.
+            Layout: split — left column is sticky context (eyebrow, headline,
+            big stat ticker), right column is an interactive list of 6
+            failure modes. Click/hover to expand, each shows the problem
+            and our specific countermeasure.
         ═══════════════════════════════════════════════════════════════ */}
+        <section className="csd-fail-section" aria-labelledby="why-apps-fail">
+          <div aria-hidden className="csd-fail-bg-grid" />
+          <div aria-hidden className="csd-fail-bg-glow" />
+
+          <div className="csd-fail-inner">
+            <div className="csd-fail-grid">
+              {/* LEFT — sticky context */}
+              <div className="csd-fail-left">
+                <div className="csd-sh">
+                  <div className="csd-fail-eyebrow">
+                    <span className="csd-fail-eyebrow-line" />
+                    The hard truth
+                  </div>
+                  <h2 id="why-apps-fail" className="csd-fail-h2">
+                    Most apps don't fail at launch.{" "}
+                    <span className="csd-fail-italic">They fail at scale.</span>
+                  </h2>
+                  <p className="csd-fail-lead">
+                    Industry research is consistent: between 60% and 70% of software
+                    projects either fail outright or fall short of their objectives.
+                    The reasons are predictable — and almost all of them are preventable
+                    if you build with the right discipline from day one.
+                  </p>
+
+                  {/* Big stat block */}
+                  <div className="csd-fail-stat-block">
+                    <div className="csd-fail-stat-num">66<span className="csd-fail-stat-pct">%</span></div>
+                    <div className="csd-fail-stat-text">
+                      <strong>of software projects</strong> are delivered late,
+                      over budget, or with reduced functionality.
+                      <span className="csd-fail-stat-source">— Standish Group, CHAOS Report</span>
+                    </div>
+                  </div>
+
+                  <div className="csd-fail-quote">
+                    <span className="csd-fail-quote-mark">"</span>
+                    <p>
+                      The patterns behind every failed product are the same six mistakes,
+                      repeated. We built our process around eliminating each one.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* RIGHT — interactive failure modes */}
+              <div className="csd-fail-right">
+                <div className="csd-fail-list" role="list">
+                  {FAILURE_MODES.map((f, i) => {
+                    const isActive = activeFailure === i;
+                    return (
+                      <button
+                        key={f.num}
+                        type="button"
+                        role="listitem"
+                        className="csd-fail-row"
+                        data-active={isActive ? "true" : "false"}
+                        onClick={() => setActiveFailure(isActive ? -1 : i)}
+                        aria-expanded={isActive}
+                      >
+                        <div className="csd-fail-row-head">
+                          <div className="csd-fail-row-num">{f.num}</div>
+                          <div className="csd-fail-row-stat">
+                            <div className="csd-fail-row-stat-num">{f.stat}</div>
+                            <div className="csd-fail-row-stat-label">{f.statLabel}</div>
+                          </div>
+                          <div className="csd-fail-row-title-wrap">
+                            <h3 className="csd-fail-row-title">{f.title}</h3>
+                          </div>
+                          <div className="csd-fail-row-icon" aria-hidden>
+                            <svg width="14" height="14" viewBox="0 0 14 14">
+                              <path d="M3 7h8 M7 3v8" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                            </svg>
+                          </div>
+                        </div>
+                        <div className="csd-fail-row-content">
+                          <div className="csd-fail-row-content-inner">
+                            <div className="csd-fail-row-block csd-fail-row-block-problem">
+                              <div className="csd-fail-row-block-label">
+                                <span className="csd-fail-row-block-dot csd-fail-dot-red" />
+                                The pattern
+                              </div>
+                              <p>{f.problem}</p>
+                            </div>
+                            <div className="csd-fail-row-block csd-fail-row-block-fix">
+                              <div className="csd-fail-row-block-label">
+                                <span className="csd-fail-row-block-dot csd-fail-dot-green" />
+                                How we prevent it
+                              </div>
+                              <p>{f.fix}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* PROCESS */}
         <section
           className="csd-process-pin"
           style={{
@@ -2962,36 +5557,14 @@ export default function CustomSoftwarePage() {
                 >
                   <div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "clamp(24px, 4vh, 48px)" }}>
-                      <span
-                        style={{
-                          fontFamily: "var(--font-display)",
-                          fontSize: "clamp(48px, 6vh, 72px)", fontWeight: 500,
-                          color: "rgba(255,255,255,0.12)",
-                          lineHeight: 1, letterSpacing: "-0.04em",
-                          fontVariantNumeric: "tabular-nums",
-                        }}
-                      >
+                      <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(48px, 6vh, 72px)", fontWeight: 500, color: "rgba(255,255,255,0.12)", lineHeight: 1, letterSpacing: "-0.04em", fontVariantNumeric: "tabular-nums" }}>
                         {step.num}
                       </span>
-                      <span
-                        style={{
-                          padding: "5px 12px", borderRadius: 999,
-                          border: "1px solid rgba(255,255,255,0.15)",
-                          fontSize: 11, fontWeight: 500,
-                          color: "rgba(255,255,255,0.65)", letterSpacing: "0.04em",
-                        }}
-                      >
+                      <span style={{ padding: "5px 12px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.15)", fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.65)", letterSpacing: "0.04em" }}>
                         Phase {step.num}
                       </span>
                     </div>
-                    <h3
-                      style={{
-                        fontFamily: "var(--font-display)",
-                        fontSize: "clamp(26px, 3.2vh, 40px)", fontWeight: 500,
-                        margin: "0 0 clamp(10px, 2vh, 20px)",
-                        letterSpacing: "-0.02em", lineHeight: 1,
-                      }}
-                    >
+                    <h3 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(26px, 3.2vh, 40px)", fontWeight: 500, margin: "0 0 clamp(10px, 2vh, 20px)", letterSpacing: "-0.02em", lineHeight: 1 }}>
                       {step.title}
                     </h3>
                     <p style={{ fontSize: "clamp(13px, 1.6vh, 15px)", color: "rgba(255,255,255,0.6)", lineHeight: 1.65, margin: 0 }}>
@@ -3000,14 +5573,7 @@ export default function CustomSoftwarePage() {
                   </div>
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "clamp(14px, 2.5vh, 24px)" }}>
                     {step.points.map((p) => (
-                      <li
-                        key={p}
-                        style={{
-                          fontSize: 13, color: "rgba(255,255,255,0.7)",
-                          padding: "clamp(5px, 1vh, 8px) 0",
-                          display: "flex", alignItems: "center", gap: 12,
-                        }}
-                      >
+                      <li key={p} style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", padding: "clamp(5px, 1vh, 8px) 0", display: "flex", alignItems: "center", gap: 12 }}>
                         <span style={{ width: 14, height: 1, background: "rgba(255,255,255,0.2)", flexShrink: 0 }} />
                         {p}
                       </li>
@@ -3015,33 +5581,11 @@ export default function CustomSoftwarePage() {
                   </ul>
                 </div>
               ))}
-              <div
-                style={{
-                  width: 300, flexShrink: 0,
-                  padding: "clamp(28px, 3.5vh, 44px) 36px",
-                  display: "flex", flexDirection: "column", justifyContent: "center",
-                  height: "clamp(340px, 58vh, 500px)",
-                }}
-              >
-                <h3
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontSize: "clamp(22px, 2.8vh, 32px)", fontWeight: 500,
-                    margin: "0 0 20px",
-                    letterSpacing: "-0.025em", lineHeight: 1.1,
-                  }}
-                >
+              <div style={{ width: 300, flexShrink: 0, padding: "clamp(28px, 3.5vh, 44px) 36px", display: "flex", flexDirection: "column", justifyContent: "center", height: "clamp(340px, 58vh, 500px)" }}>
+                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(22px, 2.8vh, 32px)", fontWeight: 500, margin: "0 0 20px", letterSpacing: "-0.025em", lineHeight: 1.1 }}>
                   Every project. <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(255,255,255,0.6)" }}>No exceptions.</span>
                 </h3>
-                <Link
-                  href="/contact"
-                  style={{
-                    display: "inline-flex", alignItems: "center", gap: 10,
-                    padding: "12px 22px", background: "#fafaf9", color: "#0a0a0a",
-                    borderRadius: 999, fontSize: 13, fontWeight: 500,
-                    textDecoration: "none", alignSelf: "flex-start", marginTop: 4,
-                  }}
-                >
+                <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "12px 22px", background: "#fafaf9", color: "#0a0a0a", borderRadius: 999, fontSize: 13, fontWeight: 500, textDecoration: "none", alignSelf: "flex-start", marginTop: 4 }}>
                   Start yours →
                 </Link>
               </div>
@@ -3061,16 +5605,10 @@ export default function CustomSoftwarePage() {
           )}
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            SECTION 3 — WHAT WE BUILD
-            Image RIGHT, text LEFT. Left = numbered hover list of product
-            types. Right = animated device frame (browser/dashboard/phone)
-            that switches based on which row is hovered/focused.
-        ═══════════════════════════════════════════════════════════════ */}
+        {/* WHAT WE BUILD */}
         <section className="csd-build-section">
           <div className="csd-build-inner">
             <div className="csd-build-grid">
-              {/* LEFT — text + interactive list */}
               <div className="csd-build-left">
                 <div className="csd-sh">
                   <h2 className="csd-h2">
@@ -3115,13 +5653,9 @@ export default function CustomSoftwarePage() {
                 </ul>
               </div>
 
-              {/* RIGHT — animated device viz tied to hover state */}
               <div className="csd-build-right">
                 <div className="csd-build-stage" aria-hidden>
-                  {/* Background grid */}
                   <div className="csd-build-stage-grid" />
-
-                  {/* Floating frames */}
                   <BuildFrame index={0} active={hoveredBuild === 0} variant="saas"      label="SaaS" />
                   <BuildFrame index={1} active={hoveredBuild === 1} variant="dashboard" label="Dashboard" />
                   <BuildFrame index={2} active={hoveredBuild === 2} variant="mobile"    label="Mobile" />
@@ -3129,7 +5663,6 @@ export default function CustomSoftwarePage() {
                   <BuildFrame index={4} active={hoveredBuild === 4} variant="mvp"       label="MVP" />
                   <BuildFrame index={5} active={hoveredBuild === 5} variant="market"    label="Market" />
 
-                  {/* Active label badge */}
                   <div className="csd-build-stage-badge">
                     <span className="csd-build-stage-badge-bin">{WE_BUILD[hoveredBuild].bin}</span>
                     <span>{WE_BUILD[hoveredBuild].label}</span>
@@ -3140,10 +5673,7 @@ export default function CustomSoftwarePage() {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            SECTION 4 — WHY TEAMS CHOOSE US
-            Clean, minimal cards that explain how we drive growth.
-        ═══════════════════════════════════════════════════════════════ */}
+        {/* WHY TEAMS CHOOSE US */}
         <section className="csd-vp-section" aria-labelledby="csd-vp-title">
           <div className="csd-vp-inner">
             <div className="csd-vp-grid">
@@ -3152,7 +5682,6 @@ export default function CustomSoftwarePage() {
                   <h2 id="csd-vp-title" className="csd-h2 csd-h2-light">
                     Why teams <span className="csd-italic-light">choose us</span>.
                   </h2>
-
                   <p className="csd-h2-lead csd-h2-lead-light">
                     We help businesses grow through reliable delivery: faster performance, scalable architecture,
                     consistent UX, and a cadence your team can trust.
@@ -3176,9 +5705,7 @@ export default function CustomSoftwarePage() {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            SECTION 6 — TECH STACK (UNCHANGED — same marquee as landing)
-        ═══════════════════════════════════════════════════════════════ */}
+        {/* TECH MARQUEE */}
         <section
           className="csd-tech-marquee"
           onMouseEnter={handleTechMarqueeEnter}
@@ -3219,12 +5746,7 @@ export default function CustomSoftwarePage() {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            SECTION 7 — RESULTS / IMPACT
-            Image LEFT (the metric, huge), text RIGHT (project + story).
-            Each result is a wide horizontal panel with the number doing
-            the heavy visual lifting. Reads as evidence, not a stat grid.
-        ═══════════════════════════════════════════════════════════════ */}
+        {/* RESULTS */}
         <section className="csd-results-section">
           <div className="csd-results-inner">
             <div className="csd-sh csd-results-header">
@@ -3243,7 +5765,6 @@ export default function CustomSoftwarePage() {
             <div className="csd-results-list">
               {RESULTS.map((r, i) => (
                 <div key={r.label} className="csd-result-card">
-                  {/* Left = the number */}
                   <div className="csd-result-num-wrap">
                     <div className="csd-result-index">
                       <span style={{ fontFamily: "var(--font-mono)" }}>R-{String(i + 1).padStart(2, "0")}</span>
@@ -3251,7 +5772,6 @@ export default function CustomSoftwarePage() {
                     <div className="csd-result-metric">{r.metric}</div>
                     <div className="csd-result-label">{r.label}</div>
                   </div>
-                  {/* Right = the story */}
                   <div className="csd-result-story">
                     <div className="csd-result-project">
                       <span className="csd-result-project-dot" />
@@ -3265,9 +5785,7 @@ export default function CustomSoftwarePage() {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            SECTION 8 — FAQs
-        ═══════════════════════════════════════════════════════════════ */}
+        {/* FAQS */}
         <section className="csd-faq-section">
           <div className="csd-faq-layout">
             <div className="csd-faq-aside csd-sh">
@@ -3315,9 +5833,7 @@ export default function CustomSoftwarePage() {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            SECTION 9 — FINAL CTA
-        ═══════════════════════════════════════════════════════════════ */}
+        {/* FINAL CTA */}
         <section style={{ padding: "0 20px 64px", borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 64 }}>
           <div
             className="csd-cta-inner"
@@ -3331,7 +5847,6 @@ export default function CustomSoftwarePage() {
             <div aria-hidden style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)", backgroundSize: "48px 48px", pointerEvents: "none" }} />
             <div aria-hidden style={{ position: "absolute", top: "-20%", right: "-10%", width: 560, height: 560, background: "radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%)", pointerEvents: "none" }} />
 
-            {/* Big floating binary mark in CTA — ties the page back to the hero */}
             <div aria-hidden className="csd-cta-mark">
               <span>1</span><span>0</span>
             </div>
@@ -3369,34 +5884,13 @@ export default function CustomSoftwarePage() {
             </div>
           </div>
         </section>
+        <SiteFooter />
       </div>
 
       <style>{`
         /* ═══════════════════════════════════════════════════════════════
            SHARED PRIMITIVES
         ═══════════════════════════════════════════════════════════════ */
-        .csd-eyebrow {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          margin-bottom: 18px;
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.5);
-        }
-        .csd-eyebrow-line {
-          width: 24px;
-          height: 1px;
-          background: rgba(10,10,10,0.3);
-        }
-        .csd-eyebrow-light {
-          color: rgba(255,255,255,0.55);
-        }
-        .csd-eyebrow-light .csd-eyebrow-line {
-          background: rgba(255,255,255,0.3);
-        }
         .csd-h2 {
           font-family: var(--font-display);
           font-size: clamp(32px, 4.4vw, 64px);
@@ -3452,74 +5946,107 @@ export default function CustomSoftwarePage() {
         .csd-cta-primary:hover .csd-cta-arrow { transform: translateX(2px); }
         .csd-cta-arrow { transition: transform 0.25s ease; }
 
-        .csd-cta-ghost {
+        .csd-cta-ghost-light {
           display: inline-flex;
           align-items: center;
           gap: 8px;
           padding: 15px 26px;
-          border: 1px solid rgba(255,255,255,0.18);
-          color: rgba(255,255,255,0.85);
+          border: 1px solid rgba(10,10,10,0.18);
+          color: rgba(10,10,10,0.78);
           text-decoration: none;
           font-size: 14px;
           font-weight: 500;
           border-radius: 999px;
-          background: transparent;
+          background: rgba(255,255,255,0.6);
+          backdrop-filter: blur(8px);
           transition: border-color 0.2s, background 0.2s, color 0.2s;
         }
-        .csd-cta-ghost:hover {
-          border-color: rgba(255,255,255,0.45);
-          background: rgba(255,255,255,0.05);
-          color: #fafaf9;
+        .csd-cta-ghost-light:hover {
+          border-color: rgba(10,10,10,0.4);
+          background: #fff;
+          color: #0a0a0a;
         }
+
         .csd-ghost-dark:hover {
           border-color: rgba(255,255,255,0.45) !important;
           background: rgba(255,255,255,0.05) !important;
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           SECTION 1 - HERO
+           SECTION 1 — HERO (REDESIGNED, LIGHT)
         ═══════════════════════════════════════════════════════════════ */
         .csd-hero {
           position: relative;
           min-height: 100vh;
           background:
-            radial-gradient(circle at 84% 18%, rgba(212,212,216,0.18), transparent 28%),
-            linear-gradient(135deg, #f8f8f7 0%, #efefed 48%, #e7e5e4 100%);
+            radial-gradient(circle at 80% 18%, rgba(255,255,255,0.9), transparent 35%),
+            radial-gradient(circle at 12% 85%, rgba(212,212,216,0.25), transparent 40%),
+            linear-gradient(135deg, #f8f8f7 0%, #efefed 50%, #e7e5e4 100%);
           color: #0a0a0a;
           padding: 132px 20px 72px;
           overflow: hidden;
         }
+
         .csd-hero-grid-bg {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(10,10,10,0.045) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(10,10,10,0.045) 1px, transparent 1px);
-          background-size: 72px 72px;
-          mask-image: radial-gradient(ellipse 85% 72% at 50% 28%, black 0%, transparent 88%);
-          -webkit-mask-image: radial-gradient(ellipse 85% 72% at 50% 28%, black 0%, transparent 88%);
+            linear-gradient(rgba(10,10,10,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(10,10,10,0.04) 1px, transparent 1px);
+          background-size: 64px 64px;
+          mask-image: radial-gradient(ellipse 90% 75% at 50% 38%, black 0%, transparent 92%);
+          -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 38%, black 0%, transparent 92%);
           pointer-events: none;
         }
-        .csd-hero-orb {
+
+        .csd-hero-gradient-orb {
           position: absolute;
           border-radius: 999px;
           pointer-events: none;
-          filter: blur(10px);
+          filter: blur(60px);
         }
         .csd-hero-orb-a {
-          width: 340px;
-          height: 340px;
-          right: 5%;
-          top: 14%;
-          background: rgba(255,255,255,0.72);
-          border: 1px solid rgba(10,10,10,0.06);
+          width: 480px;
+          height: 480px;
+          right: -8%;
+          top: 8%;
+          background:
+            radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(212,212,216,0.2) 60%, transparent 100%);
         }
         .csd-hero-orb-b {
-          width: 220px;
-          height: 220px;
-          left: -70px;
-          bottom: 12%;
-          background: rgba(10,10,10,0.04);
+          width: 320px;
+          height: 320px;
+          left: -8%;
+          bottom: 8%;
+          background:
+            radial-gradient(circle, rgba(10,10,10,0.05) 0%, transparent 70%);
+        }
+
+        .csd-hero-corner {
+          position: absolute;
+          width: 24px;
+          height: 24px;
+          pointer-events: none;
+        }
+        .csd-hero-corner-tl {
+          top: 100px; left: 24px;
+          border-top: 1px solid rgba(10,10,10,0.18);
+          border-left: 1px solid rgba(10,10,10,0.18);
+        }
+        .csd-hero-corner-tr {
+          top: 100px; right: 24px;
+          border-top: 1px solid rgba(10,10,10,0.18);
+          border-right: 1px solid rgba(10,10,10,0.18);
+        }
+        .csd-hero-corner-bl {
+          bottom: 24px; left: 24px;
+          border-bottom: 1px solid rgba(10,10,10,0.18);
+          border-left: 1px solid rgba(10,10,10,0.18);
+        }
+        .csd-hero-corner-br {
+          bottom: 24px; right: 24px;
+          border-bottom: 1px solid rgba(10,10,10,0.18);
+          border-right: 1px solid rgba(10,10,10,0.18);
         }
 
         .csd-hero-inner {
@@ -3529,72 +6056,59 @@ export default function CustomSoftwarePage() {
           margin: 0 auto;
           display: flex;
           flex-direction: column;
-          min-height: calc(100vh - 204px);
+          gap: 56px;
         }
 
-        .csd-hero-meta {
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-          align-self: flex-start;
-          margin-bottom: 54px;
-          padding: 9px 14px;
-          border: 1px solid rgba(10,10,10,0.09);
-          border-radius: 999px;
-          background: rgba(255,255,255,0.62);
-          backdrop-filter: blur(12px);
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.52);
-        }
-        .csd-hero-back {
-          color: rgba(10,10,10,0.72);
-          text-decoration: none;
-          transition: color 0.2s ease;
-        }
-        .csd-hero-back:hover { color: #0a0a0a; }
-        .csd-hero-meta-divider {
-          width: 4px;
-          height: 4px;
-          border-radius: 50%;
-          background: rgba(10,10,10,0.28);
-        }
-
-        .csd-hero-main {
-          display: grid;
-          grid-template-columns: minmax(0, 1.02fr) minmax(420px, 0.98fr);
-          gap: clamp(44px, 6vw, 84px);
-          align-items: center;
-          flex: 1;
-        }
-
-        .csd-hero-kicker {
+        .csd-hero-crumb {
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          margin-bottom: 22px;
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.56);
-        }
-        .csd-hero-kicker-dot {
-          width: 9px;
-          height: 9px;
+          align-self: flex-start;
+          padding: 8px 16px;
+          border: 1px solid rgba(10,10,10,0.1);
           border-radius: 999px;
-          background: #0a0a0a;
-          box-shadow: 0 0 0 6px rgba(10,10,10,0.08);
+          background: rgba(255,255,255,0.7);
+          backdrop-filter: blur(12px);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.55);
         }
+        .csd-hero-crumb-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #0a0a0a;
+          box-shadow: 0 0 0 4px rgba(10,10,10,0.08);
+          animation: csd-crumb-pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes csd-crumb-pulse {
+          0%, 100% { box-shadow: 0 0 0 4px rgba(10,10,10,0.08); }
+          50% { box-shadow: 0 0 0 6px rgba(10,10,10,0.12); }
+        }
+        .csd-hero-crumb-link {
+          color: rgba(10,10,10,0.7);
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+        .csd-hero-crumb-link:hover { color: #0a0a0a; }
+        .csd-hero-crumb-sep { opacity: 0.4; }
+
+        .csd-hero-main {
+          display: grid;
+          grid-template-columns: minmax(0, 1.05fr) minmax(440px, 0.95fr);
+          gap: clamp(48px, 6vw, 88px);
+          align-items: center;
+        }
+
         .csd-hero-title {
           font-family: var(--font-display);
-          font-size: clamp(48px, 6.6vw, 106px);
+          font-size: clamp(48px, 7vw, 110px);
           font-weight: 500;
           line-height: 0.93;
           letter-spacing: -0.048em;
-          margin: 0 0 34px;
+          margin: 0 0 32px;
           color: #0a0a0a;
         }
         .csd-h1-line {
@@ -3610,157 +6124,416 @@ export default function CustomSoftwarePage() {
         .csd-h1-italic {
           font-style: italic;
           font-weight: 400;
-          color: rgba(10,10,10,0.52);
+          color: rgba(10,10,10,0.5);
           display: inline-flex;
+          background: linear-gradient(135deg, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.25) 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
 
         .csd-hero-lead {
           font-size: 17px;
           color: rgba(10,10,10,0.62);
-          max-width: 620px;
+          max-width: 580px;
           line-height: 1.72;
           margin: 0 0 32px;
         }
+
         .csd-hero-cta-row {
           display: flex;
           gap: 12px;
           flex-wrap: wrap;
-        }
-        .csd-hero .csd-cta-ghost {
-          border-color: rgba(10,10,10,0.14);
-          color: rgba(10,10,10,0.72);
-          background: rgba(255,255,255,0.56);
-        }
-        .csd-hero .csd-cta-ghost:hover {
-          border-color: rgba(10,10,10,0.28);
-          background: #fff;
-          color: #0a0a0a;
+          margin-bottom: 48px;
         }
 
-        .csd-hero-right { position: relative; }
-        .csd-hero-binary-frame {
-          position: relative;
-          overflow: hidden;
-          border: 1px solid rgba(10,10,10,0.08);
-          border-radius: 24px;
-          background: #fff;
-          box-shadow: 0 24px 60px -48px rgba(10,10,10,0.32);
+        .csd-hero-proof {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 28px;
+          padding-top: 28px;
+          border-top: 1px solid rgba(10,10,10,0.1);
+          max-width: 580px;
         }
-        .csd-hero-binary-frame::before {
-          content: none;
+        .csd-hero-proof-item {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .csd-hero-proof-k {
+          font-family: var(--font-display);
+          font-size: 26px;
+          font-weight: 500;
+          letter-spacing: -0.035em;
+          line-height: 1;
+          color: #0a0a0a;
+          font-variant-numeric: tabular-nums;
+        }
+        .csd-hero-proof-v {
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.5);
+        }
+
+        /* HERO STAGE (right side) */
+        .csd-hero-right {
+          position: relative;
+          align-self: stretch;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .csd-hero-stage {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 0.96 / 1;
+          background:
+            linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+          border-radius: 28px;
+          overflow: hidden;
+          box-shadow:
+            0 40px 100px -40px rgba(10,10,10,0.45),
+            0 0 0 1px rgba(10,10,10,0.08);
+        }
+        .csd-hero-stage-bg {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(10,10,10,0.035) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(10,10,10,0.035) 1px, transparent 1px);
-          background-size: 34px 34px;
-          pointer-events: none;
-          mask-image: linear-gradient(180deg, black, transparent 78%);
-          -webkit-mask-image: linear-gradient(180deg, black, transparent 78%);
+            linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+          background-size: 32px 32px;
+          opacity: 0.6;
         }
-        .csd-hero-card-head {
-          position: relative;
-          z-index: 1;
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 20px;
-          padding: 22px 24px 16px;
-          border-bottom: 1px solid rgba(10,10,10,0.08);
-        }
-        .csd-hero-card-eyebrow {
-          display: block;
-          margin-bottom: 9px;
-          font-size: 10px;
-          font-weight: 800;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.42);
-        }
-        .csd-hero-card-head h2 {
-          font-family: var(--font-display);
-          font-size: clamp(24px, 2.6vw, 34px);
-          font-weight: 500;
-          letter-spacing: -0.03em;
-          line-height: 1.06;
-          margin: 0;
-          max-width: 430px;
+        .csd-hero-stage-bg::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(circle at 30% 20%, rgba(255,255,255,0.06) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(255,255,255,0.04) 0%, transparent 50%);
         }
 
-        .csd-hero-blueprint {
-          position: relative;
-          z-index: 1;
-          padding: 16px 20px 20px;
-        }
-        .csd-hero-blueprint-main {
-          display: grid;
-          gap: 4px;
-        }
-        .csd-hero-step {
-          display: grid;
-          grid-template-columns: 38px 1fr;
-          gap: 12px;
-          align-items: start;
-          padding: 14px 0;
-          border-bottom: 1px solid rgba(10,10,10,0.08);
-        }
-        .csd-hero-step:last-child { border-bottom: none; }
-        .csd-hero-step > span {
-          display: grid;
-          place-items: center;
-          width: 32px;
-          height: 32px;
-          border-radius: 9px;
-          border: 1px solid rgba(10,10,10,0.12);
-          background: rgba(10,10,10,0.03);
-          color: rgba(10,10,10,0.72);
+        .csd-hero-stage-status {
+          position: absolute;
+          top: 18px;
+          left: 18px;
+          right: 18px;
+          z-index: 5;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
           font-family: var(--font-mono);
           font-size: 10px;
+          color: rgba(255,255,255,0.5);
           letter-spacing: 0.08em;
         }
-        .csd-hero-step strong {
-          display: block;
-          margin-bottom: 2px;
-          font-family: var(--font-display);
-          font-size: 18px;
-          font-weight: 500;
-          letter-spacing: -0.02em;
-          color: #0a0a0a;
+        .csd-hero-stage-status-left {
+          display: flex;
+          align-items: center;
+          gap: 8px;
         }
-        .csd-hero-step p {
-          margin: 0;
-          font-size: 13px;
-          line-height: 1.45;
-          color: rgba(10,10,10,0.56);
+        .csd-hero-stage-status-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #4ade80;
+          box-shadow: 0 0 8px rgba(74,222,128,0.6);
+          animation: csd-status-pulse 2s ease-in-out infinite;
         }
-        .csd-hero-binary-footer {
-          position: relative;
-          z-index: 1;
+        @keyframes csd-status-pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+        .csd-hero-stage-status-text { text-transform: uppercase; }
+        .csd-hero-stage-status-right { color: rgba(255,255,255,0.35); }
+
+        .csd-hero-stage-card {
+          position: absolute;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 14px;
+          backdrop-filter: blur(8px);
+          overflow: hidden;
+          box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
+        }
+
+        /* Card 1 — SaaS dashboard, top-left */
+        .csd-hero-stage-card-1 {
+          top: 60px;
+          left: 32px;
+          width: 62%;
+          z-index: 3;
+        }
+        .csd-hero-stage-card-head {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 20px;
-          padding: 14px 24px 18px;
-          border-top: 1px solid rgba(10,10,10,0.08);
-          background: rgba(10,10,10,0.015);
+          padding: 10px 14px;
+          border-bottom: 1px solid rgba(255,255,255,0.06);
+          background: rgba(255,255,255,0.02);
         }
-        .csd-hero-binary-foot-k {
-          font-size: 10px;
-          font-weight: 800;
-          letter-spacing: 0.16em;
+        .csd-hero-stage-card-dots {
+          display: flex;
+          gap: 5px;
+        }
+        .csd-hero-stage-card-dots span {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.18);
+        }
+        .csd-hero-stage-card-dots span:first-child { background: rgba(248,113,113,0.5); }
+        .csd-hero-stage-card-dots span:nth-child(2) { background: rgba(251,191,36,0.5); }
+        .csd-hero-stage-card-dots span:last-child { background: rgba(74,222,128,0.5); }
+        .csd-hero-stage-card-title {
+          font-family: var(--font-mono);
+          font-size: 9px;
+          color: rgba(255,255,255,0.4);
+          letter-spacing: 0.06em;
+        }
+        .csd-hero-stage-card-body {
+          padding: 16px;
+        }
+        .csd-hero-stage-metric-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          margin-bottom: 14px;
+        }
+        .csd-hero-stage-metric-label {
+          font-size: 9px;
+          font-weight: 600;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
-          color: rgba(10,10,10,0.42);
+          color: rgba(255,255,255,0.4);
           margin-bottom: 4px;
         }
-        .csd-hero-binary-foot-v {
-          max-width: 430px;
-          font-size: 13px;
-          line-height: 1.4;
-          color: rgba(10,10,10,0.64);
+        .csd-hero-stage-metric-value {
+          font-family: var(--font-display);
+          font-size: 20px;
+          font-weight: 500;
+          color: #fff;
+          letter-spacing: -0.02em;
+          line-height: 1;
+          font-variant-numeric: tabular-nums;
+        }
+        .csd-hero-stage-metric-delta {
+          font-family: var(--font-mono);
+          font-size: 10px;
+          color: #4ade80;
+          margin-top: 4px;
+        }
+        .csd-hero-stage-chart {
+          display: flex;
+          align-items: flex-end;
+          gap: 4px;
+          height: 56px;
+        }
+        .csd-hero-stage-chart span {
+          flex: 1;
+          background: linear-gradient(180deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+          border-radius: 2px 2px 0 0;
+          animation: csd-bar-rise 1.2s ease-out backwards;
+        }
+        .csd-hero-stage-chart span:nth-child(odd) {
+          background: linear-gradient(180deg, rgba(74,222,128,0.7), rgba(74,222,128,0.2));
+        }
+        .csd-hero-stage-chart span:last-child {
+          background: linear-gradient(180deg, #4ade80, rgba(74,222,128,0.4));
+        }
+        @keyframes csd-bar-rise {
+          from { transform: scaleY(0); transform-origin: bottom; }
+          to { transform: scaleY(1); transform-origin: bottom; }
         }
 
+        /* Card 2 — mobile, right side */
+        .csd-hero-stage-card-2 {
+          top: 28px;
+          right: 28px;
+          width: 28%;
+          aspect-ratio: 0.5;
+          z-index: 4;
+          border-radius: 22px;
+          background: linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+          padding: 10px;
+        }
+        .csd-hero-stage-mobile-notch {
+          width: 36%;
+          height: 6px;
+          background: rgba(0,0,0,0.5);
+          border-radius: 0 0 8px 8px;
+          margin: 0 auto 14px;
+        }
+        .csd-hero-stage-mobile-body {
+          padding: 0 4px;
+        }
+        .csd-hero-stage-mobile-greeting {
+          font-size: 9px;
+          color: rgba(255,255,255,0.4);
+          letter-spacing: 0.04em;
+        }
+        .csd-hero-stage-mobile-user {
+          font-family: var(--font-display);
+          font-size: 13px;
+          font-weight: 500;
+          color: #fff;
+          margin-bottom: 12px;
+          letter-spacing: -0.01em;
+        }
+        .csd-hero-stage-mobile-card {
+          background: linear-gradient(135deg, rgba(74,222,128,0.18), rgba(74,222,128,0.04));
+          border: 1px solid rgba(74,222,128,0.25);
+          border-radius: 10px;
+          padding: 10px 12px;
+          margin-bottom: 12px;
+        }
+        .csd-hero-stage-mobile-card-label {
+          font-size: 8px;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.5);
+          margin-bottom: 4px;
+        }
+        .csd-hero-stage-mobile-card-value {
+          font-family: var(--font-display);
+          font-size: 16px;
+          font-weight: 500;
+          color: #fff;
+          letter-spacing: -0.02em;
+        }
+        .csd-hero-stage-mobile-list {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .csd-hero-stage-mobile-list div {
+          height: 18px;
+          background: rgba(255,255,255,0.05);
+          border-radius: 6px;
+        }
+        .csd-hero-stage-mobile-list div:nth-child(2) { background: rgba(255,255,255,0.08); }
+
+        /* Card 3 — terminal, bottom */
+        .csd-hero-stage-card-3 {
+          bottom: 32px;
+          left: 60px;
+          width: 56%;
+          z-index: 2;
+        }
+        .csd-hero-stage-code {
+          padding: 14px 16px;
+          font-family: var(--font-mono);
+          font-size: 11px;
+          line-height: 1.7;
+          color: rgba(255,255,255,0.85);
+        }
+        .csd-hero-stage-code > div {
+          opacity: 0;
+          animation: csd-code-line 0.4s ease-out forwards;
+        }
+        .csd-hero-stage-code > div:nth-child(1) { animation-delay: 1.2s; }
+        .csd-hero-stage-code > div:nth-child(2) { animation-delay: 1.5s; }
+        .csd-hero-stage-code > div:nth-child(3) { animation-delay: 1.8s; }
+        .csd-hero-stage-code > div:nth-child(4) { animation-delay: 2.1s; }
+        @keyframes csd-code-line {
+          from { opacity: 0; transform: translateX(-4px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        .csd-code-mute { color: rgba(255,255,255,0.4); }
+        .csd-code-cmd { color: #fff; }
+        .csd-code-flag { color: #fbbf24; }
+        .csd-code-ok { color: #4ade80; }
+
+        /* Floating uptime badge */
+        .csd-hero-stage-badge {
+          position: absolute;
+          bottom: 32px;
+          right: 32px;
+          z-index: 6;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 16px 10px 12px;
+          background: rgba(255,255,255,0.95);
+          border-radius: 14px;
+          box-shadow: 0 12px 32px -8px rgba(0,0,0,0.4);
+        }
+        .csd-hero-stage-badge-pulse {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: #4ade80;
+          box-shadow: 0 0 0 0 rgba(74,222,128,0.6);
+          animation: csd-badge-pulse 2s ease-in-out infinite;
+        }
+        @keyframes csd-badge-pulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.6); }
+          50% { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+        }
+        .csd-hero-stage-badge-k {
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.45);
+          margin-bottom: 1px;
+        }
+        .csd-hero-stage-badge-v {
+          font-family: var(--font-display);
+          font-size: 14px;
+          font-weight: 500;
+          color: #0a0a0a;
+          letter-spacing: -0.01em;
+          line-height: 1;
+          font-variant-numeric: tabular-nums;
+        }
+
+        /* HERO bottom marquee */
+        .csd-hero-marquee-row {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+          padding-top: 24px;
+          border-top: 1px solid rgba(10,10,10,0.08);
+        }
+        .csd-hero-marquee-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          flex-shrink: 0;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.45);
+        }
+        .csd-hero-marquee-label-dot {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: #0a0a0a;
+        }
+        .csd-hero-marquee-track {
+          display: flex;
+          gap: 28px;
+          flex-wrap: wrap;
+          align-items: center;
+        }
+        .csd-hero-marquee-item {
+          font-family: var(--font-display);
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: -0.01em;
+          color: rgba(10,10,10,0.55);
+          transition: color 0.2s;
+        }
+        .csd-hero-marquee-item:hover { color: #0a0a0a; }
+
         /* ═══════════════════════════════════════════════════════════════
-           SECTION 2 — CAPABILITIES (horizontal rows)
+           SECTION 2 — CAPABILITIES
         ═══════════════════════════════════════════════════════════════ */
         .csd-cap-h2 {
           font-family: var(--font-display);
@@ -3856,29 +6629,6 @@ export default function CustomSoftwarePage() {
           line-height: 1.18;
           margin: 0;
         }
-        .csd-cap-row-desc {
-          font-size: 14px;
-          color: rgba(10,10,10,0.6);
-          line-height: 1.55;
-          margin: 0;
-          max-width: 580px;
-        }
-        .csd-cap-row-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 5px;
-          justify-content: flex-end;
-        }
-        .csd-cap-row-tags span {
-          padding: 4px 10px;
-          border: 1px solid rgba(10,10,10,0.12);
-          border-radius: 999px;
-          font-size: 11px;
-          font-weight: 500;
-          color: rgba(10,10,10,0.7);
-          letter-spacing: 0.02em;
-          background: #fff;
-        }
         .csd-cap-row-arrow {
           color: rgba(10,10,10,0.35);
           transition: transform 0.3s, color 0.3s;
@@ -3889,7 +6639,311 @@ export default function CustomSoftwarePage() {
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           SECTION 3 — WHAT WE BUILD
+           NEW SECTION — WHY APPS FAIL (DARK)
+        ═══════════════════════════════════════════════════════════════ */
+        .csd-fail-section {
+          position: relative;
+          padding: 140px 20px;
+          background:
+            linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
+          color: #fafaf9;
+          overflow: hidden;
+          border-top: 1px solid rgba(10,10,10,0.1);
+        }
+        .csd-fail-bg-grid {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+          background-size: 64px 64px;
+          mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 0%, transparent 90%);
+          -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 0%, transparent 90%);
+          pointer-events: none;
+        }
+        .csd-fail-bg-glow {
+          position: absolute;
+          top: -10%;
+          right: -10%;
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, rgba(248,113,113,0.08) 0%, transparent 70%);
+          filter: blur(40px);
+          pointer-events: none;
+        }
+
+        .csd-fail-inner {
+          position: relative;
+          z-index: 1;
+          max-width: 1320px;
+          margin: 0 auto;
+        }
+
+        .csd-fail-grid {
+          display: grid;
+          grid-template-columns: 0.9fr 1.1fr;
+          gap: 80px;
+          align-items: start;
+        }
+
+        .csd-fail-left {
+          position: sticky;
+          top: 100px;
+        }
+
+        .csd-fail-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 24px;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(248,113,113,0.85);
+        }
+        .csd-fail-eyebrow-line {
+          width: 24px;
+          height: 1px;
+          background: rgba(248,113,113,0.5);
+        }
+
+        .csd-fail-h2 {
+          font-family: var(--font-display);
+          font-size: clamp(34px, 4.6vw, 64px);
+          font-weight: 500;
+          letter-spacing: -0.034em;
+          line-height: 1.02;
+          margin: 0 0 24px;
+          color: #fafaf9;
+        }
+        .csd-fail-italic {
+          font-style: italic;
+          font-weight: 400;
+          color: rgba(255,255,255,0.55);
+        }
+
+        .csd-fail-lead {
+          font-size: 15px;
+          line-height: 1.7;
+          color: rgba(255,255,255,0.6);
+          margin: 0 0 36px;
+          max-width: 480px;
+        }
+
+        .csd-fail-stat-block {
+          display: flex;
+          align-items: flex-start;
+          gap: 20px;
+          padding: 24px 24px 26px;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 16px;
+          margin-bottom: 28px;
+        }
+        .csd-fail-stat-num {
+          font-family: var(--font-display);
+          font-size: 56px;
+          font-weight: 500;
+          letter-spacing: -0.045em;
+          line-height: 0.9;
+          color: #fff;
+          font-variant-numeric: tabular-nums;
+          flex-shrink: 0;
+        }
+        .csd-fail-stat-pct {
+          font-size: 32px;
+          color: rgba(248,113,113,0.85);
+          margin-left: 2px;
+        }
+        .csd-fail-stat-text {
+          font-size: 13.5px;
+          line-height: 1.6;
+          color: rgba(255,255,255,0.7);
+          padding-top: 4px;
+        }
+        .csd-fail-stat-source {
+          display: block;
+          margin-top: 8px;
+          font-family: var(--font-mono);
+          font-size: 10px;
+          color: rgba(255,255,255,0.4);
+          letter-spacing: 0.04em;
+        }
+
+        .csd-fail-quote {
+          position: relative;
+          padding: 20px 0 0 28px;
+          border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .csd-fail-quote-mark {
+          position: absolute;
+          top: 4px;
+          left: 0;
+          font-family: var(--font-display);
+          font-size: 48px;
+          font-style: italic;
+          color: rgba(248,113,113,0.5);
+          line-height: 1;
+        }
+        .csd-fail-quote p {
+          font-family: var(--font-display);
+          font-size: 16px;
+          font-style: italic;
+          font-weight: 400;
+          line-height: 1.55;
+          color: rgba(255,255,255,0.78);
+          margin: 0;
+          letter-spacing: -0.005em;
+        }
+
+        /* RIGHT — interactive failure list */
+        .csd-fail-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .csd-fail-row {
+          display: block;
+          width: 100%;
+          padding: 0;
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 16px;
+          background: rgba(255,255,255,0.02);
+          color: inherit;
+          text-align: left;
+          cursor: pointer;
+          font-family: inherit;
+          overflow: hidden;
+          transition: border-color 0.3s, background 0.3s;
+        }
+        .csd-fail-row:hover {
+          border-color: rgba(255,255,255,0.18);
+          background: rgba(255,255,255,0.04);
+        }
+        .csd-fail-row[data-active="true"] {
+          border-color: rgba(248,113,113,0.4);
+          background: rgba(255,255,255,0.04);
+        }
+
+        .csd-fail-row-head {
+          display: grid;
+          grid-template-columns: 56px 110px 1fr 32px;
+          gap: 20px;
+          align-items: center;
+          padding: 22px 24px;
+        }
+        .csd-fail-row-num {
+          font-family: var(--font-display);
+          font-size: 28px;
+          font-weight: 500;
+          letter-spacing: -0.04em;
+          color: transparent;
+          -webkit-text-stroke: 1px rgba(255,255,255,0.35);
+          font-variant-numeric: tabular-nums;
+          line-height: 1;
+          transition: color 0.3s, -webkit-text-stroke-color 0.3s;
+        }
+        .csd-fail-row[data-active="true"] .csd-fail-row-num {
+          color: rgba(248,113,113,0.9);
+          -webkit-text-stroke-color: transparent;
+        }
+        .csd-fail-row-stat {
+          padding-left: 18px;
+          border-left: 1px solid rgba(255,255,255,0.1);
+        }
+        .csd-fail-row-stat-num {
+          font-family: var(--font-display);
+          font-size: 20px;
+          font-weight: 500;
+          letter-spacing: -0.025em;
+          color: #fff;
+          line-height: 1;
+          font-variant-numeric: tabular-nums;
+        }
+        .csd-fail-row-stat-label {
+          font-family: var(--font-mono);
+          font-size: 9.5px;
+          color: rgba(255,255,255,0.45);
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          margin-top: 6px;
+        }
+        .csd-fail-row-title {
+          font-family: var(--font-display);
+          font-size: clamp(17px, 1.7vw, 21px);
+          font-weight: 500;
+          letter-spacing: -0.018em;
+          line-height: 1.25;
+          margin: 0;
+          color: #fafaf9;
+        }
+        .csd-fail-row-icon {
+          width: 32px;
+          height: 32px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 50%;
+          color: rgba(255,255,255,0.7);
+          transition: transform 0.35s cubic-bezier(0.22,1,0.36,1),
+                      background 0.25s, color 0.25s, border-color 0.25s;
+        }
+        .csd-fail-row[data-active="true"] .csd-fail-row-icon {
+          transform: rotate(45deg);
+          background: rgba(248,113,113,0.85);
+          border-color: rgba(248,113,113,0.85);
+          color: #0a0a0a;
+        }
+
+        .csd-fail-row-content {
+          display: grid;
+          grid-template-rows: 0fr;
+          transition: grid-template-rows 0.45s cubic-bezier(0.22,1,0.36,1);
+        }
+        .csd-fail-row[data-active="true"] .csd-fail-row-content {
+          grid-template-rows: 1fr;
+        }
+        .csd-fail-row-content-inner {
+          overflow: hidden;
+        }
+        .csd-fail-row-block {
+          padding: 18px 24px 22px 88px;
+          border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .csd-fail-row-block-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 8px;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+        }
+        .csd-fail-row-block-problem .csd-fail-row-block-label {
+          color: rgba(248,113,113,0.85);
+        }
+        .csd-fail-row-block-fix .csd-fail-row-block-label {
+          color: rgba(74,222,128,0.85);
+        }
+        .csd-fail-row-block-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+        }
+        .csd-fail-dot-red { background: rgba(248,113,113,0.85); }
+        .csd-fail-dot-green { background: rgba(74,222,128,0.85); }
+        .csd-fail-row-block p {
+          margin: 0;
+          font-size: 14px;
+          line-height: 1.65;
+          color: rgba(255,255,255,0.7);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           SECTION — WHAT WE BUILD
         ═══════════════════════════════════════════════════════════════ */
         .csd-build-section {
           padding: 140px 20px;
@@ -3924,12 +6978,8 @@ export default function CustomSoftwarePage() {
           outline: none;
           transition: padding-left 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .csd-build-row:focus-visible {
-          padding-left: 8px;
-        }
-        .csd-build-row[data-active="true"] {
-          padding-left: 8px;
-        }
+        .csd-build-row:focus-visible { padding-left: 8px; }
+        .csd-build-row[data-active="true"] { padding-left: 8px; }
         .csd-build-row-bin {
           font-family: var(--font-mono);
           font-size: 13px;
@@ -3938,9 +6988,7 @@ export default function CustomSoftwarePage() {
           padding-top: 6px;
           transition: color 0.25s;
         }
-        .csd-build-row[data-active="true"] .csd-build-row-bin {
-          color: #d4d4d8;
-        }
+        .csd-build-row[data-active="true"] .csd-build-row-bin { color: #d4d4d8; }
         .csd-build-row-label {
           font-family: var(--font-display);
           font-size: clamp(22px, 2.6vw, 32px);
@@ -3964,11 +7012,8 @@ export default function CustomSoftwarePage() {
           background: #d4d4d8;
           transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .csd-build-row[data-active="true"] .csd-build-row-line {
-          width: 100%;
-        }
+        .csd-build-row[data-active="true"] .csd-build-row-line { width: 100%; }
 
-        /* Right stage */
         .csd-build-right {
           position: relative;
           min-height: 560px;
@@ -4007,7 +7052,6 @@ export default function CustomSoftwarePage() {
           transition:
             opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
             transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-          /* backdrop-filter is expensive; only enable it for the active frame */
           backdrop-filter: none;
         }
         .csd-build-frame[data-active="true"] {
@@ -4026,10 +7070,7 @@ export default function CustomSoftwarePage() {
           gap: 8px;
           margin-bottom: 10px;
         }
-        .csd-build-frame-dots {
-          display: flex;
-          gap: 4px;
-        }
+        .csd-build-frame-dots { display: flex; gap: 4px; }
         .csd-build-frame-dots span {
           width: 6px; height: 6px;
           border-radius: 50%;
@@ -4048,7 +7089,6 @@ export default function CustomSoftwarePage() {
           gap: 6px;
         }
 
-        /* Frame variants */
         .csd-build-frame-saas      { top: 8%;  left: 5%;  width: 48%; }
         .csd-build-frame-dashboard { top: 12%; right: 4%; width: 44%; }
         .csd-build-frame-mobile    { top: 38%; left: 38%; width: 26%; aspect-ratio: 0.5; padding: 10px; }
@@ -4133,8 +7173,7 @@ export default function CustomSoftwarePage() {
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           SECTION 4 — WHY TEAMS CHOOSE US
-           Clean, minimal layout (no heavy binary visuals).
+           VALUE PROPS
         ═══════════════════════════════════════════════════════════════ */
         .csd-vp-section {
           padding: 110px 20px;
@@ -4144,7 +7183,6 @@ export default function CustomSoftwarePage() {
           overflow: hidden;
           border-top: 1px solid rgba(0,0,0,0.06);
         }
-
         .csd-vp-section::before {
           content: "";
           position: absolute;
@@ -4157,8 +7195,6 @@ export default function CustomSoftwarePage() {
           mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 85%);
           -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 85%);
         }
-
-        /* Light-theme typography inside the section */
         .csd-vp-section .csd-h2-light { color: #0a0a0a; }
         .csd-vp-section .csd-italic-light { color: rgba(10,10,10,0.6); }
         .csd-vp-section .csd-h2-lead-light { color: rgba(10,10,10,0.58); }
@@ -4169,27 +7205,23 @@ export default function CustomSoftwarePage() {
           position: relative;
           z-index: 1;
         }
-
         .csd-vp-grid {
           display: grid;
           grid-template-columns: 0.95fr 1.05fr;
           gap: 64px;
           align-items: start;
         }
-
         .csd-vp-left {
           display: flex;
           flex-direction: column;
           gap: 18px;
         }
-
         .csd-vp-right {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 16px;
           align-content: start;
         }
-
         .csd-vp-card {
           padding: 22px 22px 24px;
           border: 1px solid rgba(0,0,0,0.08);
@@ -4201,14 +7233,12 @@ export default function CustomSoftwarePage() {
           min-height: 0;
           transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
         }
-
         .csd-vp-card:hover {
           transform: translateY(-2px);
           border-color: rgba(0,0,0,0.18);
           box-shadow: 0 14px 32px rgba(10,10,10,0.08);
           background: #fff;
         }
-
         .csd-vp-card-pill {
           display: flex;
           align-items: baseline;
@@ -4219,7 +7249,6 @@ export default function CustomSoftwarePage() {
           border: 1px solid rgba(0,0,0,0.08);
           background: rgba(10,10,10,0.02);
         }
-
         .csd-vp-card-pill-value {
           font-family: var(--font-display);
           font-size: 22px;
@@ -4228,7 +7257,6 @@ export default function CustomSoftwarePage() {
           line-height: 1;
           color: #0a0a0a;
         }
-
         .csd-vp-card-pill-label {
           font-size: 11px;
           font-weight: 700;
@@ -4237,7 +7265,6 @@ export default function CustomSoftwarePage() {
           color: rgba(10,10,10,0.45);
           white-space: nowrap;
         }
-
         .csd-vp-card-title {
           font-family: var(--font-display);
           font-size: 20px;
@@ -4247,7 +7274,6 @@ export default function CustomSoftwarePage() {
           margin: 0;
           color: #0a0a0a;
         }
-
         .csd-vp-card-desc {
           font-size: 14.5px;
           line-height: 1.7;
@@ -4256,7 +7282,7 @@ export default function CustomSoftwarePage() {
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           SECTION 7 — RESULTS
+           RESULTS
         ═══════════════════════════════════════════════════════════════ */
         .csd-results-section {
           padding: 140px 20px;
@@ -4272,7 +7298,6 @@ export default function CustomSoftwarePage() {
           flex-wrap: wrap;
           margin-bottom: 56px;
         }
-
         .csd-results-list {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -4306,9 +7331,7 @@ export default function CustomSoftwarePage() {
           border-color: rgba(10,10,10,0.22);
           box-shadow: 0 24px 50px -28px rgba(10,10,10,0.22);
         }
-        .csd-result-card:hover::before {
-          transform: scaleY(1);
-        }
+        .csd-result-card:hover::before { transform: scaleY(1); }
         .csd-result-num-wrap {
           display: flex;
           flex-direction: column;
@@ -4337,9 +7360,7 @@ export default function CustomSoftwarePage() {
           color: rgba(10,10,10,0.65);
           margin-top: 4px;
         }
-        .csd-result-story {
-          padding-top: 28px;
-        }
+        .csd-result-story { padding-top: 28px; }
         .csd-result-project {
           display: inline-flex;
           align-items: center;
@@ -4368,7 +7389,7 @@ export default function CustomSoftwarePage() {
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           SECTION 8 — FAQs
+           FAQs
         ═══════════════════════════════════════════════════════════════ */
         .csd-faq-section {
           padding: 140px 20px;
@@ -4398,10 +7419,7 @@ export default function CustomSoftwarePage() {
           border-radius: 999px;
           transition: background 0.2s, color 0.2s;
         }
-        .csd-faq-cta:hover {
-          background: #0a0a0a;
-          color: #fafaf9;
-        }
+        .csd-faq-cta:hover { background: #0a0a0a; color: #fafaf9; }
         .csd-faq-list {
           display: flex;
           flex-direction: column;
@@ -4458,9 +7476,7 @@ export default function CustomSoftwarePage() {
           grid-template-rows: 0fr;
           transition: grid-template-rows 0.4s cubic-bezier(0.22,1,0.36,1);
         }
-        .csd-faq-row[data-open="true"] .csd-faq-a {
-          grid-template-rows: 1fr;
-        }
+        .csd-faq-row[data-open="true"] .csd-faq-a { grid-template-rows: 1fr; }
         .csd-faq-a-inner {
           overflow: hidden;
           padding-left: 66px;
@@ -4471,11 +7487,8 @@ export default function CustomSoftwarePage() {
           padding-bottom: 0;
           transition: padding-bottom 0.4s cubic-bezier(0.22,1,0.36,1);
         }
-        .csd-faq-row[data-open="true"] .csd-faq-a-inner {
-          padding-bottom: 28px;
-        }
+        .csd-faq-row[data-open="true"] .csd-faq-a-inner { padding-bottom: 28px; }
 
-        /* CTA mark */
         .csd-cta-mark {
           position: absolute;
           right: 8%;
@@ -4498,24 +7511,33 @@ export default function CustomSoftwarePage() {
           -webkit-text-stroke: 2px rgba(255,255,255,0.6);
         }
 
-        /* Marquee */
         .marquee-track { will-change: transform; }
 
         /* ═══════════════════════════════════════════════════════════════
            RESPONSIVE
         ═══════════════════════════════════════════════════════════════ */
         @media (max-width: 1100px) {
+          .csd-hero-main {
+            grid-template-columns: 1fr;
+            gap: 64px;
+          }
+          .csd-hero-right { max-width: 720px; margin: 0 auto; width: 100%; }
+
           .csd-cap-row {
             grid-template-columns: 60px 50px 1fr 30px;
             gap: 18px;
           }
-          .csd-cap-row-tags { display: none; }
+
+          .csd-fail-grid {
+            grid-template-columns: 1fr;
+            gap: 56px;
+          }
+          .csd-fail-left { position: static; }
 
           .csd-build-grid { grid-template-columns: 1fr; gap: 56px; }
           .csd-build-right { min-height: 480px; }
 
           .csd-vp-grid { grid-template-columns: 1fr; gap: 48px; }
-          .csd-vp-tape { min-height: 240px; }
 
           .csd-results-list { grid-template-columns: 1fr; }
           .csd-result-card { grid-template-columns: 200px 1fr; }
@@ -4523,45 +7545,46 @@ export default function CustomSoftwarePage() {
           .csd-faq-layout { grid-template-columns: 1fr; gap: 48px; }
           .csd-faq-aside { position: static; }
         }
-        @media (max-width: 900px) {
-          .csd-hero-main { grid-template-columns: 1fr; gap: 56px; }
-          .csd-hero-right { max-width: 760px; }
-        }
+
         @media (max-width: 768px) {
-          .csd-hero { padding: 120px 14px 60px; min-height: auto; }
-          .csd-hero-inner { min-height: auto; }
-          .csd-hero-meta {
-            max-width: 100%;
-            align-items: flex-start;
-            border-radius: 18px;
-            line-height: 1.35;
+          .csd-hero {
+            padding: 120px 14px 60px;
+            min-height: auto;
           }
-          .csd-hero-title { font-size: clamp(40px, 13vw, 62px); }
-          .csd-hero-main { gap: 40px; }
-          .csd-hero-card-head,
-          .csd-hero-binary-footer {
-            padding-left: 20px;
-            padding-right: 20px;
+          .csd-hero-title { font-size: clamp(40px, 13vw, 64px); }
+          .csd-hero-proof {
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
           }
-          .csd-hero-blueprint { grid-template-columns: 1fr; padding: 18px; }
-          .csd-hero-binary-footer {
-            align-items: flex-start;
+          .csd-hero-stage { aspect-ratio: 1 / 1; }
+          .csd-hero-stage-card-1 { width: 70%; left: 20px; top: 50px; }
+          .csd-hero-stage-card-2 { width: 30%; right: 18px; top: 22px; }
+          .csd-hero-stage-card-3 { width: 62%; bottom: 24px; left: 40px; }
+          .csd-hero-stage-badge {
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 12px 8px 10px;
+          }
+          .csd-hero-stage-badge-v { font-size: 12px; }
+          .csd-hero-marquee-row {
             flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
           }
-          .csd-hero-binary-foot-v { text-align: left; }
+          .csd-hero-marquee-track { gap: 18px; }
+          .csd-hero-marquee-item { font-size: 13px; }
 
           .csd-cap-section,
           .csd-build-section,
           .csd-vp-section,
           .csd-results-section,
-          .csd-faq-section {
+          .csd-faq-section,
+          .csd-fail-section {
             padding-left: 14px;
             padding-right: 14px;
             padding-top: 90px;
             padding-bottom: 90px;
           }
-
-          /* Make just the 6-sub-service section more compact */
           .csd-cap-section {
             padding-top: 70px;
             padding-bottom: 70px;
@@ -4575,6 +7598,27 @@ export default function CustomSoftwarePage() {
           .csd-cap-row-bin,
           .csd-cap-row-num { display: none; }
           .csd-cap-row-title { font-size: 19px; }
+
+          /* Why apps fail mobile */
+          .csd-fail-row-head {
+            grid-template-columns: 44px 1fr 28px;
+            gap: 14px;
+            padding: 18px 18px;
+          }
+          .csd-fail-row-stat { display: none; }
+          .csd-fail-row-num { font-size: 22px; }
+          .csd-fail-row-title { font-size: 16px; }
+          .csd-fail-row-block {
+            padding: 16px 18px 18px 18px;
+          }
+          .csd-fail-row-block p { font-size: 13.5px; }
+          .csd-fail-stat-block {
+            flex-direction: column;
+            gap: 14px;
+            padding: 20px;
+          }
+          .csd-fail-stat-num { font-size: 48px; }
+          .csd-fail-h2 { font-size: clamp(28px, 8vw, 40px); }
 
           .csd-build-list { border-top: none; }
           .csd-build-row {
@@ -4595,7 +7639,6 @@ export default function CustomSoftwarePage() {
 
           .csd-vp-right { grid-template-columns: 1fr; }
           .csd-vp-card { min-height: auto; }
-          .csd-vp-tape { min-height: 200px; }
 
           .csd-result-card {
             grid-template-columns: 1fr;
@@ -4609,10 +7652,7 @@ export default function CustomSoftwarePage() {
           .csd-faq-a-inner { padding-left: 48px; font-size: 14px; }
           .csd-faq-row[data-open="true"] .csd-faq-a-inner { padding-bottom: 22px; }
 
-          .csd-process-pin {
-            height: auto !important;
-            overflow: visible !important;
-          }
+          .csd-process-pin { height: auto !important; overflow: visible !important; }
           .csd-process-pin > div:first-of-type { padding: 80px 14px 32px !important; }
           .csd-process-track {
             flex-direction: column !important;
@@ -4639,8 +7679,7 @@ export default function CustomSoftwarePage() {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// BuildFrame — small device/window mockup component used inside the
-// "What we build" stage. Kept inline to this file so the page is one drop-in.
+// BuildFrame
 // ────────────────────────────────────────────────────────────────────────────
 type BuildVariant = "saas" | "dashboard" | "mobile" | "internal" | "mvp" | "market";
 
