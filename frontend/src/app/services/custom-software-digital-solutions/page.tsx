@@ -1,4 +1,3 @@
-
 //version 3
 "use client";
 
@@ -262,7 +261,7 @@ export default function CustomSoftwarePage() {
       setupBatchReveal(".csd-sh", { opacity: 0, y: 38 }, { opacity: 1, y: 0, duration: 0.95, ease: "power3.out" }, "top 88%");
       setupBatchReveal(".csd-svc-card", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 90%");
       setupBatchReveal(".csd-build-row", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, "top 92%");
-      setupBatchReveal(".csd-vp-card", { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 88%");
+      setupBatchReveal(".csd-vp-item", { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 88%");
       setupBatchReveal(".csd-result-card", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 90%");
       setupBatchReveal(".csd-faq-row", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, "top 92%");
 
@@ -817,31 +816,47 @@ export default function CustomSoftwarePage() {
 
         {/* WHY TEAMS CHOOSE US */}
         <section className="csd-vp-section" aria-labelledby="csd-vp-title">
-          <div className="csd-vp-inner">
-            <div className="csd-vp-grid">
-              <div className="csd-vp-left">
-                <div className="csd-sh">
-                  <h2 id="csd-vp-title" className="csd-h2 csd-h2-light">
-                    Why teams <span className="csd-italic-light">choose us</span>.
-                  </h2>
-                  <p className="csd-h2-lead csd-h2-lead-light">
-                    We help businesses grow through reliable delivery: faster performance, scalable architecture,
-                    consistent UX, and a cadence your team can trust.
-                  </p>
-                </div>
-              </div>
+          <div className="csd-vp-grid">
+            {/* LEFT — content */}
+            <div className="csd-vp-content csd-sh">
+              <h2 id="csd-vp-title" className="csd-vp-h2">
+                Built for teams that <span className="csd-vp-h2-accent">measure outcomes.</span>
+              </h2>
 
-              <div className="csd-vp-right" role="list" aria-label="What drives growth">
-                {VALUE_PROPS.map((v) => (
-                  <div key={v.id} className="csd-vp-card" role="listitem">
-                    <div className="csd-vp-card-pill" aria-hidden>
-                      <span className="csd-vp-card-pill-value">{v.metric}</span>
-                      <span className="csd-vp-card-pill-label">{v.metricLabel}</span>
+              <ul className="csd-vp-list" role="list">
+                {VALUE_PROPS.map((v, i) => (
+                  <li key={v.id} className="csd-vp-item">
+                    <div className="csd-vp-item-num">
+                      <span style={{ fontFamily: "var(--font-mono)" }}>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                     </div>
-                    <h3 className="csd-vp-card-title">{v.title}</h3>
-                    <p className="csd-vp-card-desc">{v.desc}</p>
-                  </div>
+                    <div className="csd-vp-item-body">
+                      <div className="csd-vp-item-head">
+                        <h3 className="csd-vp-item-title">{v.title}</h3>
+                        <div className="csd-vp-item-metric">
+                          <span className="csd-vp-item-metric-value">{v.metric}</span>
+                          <span className="csd-vp-item-metric-label">{v.metricLabel}</span>
+                        </div>
+                      </div>
+                      <p className="csd-vp-item-desc">{v.desc}</p>
+                    </div>
+                  </li>
                 ))}
+              </ul>
+            </div>
+
+            {/* RIGHT — image */}
+            <div className="csd-vp-media" aria-hidden>
+              <img
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80&auto=format&fit=crop"
+                alt=""
+                loading="lazy"
+              />
+              <div className="csd-vp-media-overlay" />
+              <div className="csd-vp-media-tag">
+                <span className="csd-vp-media-tag-dot" />
+                Engineered with intent
               </div>
             </div>
           </div>
@@ -892,35 +907,33 @@ export default function CustomSoftwarePage() {
         <section className="csd-results-section">
           <div className="csd-results-inner">
             <div className="csd-sh csd-results-header">
-              <div>
-                <h2 className="csd-h2">
+              <div className="csd-results-header-left">
+                <div className="csd-results-eyebrow">Selected outcomes</div>
+                <h2 className="csd-results-h2">
                   We don&apos;t just build software.{" "}
                   <span className="csd-italic-mute">We deliver results.</span>
                 </h2>
               </div>
-              <p className="csd-h2-lead">
-                Selected outcomes from recent engagements. Numbers measured
-                in production, not extrapolated from pitch decks.
+              <p className="csd-results-lead">
+                Numbers measured in production, not extrapolated from pitch decks.
+                Each engagement below ran six months or longer.
               </p>
             </div>
 
-            <div className="csd-results-list">
+            <div className="csd-results-row">
               {RESULTS.map((r, i) => (
                 <div key={r.label} className="csd-result-card">
-                  <div className="csd-result-num-wrap">
-                    <div className="csd-result-index">
-                      <span style={{ fontFamily: "var(--font-mono)" }}>R-{String(i + 1).padStart(2, "0")}</span>
-                    </div>
-                    <div className="csd-result-metric">{r.metric}</div>
-                    <div className="csd-result-label">{r.label}</div>
+                  <div className="csd-result-card-top">
+                    <span className="csd-result-card-index">
+                      R—{String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="csd-result-card-dot" />
                   </div>
-                  <div className="csd-result-story">
-                    <div className="csd-result-project">
-                      <span className="csd-result-project-dot" />
-                      {r.project}
-                    </div>
-                    <p className="csd-result-desc">{r.desc}</p>
-                  </div>
+                  <div className="csd-result-card-metric">{r.metric}</div>
+                  <div className="csd-result-card-label">{r.label}</div>
+                  <div className="csd-result-card-divider" />
+                  <div className="csd-result-card-project">{r.project}</div>
+                  <p className="csd-result-card-desc">{r.desc}</p>
                 </div>
               ))}
             </div>
@@ -976,52 +989,58 @@ export default function CustomSoftwarePage() {
         </section>
 
         {/* FINAL CTA */}
-        <section style={{ padding: "0 20px 64px", borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 64 }}>
-          <div
-            className="csd-cta-inner"
-            style={{
-              borderRadius: 28, overflow: "hidden",
-              padding: "92px 56px", position: "relative",
-              background: "#0a0a0a", color: "#fafaf9",
-              opacity: 0, maxWidth: 1320, margin: "0 auto",
-            }}
-          >
-            <div aria-hidden style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)", backgroundSize: "48px 48px", pointerEvents: "none" }} />
-            <div aria-hidden style={{ position: "absolute", top: "-20%", right: "-10%", width: 560, height: 560, background: "radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%)", pointerEvents: "none" }} />
+        <section className="csd-cta-section">
+          <div className="csd-cta-inner">
+            <div className="csd-cta-grid">
+              <div className="csd-cta-left">
+                <div className="csd-cta-eyebrow">
+                  <span className="csd-cta-eyebrow-dot" />
+                  Available for new projects
+                </div>
 
-            <div aria-hidden className="csd-cta-mark">
-              <span>1</span><span>0</span>
-            </div>
+                <h2 className="csd-cta-h2">
+                  Ready to build something{" "}
+                  <span className="csd-cta-h2-accent">that lasts?</span>
+                </h2>
 
-            <div style={{ position: "relative", zIndex: 1, maxWidth: 760 }}>
-              <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(40px, 6vw, 84px)", fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 0.94, margin: "0 0 28px" }}>
-                Ready to build something{" "}
-                <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(255,255,255,0.6)" }}>that lasts?</span>
-              </h2>
-              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.58)", maxWidth: 540, lineHeight: 1.62, margin: "0 0 36px" }}>
-                Free 30-minute discovery call. You&apos;ll talk directly with an engineer
-                and a strategist. No sales pitch — just a real conversation about your
-                problem, your timeline, and whether we&apos;re the right team for it.
-              </p>
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 26px", background: "#fafaf9", color: "#0a0a0a", textDecoration: "none", fontSize: 14, fontWeight: 500, borderRadius: 999, transition: "transform 0.2s" }}>
-                  Book a discovery call <span aria-hidden>→</span>
-                </Link>
-                <a href="mailto:hello@techbinaries.com" className="csd-ghost-dark" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 26px", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.85)", textDecoration: "none", fontSize: 14, fontWeight: 500, borderRadius: 999, transition: "background 0.2s, border-color 0.2s" }}>
-                  hello@techbinaries.com
-                </a>
+                <p className="csd-cta-lead">
+                  Free 30-minute discovery call. You&apos;ll talk directly with an
+                  engineer and a strategist — no sales pitch, just a real conversation
+                  about your problem and timeline.
+                </p>
+
+                <div className="csd-cta-actions">
+                  <Link href="/contact" className="csd-cta-primary-light">
+                    <span>Book a discovery call</span>
+                    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
+                      <path d="M2.5 6h7M6 2.5L9.5 6 6 9.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </Link>
+                  <a href="mailto:hello@techbinaries.com" className="csd-cta-mail">
+                    hello@techbinaries.com
+                  </a>
+                </div>
               </div>
-              <div style={{ marginTop: 56, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.08)", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
-                {[
-                  { k: "Response time",   v: "Within 24h" },
-                  { k: "Typical project", v: "8–24 weeks" },
-                  { k: "Engagement type", v: "Fixed or T&M" },
-                ].map((it) => (
-                  <div key={it.k}>
-                    <div style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 6 }}>{it.k}</div>
-                    <div style={{ fontSize: 15, color: "#fafaf9", fontFamily: "var(--font-display)", fontWeight: 500, letterSpacing: "-0.01em" }}>{it.v}</div>
+
+              <div className="csd-cta-right">
+                <dl className="csd-cta-meta">
+                  <div className="csd-cta-meta-item">
+                    <dt>Response time</dt>
+                    <dd>Within 24h</dd>
                   </div>
-                ))}
+                  <div className="csd-cta-meta-item">
+                    <dt>Typical project</dt>
+                    <dd>8–24 weeks</dd>
+                  </div>
+                  <div className="csd-cta-meta-item">
+                    <dt>Engagement</dt>
+                    <dd>Fixed or T&amp;M</dd>
+                  </div>
+                  <div className="csd-cta-meta-item">
+                    <dt>Based in</dt>
+                    <dd>Global · remote-first</dd>
+                  </div>
+                </dl>
               </div>
             </div>
           </div>
@@ -2184,218 +2203,340 @@ export default function CustomSoftwarePage() {
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           VALUE PROPS
+           WHY TEAMS CHOOSE US — editorial split (content left, image right)
         ═══════════════════════════════════════════════════════════════ */
         .csd-vp-section {
-          padding: 110px 20px;
           background: #fafaf9;
-          color: #0a0a0a;
-          position: relative;
-          overflow: hidden;
           border-top: 1px solid rgba(0,0,0,0.06);
+          padding-right: clamp(14px, 2.4vw, 32px);
         }
-        .csd-vp-section::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background-image:
-            linear-gradient(rgba(10,10,10,0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(10,10,10,0.02) 1px, transparent 1px);
-          background-size: 72px 72px;
-          pointer-events: none;
-          mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 85%);
-          -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 85%);
-        }
-        .csd-vp-section .csd-h2-light { color: #0a0a0a; }
-        .csd-vp-section .csd-italic-light { color: rgba(10,10,10,0.6); }
-        .csd-vp-section .csd-h2-lead-light { color: rgba(10,10,10,0.58); }
 
-        .csd-vp-inner {
-          max-width: 1320px;
-          margin: 0 auto;
-          position: relative;
-          z-index: 1;
-        }
         .csd-vp-grid {
           display: grid;
-          grid-template-columns: 0.95fr 1.05fr;
-          gap: 64px;
-          align-items: start;
+          grid-template-columns: 1.05fr 0.95fr;
+          gap: 0;
+          align-items: stretch;
+          min-height: 620px;
         }
-        .csd-vp-left {
+
+        .csd-vp-content {
+          padding: clamp(56px, 7vw, 96px) clamp(32px, 5vw, 72px) clamp(56px, 7vw, 96px) clamp(132px, 18vw, 270px);
           display: flex;
           flex-direction: column;
-          gap: 18px;
+          justify-content: center;
+          background: #fafaf9;
         }
-        .csd-vp-right {
+
+        .csd-vp-eyebrow {
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.5);
+          margin-bottom: 18px;
+        }
+
+        .csd-vp-h2 {
+          font-family: var(--font-display);
+          font-size: clamp(34px, 4.4vw, 56px);
+          font-weight: 500;
+          letter-spacing: -0.034em;
+          line-height: 1.02;
+          margin: 0 0 26px;
+          color: #0a0a0a;
+          max-width: 520px;
+        }
+        .csd-vp-h2-accent {
+          font-style: italic;
+          font-weight: 400;
+          color: rgba(10,10,10,0.5);
+        }
+
+        .csd-vp-lead {
+          font-size: 16px;
+          line-height: 1.7;
+          color: rgba(10,10,10,0.62);
+          margin: 0 0 40px;
+          max-width: 540px;
+          padding-bottom: 32px;
+          border-bottom: 1px solid rgba(10,10,10,0.1);
+        }
+
+        .csd-vp-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          max-width: 540px;
+        }
+        .csd-vp-item {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 16px;
-          align-content: start;
+          grid-template-columns: 18px 1fr;
+          gap: 14px;
+          padding: 0;
+          border-bottom: 0;
         }
-        .csd-vp-card {
-          padding: 22px 22px 24px;
-          border: 1px solid rgba(0,0,0,0.08);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.9);
+        .csd-vp-item-num {
+          position: relative;
+          width: 18px;
+          height: 22px;
+          flex-shrink: 0;
+        }
+        .csd-vp-item-num span {
+          display: none;
+        }
+        .csd-vp-item-num::before {
+          content: "";
+          position: absolute;
+          top: 9px;
+          left: 0;
+          width: 12px;
+          height: 1px;
+          background: #0a0a0a;
+        }
+        .csd-vp-item-num::after {
+          content: "";
+          position: absolute;
+          top: 6px;
+          left: 8px;
+          width: 7px;
+          height: 7px;
+          border-top: 1px solid #0a0a0a;
+          border-right: 1px solid #0a0a0a;
+          transform: rotate(45deg);
+        }
+        .csd-vp-item-body {
           display: flex;
           flex-direction: column;
-          gap: 10px;
-          min-height: 0;
-          transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+          gap: 6px;
+          min-width: 0;
         }
-        .csd-vp-card:hover {
-          transform: translateY(-2px);
-          border-color: rgba(0,0,0,0.18);
-          box-shadow: 0 14px 32px rgba(10,10,10,0.08);
-          background: #fff;
-        }
-        .csd-vp-card-pill {
+        .csd-vp-item-head {
           display: flex;
           align-items: baseline;
           justify-content: space-between;
-          gap: 12px;
-          padding: 10px 12px;
-          border-radius: 999px;
-          border: 1px solid rgba(0,0,0,0.08);
-          background: rgba(10,10,10,0.02);
+          gap: 18px;
+          flex-wrap: wrap;
         }
-        .csd-vp-card-pill-value {
+        .csd-vp-item-title {
           font-family: var(--font-display);
-          font-size: 22px;
+          font-size: 18px;
           font-weight: 500;
-          letter-spacing: -0.03em;
-          line-height: 1;
+          letter-spacing: -0.018em;
+          line-height: 1.3;
+          margin: 0;
           color: #0a0a0a;
+          flex: 1;
+          min-width: 220px;
         }
-        .csd-vp-card-pill-label {
-          font-size: 11px;
+        .csd-vp-item-metric {
+          display: inline-flex;
+          align-items: baseline;
+          gap: 8px;
+          flex-shrink: 0;
+        }
+        .csd-vp-item-metric-value {
+          font-family: var(--font-display);
+          font-size: 18px;
+          font-weight: 500;
+          letter-spacing: -0.025em;
+          color: #0a0a0a;
+          line-height: 1;
+          font-variant-numeric: tabular-nums;
+        }
+        .csd-vp-item-metric-label {
+          font-size: 9px;
           font-weight: 700;
-          letter-spacing: 0.14em;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
           color: rgba(10,10,10,0.45);
           white-space: nowrap;
         }
-        .csd-vp-card-title {
-          font-family: var(--font-display);
-          font-size: 20px;
-          font-weight: 500;
-          letter-spacing: -0.02em;
-          line-height: 1.25;
-          margin: 0;
-          color: #0a0a0a;
-        }
-        .csd-vp-card-desc {
-          font-size: 14.5px;
-          line-height: 1.7;
-          color: rgba(10,10,10,0.62);
+        .csd-vp-item-desc {
+          font-size: 14px;
+          line-height: 1.62;
+          color: rgba(10,10,10,0.65);
           margin: 0;
         }
 
+        /* RIGHT — image */
+        .csd-vp-media {
+          position: relative;
+          align-self: center;
+          justify-self: center;
+          overflow: hidden;
+          background: #0a0a0a;
+          width: min(100%, 840px);
+          height: 760px;
+          min-height: 0;
+          border-radius: clamp(20px, 2.4vw, 32px);
+        }
+        .csd-vp-media img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          filter: grayscale(1) contrast(1.05);
+          transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .csd-vp-section:hover .csd-vp-media img {
+          transform: scale(1.03);
+        }
+        .csd-vp-media-overlay {
+          position: absolute;
+          inset: 0;
+          background:
+            linear-gradient(180deg, rgba(10,10,10,0.15) 0%, rgba(10,10,10,0.45) 100%);
+          pointer-events: none;
+        }
+        .csd-vp-media-tag {
+          display: none;
+        }
+        .csd-vp-media-tag-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #0a0a0a;
+        }
+
         /* ═══════════════════════════════════════════════════════════════
-           RESULTS
+           RESULTS — clean horizontal row (4 inline)
         ═══════════════════════════════════════════════════════════════ */
         .csd-results-section {
           padding: 140px 20px;
-          background: #f5f5f4;
+          background: #fafaf9;
           border-top: 1px solid rgba(0,0,0,0.06);
         }
         .csd-results-inner { max-width: 1320px; margin: 0 auto; }
+
         .csd-results-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: end;
-          gap: 40px;
-          flex-wrap: wrap;
-          margin-bottom: 56px;
-        }
-        .csd-results-list {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 16px;
+          grid-template-columns: 1.4fr 1fr;
+          gap: 60px;
+          align-items: end;
+          margin-bottom: 72px;
+          padding-bottom: 40px;
+          border-bottom: 1px solid rgba(10,10,10,0.1);
+        }
+        .csd-results-header-left { display: flex; flex-direction: column; gap: 18px; }
+        .csd-results-eyebrow {
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.5);
+        }
+        .csd-results-h2 {
+          font-family: var(--font-display);
+          font-size: clamp(34px, 4.4vw, 60px);
+          font-weight: 500;
+          letter-spacing: -0.034em;
+          line-height: 1.02;
+          margin: 0;
+          max-width: 720px;
+        }
+        .csd-results-lead {
+          font-size: 15px;
+          color: rgba(10,10,10,0.6);
+          line-height: 1.7;
+          margin: 0;
+          max-width: 380px;
+          padding-bottom: 6px;
+        }
+
+        .csd-results-row {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0;
+          border-top: 1px solid rgba(10,10,10,0.1);
+          border-bottom: 1px solid rgba(10,10,10,0.1);
         }
         .csd-result-card {
-          display: grid;
-          grid-template-columns: 240px 1fr;
-          gap: 24px;
-          padding: 32px 32px 36px;
-          background: #fff;
-          border: 1px solid rgba(10,10,10,0.1);
-          border-radius: 22px;
-          align-items: start;
-          transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+          padding: 36px 32px 40px;
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          border-right: 1px solid rgba(10,10,10,0.1);
           position: relative;
-          overflow: hidden;
+          transition: background 0.3s ease;
         }
+        .csd-result-card:last-child { border-right: 0; }
+        .csd-result-card:hover { background: rgba(10,10,10,0.02); }
         .csd-result-card::before {
           content: "";
           position: absolute;
-          top: 0; left: 0; bottom: 0;
-          width: 3px;
-          background: #f472b6;
-          transform: scaleY(0);
-          transform-origin: top;
-          transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+          left: 0; right: 0; top: 0;
+          height: 2px;
+          background: #0a0a0a;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .csd-result-card:hover {
-          transform: translateY(-4px);
-          border-color: rgba(10,10,10,0.22);
-          box-shadow: 0 24px 50px -28px rgba(10,10,10,0.22);
-        }
-        .csd-result-card:hover::before { transform: scaleY(1); }
-        .csd-result-num-wrap {
+        .csd-result-card:hover::before { transform: scaleX(1); }
+
+        .csd-result-card-top {
           display: flex;
-          flex-direction: column;
-          gap: 8px;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 28px;
         }
-        .csd-result-index {
+        .csd-result-card-index {
+          font-family: var(--font-mono);
           font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.1em;
           color: rgba(10,10,10,0.4);
-          letter-spacing: 0.12em;
-          margin-bottom: 8px;
         }
-        .csd-result-metric {
+        .csd-result-card-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #0a0a0a;
+          opacity: 0.25;
+          transition: opacity 0.3s, transform 0.3s;
+        }
+        .csd-result-card:hover .csd-result-card-dot {
+          opacity: 1;
+          transform: scale(1.2);
+        }
+
+        .csd-result-card-metric {
           font-family: var(--font-display);
-          font-size: clamp(56px, 7vw, 96px);
+          font-size: clamp(48px, 5.4vw, 80px);
           font-weight: 500;
           letter-spacing: -0.045em;
           line-height: 0.92;
           color: #0a0a0a;
           font-variant-numeric: tabular-nums;
+          margin-bottom: 10px;
         }
-        .csd-result-label {
+        .csd-result-card-label {
           font-family: var(--font-display);
-          font-size: 16px;
+          font-size: 15px;
           font-weight: 500;
           letter-spacing: -0.012em;
-          color: rgba(10,10,10,0.65);
-          margin-top: 4px;
+          color: rgba(10,10,10,0.6);
+          margin-bottom: 28px;
         }
-        .csd-result-story { padding-top: 28px; }
-        .csd-result-project {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
+        .csd-result-card-divider {
+          height: 1px;
+          background: rgba(10,10,10,0.1);
+          margin-bottom: 18px;
+        }
+        .csd-result-card-project {
           font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.14em;
+          font-weight: 700;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
-          color: rgba(10,10,10,0.55);
-          margin-bottom: 14px;
-          padding: 5px 12px;
-          border: 1px solid rgba(10,10,10,0.12);
-          border-radius: 999px;
-          background: rgba(10,10,10,0.02);
+          color: #0a0a0a;
+          margin-bottom: 12px;
         }
-        .csd-result-project-dot {
-          width: 6px; height: 6px;
-          border-radius: 50%;
-          background: #f472b6;
-        }
-        .csd-result-desc {
-          font-size: 14.5px;
-          line-height: 1.65;
-          color: rgba(10,10,10,0.62);
+        .csd-result-card-desc {
+          font-size: 13.5px;
+          line-height: 1.6;
+          color: rgba(10,10,10,0.6);
           margin: 0;
         }
 
@@ -2500,26 +2641,180 @@ export default function CustomSoftwarePage() {
         }
         .csd-faq-row[data-open="true"] .csd-faq-a-inner { padding-bottom: 28px; }
 
-        .csd-cta-mark {
+        /* ═══════════════════════════════════════════════════════════════
+           FINAL CTA — light, minimal, sleek
+        ═══════════════════════════════════════════════════════════════ */
+        .csd-cta-section {
+          padding: 0 20px 80px;
+          background: #fafaf9;
+          border-top: 1px solid rgba(0,0,0,0.06);
+          padding-top: 64px;
+        }
+
+        .csd-cta-inner {
+          max-width: 1320px;
+          margin: 0 auto;
+          padding: clamp(80px, 10vw, 140px) clamp(32px, 5vw, 88px);
+          background: #f5f5f4;
+          border-radius: 28px;
+          position: relative;
+          overflow: hidden;
+          opacity: 0;
+        }
+
+        /* subtle grid */
+        .csd-cta-inner::before {
+          content: "";
           position: absolute;
-          right: 8%;
-          bottom: -6%;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(10,10,10,0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(10,10,10,0.025) 1px, transparent 1px);
+          background-size: 56px 56px;
+          mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, transparent 90%);
+          -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, transparent 90%);
+          pointer-events: none;
+        }
+
+        .csd-cta-grid {
+          position: relative;
+          z-index: 1;
+          display: grid;
+          grid-template-columns: 1.3fr 1fr;
+          gap: clamp(48px, 6vw, 96px);
+          align-items: end;
+        }
+
+        .csd-cta-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 7px 14px;
+          background: #fff;
+          border: 1px solid rgba(10,10,10,0.1);
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.65);
+          margin-bottom: 32px;
+          align-self: flex-start;
+          width: fit-content;
+        }
+        .csd-cta-eyebrow-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #16a34a;
+          box-shadow: 0 0 0 4px rgba(22,163,74,0.12);
+          animation: csd-cta-pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes csd-cta-pulse {
+          0%, 100% { box-shadow: 0 0 0 4px rgba(22,163,74,0.12); }
+          50% { box-shadow: 0 0 0 6px rgba(22,163,74,0.2); }
+        }
+
+        .csd-cta-h2 {
+          font-family: var(--font-display);
+          font-size: clamp(40px, 5.6vw, 80px);
+          font-weight: 500;
+          letter-spacing: -0.042em;
+          line-height: 0.96;
+          margin: 0 0 28px;
+          color: #0a0a0a;
+          max-width: 640px;
+        }
+        .csd-cta-h2-accent {
+          font-style: italic;
+          font-weight: 400;
+          color: rgba(10,10,10,0.45);
+        }
+
+        .csd-cta-lead {
+          font-size: 16px;
+          line-height: 1.7;
+          color: rgba(10,10,10,0.62);
+          margin: 0 0 40px;
+          max-width: 540px;
+        }
+
+        .csd-cta-actions {
           display: flex;
           align-items: center;
-          gap: clamp(8px, 1.4vw, 18px);
-          font-family: var(--font-display);
-          font-size: clamp(180px, 22vw, 380px);
-          font-weight: 500;
-          letter-spacing: -0.1em;
-          line-height: 0.8;
-          opacity: 0.07;
-          pointer-events: none;
-          z-index: 0;
+          gap: 24px;
+          flex-wrap: wrap;
         }
-        .csd-cta-mark span:first-child { color: #fafaf9; }
-        .csd-cta-mark span:last-child {
-          color: transparent;
-          -webkit-text-stroke: 2px rgba(255,255,255,0.6);
+
+        .csd-cta-primary-light {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 15px 28px;
+          background: #0a0a0a;
+          color: #fafaf9;
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 500;
+          border-radius: 999px;
+          transition: background 0.25s, transform 0.25s;
+        }
+        .csd-cta-primary-light:hover {
+          background: #262626;
+          transform: translateX(2px);
+        }
+        .csd-cta-primary-light svg { transition: transform 0.25s; }
+        .csd-cta-primary-light:hover svg { transform: translateX(2px); }
+
+        .csd-cta-mail {
+          font-size: 14px;
+          font-weight: 500;
+          color: rgba(10,10,10,0.65);
+          text-decoration: none;
+          border-bottom: 1px solid rgba(10,10,10,0.25);
+          padding-bottom: 2px;
+          transition: color 0.2s, border-color 0.2s;
+        }
+        .csd-cta-mail:hover {
+          color: #0a0a0a;
+          border-color: #0a0a0a;
+        }
+
+        /* RIGHT — meta */
+        .csd-cta-right {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .csd-cta-meta {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0;
+          margin: 0;
+          border-top: 1px solid rgba(10,10,10,0.12);
+          border-left: 1px solid rgba(10,10,10,0.12);
+        }
+        .csd-cta-meta-item {
+          padding: 22px 24px;
+          border-right: 1px solid rgba(10,10,10,0.12);
+          border-bottom: 1px solid rgba(10,10,10,0.12);
+          background: rgba(255,255,255,0.5);
+        }
+        .csd-cta-meta-item dt {
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.5);
+          margin: 0 0 8px;
+        }
+        .csd-cta-meta-item dd {
+          font-family: var(--font-display);
+          font-size: 17px;
+          font-weight: 500;
+          letter-spacing: -0.018em;
+          color: #0a0a0a;
+          margin: 0;
         }
 
         .marquee-track { will-change: transform; }
@@ -2551,10 +2846,42 @@ export default function CustomSoftwarePage() {
           .csd-build-grid { grid-template-columns: 1fr; gap: 56px; }
           .csd-build-right { min-height: 480px; }
 
-          .csd-vp-grid { grid-template-columns: 1fr; gap: 48px; }
+          /* WHY TEAMS CHOOSE US */
+          .csd-vp-grid {
+            grid-template-columns: 1fr;
+            min-height: auto;
+          }
+          .csd-vp-media {
+            align-self: stretch;
+            justify-self: stretch;
+            width: 100%;
+            height: auto;
+            min-height: 360px;
+            aspect-ratio: 16 / 9;
+            margin: 0;
+          }
 
-          .csd-results-list { grid-template-columns: 1fr; }
-          .csd-result-card { grid-template-columns: 200px 1fr; }
+          /* RESULTS */
+          .csd-results-header {
+            grid-template-columns: 1fr;
+            gap: 24px;
+            align-items: start;
+          }
+          .csd-results-row {
+            grid-template-columns: 1fr 1fr;
+          }
+          .csd-result-card:nth-child(2) { border-right: 0; }
+          .csd-result-card:nth-child(1),
+          .csd-result-card:nth-child(2) {
+            border-bottom: 1px solid rgba(10,10,10,0.1);
+          }
+
+          /* CTA */
+          .csd-cta-grid {
+            grid-template-columns: 1fr;
+            gap: 56px;
+            align-items: start;
+          }
 
           .csd-faq-layout { grid-template-columns: 1fr; gap: 48px; }
           .csd-faq-aside { position: static; }
@@ -2598,8 +2925,6 @@ export default function CustomSoftwarePage() {
 
           .csd-cap-section,
           .csd-build-section,
-          .csd-vp-section,
-          .csd-results-section,
           .csd-faq-section {
             padding-left: 14px;
             padding-right: 14px;
@@ -2644,15 +2969,27 @@ export default function CustomSoftwarePage() {
           .csd-build-frame-mvp       { width: 44%; }
           .csd-build-frame-market    { width: 42%; }
 
-          .csd-vp-right { grid-template-columns: 1fr; }
-          .csd-vp-card { min-height: auto; }
+          /* WHY TEAMS CHOOSE US */
+          .csd-vp-section { padding-right: 14px; }
+          .csd-vp-content { padding: 56px 22px 64px; }
+          .csd-vp-h2 { font-size: clamp(28px, 8vw, 38px); }
+          .csd-vp-lead { font-size: 15px; }
+          .csd-vp-list { gap: 12px; }
+          .csd-vp-item { grid-template-columns: 18px 1fr; gap: 12px; padding: 0; }
+          .csd-vp-item-title { font-size: 17px; min-width: 0; }
+          .csd-vp-item-metric-value { font-size: 16px; }
+          .csd-vp-media { min-height: 280px; aspect-ratio: 4 / 3; }
 
+          /* RESULTS */
+          .csd-results-section { padding: 90px 14px; }
+          .csd-results-header { margin-bottom: 48px; padding-bottom: 28px; }
+          .csd-results-row { grid-template-columns: 1fr; }
           .csd-result-card {
-            grid-template-columns: 1fr;
-            padding: 26px 22px 28px;
-            gap: 12px;
+            border-right: 0 !important;
+            border-bottom: 1px solid rgba(10,10,10,0.1);
+            padding: 28px 22px 32px;
           }
-          .csd-result-story { padding-top: 4px; }
+          .csd-result-card:last-child { border-bottom: 0; }
 
           .csd-faq-q { grid-template-columns: 36px 1fr 26px; gap: 12px; padding: 20px 0; }
           .csd-faq-q-icon { width: 26px; height: 26px; }
@@ -2674,11 +3011,13 @@ export default function CustomSoftwarePage() {
             height: auto !important;
             min-height: 320px !important;
           }
-          .csd-cta-inner { padding: 64px 26px !important; border-radius: 18px !important; }
-          .csd-cta-inner > div > div[style*="repeat(3, 1fr)"] {
-            grid-template-columns: 1fr !important;
-            gap: 18px !important;
-          }
+          /* CTA */
+          .csd-cta-section { padding: 48px 14px 56px; }
+          .csd-cta-inner { padding: 56px 26px; border-radius: 18px; }
+          .csd-cta-h2 { font-size: clamp(32px, 10vw, 48px); }
+          .csd-cta-actions { gap: 16px; }
+          .csd-cta-meta { grid-template-columns: 1fr; }
+          .csd-cta-meta-item:last-child { border-bottom: 0; }
         }
       `}</style>
     </>
