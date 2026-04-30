@@ -4803,63 +4803,6 @@ const SUB_SERVICES = [
   },
 ];
 
-// ── NEW: Why apps fail data (research-backed) ──
-// Stats sourced from widely-cited industry research:
-// - Standish Group CHAOS report: ~66% of software projects fail or are challenged
-// - McKinsey: 70% of digital transformations fall short of objectives
-// - Google/SOASTA: 53% of mobile users leave a site that takes >3s to load
-// - Failory startup post-mortems: technical debt + wrong product are top failure modes
-const FAILURE_MODES = [
-  {
-    num: "01",
-    stat: "70%",
-    statLabel: "of digital projects fall short",
-    title: "Built without a real architecture",
-    problem: "Most failed apps share a common root cause: code shipped before the system was designed. Teams optimize for the demo, not the second year. By month 18, every new feature breaks two old ones.",
-    fix: "We design boundaries, data flow, and integration contracts before writing production code. The system you have at month 24 should still be the system you launched.",
-  },
-  {
-    num: "02",
-    stat: "53%",
-    statLabel: "abandon if load > 3 seconds",
-    title: "Performance treated as an afterthought",
-    problem: "Slow apps don't fail loudly — they bleed users. Bundle bloat, unindexed queries, and waterfall network calls compound until your funnel quietly collapses and nobody can pinpoint why.",
-    fix: "Every build ships with performance budgets, real-device testing, and Core Web Vitals enforced in CI. If a PR regresses LCP or TTI, it doesn't merge.",
-  },
-  {
-    num: "03",
-    stat: "60%",
-    statLabel: "of features go unused",
-    title: "Designed without users in the room",
-    problem: "When founders or stakeholders design alone, the product becomes a collection of opinions instead of a tool that solves a job. You ship more, users use less, and the roadmap gets longer every quarter.",
-    fix: "Discovery sprints with real users. Click-tested prototypes before engineering starts. Telemetry on every feature so you ship the next thing knowing what's working.",
-  },
-  {
-    num: "04",
-    stat: "$85B",
-    statLabel: "lost yearly to tech debt",
-    title: "Tech debt left to compound silently",
-    problem: "Shortcuts taken in week one become outages in year two. Without a maintenance plan, dependency drift, missing tests, and one-off hacks accumulate until shipping anything new requires a rewrite.",
-    fix: "Every engagement includes a debt ledger, dependency upgrade cadence, and a refactor budget baked into each sprint. Debt is a line item, not a surprise.",
-  },
-  {
-    num: "05",
-    stat: "1 in 3",
-    statLabel: "apps die from poor scaling",
-    title: "Scaled for the demo, not for traction",
-    problem: "The app works for 100 users. Then growth hits, the database melts, and you're rewriting the foundation under live traffic. By the time scale matters, it's already too late to plan for it.",
-    fix: "We design for the load you'll have in two years — caching layers, queue-based workflows, observability, and database patterns that don't need to be torn out when traffic 10x's.",
-  },
-  {
-    num: "06",
-    stat: "Day 1",
-    statLabel: "abandonment after launch",
-    title: "Launched, then abandoned",
-    problem: "Most agencies vanish after go-live. Bugs sit, metrics decay, and the product ossifies. What launched as a v1 becomes the v1 forever — until a competitor ships their v2.",
-    fix: "SLA-backed support, monitored uptime, monthly roadmap reviews, and an engineering team you can call. We measure success at month 12, not at handoff.",
-  },
-];
-
 const WE_BUILD = [
   { id: "saas",      bin: "01", label: "SaaS Platforms",       desc: "Multi-tenant products with billing, dashboards, and integrations." },
   { id: "dashboard", bin: "10", label: "Business Dashboards",  desc: "Real-time analytics surfaces wired to your live data." },
@@ -4940,9 +4883,6 @@ export default function CustomSoftwarePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [isMobile, setIsMobile] = useState(false);
   const [hoveredBuild, setHoveredBuild] = useState<number>(0);
-
-  // NEW: Active failure mode (for the why-fail section interactivity)
-  const [activeFailure, setActiveFailure] = useState<number>(0);
 
   const isLenisScrollingRef = useRef(false);
   const hoverLockTimeoutRef = useRef<number | null>(null);
@@ -5053,7 +4993,6 @@ export default function CustomSoftwarePage() {
 
       setupBatchReveal(".csd-sh", { opacity: 0, y: 38 }, { opacity: 1, y: 0, duration: 0.95, ease: "power3.out" }, "top 88%");
       setupBatchReveal(".csd-svc-card", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 90%");
-      setupBatchReveal(".csd-fail-row", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 90%");
       setupBatchReveal(".csd-build-row", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, "top 92%");
       setupBatchReveal(".csd-vp-card", { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 88%");
       setupBatchReveal(".csd-result-card", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, "top 90%");
@@ -5167,14 +5106,6 @@ export default function CustomSoftwarePage() {
           <div aria-hidden className="csd-hero-corner csd-hero-corner-br" />
 
           <div className="csd-hero-inner">
-            {/* Breadcrumb pill */}
-            <div className="csd-hero-fade csd-hero-crumb" style={{ opacity: 0 }}>
-              <span className="csd-hero-crumb-dot" />
-              <Link href="/services" className="csd-hero-crumb-link">Services</Link>
-              <span className="csd-hero-crumb-sep">/</span>
-              <span>Custom Software &amp; Digital Solutions</span>
-            </div>
-
             <div className="csd-hero-main">
               {/* LEFT — headline + CTAs + inline proof */}
               <div className="csd-hero-left">
@@ -5219,20 +5150,6 @@ export default function CustomSoftwarePage() {
                   </a>
                 </div>
 
-                {/* Inline proof strip */}
-                <div className="csd-hero-fade csd-hero-proof" style={{ opacity: 0 }}>
-                  {[
-                    { k: "150+", v: "Products shipped" },
-                    { k: "98", v: "Avg Lighthouse" },
-                    { k: "8 wk", v: "Time to MVP" },
-                    { k: "24h", v: "Reply window" },
-                  ].map((p) => (
-                    <div key={p.k} className="csd-hero-proof-item">
-                      <div className="csd-hero-proof-k">{p.k}</div>
-                      <div className="csd-hero-proof-v">{p.v}</div>
-                    </div>
-                  ))}
-                </div>
               </div>
 
               {/* RIGHT — visual stage with stacked product surfaces */}
@@ -5252,91 +5169,83 @@ export default function CustomSoftwarePage() {
                     </div>
                   </div>
 
-                  {/* Card 1 — SaaS dashboard */}
-                  <div className="csd-hero-stage-card csd-hero-stage-card-1">
-                    <div className="csd-hero-stage-card-head">
-                      <div className="csd-hero-stage-card-dots">
-                        <span /><span /><span />
-                      </div>
-                      <span className="csd-hero-stage-card-title">analytics.app</span>
-                    </div>
-                    <div className="csd-hero-stage-card-body">
-                      <div className="csd-hero-stage-metric-row">
-                        <div>
-                          <div className="csd-hero-stage-metric-label">MRR</div>
-                          <div className="csd-hero-stage-metric-value">$48.2K</div>
-                          <div className="csd-hero-stage-metric-delta">↑ 12.4%</div>
+                  {/* Main row: SaaS card + Mobile card (aligned at top) */}
+                  <div className="csd-hero-stage-row">
+                    {/* SaaS dashboard card */}
+                    <div className="csd-hero-stage-card csd-hero-stage-card-saas">
+                      <div className="csd-hero-stage-card-head">
+                        <div className="csd-hero-stage-card-dots">
+                          <span /><span /><span />
                         </div>
-                        <div>
-                          <div className="csd-hero-stage-metric-label">Active</div>
-                          <div className="csd-hero-stage-metric-value">2,847</div>
-                          <div className="csd-hero-stage-metric-delta">↑ 8.1%</div>
+                        <span className="csd-hero-stage-card-title">analytics.app</span>
+                      </div>
+                      <div className="csd-hero-stage-card-body">
+                        <div className="csd-hero-stage-metric-row">
+                          <div>
+                            <div className="csd-hero-stage-metric-label">MRR</div>
+                            <div className="csd-hero-stage-metric-value">$48.2K</div>
+                            <div className="csd-hero-stage-metric-delta">↑ 12.4%</div>
+                          </div>
+                          <div>
+                            <div className="csd-hero-stage-metric-label">Active</div>
+                            <div className="csd-hero-stage-metric-value">2,847</div>
+                            <div className="csd-hero-stage-metric-delta">↑ 8.1%</div>
+                          </div>
+                        </div>
+                        <div className="csd-hero-stage-chart">
+                          {[35, 52, 41, 68, 55, 78, 62, 88, 71, 94].map((h, i) => (
+                            <span key={i} style={{ height: `${h}%` }} />
+                          ))}
                         </div>
                       </div>
-                      <div className="csd-hero-stage-chart">
-                        {[35, 52, 41, 68, 55, 78, 62, 88, 71, 94].map((h, i) => (
-                          <span key={i} style={{ height: `${h}%` }} />
-                        ))}
+                    </div>
+
+                    {/* Mobile app frame */}
+                    <div className="csd-hero-stage-card csd-hero-stage-card-mobile">
+                      <div className="csd-hero-stage-mobile-notch" />
+                      <div className="csd-hero-stage-mobile-body">
+                        <div className="csd-hero-stage-mobile-greeting">Welcome back</div>
+                        <div className="csd-hero-stage-mobile-user">Sarah K.</div>
+                        <div className="csd-hero-stage-mobile-card">
+                          <div className="csd-hero-stage-mobile-card-label">Balance</div>
+                          <div className="csd-hero-stage-mobile-card-value">$12,840</div>
+                        </div>
+                        <div className="csd-hero-stage-mobile-list">
+                          <div /><div /><div />
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Card 2 — mobile app frame */}
-                  <div className="csd-hero-stage-card csd-hero-stage-card-2">
-                    <div className="csd-hero-stage-mobile-notch" />
-                    <div className="csd-hero-stage-mobile-body">
-                      <div className="csd-hero-stage-mobile-greeting">Welcome back</div>
-                      <div className="csd-hero-stage-mobile-user">Sarah K.</div>
-                      <div className="csd-hero-stage-mobile-card">
-                        <div className="csd-hero-stage-mobile-card-label">Balance</div>
-                        <div className="csd-hero-stage-mobile-card-value">$12,840</div>
+                  {/* Bottom row: terminal + badge inline */}
+                  <div className="csd-hero-stage-bottom">
+                    <div className="csd-hero-stage-card csd-hero-stage-card-code">
+                      <div className="csd-hero-stage-card-head">
+                        <div className="csd-hero-stage-card-dots">
+                          <span /><span /><span />
+                        </div>
+                        <span className="csd-hero-stage-card-title">deploy.ts</span>
                       </div>
-                      <div className="csd-hero-stage-mobile-list">
-                        <div /><div /><div />
+                      <div className="csd-hero-stage-code">
+                        <div><span className="csd-code-mute">$</span> <span className="csd-code-cmd">build</span> <span className="csd-code-flag">--prod</span></div>
+                        <div className="csd-code-mute">→ Compiled in 8.4s</div>
+                        <div className="csd-code-mute">→ 0 errors · 0 warnings</div>
+                        <div><span className="csd-code-ok">✓</span> <span className="csd-code-mute">deployed to edge</span></div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Card 3 — code/terminal snippet */}
-                  <div className="csd-hero-stage-card csd-hero-stage-card-3">
-                    <div className="csd-hero-stage-card-head">
-                      <div className="csd-hero-stage-card-dots">
-                        <span /><span /><span />
+                    <div className="csd-hero-stage-badge" aria-hidden>
+                      <div className="csd-hero-stage-badge-pulse" />
+                      <div>
+                        <div className="csd-hero-stage-badge-k">UPTIME</div>
+                        <div className="csd-hero-stage-badge-v">99.98%</div>
                       </div>
-                      <span className="csd-hero-stage-card-title">deploy.ts</span>
-                    </div>
-                    <div className="csd-hero-stage-code">
-                      <div><span className="csd-code-mute">$</span> <span className="csd-code-cmd">build</span> <span className="csd-code-flag">--prod</span></div>
-                      <div className="csd-code-mute">→ Compiled in 8.4s</div>
-                      <div className="csd-code-mute">→ 0 errors · 0 warnings</div>
-                      <div><span className="csd-code-ok">✓</span> <span className="csd-code-mute">deployed to edge</span></div>
-                    </div>
-                  </div>
-
-                  {/* Floating accent badge */}
-                  <div className="csd-hero-stage-badge" aria-hidden>
-                    <div className="csd-hero-stage-badge-pulse" />
-                    <div>
-                      <div className="csd-hero-stage-badge-k">UPTIME</div>
-                      <div className="csd-hero-stage-badge-v">99.98%</div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Bottom marquee strip — trust signal */}
-            <div className="csd-hero-marquee-row csd-hero-fade" style={{ opacity: 0 }}>
-              <div className="csd-hero-marquee-label">
-                <span className="csd-hero-marquee-label-dot" />
-                Trusted stack
-              </div>
-              <div className="csd-hero-marquee-track">
-                {["Next.js", "TypeScript", "PostgreSQL", "AWS", "React Native", "Kubernetes", "GraphQL", "Swift", "Tailwind"].map((t) => (
-                  <span key={t} className="csd-hero-marquee-item">{t}</span>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
@@ -5382,110 +5291,75 @@ export default function CustomSoftwarePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════
-            NEW SECTION — WHY APPS FAIL
-            Dark theme for visual contrast against light sections above/below.
-            Layout: split — left column is sticky context (eyebrow, headline,
-            big stat ticker), right column is an interactive list of 6
-            failure modes. Click/hover to expand, each shows the problem
-            and our specific countermeasure.
+            SECTION — THE COST OF A POORLY BUILT APP
+            Minimal layout: full-bleed image left, clean editorial text right.
+            Inspired by editorial / consulting page treatments.
         ═══════════════════════════════════════════════════════════════ */}
-        <section className="csd-fail-section" aria-labelledby="why-apps-fail">
-          <div aria-hidden className="csd-fail-bg-grid" />
-          <div aria-hidden className="csd-fail-bg-glow" />
+        <section
+          className="csd-cost-section"
+          aria-labelledby="cost-heading"
+          style={{ marginBottom: "clamp(40px, 6vw, 88px)" }}
+        >
+          <div className="csd-cost-grid">
+            {/* LEFT — image */}
+            <div className="csd-cost-media" aria-hidden>
+              <img
+                src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&q=80&auto=format&fit=crop"
+                alt=""
+                loading="lazy"
+              />
+              <div className="csd-cost-media-overlay" />
+            </div>
 
-          <div className="csd-fail-inner">
-            <div className="csd-fail-grid">
-              {/* LEFT — sticky context */}
-              <div className="csd-fail-left">
-                <div className="csd-sh">
-                  <div className="csd-fail-eyebrow">
-                    <span className="csd-fail-eyebrow-line" />
-                    The hard truth
+            {/* RIGHT — content */}
+            <div className="csd-cost-content csd-sh">
+              <div className="csd-cost-eyebrow">The cost of a poorly built app</div>
+
+              <h2 id="cost-heading" className="csd-cost-h2">
+                Why it <span className="csd-cost-h2-accent">matters.</span>
+              </h2>
+
+              <p className="csd-cost-lead">
+                Even leading companies waste millions on apps that don&apos;t convert.
+                The pattern is consistent — and almost always preventable.
+              </p>
+
+              <ul className="csd-cost-list">
+                <li>
+                  <span className="csd-cost-list-mark" />
+                  <div>
+                    <strong>Cluttered interfaces</strong> frustrate users and drive
+                    them to competitors within the first session.
                   </div>
-                  <h2 id="why-apps-fail" className="csd-fail-h2">
-                    Most apps don't fail at launch.{" "}
-                    <span className="csd-fail-italic">They fail at scale.</span>
-                  </h2>
-                  <p className="csd-fail-lead">
-                    Industry research is consistent: between 60% and 70% of software
-                    projects either fail outright or fall short of their objectives.
-                    The reasons are predictable — and almost all of them are preventable
-                    if you build with the right discipline from day one.
-                  </p>
-
-                  {/* Big stat block */}
-                  <div className="csd-fail-stat-block">
-                    <div className="csd-fail-stat-num">66<span className="csd-fail-stat-pct">%</span></div>
-                    <div className="csd-fail-stat-text">
-                      <strong>of software projects</strong> are delivered late,
-                      over budget, or with reduced functionality.
-                      <span className="csd-fail-stat-source">— Standish Group, CHAOS Report</span>
-                    </div>
+                </li>
+                <li>
+                  <span className="csd-cost-list-mark" />
+                  <div>
+                    <strong>Slow performance</strong> kills retention — 53% of users
+                    abandon sites that take longer than three seconds to load.
                   </div>
-
-                  <div className="csd-fail-quote">
-                    <span className="csd-fail-quote-mark">"</span>
-                    <p>
-                      The patterns behind every failed product are the same six mistakes,
-                      repeated. We built our process around eliminating each one.
-                    </p>
+                </li>
+                <li>
+                  <span className="csd-cost-list-mark" />
+                  <div>
+                    <strong>Poor integration</strong> with back-end systems creates
+                    silent operational drag and reduces team efficiency.
                   </div>
-                </div>
-              </div>
+                </li>
+                <li>
+                  <span className="csd-cost-list-mark" />
+                  <div>
+                    <strong>Lack of analytics</strong> means decisions get made on
+                    guesswork instead of evidence — and the roadmap suffers.
+                  </div>
+                </li>
+              </ul>
 
-              {/* RIGHT — interactive failure modes */}
-              <div className="csd-fail-right">
-                <div className="csd-fail-list" role="list">
-                  {FAILURE_MODES.map((f, i) => {
-                    const isActive = activeFailure === i;
-                    return (
-                      <button
-                        key={f.num}
-                        type="button"
-                        role="listitem"
-                        className="csd-fail-row"
-                        data-active={isActive ? "true" : "false"}
-                        onClick={() => setActiveFailure(isActive ? -1 : i)}
-                        aria-expanded={isActive}
-                      >
-                        <div className="csd-fail-row-head">
-                          <div className="csd-fail-row-num">{f.num}</div>
-                          <div className="csd-fail-row-stat">
-                            <div className="csd-fail-row-stat-num">{f.stat}</div>
-                            <div className="csd-fail-row-stat-label">{f.statLabel}</div>
-                          </div>
-                          <div className="csd-fail-row-title-wrap">
-                            <h3 className="csd-fail-row-title">{f.title}</h3>
-                          </div>
-                          <div className="csd-fail-row-icon" aria-hidden>
-                            <svg width="14" height="14" viewBox="0 0 14 14">
-                              <path d="M3 7h8 M7 3v8" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-                            </svg>
-                          </div>
-                        </div>
-                        <div className="csd-fail-row-content">
-                          <div className="csd-fail-row-content-inner">
-                            <div className="csd-fail-row-block csd-fail-row-block-problem">
-                              <div className="csd-fail-row-block-label">
-                                <span className="csd-fail-row-block-dot csd-fail-dot-red" />
-                                The pattern
-                              </div>
-                              <p>{f.problem}</p>
-                            </div>
-                            <div className="csd-fail-row-block csd-fail-row-block-fix">
-                              <div className="csd-fail-row-block-label">
-                                <span className="csd-fail-row-block-dot csd-fail-dot-green" />
-                                How we prevent it
-                              </div>
-                              <p>{f.fix}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              <p className="csd-cost-close">
+                We design and engineer custom software to eliminate every one of these failure
+                points — built for the audience you actually serve, with adoption,
+                engagement, and ROI as the brief.
+              </p>
             </div>
           </div>
         </section>
@@ -6193,6 +6067,10 @@ export default function CustomSoftwarePage() {
             linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
           border-radius: 28px;
           overflow: hidden;
+          padding: 52px 28px 28px;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
           box-shadow:
             0 40px 100px -40px rgba(10,10,10,0.45),
             0 0 0 1px rgba(10,10,10,0.08);
@@ -6249,8 +6127,16 @@ export default function CustomSoftwarePage() {
         .csd-hero-stage-status-text { text-transform: uppercase; }
         .csd-hero-stage-status-right { color: rgba(255,255,255,0.35); }
 
+        .csd-hero-stage-row {
+          display: grid;
+          grid-template-columns: 1fr 38%;
+          gap: 16px;
+          align-items: stretch;
+          flex: 1;
+          min-height: 0;
+        }
+
         .csd-hero-stage-card {
-          position: absolute;
           background: rgba(255,255,255,0.04);
           border: 1px solid rgba(255,255,255,0.1);
           border-radius: 14px;
@@ -6259,12 +6145,9 @@ export default function CustomSoftwarePage() {
           box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
         }
 
-        /* Card 1 — SaaS dashboard, top-left */
-        .csd-hero-stage-card-1 {
-          top: 60px;
-          left: 32px;
-          width: 62%;
-          z-index: 3;
+        .csd-hero-stage-card-saas {
+          display: flex;
+          flex-direction: column;
         }
         .csd-hero-stage-card-head {
           display: flex;
@@ -6296,11 +6179,16 @@ export default function CustomSoftwarePage() {
         .csd-hero-stage-card-body {
           padding: 16px;
         }
+        .csd-hero-stage-card-saas .csd-hero-stage-card-body {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+        }
         .csd-hero-stage-metric-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 16px;
-          margin-bottom: 14px;
         }
         .csd-hero-stage-metric-label {
           font-size: 9px;
@@ -6348,16 +6236,12 @@ export default function CustomSoftwarePage() {
           to { transform: scaleY(1); transform-origin: bottom; }
         }
 
-        /* Card 2 — mobile, right side */
-        .csd-hero-stage-card-2 {
-          top: 28px;
-          right: 28px;
-          width: 28%;
-          aspect-ratio: 0.5;
-          z-index: 4;
+        .csd-hero-stage-card-mobile {
           border-radius: 22px;
           background: linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
-          padding: 10px;
+          padding: 12px 12px 16px;
+          display: flex;
+          flex-direction: column;
         }
         .csd-hero-stage-mobile-notch {
           width: 36%;
@@ -6416,12 +6300,14 @@ export default function CustomSoftwarePage() {
         }
         .csd-hero-stage-mobile-list div:nth-child(2) { background: rgba(255,255,255,0.08); }
 
-        /* Card 3 — terminal, bottom */
-        .csd-hero-stage-card-3 {
-          bottom: 32px;
-          left: 60px;
-          width: 56%;
-          z-index: 2;
+        .csd-hero-stage-bottom {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 14px;
+          align-items: stretch;
+        }
+        .csd-hero-stage-card-code {
+          min-width: 0;
         }
         .csd-hero-stage-code {
           padding: 14px 16px;
@@ -6447,19 +6333,15 @@ export default function CustomSoftwarePage() {
         .csd-code-flag { color: #fbbf24; }
         .csd-code-ok { color: #4ade80; }
 
-        /* Floating uptime badge */
         .csd-hero-stage-badge {
-          position: absolute;
-          bottom: 32px;
-          right: 32px;
-          z-index: 6;
-          display: flex;
+          display: inline-flex;
           align-items: center;
           gap: 12px;
-          padding: 10px 16px 10px 12px;
+          padding: 0 18px;
           background: rgba(255,255,255,0.95);
           border-radius: 14px;
           box-shadow: 0 12px 32px -8px rgba(0,0,0,0.4);
+          white-space: nowrap;
         }
         .csd-hero-stage-badge-pulse {
           width: 10px;
@@ -6639,307 +6521,167 @@ export default function CustomSoftwarePage() {
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           NEW SECTION — WHY APPS FAIL (DARK)
+           SECTION — COST OF A POORLY BUILT APP (minimal, editorial)
         ═══════════════════════════════════════════════════════════════ */
-        .csd-fail-section {
-          position: relative;
-          padding: 140px 20px;
-          background:
-            linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
-          color: #fafaf9;
-          overflow: hidden;
-          border-top: 1px solid rgba(10,10,10,0.1);
+        .csd-cost-section {
+          background: #f5f5f4;
+          border-bottom: 1px solid rgba(0,0,0,0.06);
+          padding-left: clamp(14px, 2.4vw, 32px);
         }
-        .csd-fail-bg-grid {
+
+        .csd-cost-grid {
+          display: grid;
+          grid-template-columns: 0.95fr 1.05fr;
+          gap: 0;
+          align-items: stretch;
+          min-height: 620px;
+        }
+
+        .csd-cost-media {
+          position: relative;
+          overflow: hidden;
+          background: #0a0a0a;
+          min-height: 480px;
+        }
+        .csd-cost-media img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          filter: grayscale(1) contrast(1.05);
+          transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .csd-cost-section:hover .csd-cost-media img {
+          transform: scale(1.03);
+        }
+        .csd-cost-media-overlay {
           position: absolute;
           inset: 0;
-          background-image:
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-          background-size: 64px 64px;
-          mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 0%, transparent 90%);
-          -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 0%, transparent 90%);
+          background:
+            linear-gradient(180deg, rgba(10,10,10,0.15) 0%, rgba(10,10,10,0.45) 100%);
           pointer-events: none;
         }
-        .csd-fail-bg-glow {
+        .csd-cost-media-tag {
           position: absolute;
-          top: -10%;
-          right: -10%;
-          width: 600px;
-          height: 600px;
-          background: radial-gradient(circle, rgba(248,113,113,0.08) 0%, transparent 70%);
-          filter: blur(40px);
-          pointer-events: none;
-        }
-
-        .csd-fail-inner {
-          position: relative;
-          z-index: 1;
-          max-width: 1320px;
-          margin: 0 auto;
-        }
-
-        .csd-fail-grid {
-          display: grid;
-          grid-template-columns: 0.9fr 1.1fr;
-          gap: 80px;
-          align-items: start;
-        }
-
-        .csd-fail-left {
-          position: sticky;
-          top: 100px;
-        }
-
-        .csd-fail-eyebrow {
+          top: 28px;
+          left: 28px;
           display: inline-flex;
           align-items: center;
-          gap: 12px;
-          margin-bottom: 24px;
+          gap: 10px;
+          padding: 8px 14px;
+          background: rgba(255,255,255,0.95);
+          backdrop-filter: blur(8px);
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #0a0a0a;
+        }
+        .csd-cost-media-tag-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #0a0a0a;
+        }
+
+        .csd-cost-content {
+          padding: clamp(56px, 7vw, 96px) clamp(32px, 5vw, 72px);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          background: #fafaf9;
+        }
+
+        .csd-cost-eyebrow {
           font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: rgba(248,113,113,0.85);
-        }
-        .csd-fail-eyebrow-line {
-          width: 24px;
-          height: 1px;
-          background: rgba(248,113,113,0.5);
+          color: rgba(10,10,10,0.5);
+          margin-bottom: 18px;
         }
 
-        .csd-fail-h2 {
+        .csd-cost-h2 {
           font-family: var(--font-display);
-          font-size: clamp(34px, 4.6vw, 64px);
+          font-size: clamp(34px, 4.4vw, 56px);
           font-weight: 500;
           letter-spacing: -0.034em;
           line-height: 1.02;
           margin: 0 0 24px;
-          color: #fafaf9;
-        }
-        .csd-fail-italic {
-          font-style: italic;
-          font-weight: 400;
-          color: rgba(255,255,255,0.55);
-        }
-
-        .csd-fail-lead {
-          font-size: 15px;
-          line-height: 1.7;
-          color: rgba(255,255,255,0.6);
-          margin: 0 0 36px;
-          max-width: 480px;
-        }
-
-        .csd-fail-stat-block {
-          display: flex;
-          align-items: flex-start;
-          gap: 20px;
-          padding: 24px 24px 26px;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 16px;
-          margin-bottom: 28px;
-        }
-        .csd-fail-stat-num {
-          font-family: var(--font-display);
-          font-size: 56px;
-          font-weight: 500;
-          letter-spacing: -0.045em;
-          line-height: 0.9;
-          color: #fff;
-          font-variant-numeric: tabular-nums;
-          flex-shrink: 0;
-        }
-        .csd-fail-stat-pct {
-          font-size: 32px;
-          color: rgba(248,113,113,0.85);
-          margin-left: 2px;
-        }
-        .csd-fail-stat-text {
-          font-size: 13.5px;
-          line-height: 1.6;
-          color: rgba(255,255,255,0.7);
-          padding-top: 4px;
-        }
-        .csd-fail-stat-source {
-          display: block;
-          margin-top: 8px;
-          font-family: var(--font-mono);
-          font-size: 10px;
-          color: rgba(255,255,255,0.4);
-          letter-spacing: 0.04em;
-        }
-
-        .csd-fail-quote {
-          position: relative;
-          padding: 20px 0 0 28px;
-          border-top: 1px solid rgba(255,255,255,0.08);
-        }
-        .csd-fail-quote-mark {
-          position: absolute;
-          top: 4px;
-          left: 0;
-          font-family: var(--font-display);
-          font-size: 48px;
-          font-style: italic;
-          color: rgba(248,113,113,0.5);
-          line-height: 1;
-        }
-        .csd-fail-quote p {
-          font-family: var(--font-display);
-          font-size: 16px;
-          font-style: italic;
-          font-weight: 400;
-          line-height: 1.55;
-          color: rgba(255,255,255,0.78);
-          margin: 0;
-          letter-spacing: -0.005em;
-        }
-
-        /* RIGHT — interactive failure list */
-        .csd-fail-list {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-        .csd-fail-row {
-          display: block;
-          width: 100%;
-          padding: 0;
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 16px;
-          background: rgba(255,255,255,0.02);
-          color: inherit;
-          text-align: left;
-          cursor: pointer;
-          font-family: inherit;
-          overflow: hidden;
-          transition: border-color 0.3s, background 0.3s;
-        }
-        .csd-fail-row:hover {
-          border-color: rgba(255,255,255,0.18);
-          background: rgba(255,255,255,0.04);
-        }
-        .csd-fail-row[data-active="true"] {
-          border-color: rgba(248,113,113,0.4);
-          background: rgba(255,255,255,0.04);
-        }
-
-        .csd-fail-row-head {
-          display: grid;
-          grid-template-columns: 56px 110px 1fr 32px;
-          gap: 20px;
-          align-items: center;
-          padding: 22px 24px;
-        }
-        .csd-fail-row-num {
-          font-family: var(--font-display);
-          font-size: 28px;
-          font-weight: 500;
-          letter-spacing: -0.04em;
-          color: transparent;
-          -webkit-text-stroke: 1px rgba(255,255,255,0.35);
-          font-variant-numeric: tabular-nums;
-          line-height: 1;
-          transition: color 0.3s, -webkit-text-stroke-color 0.3s;
-        }
-        .csd-fail-row[data-active="true"] .csd-fail-row-num {
-          color: rgba(248,113,113,0.9);
-          -webkit-text-stroke-color: transparent;
-        }
-        .csd-fail-row-stat {
-          padding-left: 18px;
-          border-left: 1px solid rgba(255,255,255,0.1);
-        }
-        .csd-fail-row-stat-num {
-          font-family: var(--font-display);
-          font-size: 20px;
-          font-weight: 500;
-          letter-spacing: -0.025em;
-          color: #fff;
-          line-height: 1;
-          font-variant-numeric: tabular-nums;
-        }
-        .csd-fail-row-stat-label {
-          font-family: var(--font-mono);
-          font-size: 9.5px;
-          color: rgba(255,255,255,0.45);
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          margin-top: 6px;
-        }
-        .csd-fail-row-title {
-          font-family: var(--font-display);
-          font-size: clamp(17px, 1.7vw, 21px);
-          font-weight: 500;
-          letter-spacing: -0.018em;
-          line-height: 1.25;
-          margin: 0;
-          color: #fafaf9;
-        }
-        .csd-fail-row-icon {
-          width: 32px;
-          height: 32px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          border: 1px solid rgba(255,255,255,0.2);
-          border-radius: 50%;
-          color: rgba(255,255,255,0.7);
-          transition: transform 0.35s cubic-bezier(0.22,1,0.36,1),
-                      background 0.25s, color 0.25s, border-color 0.25s;
-        }
-        .csd-fail-row[data-active="true"] .csd-fail-row-icon {
-          transform: rotate(45deg);
-          background: rgba(248,113,113,0.85);
-          border-color: rgba(248,113,113,0.85);
           color: #0a0a0a;
         }
+        .csd-cost-h2-accent {
+          font-style: italic;
+          font-weight: 400;
+          color: rgba(10,10,10,0.5);
+        }
 
-        .csd-fail-row-content {
+        .csd-cost-lead {
+          font-size: 16px;
+          line-height: 1.7;
+          color: rgba(10,10,10,0.65);
+          margin: 0 0 28px;
+          max-width: 520px;
+        }
+
+        .csd-cost-list {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 32px;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          max-width: 540px;
+        }
+        .csd-cost-list li {
           display: grid;
-          grid-template-rows: 0fr;
-          transition: grid-template-rows 0.45s cubic-bezier(0.22,1,0.36,1);
+          grid-template-columns: 18px 1fr;
+          gap: 14px;
+          align-items: start;
+          font-size: 15px;
+          line-height: 1.62;
+          color: rgba(10,10,10,0.7);
         }
-        .csd-fail-row[data-active="true"] .csd-fail-row-content {
-          grid-template-rows: 1fr;
+        .csd-cost-list li strong {
+          color: #0a0a0a;
+          font-weight: 600;
         }
-        .csd-fail-row-content-inner {
-          overflow: hidden;
+        .csd-cost-list-mark {
+          position: relative;
+          width: 18px;
+          height: 22px;
+          flex-shrink: 0;
         }
-        .csd-fail-row-block {
-          padding: 18px 24px 22px 88px;
-          border-top: 1px solid rgba(255,255,255,0.06);
+        .csd-cost-list-mark::before {
+          content: "";
+          position: absolute;
+          top: 9px;
+          left: 0;
+          width: 12px;
+          height: 1px;
+          background: #0a0a0a;
         }
-        .csd-fail-row-block-label {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          margin-bottom: 8px;
-          font-size: 10px;
-          font-weight: 700;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
+        .csd-cost-list-mark::after {
+          content: "";
+          position: absolute;
+          top: 6px;
+          left: 8px;
+          width: 7px;
+          height: 7px;
+          border-top: 1px solid #0a0a0a;
+          border-right: 1px solid #0a0a0a;
+          transform: rotate(45deg);
         }
-        .csd-fail-row-block-problem .csd-fail-row-block-label {
-          color: rgba(248,113,113,0.85);
-        }
-        .csd-fail-row-block-fix .csd-fail-row-block-label {
-          color: rgba(74,222,128,0.85);
-        }
-        .csd-fail-row-block-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-        }
-        .csd-fail-dot-red { background: rgba(248,113,113,0.85); }
-        .csd-fail-dot-green { background: rgba(74,222,128,0.85); }
-        .csd-fail-row-block p {
+
+        .csd-cost-close {
+          font-size: 14.5px;
+          line-height: 1.7;
+          color: rgba(10,10,10,0.62);
           margin: 0;
-          font-size: 14px;
-          line-height: 1.65;
-          color: rgba(255,255,255,0.7);
+          padding-top: 24px;
+          border-top: 1px solid rgba(10,10,10,0.1);
+          max-width: 540px;
         }
 
         /* ═══════════════════════════════════════════════════════════════
@@ -7528,11 +7270,14 @@ export default function CustomSoftwarePage() {
             gap: 18px;
           }
 
-          .csd-fail-grid {
+          .csd-cost-grid {
             grid-template-columns: 1fr;
-            gap: 56px;
+            min-height: auto;
           }
-          .csd-fail-left { position: static; }
+          .csd-cost-media {
+            min-height: 360px;
+            aspect-ratio: 16 / 9;
+          }
 
           .csd-build-grid { grid-template-columns: 1fr; gap: 56px; }
           .csd-build-right { min-height: 480px; }
@@ -7556,16 +7301,24 @@ export default function CustomSoftwarePage() {
             grid-template-columns: 1fr 1fr;
             gap: 20px;
           }
-          .csd-hero-stage { aspect-ratio: 1 / 1; }
-          .csd-hero-stage-card-1 { width: 70%; left: 20px; top: 50px; }
-          .csd-hero-stage-card-2 { width: 30%; right: 18px; top: 22px; }
-          .csd-hero-stage-card-3 { width: 62%; bottom: 24px; left: 40px; }
-          .csd-hero-stage-badge {
-            bottom: 20px;
-            right: 20px;
-            padding: 8px 12px 8px 10px;
+          .csd-hero-stage {
+            padding: 44px 16px 16px;
+            gap: 14px;
+            aspect-ratio: 1.05 / 1;
           }
-          .csd-hero-stage-badge-v { font-size: 12px; }
+          .csd-hero-stage-row {
+            grid-template-columns: 1fr 36%;
+            gap: 12px;
+          }
+          .csd-hero-stage-bottom {
+            grid-template-columns: 1fr;
+            gap: 10px;
+          }
+          .csd-hero-stage-badge {
+            padding: 10px 14px;
+            justify-content: flex-start;
+          }
+          .csd-hero-stage-badge-v { font-size: 13px; }
           .csd-hero-marquee-row {
             flex-direction: column;
             align-items: flex-start;
@@ -7578,8 +7331,7 @@ export default function CustomSoftwarePage() {
           .csd-build-section,
           .csd-vp-section,
           .csd-results-section,
-          .csd-faq-section,
-          .csd-fail-section {
+          .csd-faq-section {
             padding-left: 14px;
             padding-right: 14px;
             padding-top: 90px;
@@ -7599,26 +7351,12 @@ export default function CustomSoftwarePage() {
           .csd-cap-row-num { display: none; }
           .csd-cap-row-title { font-size: 19px; }
 
-          /* Why apps fail mobile */
-          .csd-fail-row-head {
-            grid-template-columns: 44px 1fr 28px;
-            gap: 14px;
-            padding: 18px 18px;
-          }
-          .csd-fail-row-stat { display: none; }
-          .csd-fail-row-num { font-size: 22px; }
-          .csd-fail-row-title { font-size: 16px; }
-          .csd-fail-row-block {
-            padding: 16px 18px 18px 18px;
-          }
-          .csd-fail-row-block p { font-size: 13.5px; }
-          .csd-fail-stat-block {
-            flex-direction: column;
-            gap: 14px;
-            padding: 20px;
-          }
-          .csd-fail-stat-num { font-size: 48px; }
-          .csd-fail-h2 { font-size: clamp(28px, 8vw, 40px); }
+          .csd-cost-media { min-height: 280px; aspect-ratio: 4 / 3; }
+          .csd-cost-media-tag { top: 18px; left: 18px; padding: 6px 12px; font-size: 10px; }
+          .csd-cost-content { padding: 56px 22px 64px; }
+          .csd-cost-h2 { font-size: clamp(28px, 8vw, 38px); }
+          .csd-cost-lead { font-size: 15px; }
+          .csd-cost-list li { font-size: 14px; }
 
           .csd-build-list { border-top: none; }
           .csd-build-row {
