@@ -3,6 +3,21 @@
 export const SERVICES = [
   {
     num: "01",
+    title: "Custom Software & Digital Solutions",
+    kicker: "Web, mobile, SaaS, and product UX delivery",
+    desc: "We design and build custom digital products from interface systems to production-ready applications tailored to your business goals.",
+    deliverables: [
+      "Custom Web Application Development",
+      "Mobile App Development (iOS & Android)",
+      "SaaS Product Development",
+      "UI/UX Design Systems",
+    ],
+    tags: ["Web Apps", "Mobile Apps", "SaaS", "UI/UX"],
+    accent: "#f472b6",
+    glyph: "◒",
+  },
+  {
+    num: "02",
     title: "Growth & Performance Engineering",
     kicker: "Conversion systems, analytics, and experimentation",
     desc: "We build end-to-end growth systems that turn traffic into measurable revenue with better conversion paths, smarter tracking, and continuous experimentation.",
@@ -17,7 +32,7 @@ export const SERVICES = [
     glyph: "◐",
   },
   {
-    num: "02",
+    num: "03",
     title: "Search Visibility & Digital Authority",
     kicker: "Technical SEO and long-term organic growth",
     desc: "We strengthen your search foundation with technical SEO, content architecture, and monitoring systems that compound organic visibility over time.",
@@ -30,21 +45,6 @@ export const SERVICES = [
     tags: ["Technical SEO", "Indexing", "Content", "Search Growth"],
     accent: "#38bdf8",
     glyph: "◑",
-  },
-  {
-    num: "03",
-    title: "Custom Software & Digital Solutions",
-    kicker: "Web, mobile, SaaS, and product UX delivery",
-    desc: "We design and build custom digital products from interface systems to production-ready applications tailored to your business goals.",
-    deliverables: [
-      "Custom Web Application Development",
-      "Mobile App Development (iOS & Android)",
-      "SaaS Product Development",
-      "UI/UX Design Systems",
-    ],
-    tags: ["Web Apps", "Mobile Apps", "SaaS", "UI/UX"],
-    accent: "#f472b6",
-    glyph: "◒",
   },
 ];
 
@@ -132,19 +132,19 @@ export const FOOTER_NAV_COLS = [
   {
     heading: "Services",
     links: [
+      { label: "Custom Software & Digital Solutions", href: "#services", ext: false },
       { label: "Growth & Performance Engineering", href: "#services", ext: false },
       { label: "Search Visibility & Digital Authority", href: "#services", ext: false },
-      { label: "Custom Software & Digital Solutions", href: "#services", ext: false },
     ],
   },
   {
     heading: "Explore",
     links: [
-      { label: "place", href: "/place", ext: false },
-      { label: "about us", href: "/about", ext: false },
-      { label: "contact", href: "/contact", ext: false },
+      { label: "Case Studies", href: "/place", ext: false },
+      { label: "About Us", href: "/about", ext: false },
+      { label: "Contact", href: "/contact", ext: false },
       { label: "Blogs", href: "/blogs", ext: false },
-      { label: "careers", href: "/careers", ext: false },
+      { label: "Careers", href: "/careers", ext: false },
     ],
   },
 ];
