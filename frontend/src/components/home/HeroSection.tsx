@@ -23,8 +23,6 @@ interface HeroSectionProps {
 
 export default function HeroSection({ lenisRef }: HeroSectionProps) {
   const heroRef = useRef<HTMLElement>(null);
-  const heroGlyphRef = useRef<HTMLDivElement>(null);
-  const heroDotsRef = useRef<HTMLDivElement>(null);
   const heroTerminalRef = useRef<HTMLDivElement>(null);
   const [rotatingVerb, setRotatingVerb] = useState(0);
 
@@ -36,18 +34,12 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
     return () => clearInterval(id);
   }, []);
 
-  // Mouse-reactive parallax: glyph, dots, terminal tilt
+  // Mouse-reactive terminal tilt
   useEffect(() => {
     if (!heroRef.current) return;
     const hero = heroRef.current;
-    const glyph = heroGlyphRef.current;
-    const dots = heroDotsRef.current;
     const terminal = heroTerminalRef.current;
 
-    const glyphX = glyph ? gsap.quickTo(glyph, "x", { duration: 0.9, ease: "power3.out" }) : null;
-    const glyphY = glyph ? gsap.quickTo(glyph, "y", { duration: 0.9, ease: "power3.out" }) : null;
-    const dotsX = dots ? gsap.quickTo(dots, "x", { duration: 0.9, ease: "power3.out" }) : null;
-    const dotsY = dots ? gsap.quickTo(dots, "y", { duration: 0.9, ease: "power3.out" }) : null;
     const termRY = terminal ? gsap.quickTo(terminal, "rotationY", { duration: 0.7, ease: "power3.out" }) : null;
     const termRX = terminal ? gsap.quickTo(terminal, "rotationX", { duration: 0.7, ease: "power3.out" }) : null;
 
@@ -58,10 +50,6 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
       if (e.clientY > rect.bottom || e.clientY < rect.top) return;
       const tx = (e.clientX / window.innerWidth - 0.5) * 2;
       const ty = (e.clientY / window.innerHeight - 0.5) * 2;
-      glyphX?.(tx * -28);
-      glyphY?.(ty * -18);
-      dotsX?.(tx * 10);
-      dotsY?.(ty * 6);
       termRY?.(tx * -3);
       termRX?.(ty * 3);
     };
@@ -70,7 +58,7 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  // GSAP intro timeline + scroll-driven parallax
+  // GSAP intro timeline + scroll-driven fade
   useEffect(() => {
     const ctx = gsap.context(() => {
       const heroTl = gsap.timeline({ delay: 0.1 });
@@ -121,14 +109,6 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
           opacity: 0, y: 20, ease: "none",
           scrollTrigger: { trigger: heroRef.current, start: "top top", end: "15% top", scrub: true },
         });
-        gsap.to(".hero-dots-scroll", {
-          y: 120, ease: "none",
-          scrollTrigger: { trigger: heroRef.current, start: "top top", end: "bottom top", scrub: true },
-        });
-        gsap.to(".hero-glyph-scroll", {
-          y: -180, x: 80, ease: "none",
-          scrollTrigger: { trigger: heroRef.current, start: "top top", end: "bottom top", scrub: true },
-        });
       }
     });
     return () => ctx.revert();
@@ -143,35 +123,61 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
         position: "relative", overflow: "hidden",
       }}
     >
-      {/* Dot grid parallax */}
-      <div className="hero-dots-scroll" aria-hidden style={{ position: "absolute", inset: 0, pointerEvents: "none", willChange: "transform" }}>
-        <div
-          ref={heroDotsRef}
-          className="hero-dots"
-          style={{
-            position: "absolute", inset: "-40px",
-            backgroundImage: "radial-gradient(rgba(0,0,0,0.09) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-            maskImage: "radial-gradient(ellipse 75% 65% at 35% 45%, black 0%, transparent 95%)",
-            WebkitMaskImage: "radial-gradient(ellipse 75% 65% at 35% 45%, black 0%, transparent 95%)",
-            willChange: "transform",
-          }}
-        />
-      </div>
+      {/* Hero background media */}
+      <video
+        aria-hidden
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center",
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      >
+        <source src="/videos/her-section-land.mp4" type="video/mp4" />
+      </video>
 
-      {/* Background glyph */}
-      <div className="hero-glyph-scroll" aria-hidden style={{ position: "absolute", right: -80, bottom: -80, pointerEvents: "none", willChange: "transform" }}>
-        <div ref={heroGlyphRef} className="hero-glyph" style={{ width: "clamp(360px, 46vw, 700px)", userSelect: "none", willChange: "transform" }}>
-          <img src="/images/hero-section.png" alt="" aria-hidden draggable={false} style={{ display: "block", width: "100%", height: "auto", opacity: 0.1 }} />
-        </div>
-      </div>
+      {/* Cinematic left-heavy shade inspired by services hero */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          pointerEvents: "none",
+          background:
+            "linear-gradient(90deg, rgba(0,0,0,0.74) 0%, rgba(0,0,0,0.62) 34%, rgba(0,0,0,0.38) 58%, rgba(0,0,0,0.18) 78%, rgba(0,0,0,0.1) 100%), linear-gradient(180deg, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.52) 100%)",
+        }}
+      />
+
+      {/* Soft spotlight for a richer hero tone */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          pointerEvents: "none",
+          background:
+            "radial-gradient(1000px 520px at 18% 36%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 34%, transparent 72%)",
+          mixBlendMode: "screen",
+        }}
+      />
 
       {/* Corner crosshair marks */}
       {[
-        { top: 140, left: 40, borderTop: "1px solid rgba(0,0,0,0.22)", borderLeft: "1px solid rgba(0,0,0,0.22)" },
-        { top: 140, right: 40, borderTop: "1px solid rgba(0,0,0,0.22)", borderRight: "1px solid rgba(0,0,0,0.22)" },
-        { bottom: 40, left: 40, borderBottom: "1px solid rgba(0,0,0,0.22)", borderLeft: "1px solid rgba(0,0,0,0.22)" },
-        { bottom: 40, right: 40, borderBottom: "1px solid rgba(0,0,0,0.22)", borderRight: "1px solid rgba(0,0,0,0.22)" },
+        { top: 140, left: 40, borderTop: "1px solid rgba(255,255,255,0.34)", borderLeft: "1px solid rgba(255,255,255,0.34)" },
+        { top: 140, right: 40, borderTop: "1px solid rgba(255,255,255,0.28)", borderRight: "1px solid rgba(255,255,255,0.28)" },
+        { bottom: 40, left: 40, borderBottom: "1px solid rgba(255,255,255,0.34)", borderLeft: "1px solid rgba(255,255,255,0.34)" },
+        { bottom: 40, right: 40, borderBottom: "1px solid rgba(255,255,255,0.28)", borderRight: "1px solid rgba(255,255,255,0.28)" },
       ].map((s, i) => (
         <div key={i} aria-hidden style={{ position: "absolute", width: 10, height: 10, pointerEvents: "none", ...s }} />
       ))}
@@ -193,6 +199,8 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
                 fontSize: "clamp(40px, 5.8vw, 96px)",
                 fontWeight: 500, lineHeight: 0.96,
                 letterSpacing: "-0.032em", margin: "0 0 48px",
+                color: "#ffffff",
+                textShadow: "0 8px 28px rgba(0,0,0,0.35)",
               }}
             >
               {/* "We [rotating verb]" */}
@@ -218,7 +226,7 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
                         key={v}
                         style={{
                           display: "block", fontStyle: "italic", fontWeight: 400,
-                          color: "rgba(0,0,0,0.62)", whiteSpace: "nowrap",
+                          color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap",
                           transform: `translateY(${(i - rotatingVerb) * 100}%)`,
                           transition: "transform 0.7s cubic-bezier(0.76, 0, 0.24, 1)",
                           position: i === 0 ? "relative" : "absolute",
@@ -249,7 +257,7 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
                     className="hero-char"
                     style={{
                       display: "inline-block", willChange: "transform",
-                      color: c === "." ? "rgba(0,0,0,0.28)" : "inherit",
+                      color: c === "." ? "rgba(255,255,255,0.55)" : "inherit",
                       whiteSpace: "pre",
                     }}
                   >
@@ -261,7 +269,7 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
 
             <p
               className="hero-intro-col"
-              style={{ fontSize: 17, color: "rgba(0,0,0,0.6)", maxWidth: 480, lineHeight: 1.65, margin: "0 0 36px", fontWeight: 400, opacity: 0 }}
+              style={{ fontSize: 17, color: "rgba(255,255,255,0.88)", maxWidth: 480, lineHeight: 1.65, margin: "0 0 36px", fontWeight: 400, opacity: 0, textShadow: "0 6px 22px rgba(0,0,0,0.32)" }}
             >
               A senior team of engineers, designers, and strategists partnering with
               startups and scale-ups to design, build, and ship products that matter —
@@ -295,11 +303,13 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
           <div ref={heroTerminalRef} className="hero-terminal" style={{ opacity: 0, willChange: "transform", transformStyle: "preserve-3d", position: "relative" }}>
             <div
               style={{
-                background: "#0a0a0a", color: "#fafaf9", borderRadius: 16,
-                border: "1px solid rgba(0,0,0,0.85)",
+                background: "linear-gradient(145deg, rgba(12,12,12,0.74) 0%, rgba(12,12,12,0.5) 100%)",
+                color: "#fafaf9", borderRadius: 16,
+                border: "1px solid rgba(255,255,255,0.14)",
                 padding: "20px 22px 22px",
-                boxShadow: "0 30px 70px -30px rgba(0,0,0,0.45), 0 8px 24px -10px rgba(0,0,0,0.2)",
+                boxShadow: "0 30px 70px -30px rgba(0,0,0,0.6), 0 8px 24px -10px rgba(0,0,0,0.35)",
                 position: "relative", overflow: "hidden",
+                backdropFilter: "blur(10px)",
               }}
             >
               {/* Window chrome */}
@@ -416,13 +426,13 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
           opacity: 0, pointerEvents: "none",
         }}
       >
-        <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(0,0,0,0.35)" }}>
+        <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.65)" }}>
           Scroll
         </span>
-        <div style={{ width: 20, height: 32, borderRadius: 10, border: "1px solid rgba(0,0,0,0.2)", position: "relative", overflow: "hidden" }}>
+        <div style={{ width: 20, height: 32, borderRadius: 10, border: "1px solid rgba(255,255,255,0.35)", position: "relative", overflow: "hidden" }}>
           <span
             className="scroll-dot"
-            style={{ position: "absolute", top: 6, left: "50%", marginLeft: -2, width: 4, height: 4, borderRadius: "50%", background: "rgba(0,0,0,0.5)" }}
+            style={{ position: "absolute", top: 6, left: "50%", marginLeft: -2, width: 4, height: 4, borderRadius: "50%", background: "rgba(255,255,255,0.75)" }}
           />
         </div>
       </div>
