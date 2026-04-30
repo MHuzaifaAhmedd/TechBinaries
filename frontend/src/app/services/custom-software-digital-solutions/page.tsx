@@ -6542,6 +6542,7 @@ export default function CustomSoftwarePage() {
           overflow: hidden;
           background: #0a0a0a;
           min-height: 480px;
+          border-radius: clamp(20px, 2.4vw, 32px);
         }
         .csd-cost-media img {
           width: 100%;
