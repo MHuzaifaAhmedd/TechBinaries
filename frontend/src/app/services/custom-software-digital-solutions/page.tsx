@@ -85,28 +85,28 @@ const VALUE_PROPS = [
     metric: "98%+",
     metricLabel: "Avg Lighthouse",
     title: "Performance that keeps users engaged",
-    desc: "We build with runtime budgets in mind: fast pages, stable interactions, and measurable improvements (Lighthouse, Core Web Vitals, and real device testing).",
+    desc: "Runtime budgets, stable interactions, and measurable gains across Lighthouse, Core Web Vitals, and real-device testing.",
   },
   {
     id: "architecture",
     metric: "10×",
     metricLabel: "Growth headroom",
     title: "Architecture that scales as you grow",
-    desc: "We design clean boundaries and observable systems so you can ship new features without rework. Fewer incidents, faster iteration, and less tech debt over time.",
+    desc: "Clear boundaries and observability let you ship faster with fewer incidents and less rework.",
   },
   {
     id: "design-system",
     metric: "1 system",
     metricLabel: "Design coverage",
     title: "Design systems that reduce UX friction",
-    desc: "Tokens, reusable components, and consistent patterns across web, mobile, and internal tools. Your product stays coherent while teams move faster.",
+    desc: "Tokens and reusable components keep web, mobile, and internal tools consistent as teams scale.",
   },
   {
     id: "delivery",
     metric: "Weekly",
     metricLabel: "Shipped iterations",
     title: "Delivery cadence that accelerates momentum",
-    desc: "Weekly demos, feature-flagged deploys, and post-launch support. You learn faster, reduce rollout risk, and keep growth moving.",
+    desc: "Weekly demos and feature-flagged releases help you learn quickly and reduce rollout risk.",
   },
 ];
 
@@ -580,8 +580,6 @@ export default function CustomSoftwarePage() {
 
             {/* RIGHT — content */}
             <div className="csd-cost-content csd-sh">
-              <div className="csd-cost-eyebrow">The cost of a poorly built app</div>
-
               <h2 id="cost-heading" className="csd-cost-h2">
                 Why it <span className="csd-cost-h2-accent">matters.</span>
               </h2>
@@ -908,7 +906,6 @@ export default function CustomSoftwarePage() {
           <div className="csd-results-inner">
             <div className="csd-sh csd-results-header">
               <div className="csd-results-header-left">
-                <div className="csd-results-eyebrow">Selected outcomes</div>
                 <h2 className="csd-results-h2">
                   We don&apos;t just build software.{" "}
                   <span className="csd-italic-mute">We deliver results.</span>
@@ -1812,7 +1809,6 @@ export default function CustomSoftwarePage() {
         ═══════════════════════════════════════════════════════════════ */
         .csd-cost-section {
           background: #f5f5f4;
-          border-bottom: 1px solid rgba(0,0,0,0.06);
           padding-left: clamp(14px, 2.4vw, 32px);
         }
 
@@ -1879,15 +1875,6 @@ export default function CustomSoftwarePage() {
           flex-direction: column;
           justify-content: center;
           background: #fafaf9;
-        }
-
-        .csd-cost-eyebrow {
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.5);
-          margin-bottom: 18px;
         }
 
         .csd-cost-h2 {
@@ -1968,7 +1955,6 @@ export default function CustomSoftwarePage() {
           color: rgba(10,10,10,0.62);
           margin: 0;
           padding-top: 24px;
-          border-top: 1px solid rgba(10,10,10,0.1);
           max-width: 540px;
         }
 
@@ -1978,7 +1964,6 @@ export default function CustomSoftwarePage() {
         .csd-build-section {
           padding: 140px 20px;
           background: #f5f5f4;
-          border-top: 1px solid rgba(0,0,0,0.06);
         }
         .csd-build-inner { max-width: 1320px; margin: 0 auto; }
         .csd-build-grid {
@@ -2268,20 +2253,23 @@ export default function CustomSoftwarePage() {
           margin: 0;
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 10px;
           max-width: 540px;
         }
         .csd-vp-item {
           display: grid;
           grid-template-columns: 18px 1fr;
           gap: 14px;
-          padding: 0;
-          border-bottom: 0;
+          padding: 16px 0 14px;
+          border-top: 1px solid rgba(10,10,10,0.1);
+        }
+        .csd-vp-item:last-child {
+          border-bottom: 1px solid rgba(10,10,10,0.1);
         }
         .csd-vp-item-num {
           position: relative;
           width: 18px;
-          height: 22px;
+          height: 18px;
           flex-shrink: 0;
         }
         .csd-vp-item-num span {
@@ -2290,75 +2278,74 @@ export default function CustomSoftwarePage() {
         .csd-vp-item-num::before {
           content: "";
           position: absolute;
-          top: 9px;
+          top: 7px;
           left: 0;
-          width: 12px;
-          height: 1px;
-          background: #0a0a0a;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: rgba(10,10,10,0.75);
         }
         .csd-vp-item-num::after {
-          content: "";
-          position: absolute;
-          top: 6px;
-          left: 8px;
-          width: 7px;
-          height: 7px;
-          border-top: 1px solid #0a0a0a;
-          border-right: 1px solid #0a0a0a;
-          transform: rotate(45deg);
+          content: none;
         }
         .csd-vp-item-body {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          column-gap: 20px;
+          row-gap: 8px;
+          align-items: start;
           min-width: 0;
         }
         .csd-vp-item-head {
-          display: flex;
-          align-items: baseline;
-          justify-content: space-between;
-          gap: 18px;
-          flex-wrap: wrap;
+          display: contents;
         }
         .csd-vp-item-title {
           font-family: var(--font-display);
-          font-size: 18px;
+          font-size: 19px;
           font-weight: 500;
           letter-spacing: -0.018em;
-          line-height: 1.3;
+          line-height: 1.24;
           margin: 0;
           color: #0a0a0a;
-          flex: 1;
-          min-width: 220px;
+          min-width: 0;
+          grid-column: 1;
         }
         .csd-vp-item-metric {
-          display: inline-flex;
-          align-items: baseline;
-          gap: 8px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 3px;
           flex-shrink: 0;
+          grid-column: 2;
+          grid-row: 1 / span 2;
+          margin-top: 2px;
+          text-align: right;
+          padding-left: 12px;
         }
         .csd-vp-item-metric-value {
           font-family: var(--font-display);
-          font-size: 18px;
+          font-size: 22px;
           font-weight: 500;
-          letter-spacing: -0.025em;
+          letter-spacing: -0.03em;
           color: #0a0a0a;
           line-height: 1;
           font-variant-numeric: tabular-nums;
         }
         .csd-vp-item-metric-label {
-          font-size: 9px;
+          font-size: 8px;
           font-weight: 700;
-          letter-spacing: 0.12em;
+          letter-spacing: 0.14em;
           text-transform: uppercase;
           color: rgba(10,10,10,0.45);
           white-space: nowrap;
         }
         .csd-vp-item-desc {
           font-size: 14px;
-          line-height: 1.62;
-          color: rgba(10,10,10,0.65);
+          line-height: 1.52;
+          color: rgba(10,10,10,0.62);
           margin: 0;
+          max-width: 42ch;
+          grid-column: 1;
         }
 
         /* RIGHT — image */
@@ -2418,16 +2405,8 @@ export default function CustomSoftwarePage() {
           align-items: end;
           margin-bottom: 72px;
           padding-bottom: 40px;
-          border-bottom: 1px solid rgba(10,10,10,0.1);
         }
         .csd-results-header-left { display: flex; flex-direction: column; gap: 18px; }
-        .csd-results-eyebrow {
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.5);
-        }
         .csd-results-h2 {
           font-family: var(--font-display);
           font-size: clamp(34px, 4.4vw, 60px);
@@ -2975,9 +2954,25 @@ export default function CustomSoftwarePage() {
           .csd-vp-h2 { font-size: clamp(28px, 8vw, 38px); }
           .csd-vp-lead { font-size: 15px; }
           .csd-vp-list { gap: 12px; }
-          .csd-vp-item { grid-template-columns: 18px 1fr; gap: 12px; padding: 0; }
+          .csd-vp-item { grid-template-columns: 14px 1fr; gap: 12px; padding: 14px 0; }
+          .csd-vp-item-body {
+            grid-template-columns: 1fr;
+            row-gap: 8px;
+          }
           .csd-vp-item-title { font-size: 17px; min-width: 0; }
+          .csd-vp-item-metric {
+            grid-column: 1;
+            grid-row: auto;
+            flex-direction: row;
+            align-items: baseline;
+            justify-content: flex-start;
+            gap: 8px;
+            padding-left: 0;
+            margin-top: 0;
+            text-align: left;
+          }
           .csd-vp-item-metric-value { font-size: 16px; }
+          .csd-vp-item-desc { max-width: 100%; }
           .csd-vp-media { min-height: 280px; aspect-ratio: 4 / 3; }
 
           /* RESULTS */
