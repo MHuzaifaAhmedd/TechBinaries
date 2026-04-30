@@ -222,13 +222,13 @@ export default function CustomSoftwarePage() {
         0.55
       );
       heroTl.fromTo(
-        ".csd-hero-stage",
+        ".csd-hero-form-shell",
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" },
         0.4
       );
       heroTl.fromTo(
-        ".csd-hero-stage-card",
+        ".csd-hero-form-field",
         { opacity: 0, y: 16, scale: 0.96 },
         { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.12, ease: "power3.out" },
         0.7
@@ -363,14 +363,19 @@ export default function CustomSoftwarePage() {
               - Bottom strip: trust marquee with metrics + technology badges
         ═══════════════════════════════════════════════════════════════ */}
         <section className="csd-hero">
-          {/* Background layers */}
-          <div aria-hidden className="csd-hero-grid-bg" />
-          <div aria-hidden className="csd-hero-gradient-orb csd-hero-orb-a" />
-          <div aria-hidden className="csd-hero-gradient-orb csd-hero-orb-b" />
-          <div aria-hidden className="csd-hero-corner csd-hero-corner-tl" />
-          <div aria-hidden className="csd-hero-corner csd-hero-corner-tr" />
-          <div aria-hidden className="csd-hero-corner csd-hero-corner-bl" />
-          <div aria-hidden className="csd-hero-corner csd-hero-corner-br" />
+          <div className="csd-hero-video-wrap" aria-hidden>
+            <video
+              className="csd-hero-video"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+            >
+              <source src="/videos/hero-services-csds-video.mp4" type="video/mp4" />
+            </video>
+            <div className="csd-hero-video-overlay" />
+          </div>
 
           <div className="csd-hero-inner">
             <div className="csd-hero-main">
@@ -378,18 +383,18 @@ export default function CustomSoftwarePage() {
               <div className="csd-hero-left">
                 <h1 className="csd-hero-title">
                   <div className="csd-h1-line">
-                    {"Software".split("").map((c, i) => (
+                    {"Custom software".split("").map((c, i) => (
                       <span key={`l1-${i}`} className="csd-h1-char">{c === " " ? "\u00A0" : c}</span>
                     ))}
                   </div>
                   <div className="csd-h1-line">
-                    {"engineered to".split("").map((c, i) => (
+                    {"built for speed,".split("").map((c, i) => (
                       <span key={`l2-${i}`} className="csd-h1-char" style={{ whiteSpace: "pre" }}>{c === " " ? "\u00A0" : c}</span>
                     ))}
                   </div>
                   <div className="csd-h1-line">
                     <span className="csd-h1-italic">
-                      {"compound value.".split("").map((c, i) => (
+                      {"scale & growth.".split("").map((c, i) => (
                         <span key={`l3i-${i}`} className="csd-h1-char">{c}</span>
                       ))}
                     </span>
@@ -398,8 +403,8 @@ export default function CustomSoftwarePage() {
 
                 <p className="csd-hero-fade csd-hero-lead" style={{ opacity: 0 }}>
                   We design, build, and modernize web apps, mobile apps, SaaS platforms,
-                  and internal tools that ship on schedule, scale cleanly, and stay
-                  maintainable years after launch.
+                  and internal tools that launch fast, perform reliably, and stay easy
+                  to scale as your business grows.
                 </p>
 
                 <div className="csd-hero-fade csd-hero-cta-row" style={{ opacity: 0 }}>
@@ -419,96 +424,57 @@ export default function CustomSoftwarePage() {
 
               </div>
 
-              {/* RIGHT — visual stage with stacked product surfaces */}
               <div className="csd-hero-right">
-                <div className="csd-hero-stage" style={{ opacity: 0 }}>
-                  {/* Background pattern inside stage */}
-                  <div className="csd-hero-stage-bg" aria-hidden />
+                <div className="csd-hero-form-shell" style={{ opacity: 0 }}>
+                  <h3 className="csd-hero-form-title">Share Your Requirements</h3>
+                  <p className="csd-hero-form-subtitle">
+                    Tell our experts about your goals and get a tailored consultation plan.
+                  </p>
 
-                  {/* Top status bar */}
-                  <div className="csd-hero-stage-status" aria-hidden>
-                    <div className="csd-hero-stage-status-left">
-                      <span className="csd-hero-stage-status-dot" />
-                      <span className="csd-hero-stage-status-text">Live · production builds</span>
-                    </div>
-                    <div className="csd-hero-stage-status-right">
-                      <span>v4.2.1</span>
-                    </div>
-                  </div>
+                  <form className="csd-hero-form" onSubmit={(e) => e.preventDefault()}>
+                    <label className="csd-hero-form-field">
+                      <span>Name</span>
+                      <input type="text" placeholder="Your name" />
+                    </label>
 
-                  {/* Main row: SaaS card + Mobile card (aligned at top) */}
-                  <div className="csd-hero-stage-row">
-                    {/* SaaS dashboard card */}
-                    <div className="csd-hero-stage-card csd-hero-stage-card-saas">
-                      <div className="csd-hero-stage-card-head">
-                        <div className="csd-hero-stage-card-dots">
-                          <span /><span /><span />
-                        </div>
-                        <span className="csd-hero-stage-card-title">analytics.app</span>
-                      </div>
-                      <div className="csd-hero-stage-card-body">
-                        <div className="csd-hero-stage-metric-row">
-                          <div>
-                            <div className="csd-hero-stage-metric-label">MRR</div>
-                            <div className="csd-hero-stage-metric-value">$48.2K</div>
-                            <div className="csd-hero-stage-metric-delta">↑ 12.4%</div>
-                          </div>
-                          <div>
-                            <div className="csd-hero-stage-metric-label">Active</div>
-                            <div className="csd-hero-stage-metric-value">2,847</div>
-                            <div className="csd-hero-stage-metric-delta">↑ 8.1%</div>
-                          </div>
-                        </div>
-                        <div className="csd-hero-stage-chart">
-                          {[35, 52, 41, 68, 55, 78, 62, 88, 71, 94].map((h, i) => (
-                            <span key={i} style={{ height: `${h}%` }} />
-                          ))}
-                        </div>
-                      </div>
+                    <div className="csd-hero-form-grid">
+                      <label className="csd-hero-form-field">
+                        <span>Contact Number</span>
+                        <input type="tel" placeholder="+92 Enter your number" />
+                      </label>
+                      <label className="csd-hero-form-field">
+                        <span>Work Email</span>
+                        <input type="email" placeholder="Enter your email address" />
+                      </label>
                     </div>
 
-                    {/* Mobile app frame */}
-                    <div className="csd-hero-stage-card csd-hero-stage-card-mobile">
-                      <div className="csd-hero-stage-mobile-notch" />
-                      <div className="csd-hero-stage-mobile-body">
-                        <div className="csd-hero-stage-mobile-greeting">Welcome back</div>
-                        <div className="csd-hero-stage-mobile-user">Sarah K.</div>
-                        <div className="csd-hero-stage-mobile-card">
-                          <div className="csd-hero-stage-mobile-card-label">Balance</div>
-                          <div className="csd-hero-stage-mobile-card-value">$12,840</div>
-                        </div>
-                        <div className="csd-hero-stage-mobile-list">
-                          <div /><div /><div />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <label className="csd-hero-form-field">
+                      <span>Budget Range</span>
+                      <select defaultValue="">
+                        <option value="" disabled>Select a budget range</option>
+                        <option value="under-10k">Under $10k</option>
+                        <option value="10k-25k">$10k - $25k</option>
+                        <option value="25k-50k">$25k - $50k</option>
+                        <option value="50k-plus">$50k+</option>
+                      </select>
+                    </label>
 
-                  {/* Bottom row: terminal + badge inline */}
-                  <div className="csd-hero-stage-bottom">
-                    <div className="csd-hero-stage-card csd-hero-stage-card-code">
-                      <div className="csd-hero-stage-card-head">
-                        <div className="csd-hero-stage-card-dots">
-                          <span /><span /><span />
-                        </div>
-                        <span className="csd-hero-stage-card-title">deploy.ts</span>
-                      </div>
-                      <div className="csd-hero-stage-code">
-                        <div><span className="csd-code-mute">$</span> <span className="csd-code-cmd">build</span> <span className="csd-code-flag">--prod</span></div>
-                        <div className="csd-code-mute">→ Compiled in 8.4s</div>
-                        <div className="csd-code-mute">→ 0 errors · 0 warnings</div>
-                        <div><span className="csd-code-ok">✓</span> <span className="csd-code-mute">deployed to edge</span></div>
-                      </div>
-                    </div>
+                    <label className="csd-hero-form-field">
+                      <span>Describe your project</span>
+                      <textarea rows={3} placeholder="Describe your project" />
+                    </label>
 
-                    <div className="csd-hero-stage-badge" aria-hidden>
-                      <div className="csd-hero-stage-badge-pulse" />
-                      <div>
-                        <div className="csd-hero-stage-badge-k">UPTIME</div>
-                        <div className="csd-hero-stage-badge-v">99.98%</div>
+                    <div className="csd-hero-form-foot">
+                      <div className="csd-hero-form-captcha">
+                        <span>5 + 2 =</span>
+                        <input type="text" inputMode="numeric" aria-label="Simple captcha answer" />
                       </div>
+                      <button type="submit" className="csd-hero-form-submit">
+                        Schedule a Technical Consultation
+                      </button>
                     </div>
-                  </div>
+                    <p className="csd-hero-form-note">Fast, high-touch engagement under strict NDA protection.</p>
+                  </form>
                 </div>
               </div>
             </div>
@@ -990,11 +956,6 @@ export default function CustomSoftwarePage() {
           <div className="csd-cta-inner">
             <div className="csd-cta-grid">
               <div className="csd-cta-left">
-                <div className="csd-cta-eyebrow">
-                  <span className="csd-cta-eyebrow-dot" />
-                  Available for new projects
-                </div>
-
                 <h2 className="csd-cta-h2">
                   Ready to build something{" "}
                   <span className="csd-cta-h2-accent">that lasts?</span>
@@ -1109,20 +1070,20 @@ export default function CustomSoftwarePage() {
           align-items: center;
           gap: 8px;
           padding: 15px 26px;
-          border: 1px solid rgba(10,10,10,0.18);
-          color: rgba(10,10,10,0.78);
+          border: 1px solid rgba(255,255,255,0.36);
+          color: rgba(255,255,255,0.96);
           text-decoration: none;
           font-size: 14px;
           font-weight: 500;
           border-radius: 999px;
-          background: rgba(255,255,255,0.6);
+          background: rgba(255,255,255,0.16);
           backdrop-filter: blur(8px);
           transition: border-color 0.2s, background 0.2s, color 0.2s;
         }
         .csd-cta-ghost-light:hover {
-          border-color: rgba(10,10,10,0.4);
-          background: #fff;
-          color: #0a0a0a;
+          border-color: rgba(255,255,255,0.68);
+          background: rgba(255,255,255,0.24);
+          color: #fff;
         }
 
         .csd-ghost-dark:hover {
@@ -1136,75 +1097,35 @@ export default function CustomSoftwarePage() {
         .csd-hero {
           position: relative;
           min-height: 100vh;
-          background:
-            radial-gradient(circle at 80% 18%, rgba(255,255,255,0.9), transparent 35%),
-            radial-gradient(circle at 12% 85%, rgba(212,212,216,0.25), transparent 40%),
-            linear-gradient(135deg, #f8f8f7 0%, #efefed 50%, #e7e5e4 100%);
-          color: #0a0a0a;
-          padding: 132px 20px 72px;
+          background: #e7e5e4;
+          color: #fff;
+          padding: clamp(150px, 17vh, 190px) 20px 56px;
           overflow: hidden;
         }
 
-        .csd-hero-grid-bg {
+        .csd-hero-video-wrap {
           position: absolute;
           inset: 0;
-          background-image:
-            linear-gradient(rgba(10,10,10,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(10,10,10,0.04) 1px, transparent 1px);
-          background-size: 64px 64px;
-          mask-image: radial-gradient(ellipse 90% 75% at 50% 38%, black 0%, transparent 92%);
-          -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 38%, black 0%, transparent 92%);
           pointer-events: none;
+          z-index: 0;
         }
 
-        .csd-hero-gradient-orb {
+        .csd-hero-video {
           position: absolute;
-          border-radius: 999px;
-          pointer-events: none;
-          filter: blur(60px);
-        }
-        .csd-hero-orb-a {
-          width: 480px;
-          height: 480px;
-          right: -8%;
-          top: 8%;
-          background:
-            radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(212,212,216,0.2) 60%, transparent 100%);
-        }
-        .csd-hero-orb-b {
-          width: 320px;
-          height: 320px;
-          left: -8%;
-          bottom: 8%;
-          background:
-            radial-gradient(circle, rgba(10,10,10,0.05) 0%, transparent 70%);
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+          filter: saturate(1.08) contrast(1.04);
         }
 
-        .csd-hero-corner {
+        .csd-hero-video-overlay {
           position: absolute;
-          width: 24px;
-          height: 24px;
-          pointer-events: none;
-        }
-        .csd-hero-corner-tl {
-          top: 100px; left: 24px;
-          border-top: 1px solid rgba(10,10,10,0.18);
-          border-left: 1px solid rgba(10,10,10,0.18);
-        }
-        .csd-hero-corner-tr {
-          top: 100px; right: 24px;
-          border-top: 1px solid rgba(10,10,10,0.18);
-          border-right: 1px solid rgba(10,10,10,0.18);
-        }
-        .csd-hero-corner-bl {
-          bottom: 24px; left: 24px;
-          border-bottom: 1px solid rgba(10,10,10,0.18);
-          border-left: 1px solid rgba(10,10,10,0.18);
-        }
-        .csd-hero-corner-br {
-          bottom: 24px; right: 24px;
-          border-bottom: 1px solid rgba(10,10,10,0.18);
-          border-right: 1px solid rgba(10,10,10,0.18);
+          inset: 0;
+          background:
+            linear-gradient(90deg, rgba(0,0,0,0.66) 0%, rgba(0,0,0,0.58) 44%, rgba(0,0,0,0.34) 68%, rgba(0,0,0,0.24) 100%),
+            linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.5) 100%);
         }
 
         .csd-hero-inner {
@@ -1255,25 +1176,34 @@ export default function CustomSoftwarePage() {
 
         .csd-hero-main {
           display: grid;
-          grid-template-columns: minmax(0, 1.05fr) minmax(440px, 0.95fr);
-          gap: clamp(48px, 6vw, 88px);
+          grid-template-columns: minmax(0, 1.15fr) minmax(420px, 0.85fr);
+          gap: clamp(32px, 4vw, 64px);
           align-items: center;
+          min-height: calc(100vh - 246px);
+        }
+        .csd-hero-left {
+          min-width: 0;
+          max-width: 780px;
+          transform: translateY(clamp(22px, 4vh, 48px));
         }
 
         .csd-hero-title {
           font-family: var(--font-display);
-          font-size: clamp(48px, 7vw, 110px);
+          font-size: clamp(40px, 4.5vw, 72px);
           font-weight: 500;
-          line-height: 0.93;
-          letter-spacing: -0.048em;
-          margin: 0 0 32px;
-          color: #0a0a0a;
+          line-height: 0.98;
+          letter-spacing: -0.045em;
+          margin: 0 0 26px;
+          color: #fff;
+          max-width: 720px;
+          text-shadow: 0 10px 30px rgba(0,0,0,0.34);
         }
         .csd-h1-line {
-          overflow: hidden;
+          overflow: visible;
           padding-bottom: 0.075em;
           display: block;
           white-space: nowrap;
+          width: 100%;
         }
         .csd-h1-char {
           display: inline-block;
@@ -1282,20 +1212,22 @@ export default function CustomSoftwarePage() {
         .csd-h1-italic {
           font-style: italic;
           font-weight: 400;
-          color: rgba(10,10,10,0.5);
-          display: inline-flex;
-          background: linear-gradient(135deg, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.25) 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
+          color: rgba(255,255,255,0.96);
+          display: inline-block;
+          white-space: nowrap;
+          padding: 0 0.08em;
+          border-radius: 0.16em;
+          background: rgba(255,255,255,0.08);
+          text-shadow: 0 8px 24px rgba(0,0,0,0.36);
         }
 
         .csd-hero-lead {
           font-size: 17px;
-          color: rgba(10,10,10,0.62);
-          max-width: 580px;
-          line-height: 1.72;
+          color: rgba(255,255,255,0.84);
+          max-width: 600px;
+          line-height: 1.7;
           margin: 0 0 32px;
+          text-shadow: 0 6px 18px rgba(0,0,0,0.28);
         }
 
         .csd-hero-cta-row {
@@ -1335,7 +1267,7 @@ export default function CustomSoftwarePage() {
           color: rgba(10,10,10,0.5);
         }
 
-        /* HERO STAGE (right side) */
+        /* HERO FORM (right side) */
         .csd-hero-right {
           position: relative;
           align-self: stretch;
@@ -1343,318 +1275,154 @@ export default function CustomSoftwarePage() {
           align-items: center;
           justify-content: center;
         }
-        .csd-hero-stage {
+        .csd-hero-form-shell {
           position: relative;
           width: 100%;
-          aspect-ratio: 0.96 / 1;
-          background:
-            linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-          border-radius: 28px;
+          max-width: 540px;
+          margin-left: auto;
+          padding: 28px 26px 24px;
+          border-radius: 20px;
           overflow: hidden;
-          padding: 52px 28px 28px;
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
+          border: 1px solid rgba(255,255,255,0.2);
+          backdrop-filter: blur(10px);
+          background:
+            linear-gradient(145deg, rgba(12,12,12,0.68) 0%, rgba(12,12,12,0.45) 100%);
           box-shadow:
-            0 40px 100px -40px rgba(10,10,10,0.45),
-            0 0 0 1px rgba(10,10,10,0.08);
+            0 36px 84px -32px rgba(0,0,0,0.62),
+            inset 0 1px 0 rgba(255,255,255,0.18);
         }
-        .csd-hero-stage-bg {
-          position: absolute;
-          inset: 0;
-          background-image:
-            linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-          background-size: 32px 32px;
-          opacity: 0.6;
+        .csd-hero-form-title {
+          margin: 0;
+          font-family: var(--font-display);
+          font-size: clamp(26px, 2.6vw, 36px);
+          font-weight: 500;
+          letter-spacing: -0.03em;
+          color: #fff;
+          line-height: 1.05;
         }
-        .csd-hero-stage-bg::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background:
-            radial-gradient(circle at 30% 20%, rgba(255,255,255,0.06) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(255,255,255,0.04) 0%, transparent 50%);
+        .csd-hero-form-subtitle {
+          margin: 10px 0 20px;
+          color: rgba(255,255,255,0.72);
+          font-size: 14px;
+          line-height: 1.6;
+          max-width: 44ch;
         }
-
-        .csd-hero-stage-status {
-          position: absolute;
-          top: 18px;
-          left: 18px;
-          right: 18px;
-          z-index: 5;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-family: var(--font-mono);
-          font-size: 10px;
-          color: rgba(255,255,255,0.5);
-          letter-spacing: 0.08em;
-        }
-        .csd-hero-stage-status-left {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        .csd-hero-stage-status-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #4ade80;
-          box-shadow: 0 0 8px rgba(74,222,128,0.6);
-          animation: csd-status-pulse 2s ease-in-out infinite;
-        }
-        @keyframes csd-status-pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-        .csd-hero-stage-status-text { text-transform: uppercase; }
-        .csd-hero-stage-status-right { color: rgba(255,255,255,0.35); }
-
-        .csd-hero-stage-row {
-          display: grid;
-          grid-template-columns: 1fr 38%;
-          gap: 16px;
-          align-items: stretch;
-          flex: 1;
-          min-height: 0;
-        }
-
-        .csd-hero-stage-card {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 14px;
-          backdrop-filter: blur(8px);
-          overflow: hidden;
-          box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
-        }
-
-        .csd-hero-stage-card-saas {
+        .csd-hero-form {
           display: flex;
           flex-direction: column;
+          gap: 14px;
         }
-        .csd-hero-stage-card-head {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 10px 14px;
-          border-bottom: 1px solid rgba(255,255,255,0.06);
-          background: rgba(255,255,255,0.02);
-        }
-        .csd-hero-stage-card-dots {
-          display: flex;
-          gap: 5px;
-        }
-        .csd-hero-stage-card-dots span {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: rgba(255,255,255,0.18);
-        }
-        .csd-hero-stage-card-dots span:first-child { background: rgba(248,113,113,0.5); }
-        .csd-hero-stage-card-dots span:nth-child(2) { background: rgba(251,191,36,0.5); }
-        .csd-hero-stage-card-dots span:last-child { background: rgba(74,222,128,0.5); }
-        .csd-hero-stage-card-title {
-          font-family: var(--font-mono);
-          font-size: 9px;
-          color: rgba(255,255,255,0.4);
-          letter-spacing: 0.06em;
-        }
-        .csd-hero-stage-card-body {
-          padding: 16px;
-        }
-        .csd-hero-stage-card-saas .csd-hero-stage-card-body {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 18px;
-        }
-        .csd-hero-stage-metric-row {
+        .csd-hero-form-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 16px;
+          gap: 12px;
         }
-        .csd-hero-stage-metric-label {
-          font-size: 9px;
-          font-weight: 600;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: rgba(255,255,255,0.4);
-          margin-bottom: 4px;
-        }
-        .csd-hero-stage-metric-value {
-          font-family: var(--font-display);
-          font-size: 20px;
-          font-weight: 500;
-          color: #fff;
-          letter-spacing: -0.02em;
-          line-height: 1;
-          font-variant-numeric: tabular-nums;
-        }
-        .csd-hero-stage-metric-delta {
-          font-family: var(--font-mono);
-          font-size: 10px;
-          color: #4ade80;
-          margin-top: 4px;
-        }
-        .csd-hero-stage-chart {
-          display: flex;
-          align-items: flex-end;
-          gap: 4px;
-          height: 56px;
-        }
-        .csd-hero-stage-chart span {
-          flex: 1;
-          background: linear-gradient(180deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
-          border-radius: 2px 2px 0 0;
-          animation: csd-bar-rise 1.2s ease-out backwards;
-        }
-        .csd-hero-stage-chart span:nth-child(odd) {
-          background: linear-gradient(180deg, rgba(74,222,128,0.7), rgba(74,222,128,0.2));
-        }
-        .csd-hero-stage-chart span:last-child {
-          background: linear-gradient(180deg, #4ade80, rgba(74,222,128,0.4));
-        }
-        @keyframes csd-bar-rise {
-          from { transform: scaleY(0); transform-origin: bottom; }
-          to { transform: scaleY(1); transform-origin: bottom; }
-        }
-
-        .csd-hero-stage-card-mobile {
-          border-radius: 22px;
-          background: linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
-          padding: 12px 12px 16px;
+        .csd-hero-form-field {
           display: flex;
           flex-direction: column;
+          gap: 8px;
         }
-        .csd-hero-stage-mobile-notch {
-          width: 36%;
-          height: 6px;
-          background: rgba(0,0,0,0.5);
-          border-radius: 0 0 8px 8px;
-          margin: 0 auto 14px;
-        }
-        .csd-hero-stage-mobile-body {
-          padding: 0 4px;
-        }
-        .csd-hero-stage-mobile-greeting {
-          font-size: 9px;
-          color: rgba(255,255,255,0.4);
-          letter-spacing: 0.04em;
-        }
-        .csd-hero-stage-mobile-user {
-          font-family: var(--font-display);
-          font-size: 13px;
-          font-weight: 500;
-          color: #fff;
-          margin-bottom: 12px;
-          letter-spacing: -0.01em;
-        }
-        .csd-hero-stage-mobile-card {
-          background: linear-gradient(135deg, rgba(74,222,128,0.18), rgba(74,222,128,0.04));
-          border: 1px solid rgba(74,222,128,0.25);
-          border-radius: 10px;
-          padding: 10px 12px;
-          margin-bottom: 12px;
-        }
-        .csd-hero-stage-mobile-card-label {
-          font-size: 8px;
-          font-weight: 600;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: rgba(255,255,255,0.5);
-          margin-bottom: 4px;
-        }
-        .csd-hero-stage-mobile-card-value {
-          font-family: var(--font-display);
-          font-size: 16px;
-          font-weight: 500;
-          color: #fff;
-          letter-spacing: -0.02em;
-        }
-        .csd-hero-stage-mobile-list {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        .csd-hero-stage-mobile-list div {
-          height: 18px;
-          background: rgba(255,255,255,0.05);
-          border-radius: 6px;
-        }
-        .csd-hero-stage-mobile-list div:nth-child(2) { background: rgba(255,255,255,0.08); }
-
-        .csd-hero-stage-bottom {
-          display: grid;
-          grid-template-columns: 1fr auto;
-          gap: 14px;
-          align-items: stretch;
-        }
-        .csd-hero-stage-card-code {
-          min-width: 0;
-        }
-        .csd-hero-stage-code {
-          padding: 14px 16px;
-          font-family: var(--font-mono);
+        .csd-hero-form-field span {
           font-size: 11px;
-          line-height: 1.7;
-          color: rgba(255,255,255,0.85);
+          font-weight: 600;
+          letter-spacing: 0.07em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.74);
         }
-        .csd-hero-stage-code > div {
-          opacity: 0;
-          animation: csd-code-line 0.4s ease-out forwards;
+        .csd-hero-form-field input,
+        .csd-hero-form-field select,
+        .csd-hero-form-field textarea {
+          width: 100%;
+          border: 1px solid rgba(255,255,255,0.24);
+          background: rgba(255,255,255,0.06);
+          color: #fff;
+          border-radius: 10px;
+          padding: 12px 12px;
+          font-size: 14px;
+          outline: none;
+          transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
         }
-        .csd-hero-stage-code > div:nth-child(1) { animation-delay: 1.2s; }
-        .csd-hero-stage-code > div:nth-child(2) { animation-delay: 1.5s; }
-        .csd-hero-stage-code > div:nth-child(3) { animation-delay: 1.8s; }
-        .csd-hero-stage-code > div:nth-child(4) { animation-delay: 2.1s; }
-        @keyframes csd-code-line {
-          from { opacity: 0; transform: translateX(-4px); }
-          to { opacity: 1; transform: translateX(0); }
+        .csd-hero-form-field textarea {
+          resize: vertical;
+          min-height: 92px;
         }
-        .csd-code-mute { color: rgba(255,255,255,0.4); }
-        .csd-code-cmd { color: #fff; }
-        .csd-code-flag { color: #fbbf24; }
-        .csd-code-ok { color: #4ade80; }
-
-        .csd-hero-stage-badge {
-          display: inline-flex;
+        .csd-hero-form-field input::placeholder,
+        .csd-hero-form-field textarea::placeholder {
+          color: rgba(255,255,255,0.45);
+        }
+        .csd-hero-form-field select {
+          color: rgba(255,255,255,0.75);
+          appearance: none;
+          background-image:
+            linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.72) 50%),
+            linear-gradient(135deg, rgba(255,255,255,0.72) 50%, transparent 50%);
+          background-position:
+            calc(100% - 18px) calc(1em + 5px),
+            calc(100% - 13px) calc(1em + 5px);
+          background-size: 5px 5px, 5px 5px;
+          background-repeat: no-repeat;
+        }
+        .csd-hero-form-field select:invalid {
+          color: rgba(255,255,255,0.65);
+        }
+        .csd-hero-form-field select option {
+          color: #0a0a0a;
+          background: #ffffff;
+        }
+        .csd-hero-form-field select option[disabled] {
+          color: rgba(10,10,10,0.55);
+        }
+        .csd-hero-form-field input:focus,
+        .csd-hero-form-field select:focus,
+        .csd-hero-form-field textarea:focus {
+          border-color: rgba(59,130,246,0.8);
+          background: rgba(255,255,255,0.09);
+          box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+        .csd-hero-form-foot {
+          display: flex;
           align-items: center;
           gap: 12px;
-          padding: 0 18px;
-          background: rgba(255,255,255,0.95);
-          border-radius: 14px;
-          box-shadow: 0 12px 32px -8px rgba(0,0,0,0.4);
-          white-space: nowrap;
+          margin-top: 6px;
         }
-        .csd-hero-stage-badge-pulse {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background: #4ade80;
-          box-shadow: 0 0 0 0 rgba(74,222,128,0.6);
-          animation: csd-badge-pulse 2s ease-in-out infinite;
+        .csd-hero-form-captcha {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          color: rgba(255,255,255,0.85);
+          font-weight: 600;
+          flex-shrink: 0;
         }
-        @keyframes csd-badge-pulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.6); }
-          50% { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+        .csd-hero-form-captcha input {
+          width: 62px;
+          border: 1px solid rgba(255,255,255,0.24);
+          background: rgba(255,255,255,0.06);
+          color: #fff;
+          border-radius: 8px;
+          padding: 8px 10px;
+          outline: none;
         }
-        .csd-hero-stage-badge-k {
-          font-size: 9px;
+        .csd-hero-form-submit {
+          border: none;
+          border-radius: 999px;
+          padding: 12px 20px;
+          font-size: 13px;
           font-weight: 700;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.45);
-          margin-bottom: 1px;
+          letter-spacing: 0.01em;
+          color: #fff;
+          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+          box-shadow: 0 10px 24px -10px rgba(37,99,235,0.8);
+          cursor: pointer;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .csd-hero-stage-badge-v {
-          font-family: var(--font-display);
-          font-size: 14px;
-          font-weight: 500;
-          color: #0a0a0a;
-          letter-spacing: -0.01em;
-          line-height: 1;
-          font-variant-numeric: tabular-nums;
+        .csd-hero-form-submit:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 14px 28px -12px rgba(37,99,235,0.9);
+        }
+        .csd-hero-form-note {
+          margin: 2px 0 0;
+          font-size: 12px;
+          color: rgba(255,255,255,0.62);
         }
 
         /* HERO bottom marquee */
@@ -2402,9 +2170,9 @@ export default function CustomSoftwarePage() {
           display: grid;
           grid-template-columns: 1.4fr 1fr;
           gap: 60px;
-          align-items: end;
-          margin-bottom: 72px;
-          padding-bottom: 40px;
+          align-items: start;
+          margin-bottom: 56px;
+          padding-bottom: 28px;
         }
         .csd-results-header-left { display: flex; flex-direction: column; gap: 18px; }
         .csd-results-h2 {
@@ -2422,7 +2190,7 @@ export default function CustomSoftwarePage() {
           line-height: 1.7;
           margin: 0;
           max-width: 380px;
-          padding-bottom: 6px;
+          padding-top: 6px;
         }
 
         .csd-results-row {
@@ -2433,7 +2201,7 @@ export default function CustomSoftwarePage() {
           border-bottom: 1px solid rgba(10,10,10,0.1);
         }
         .csd-result-card {
-          padding: 36px 32px 40px;
+          padding: 28px 32px 36px;
           display: flex;
           flex-direction: column;
           gap: 0;
@@ -2805,8 +2573,14 @@ export default function CustomSoftwarePage() {
           .csd-hero-main {
             grid-template-columns: 1fr;
             gap: 64px;
+            min-height: auto;
+          }
+          .csd-hero-left {
+            max-width: 760px;
+            transform: translateY(18px);
           }
           .csd-hero-right { max-width: 720px; margin: 0 auto; width: 100%; }
+          .csd-hero-form-shell { max-width: 100%; }
 
           .csd-cap-row {
             grid-template-columns: 60px 50px 1fr 30px;
@@ -2868,32 +2642,30 @@ export default function CustomSoftwarePage() {
 
         @media (max-width: 768px) {
           .csd-hero {
-            padding: 120px 14px 60px;
+            padding: 130px 14px 60px;
             min-height: auto;
           }
-          .csd-hero-title { font-size: clamp(40px, 13vw, 64px); }
+          .csd-hero-left { transform: none; }
+          .csd-hero-title {
+            font-size: clamp(30px, 8.2vw, 48px);
+            max-width: 100%;
+            margin-bottom: 18px;
+          }
+          .csd-hero-lead { font-size: 16px; }
           .csd-hero-proof {
             grid-template-columns: 1fr 1fr;
             gap: 20px;
           }
-          .csd-hero-stage {
-            padding: 44px 16px 16px;
-            gap: 14px;
-            aspect-ratio: 1.05 / 1;
+          .csd-hero-form-shell {
+            padding: 22px 16px 18px;
+            border-radius: 16px;
           }
-          .csd-hero-stage-row {
-            grid-template-columns: 1fr 36%;
-            gap: 12px;
+          .csd-hero-form-grid { grid-template-columns: 1fr; }
+          .csd-hero-form-foot {
+            flex-direction: column;
+            align-items: stretch;
           }
-          .csd-hero-stage-bottom {
-            grid-template-columns: 1fr;
-            gap: 10px;
-          }
-          .csd-hero-stage-badge {
-            padding: 10px 14px;
-            justify-content: flex-start;
-          }
-          .csd-hero-stage-badge-v { font-size: 13px; }
+          .csd-hero-form-submit { width: 100%; }
           .csd-hero-marquee-row {
             flex-direction: column;
             align-items: flex-start;
