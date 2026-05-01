@@ -65,9 +65,9 @@ type ServiceCategory = {
 
 const SERVICE_CATEGORIES: ServiceCategory[] = [
   {
-    id: "custom-software-digital-solutions",
-    title: "Custom Software & Digital Solutions",
-    href: "/services/custom-software-digital-solutions",
+    id: "custom-software-development",
+    title: "Custom Software Development",
+    href: "/services/custom-software-development",
     blurb: "Product engineering from UX systems to SaaS and mobile delivery.",
     accent: "#f472b6",
     icon: (
@@ -82,12 +82,12 @@ const SERVICE_CATEGORIES: ServiceCategory[] = [
       </svg>
     ),
     links: [
-      { label: "Custom Web Application Development", href: "/services/custom-software-digital-solutions/custom-web-application-development" },
-      { label: "Mobile App Development (iOS & Android)", href: "/services/custom-software-digital-solutions/mobile-app-development-ios-android" },
-      { label: "SaaS Product Development", href: "/services/custom-software-digital-solutions/saas-product-development" },
-      { label: "UI/UX Design Systems", href: "/services/custom-software-digital-solutions/ui-ux-design-systems" },
-      { label: "CMS & Admin Panel Development", href: "/services/custom-software-digital-solutions/cms-admin-panel-development" },
-      { label: "High-Performance Landing Pages", href: "/services/custom-software-digital-solutions/high-performance-landing-pages" },
+      { label: "Custom Web Application Development", href: "/services/custom-software-development/custom-web-application-development" },
+      { label: "Mobile App Development (iOS & Android)", href: "/services/custom-software-development/mobile-app-development-ios-android" },
+      { label: "SaaS Product Development", href: "/services/custom-software-development/saas-product-development" },
+      { label: "UI/UX Design Systems", href: "/services/custom-software-development/ui-ux-design-systems" },
+      { label: "CMS & Admin Panel Development", href: "/services/custom-software-development/cms-admin-panel-development" },
+      { label: "High-Performance Landing Pages", href: "/services/custom-software-development/high-performance-landing-pages" },
     ],
   },
   {
@@ -228,7 +228,7 @@ export default function SiteHeader() {
   // Full-bleed dark heroes: frosted bar + ink nav at top; transparent would read as "mixed" with the hero.
   const darkHeroRoute =
     pathname === "/" ||
-    pathname === "/services/custom-software-digital-solutions";
+    pathname.startsWith("/services/custom-software-development");
   const headerTheme = darkHeroRoute && !scrolled ? "dark" : "light";
 
   return (

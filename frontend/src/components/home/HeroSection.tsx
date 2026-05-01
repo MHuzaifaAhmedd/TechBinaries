@@ -748,7 +748,7 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
                 className="hero-cta-primary"
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 8,
-                  background: "#0a0a0a", color: "#fafaf9",
+                  background: "#ffffff", color: "#0a0a0a",
                   textDecoration: "none", fontWeight: 500,
                   borderRadius: 999, position: "relative", overflow: "hidden",
                 }}
