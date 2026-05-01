@@ -414,12 +414,6 @@ export default function CustomSoftwarePage() {
                       <path d="M2.5 6h7M6 2.5L9.5 6 6 9.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </Link>
-                  <a href="#capabilities" className="csd-cta-ghost-light">
-                    <span>Explore capabilities</span>
-                    <svg aria-hidden width="12" height="12" viewBox="0 0 12 12">
-                      <path d="M6 2.5v7M3 6.5 6 9.5 9 6.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
                 </div>
 
               </div>
@@ -1044,8 +1038,8 @@ export default function CustomSoftwarePage() {
           align-items: center;
           gap: 8px;
           padding: 15px 28px;
-          background: #0a0a0a;
-          color: #fafaf9;
+          background: #ffffff;
+          color: #0a0a0a;
           text-decoration: none;
           font-size: 14px;
           font-weight: 500;
@@ -1056,7 +1050,7 @@ export default function CustomSoftwarePage() {
         .csd-cta-primary::before {
           content: "";
           position: absolute; inset: 0;
-          background: linear-gradient(90deg, #262626, #0a0a0a);
+          background: linear-gradient(90deg, #e7e5e4, #ffffff);
           transform: translateX(-101%);
           transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
           z-index: 1;
@@ -1592,7 +1586,8 @@ export default function CustomSoftwarePage() {
         ═══════════════════════════════════════════════════════════════ */
         .csd-cost-section {
           background: #f5f5f4;
-          padding-left: clamp(14px, 2.4vw, 32px);
+          padding-left: max(clamp(14px, 2.4vw, 32px), env(safe-area-inset-left, 0px));
+          padding-right: max(clamp(14px, 2.4vw, 32px), env(safe-area-inset-right, 0px));
         }
 
         .csd-cost-grid {
@@ -1601,6 +1596,8 @@ export default function CustomSoftwarePage() {
           gap: 0;
           align-items: stretch;
           min-height: 620px;
+          width: 100%;
+          box-sizing: border-box;
         }
 
         .csd-cost-media {
@@ -1608,14 +1605,16 @@ export default function CustomSoftwarePage() {
           overflow: hidden;
           background: #0a0a0a;
           min-height: 480px;
+          min-width: 0;
           border-radius: clamp(20px, 2.4vw, 32px);
         }
         .csd-cost-media img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: center;
           display: block;
-          filter: grayscale(1) contrast(1.05);
+          filter: saturate(1.08) contrast(1.04);
           transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .csd-cost-section:hover .csd-cost-media img {
@@ -1976,7 +1975,8 @@ export default function CustomSoftwarePage() {
         .csd-vp-section {
           background: #fafaf9;
           border-top: 1px solid rgba(0,0,0,0.06);
-          padding-right: clamp(14px, 2.4vw, 32px);
+          padding-left: max(clamp(14px, 2.4vw, 32px), env(safe-area-inset-left, 0px));
+          padding-right: max(clamp(14px, 2.4vw, 32px), env(safe-area-inset-right, 0px));
         }
 
         .csd-vp-grid {
@@ -1985,6 +1985,8 @@ export default function CustomSoftwarePage() {
           gap: 0;
           align-items: stretch;
           min-height: 620px;
+          width: 100%;
+          box-sizing: border-box;
         }
 
         .csd-vp-content {
@@ -2141,14 +2143,16 @@ export default function CustomSoftwarePage() {
           width: min(100%, 840px);
           height: 760px;
           min-height: 0;
+          min-width: 0;
           border-radius: clamp(20px, 2.4vw, 32px);
         }
         .csd-vp-media img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: center;
           display: block;
-          filter: grayscale(1) contrast(1.05);
+          filter: saturate(1.08) contrast(1.04);
           transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .csd-vp-section:hover .csd-vp-media img {
@@ -2607,6 +2611,10 @@ export default function CustomSoftwarePage() {
             min-height: auto;
           }
           .csd-cost-media {
+            width: 100%;
+            max-width: 100%;
+            justify-self: stretch;
+            margin-inline: 0;
             min-height: 360px;
             aspect-ratio: 16 / 9;
           }
@@ -2623,8 +2631,10 @@ export default function CustomSoftwarePage() {
             align-self: stretch;
             justify-self: stretch;
             width: 100%;
+            max-width: 100%;
             height: auto;
             min-height: 360px;
+            min-width: 0;
             aspect-ratio: 16 / 9;
             margin: 0;
           }
@@ -2716,9 +2726,13 @@ export default function CustomSoftwarePage() {
           .csd-cap-row-num { display: none; }
           .csd-cap-row-title { font-size: 19px; }
 
+          .csd-cost-section {
+            padding-left: max(14px, env(safe-area-inset-left, 0px));
+            padding-right: max(14px, env(safe-area-inset-right, 0px));
+          }
           .csd-cost-media { min-height: 280px; aspect-ratio: 4 / 3; }
           .csd-cost-media-tag { top: 18px; left: 18px; padding: 6px 12px; font-size: 10px; }
-          .csd-cost-content { padding: 56px 22px 64px; }
+          .csd-cost-content { padding: 56px 0 64px; }
           .csd-cost-h2 { font-size: clamp(28px, 8vw, 38px); }
           .csd-cost-lead { font-size: 15px; }
           .csd-cost-list li { font-size: 14px; }
@@ -2741,8 +2755,11 @@ export default function CustomSoftwarePage() {
           .csd-build-frame-market    { width: 42%; }
 
           /* WHY TEAMS CHOOSE US */
-          .csd-vp-section { padding-right: 14px; }
-          .csd-vp-content { padding: 56px 22px 64px; }
+          .csd-vp-section {
+            padding-left: max(14px, env(safe-area-inset-left, 0px));
+            padding-right: max(14px, env(safe-area-inset-right, 0px));
+          }
+          .csd-vp-content { padding: 56px 0 64px; }
           .csd-vp-h2 { font-size: clamp(28px, 8vw, 38px); }
           .csd-vp-lead { font-size: 15px; }
           .csd-vp-list { gap: 12px; }
@@ -2765,7 +2782,14 @@ export default function CustomSoftwarePage() {
           }
           .csd-vp-item-metric-value { font-size: 16px; }
           .csd-vp-item-desc { max-width: 100%; }
-          .csd-vp-media { min-height: 280px; aspect-ratio: 4 / 3; }
+          .csd-vp-media {
+            min-height: 280px;
+            aspect-ratio: 4 / 3;
+            width: 100%;
+            max-width: 100%;
+            justify-self: stretch;
+            margin-inline: 0;
+          }
 
           /* RESULTS */
           .csd-results-section { padding: 90px 14px; }
