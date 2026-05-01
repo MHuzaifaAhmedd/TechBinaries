@@ -1639,6 +1639,10 @@ const PAGE = {
     "Production-grade web applications built on modern stacks — Next.js, React, Node, Postgres — tuned for speed, resilience, and architecture that won't need a rewrite in two years.",
 };
 
+const HERO_PHONE_COUNTRY_CODES = [
+  "+92", "+1", "+44", "+971", "+91", "+61", "+49", "+966", "+65", "+86",
+];
+
 const GROWTH = {
   image:
     "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=1400&q=80&auto=format&fit=crop",
@@ -1727,8 +1731,6 @@ export default function CustomWebAppPage() {
   const [activeStack, setActiveStack] = useState(0);
   const lenisRef = useRef<Lenis | null>(null);
 
-  const heroCanvasRef = useRef<HTMLDivElement>(null);
-
   // Lenis smooth scroll
   useEffect(() => {
     const lenis = new Lenis({
@@ -1748,22 +1750,6 @@ export default function CustomWebAppPage() {
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, []);
-
-  // Hero: parallax on canvas + cursor-following spotlight
-  useEffect(() => {
-    const canvas = heroCanvasRef.current;
-    if (!canvas) return;
-
-    const onMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      canvas.style.setProperty("--mx", `${x}%`);
-      canvas.style.setProperty("--my", `${y}%`);
-    };
-    canvas.addEventListener("mousemove", onMove);
-    return () => canvas.removeEventListener("mousemove", onMove);
   }, []);
 
   // Animated counter
@@ -1814,16 +1800,22 @@ export default function CustomWebAppPage() {
         0.55
       );
       heroTl.fromTo(
-        ".cwa-hero-canvas",
+        ".cwa-hero-copy",
         { opacity: 0, scale: 0.95 },
         { opacity: 1, scale: 1, duration: 1.2, ease: "power3.out" },
         0.3
       );
       heroTl.fromTo(
-        ".cwa-hero-canvas-row",
-        { opacity: 0, x: -20 },
-        { opacity: 1, x: 0, duration: 0.5, stagger: 0.06, ease: "power3.out" },
-        1
+        ".csd-hero-form-shell",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" },
+        0.4
+      );
+      heroTl.fromTo(
+        ".csd-hero-form-field",
+        { opacity: 0, y: 16, scale: 0.96 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.12, ease: "power3.out" },
+        0.7
       );
 
       // ── SECTION HEADER REVEALS ──
@@ -1942,122 +1934,141 @@ export default function CustomWebAppPage() {
             being built. Better than a stock photo.
         ═══════════════════════════════════════════════════════════════ */}
         <section className="cwa-hero" aria-labelledby="cwa-hero-title">
+          <div className="cwa-hero-video-wrap" aria-hidden>
+            <video className="cwa-hero-bg-video" autoPlay muted loop playsInline preload="metadata">
+              <source
+                src="/videos/services/Custom%20Software%20Development/custom-web-application-development/service-cwad-hero.mp4"
+                type="video/mp4"
+                media="(min-width: 901px)"
+              />
+            </video>
+            <img
+              className="cwa-hero-mobile-bg"
+              src="/images/services/custom-software-development/cwad-service-hero-mobile.jpeg"
+              alt=""
+              decoding="async"
+              fetchPriority="high"
+            />
+            <div className="cwa-hero-bg-overlay" />
+            <div className="cwa-hero-bg-spotlight" />
+          </div>
+
           <div className="cwa-hero-inner">
-            <div className="cwa-hero-grid">
-              {/* LEFT — copy */}
-              <div className="cwa-hero-copy">
-                <h1 id="cwa-hero-title" className="cwa-hero-title">
-                  <span className="cwa-h1-line">
-                    {PAGE.headline1.split("").map((c, i) => (
-                      <span key={`a-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
-                    ))}
-                  </span>
-                  <span className="cwa-h1-line">
-                    {PAGE.headline2.split("").map((c, i) => (
-                      <span key={`b-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
-                    ))}
-                  </span>
-                  <span className="cwa-h1-line">
-                    <span className="cwa-h1-italic">
-                      {PAGE.headlineItalic.split("").map((c, i) => (
-                        <span key={`c-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
+            <div className="csd-hero-main">
+              <div className="csd-hero-left">
+                <div className="csd-hero-mobile-spacer" aria-hidden />
+                <div className="cwa-hero-copy">
+                  <h1 id="cwa-hero-title" className="cwa-hero-title">
+                    <span className="cwa-h1-line">
+                      {PAGE.headline1.split("").map((c, i) => (
+                        <span key={`a-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
                       ))}
                     </span>
-                  </span>
-                </h1>
-
-                <p className="cwa-hero-fade cwa-hero-lead" style={{ opacity: 0 }}>
-                  {PAGE.lead}
-                </p>
-
-                <div className="cwa-hero-fade cwa-hero-cta-row" style={{ opacity: 0 }}>
-                  <Link href="/contact" className="cwa-cta-primary">
-                    <span className="cwa-cta-primary-label">Plan my build</span>
-                    <span className="cwa-cta-primary-arrow" aria-hidden>
-                      <svg width="14" height="14" viewBox="0 0 14 14">
-                        <path d="M3 7h8M7 3l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                    <span className="cwa-h1-line">
+                      {PAGE.headline2.split("").map((c, i) => (
+                        <span key={`b-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
+                      ))}
                     </span>
-                  </Link>
-                </div>
-              </div>
-
-              {/* RIGHT — system canvas */}
-              <div className="cwa-hero-canvas" ref={heroCanvasRef} aria-hidden>
-                <div className="cwa-hero-canvas-spot" />
-                <div className="cwa-hero-canvas-grid" />
-
-                <div className="cwa-hero-canvas-chrome">
-                  <div className="cwa-hero-canvas-dots">
-                    <span /><span /><span />
-                  </div>
-                  <div className="cwa-hero-canvas-url">
-                    <span className="cwa-hero-canvas-url-lock">●</span>
-                    yourcompany.app
-                  </div>
-                  <div className="cwa-hero-canvas-meta">200 OK · 142ms</div>
-                </div>
-
-                <div className="cwa-hero-canvas-body">
-                  <div className="cwa-hero-canvas-row" style={{ opacity: 0 }}>
-                    <span className="cwa-hcr-label">GET</span>
-                    <span className="cwa-hcr-path">/api/dashboard</span>
-                    <span className="cwa-hcr-stat ok">200</span>
-                    <span className="cwa-hcr-time">42ms</span>
-                  </div>
-                  <div className="cwa-hero-canvas-row" style={{ opacity: 0 }}>
-                    <span className="cwa-hcr-label">POST</span>
-                    <span className="cwa-hcr-path">/api/orders</span>
-                    <span className="cwa-hcr-stat ok">201</span>
-                    <span className="cwa-hcr-time">88ms</span>
-                  </div>
-                  <div className="cwa-hero-canvas-row" style={{ opacity: 0 }}>
-                    <span className="cwa-hcr-label">GET</span>
-                    <span className="cwa-hcr-path">/api/users/me</span>
-                    <span className="cwa-hcr-stat ok">200</span>
-                    <span className="cwa-hcr-time">17ms</span>
-                  </div>
-
-                  <div className="cwa-hero-canvas-divider" />
-
-                  <div className="cwa-hero-canvas-stats">
-                    <div className="cwa-hero-canvas-row" style={{ opacity: 0 }}>
-                      <div className="cwa-hcs-block">
-                        <div className="cwa-hcs-k">P95</div>
-                        <div className="cwa-hcs-v"><span className="cwa-count" data-target="142" data-suffix="ms">0ms</span></div>
-                      </div>
-                      <div className="cwa-hcs-block">
-                        <div className="cwa-hcs-k">Uptime</div>
-                        <div className="cwa-hcs-v"><span className="cwa-count" data-target="99.99" data-decimals="2" data-suffix="%">0%</span></div>
-                      </div>
-                      <div className="cwa-hcs-block">
-                        <div className="cwa-hcs-k">CWV</div>
-                        <div className="cwa-hcs-v cwa-hcs-v-good">PASS</div>
-                      </div>
-                    </div>
-
-                    <div className="cwa-hero-canvas-row" style={{ opacity: 0 }}>
-                      <div className="cwa-hero-canvas-bars" aria-hidden>
-                        {[40, 65, 48, 80, 55, 92, 70, 88, 60, 95, 75, 100].map((h, i) => (
-                          <span key={i} style={{ height: `${h}%` }} />
+                    <span className="cwa-h1-line">
+                      <span className="cwa-h1-italic">
+                        {PAGE.headlineItalic.split("").map((c, i) => (
+                          <span key={`c-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
                         ))}
-                      </div>
-                    </div>
-                  </div>
+                      </span>
+                    </span>
+                  </h1>
 
-                  <div className="cwa-hero-canvas-foot cwa-hero-canvas-row" style={{ opacity: 0 }}>
-                    <span className="cwa-hcf-pulse" />
-                    <span>Production · live</span>
-                    <span className="cwa-hcf-spacer" />
-                    <span className="cwa-hcf-build">build #2,847</span>
+                  <p className="cwa-hero-fade cwa-hero-lead" style={{ opacity: 0 }}>
+                    {PAGE.lead}
+                  </p>
+
+                  <div className="cwa-hero-fade cwa-hero-cta-row" style={{ opacity: 0 }}>
+                    <Link href="/contact" className="csd-cta-primary">
+                      <span style={{ position: "relative", zIndex: 2 }}>Plan my build</span>
+                      <svg aria-hidden width="12" height="12" viewBox="0 0 12 12" className="csd-cta-arrow" style={{ position: "relative", zIndex: 2 }}>
+                        <path d="M2.5 6h7M6 2.5L9.5 6 6 9.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </Link>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="cwa-hero-scroll" aria-hidden>
-              <span>Scroll</span>
-              <span className="cwa-hero-scroll-line" />
+              <div className="csd-hero-right">
+                <div className="csd-hero-form-shell" style={{ opacity: 0 }}>
+                  <h3 className="csd-hero-form-title">Share Your Requirements</h3>
+                  <p className="csd-hero-form-subtitle">
+                    Tell our experts about your goals and get a tailored consultation plan.
+                  </p>
+
+                  <form className="csd-hero-form" onSubmit={(e) => e.preventDefault()}>
+                    <label className="csd-hero-form-field">
+                      <span>Name</span>
+                      <input type="text" placeholder="Your name" />
+                    </label>
+
+                    <div className="csd-hero-form-grid">
+                      <label className="csd-hero-form-field csd-hero-form-field--phone">
+                        <span>Contact Number</span>
+                        <div className="csd-hero-phone-row">
+                          <select
+                            className="csd-hero-phone-cc"
+                            name="countryCode"
+                            aria-label="Country calling code"
+                            defaultValue="+92"
+                          >
+                            {HERO_PHONE_COUNTRY_CODES.map((code) => (
+                              <option key={code} value={code}>
+                                {code}
+                              </option>
+                            ))}
+                          </select>
+                          <span className="csd-hero-phone-sep" aria-hidden />
+                          <input
+                            className="csd-hero-phone-num"
+                            type="tel"
+                            name="phoneNational"
+                            placeholder="Enter Your Number*"
+                            autoComplete="tel-national"
+                            aria-label="Phone number"
+                            required
+                          />
+                        </div>
+                      </label>
+                      <label className="csd-hero-form-field">
+                        <span>Work Email</span>
+                        <input type="email" placeholder="Enter your email address" />
+                      </label>
+                    </div>
+
+                    <label className="csd-hero-form-field">
+                      <span>Budget Range</span>
+                      <select defaultValue="">
+                        <option value="" disabled>Select a budget range</option>
+                        <option value="under-10k">Under $10k</option>
+                        <option value="10k-25k">$10k - $25k</option>
+                        <option value="25k-50k">$25k - $50k</option>
+                        <option value="50k-plus">$50k+</option>
+                      </select>
+                    </label>
+
+                    <label className="csd-hero-form-field">
+                      <span>Describe your project</span>
+                      <textarea rows={3} placeholder="Describe your project" />
+                    </label>
+
+                    <div className="csd-hero-form-foot">
+                      <div className="csd-hero-form-captcha">
+                        <span>5 + 2 =</span>
+                        <input type="text" inputMode="numeric" aria-label="Simple captcha answer" />
+                      </div>
+                      <button type="submit" className="csd-hero-form-submit">
+                        Schedule a Technical Consultation
+                      </button>
+                    </div>
+                    <p className="csd-hero-form-note">Fast, high-touch engagement under strict NDA protection.</p>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -2576,35 +2587,331 @@ export default function CustomWebAppPage() {
         ═══════════════════════════════════════════════════════════════ */
         .cwa-hero {
           position: relative;
-          padding: clamp(140px, 18vh, 200px) 20px clamp(72px, 9vh, 110px);
-          background: #fafaf9;
+          min-height: 100vh;
+          padding: clamp(150px, 17vh, 190px) 20px 56px;
+          background: #0a0a0a;
           overflow: hidden;
         }
-        .cwa-hero::before {
-          content: "";
+        .cwa-hero-video-wrap {
           position: absolute;
           inset: 0;
-          background-image:
-            linear-gradient(rgba(10,10,10,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(10,10,10,0.025) 1px, transparent 1px);
-          background-size: 64px 64px;
-          mask-image: radial-gradient(ellipse 75% 70% at 50% 35%, black 0%, transparent 95%);
-          -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 35%, black 0%, transparent 95%);
           pointer-events: none;
+          z-index: 0;
+        }
+        .cwa-hero-bg-video {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+          z-index: 0;
+          pointer-events: none;
+        }
+        .cwa-hero-mobile-bg {
+          display: none;
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center 28%;
+          z-index: 0;
+          pointer-events: none;
+        }
+        .cwa-hero-bg-overlay {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+          background:
+            linear-gradient(90deg, rgba(0,0,0,0.76) 0%, rgba(0,0,0,0.64) 36%, rgba(0,0,0,0.42) 62%, rgba(0,0,0,0.24) 82%, rgba(0,0,0,0.16) 100%),
+            linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.58) 100%);
+        }
+        .cwa-hero-bg-spotlight {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+          background: radial-gradient(1000px 520px at 18% 36%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 34%, transparent 72%);
+          mix-blend-mode: screen;
         }
         .cwa-hero-inner {
           position: relative;
           max-width: 1320px;
           margin: 0 auto;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 56px;
         }
-        .cwa-hero-grid {
+        .cwa-hero .csd-hero-main {
           display: grid;
-          grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-          gap: clamp(40px, 5vw, 88px);
+          grid-template-columns: minmax(0, 1.15fr) minmax(420px, 0.85fr);
+          gap: clamp(32px, 4vw, 64px);
           align-items: center;
-          min-height: calc(100vh - 280px);
+          min-height: calc(100vh - 246px);
+        }
+        .cwa-hero .csd-hero-left {
+          min-width: 0;
+          max-width: 780px;
+          transform: translateY(clamp(22px, 4vh, 48px));
+        }
+        .cwa-hero .csd-hero-mobile-spacer {
+          display: none;
         }
         .cwa-hero-copy { min-width: 0; }
+
+        /* HERO FORM — same as Custom Software Development service page (scoped) */
+        .cwa-hero .csd-hero-right {
+          position: relative;
+          align-self: stretch;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .cwa-hero .csd-hero-form-shell {
+          position: relative;
+          width: 100%;
+          max-width: 540px;
+          margin-left: auto;
+          padding: 28px 26px 24px;
+          border-radius: 20px;
+          overflow: hidden;
+          border: 1px solid rgba(255,255,255,0.2);
+          backdrop-filter: blur(10px);
+          background:
+            linear-gradient(145deg, rgba(12,12,12,0.68) 0%, rgba(12,12,12,0.45) 100%);
+          box-shadow:
+            0 36px 84px -32px rgba(0,0,0,0.62),
+            inset 0 1px 0 rgba(255,255,255,0.18);
+        }
+        .cwa-hero .csd-hero-form-title {
+          margin: 0;
+          font-family: var(--font-display);
+          font-size: clamp(26px, 2.6vw, 36px);
+          font-weight: 500;
+          letter-spacing: -0.03em;
+          color: #fff;
+          line-height: 1.05;
+        }
+        .cwa-hero .csd-hero-form-subtitle {
+          margin: 10px 0 20px;
+          color: rgba(255,255,255,0.72);
+          font-size: 14px;
+          line-height: 1.6;
+          max-width: 44ch;
+        }
+        .cwa-hero .csd-hero-form {
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+        }
+        .cwa-hero .csd-hero-form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+        }
+        .cwa-hero .csd-hero-form-field {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .cwa-hero .csd-hero-form-field span {
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.07em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.74);
+        }
+        .cwa-hero .csd-hero-phone-row {
+          display: flex;
+          align-items: stretch;
+          width: 100%;
+          border: none;
+          border-radius: 0;
+          background: transparent;
+          border-bottom: 1px solid rgba(255,255,255,0.42);
+          overflow: visible;
+          transition: border-color 0.2s;
+        }
+        .cwa-hero .csd-hero-form-field--phone:focus-within .csd-hero-phone-row {
+          border-bottom-color: rgba(96, 165, 250, 0.95);
+          box-shadow: none;
+          background: transparent;
+        }
+        .cwa-hero .csd-hero-phone-sep {
+          width: 1px;
+          align-self: center;
+          height: 1.15em;
+          background: rgba(255,255,255,0.38);
+          flex-shrink: 0;
+          margin: 0 10px 0 0;
+        }
+        .cwa-hero .csd-hero-form-field input,
+        .cwa-hero .csd-hero-form-field select,
+        .cwa-hero .csd-hero-form-field textarea {
+          width: 100%;
+          border: none;
+          border-radius: 0;
+          background: transparent;
+          color: #fff;
+          border-bottom: 1px solid rgba(255,255,255,0.42);
+          padding: 10px 0 14px;
+          font-size: 14px;
+          outline: none;
+          box-shadow: none;
+          transition: border-color 0.2s;
+        }
+        .cwa-hero .csd-hero-form-field textarea {
+          resize: vertical;
+          min-height: 92px;
+        }
+        .cwa-hero .csd-hero-form-field input::placeholder,
+        .cwa-hero .csd-hero-form-field textarea::placeholder {
+          color: rgba(255,255,255,0.45);
+        }
+        .cwa-hero .csd-hero-form-field select {
+          color: rgba(255,255,255,0.75);
+          appearance: none;
+          background-color: transparent;
+          background-image:
+            linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.72) 50%),
+            linear-gradient(135deg, rgba(255,255,255,0.72) 50%, transparent 50%);
+          background-position:
+            calc(100% - 4px) calc(1em + 6px),
+            calc(100% - 0px) calc(1em + 6px);
+          background-size: 5px 5px, 5px 5px;
+          background-repeat: no-repeat;
+        }
+        .cwa-hero .csd-hero-form-field select:invalid {
+          color: rgba(255,255,255,0.65);
+        }
+        .cwa-hero .csd-hero-form-field select option {
+          color: #0a0a0a;
+          background: #ffffff;
+        }
+        .cwa-hero .csd-hero-form-field select option[disabled] {
+          color: rgba(10,10,10,0.55);
+        }
+        .cwa-hero .csd-hero-form-field input:focus,
+        .cwa-hero .csd-hero-form-field select:focus,
+        .cwa-hero .csd-hero-form-field textarea:focus {
+          border-bottom-color: rgba(96, 165, 250, 0.95);
+          box-shadow: none;
+          background: transparent;
+        }
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-cc,
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-num {
+          width: auto !important;
+          border: none !important;
+          border-radius: 0 !important;
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-cc {
+          flex: 0 0 auto;
+          min-width: 84px;
+          max-width: 110px;
+          padding: 10px 26px 14px 0 !important;
+          color: rgba(255,255,255,0.78) !important;
+        }
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-num {
+          flex: 1 1 auto;
+          min-width: 0;
+          padding: 10px 0 14px 0 !important;
+        }
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-cc:focus,
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-num:focus {
+          box-shadow: none !important;
+          border: none !important;
+          background: transparent !important;
+        }
+        .cwa-hero .csd-hero-form input:-webkit-autofill,
+        .cwa-hero .csd-hero-form input:-webkit-autofill:hover,
+        .cwa-hero .csd-hero-form input:-webkit-autofill:focus,
+        .cwa-hero .csd-hero-form input:-webkit-autofill:active,
+        .cwa-hero .csd-hero-form textarea:-webkit-autofill,
+        .cwa-hero .csd-hero-form textarea:-webkit-autofill:hover,
+        .cwa-hero .csd-hero-form textarea:-webkit-autofill:focus,
+        .cwa-hero .csd-hero-form textarea:-webkit-autofill:active,
+        .cwa-hero .csd-hero-form select:-webkit-autofill,
+        .cwa-hero .csd-hero-form select:-webkit-autofill:hover,
+        .cwa-hero .csd-hero-form select:-webkit-autofill:focus,
+        .cwa-hero .csd-hero-form select:-webkit-autofill:active {
+          -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
+          caret-color: #fff;
+          transition: background-color 99999s ease-out 0s;
+          -webkit-box-shadow: 0 0 0 1000px #0c0c0c inset !important;
+          box-shadow: 0 0 0 1000px #0c0c0c inset !important;
+        }
+        .cwa-hero .csd-hero-form input:autofill,
+        .cwa-hero .csd-hero-form textarea:autofill,
+        .cwa-hero .csd-hero-form select:autofill {
+          -webkit-text-fill-color: rgba(255, 255, 255, 0.95);
+          color: rgba(255, 255, 255, 0.95) !important;
+        }
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-cc:-webkit-autofill,
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-cc:-webkit-autofill:hover,
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-cc:-webkit-autofill:focus,
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-num:-webkit-autofill,
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-num:-webkit-autofill:hover,
+        .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-num:-webkit-autofill:focus {
+          -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
+          -webkit-box-shadow: 0 0 0 1000px #0c0c0c inset !important;
+          box-shadow: 0 0 0 1000px #0c0c0c inset !important;
+        }
+        .cwa-hero .csd-hero-form-foot {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-top: 6px;
+        }
+        .cwa-hero .csd-hero-form-captcha {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          color: rgba(255,255,255,0.85);
+          font-weight: 600;
+          flex-shrink: 0;
+        }
+        .cwa-hero .csd-hero-form-captcha input {
+          width: 56px;
+          border: none;
+          border-radius: 0;
+          background: transparent;
+          color: #fff;
+          border-bottom: 1px solid rgba(255,255,255,0.42);
+          padding: 8px 0 10px;
+          outline: none;
+          box-shadow: none;
+          transition: border-color 0.2s;
+        }
+        .cwa-hero .csd-hero-form-captcha input:focus {
+          border-bottom-color: rgba(96, 165, 250, 0.95);
+        }
+        .cwa-hero .csd-hero-form-submit {
+          border: none;
+          border-radius: 999px;
+          padding: 12px 20px;
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.01em;
+          color: #fff;
+          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+          box-shadow: 0 10px 24px -10px rgba(37,99,235,0.8);
+          cursor: pointer;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .cwa-hero .csd-hero-form-submit:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 14px 28px -12px rgba(37,99,235,0.9);
+        }
+        .cwa-hero .csd-hero-form-note {
+          margin: 2px 0 0;
+          font-size: 12px;
+          color: rgba(255,255,255,0.62);
+        }
 
         .cwa-crumb {
           display: inline-flex;
@@ -2653,31 +2960,75 @@ export default function CustomWebAppPage() {
 
         .cwa-hero-title {
           font-family: var(--font-display);
-          font-size: clamp(38px, 5.6vw, 84px);
+          font-size: clamp(40px, 4.5vw, 72px);
           font-weight: 500;
-          letter-spacing: -0.042em;
-          line-height: 0.99;
+          line-height: 0.98;
+          letter-spacing: -0.045em;
           margin: 0 0 26px;
-          color: #0a0a0a;
+          color: #fff;
+          max-width: 720px;
+          text-shadow: 0 10px 30px rgba(0,0,0,0.34);
         }
-        .cwa-h1-line { display: block; padding-bottom: 0.05em; overflow: hidden; }
+        .cwa-h1-line {
+          overflow: visible;
+          padding-bottom: 0.075em;
+          display: block;
+          white-space: nowrap;
+          width: 100%;
+        }
         .cwa-h1-char { display: inline-block; will-change: transform; }
-        .cwa-h1-italic { font-style: italic; font-weight: 400; color: rgba(10,10,10,0.55); }
+        .cwa-h1-italic {
+          font-style: italic;
+          font-weight: 400;
+          color: rgba(255,255,255,0.96);
+          display: inline-block;
+          white-space: nowrap;
+          padding: 0 0.08em;
+          border-radius: 0.16em;
+          background: rgba(255,255,255,0.08);
+          text-shadow: 0 8px 24px rgba(0,0,0,0.36);
+        }
 
         .cwa-hero-lead {
-          font-size: 16px;
-          color: rgba(10,10,10,0.65);
-          line-height: 1.72;
-          max-width: 540px;
+          font-size: 17px;
+          color: rgba(255,255,255,0.84);
+          max-width: 600px;
+          line-height: 1.7;
           margin: 0 0 32px;
+          text-shadow: 0 6px 18px rgba(0,0,0,0.28);
         }
 
         .cwa-hero-cta-row {
           display: flex;
           gap: 12px;
           flex-wrap: wrap;
-          margin-bottom: 56px;
+          margin-bottom: 48px;
         }
+        .cwa-hero .csd-cta-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 15px 28px;
+          background: #ffffff;
+          color: #0a0a0a;
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 500;
+          border-radius: 999px;
+          position: relative;
+          overflow: hidden;
+        }
+        .cwa-hero .csd-cta-primary::before {
+          content: "";
+          position: absolute; inset: 0;
+          background: linear-gradient(90deg, #e7e5e4, #ffffff);
+          transform: translateX(-101%);
+          transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+          z-index: 1;
+        }
+        .cwa-hero .csd-cta-primary:hover::before { transform: translateX(0); }
+        .cwa-hero .csd-cta-primary:hover .csd-cta-arrow { transform: translateX(2px); }
+        .cwa-hero .csd-cta-arrow { transition: transform 0.25s ease; }
 
         /* hero metrics — 4-up bordered */
         .cwa-hero-metrics {
@@ -2916,41 +3267,6 @@ export default function CustomWebAppPage() {
           font-family: var(--font-mono);
           font-size: 10px;
           color: rgba(255,255,255,0.35);
-        }
-
-        /* hero scroll indicator */
-        .cwa-hero-scroll {
-          position: absolute;
-          bottom: -10px;
-          left: 0;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          font-family: var(--font-mono);
-          font-size: 10px;
-          font-weight: 600;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.4);
-        }
-        .cwa-hero-scroll-line {
-          width: 32px;
-          height: 1px;
-          background: rgba(10,10,10,0.2);
-          position: relative;
-          overflow: hidden;
-        }
-        .cwa-hero-scroll-line::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: rgba(10,10,10,0.6);
-          animation: cwa-scroll-line 2.4s ease-in-out infinite;
-        }
-        @keyframes cwa-scroll-line {
-          0% { transform: translateX(-100%); }
-          50% { transform: translateX(0); }
-          100% { transform: translateX(100%); }
         }
 
         /* ═══════════════════════════════════════════════════════════════
@@ -3858,9 +4174,15 @@ export default function CustomWebAppPage() {
            RESPONSIVE
         ═══════════════════════════════════════════════════════════════ */
         @media (max-width: 1100px) {
-          .cwa-hero-grid { grid-template-columns: 1fr; gap: 56px; min-height: auto; }
+          .cwa-hero .csd-hero-main {
+            grid-template-columns: 1fr;
+            gap: 64px;
+            min-height: auto;
+          }
+          .cwa-hero .csd-hero-left { max-width: 760px; }
+          .cwa-hero .csd-hero-right { max-width: 720px; margin: 0 auto; width: 100%; }
+          .cwa-hero .csd-hero-form-shell { max-width: 100%; }
           .cwa-hero-canvas { max-width: 580px; margin: 0 auto; width: 100%; aspect-ratio: 16 / 17; }
-          .cwa-hero-scroll { display: none; }
 
           .cwa-growth-grid { grid-template-columns: 1fr; gap: 48px; }
           .cwa-growth-media-wrap { position: static; }
@@ -3911,13 +4233,190 @@ export default function CustomWebAppPage() {
           .cwa-cta-grid { grid-template-columns: 1fr; gap: 48px; align-items: start; }
         }
 
+        @media (max-width: 1100px) and (min-width: 901px) {
+          .cwa-hero .csd-hero-left {
+            transform: translateY(18px);
+          }
+        }
+
+        @media (max-width: 900px) {
+          .cwa-hero-bg-video {
+            display: none;
+          }
+          .cwa-hero-mobile-bg {
+            display: block;
+          }
+          .cwa-hero-bg-overlay {
+            background:
+              linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.78) 55%, rgba(0,0,0,0.88) 100%),
+              linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.4) 100%);
+          }
+          .cwa-hero {
+            padding: clamp(96px, 14svh, 128px) 14px 0;
+          }
+          .cwa-hero .csd-hero-mobile-spacer {
+            display: block;
+            flex: 1 1 auto;
+            min-height: min(26vh, 220px);
+            max-height: 44vh;
+          }
+          .cwa-hero .csd-hero-left {
+            display: flex;
+            flex-direction: column;
+            min-height: min(58svh, 580px);
+            transform: none;
+            max-width: none;
+          }
+          .cwa-hero-title {
+            font-size: clamp(28px, 7vw, 40px);
+            line-height: 1.02;
+            margin-bottom: 16px;
+          }
+          .cwa-hero-lead {
+            font-size: 15px;
+            line-height: 1.62;
+            margin-bottom: 24px;
+            max-width: none;
+          }
+          .cwa-hero-inner {
+            gap: 0;
+          }
+          .cwa-hero .csd-hero-main {
+            min-height: auto;
+            gap: 0;
+          }
+          .cwa-hero .csd-hero-right {
+            align-self: stretch;
+            width: 100%;
+            margin-top: 0;
+            align-items: stretch;
+          }
+          .cwa-hero .csd-hero-form-shell {
+            max-width: none;
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 22px;
+            padding: 32px 20px 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background:
+              linear-gradient(145deg, rgba(12,12,12,0.68) 0%, rgba(12,12,12,0.45) 100%);
+            box-shadow:
+              0 36px 84px -32px rgba(0,0,0,0.62),
+              inset 0 1px 0 rgba(255,255,255,0.18);
+          }
+          .cwa-hero .csd-hero-form-subtitle {
+            max-width: none;
+          }
+          .cwa-hero .csd-hero-form {
+            gap: 22px;
+          }
+          .cwa-hero .csd-hero-form-field input,
+          .cwa-hero .csd-hero-form-field select,
+          .cwa-hero .csd-hero-form-field textarea {
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            border-bottom: 1px solid rgba(255,255,255,0.42);
+            padding: 10px 0 14px;
+            box-shadow: none;
+          }
+          .cwa-hero .csd-hero-form-field textarea {
+            min-height: 100px;
+          }
+          .cwa-hero .csd-hero-form-field input:focus,
+          .cwa-hero .csd-hero-form-field select:focus,
+          .cwa-hero .csd-hero-form-field textarea:focus {
+            border-bottom-color: rgba(96, 165, 250, 0.95);
+            box-shadow: none;
+            background: transparent;
+          }
+          .cwa-hero .csd-hero-form-field select {
+            background-position:
+              calc(100% - 2px) calc(1em + 8px),
+              calc(100% + 1px) calc(1em + 8px);
+          }
+          .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-row {
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            border-bottom: 1px solid rgba(255,255,255,0.42);
+            box-shadow: none;
+            overflow: visible;
+          }
+          .cwa-hero .csd-hero-form-field--phone:focus-within .csd-hero-phone-row {
+            border-bottom-color: rgba(96, 165, 250, 0.95);
+            box-shadow: none;
+            background: transparent;
+          }
+          .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-sep {
+            align-self: center;
+            height: 1.15em;
+            margin: 0 10px 0 0;
+            background: rgba(255,255,255,0.38);
+          }
+          .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-cc,
+          .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-num {
+            border-bottom: none !important;
+            padding: 10px 0 14px !important;
+          }
+          .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-cc {
+            min-width: 72px;
+            max-width: 96px;
+            padding-right: 22px !important;
+            color: rgba(255,255,255,0.72) !important;
+            background-position:
+              calc(100% - 2px) calc(1em + 6px),
+              calc(100% + 1px) calc(1em + 6px);
+          }
+          .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-cc:focus,
+          .cwa-hero .csd-hero-form-field--phone .csd-hero-phone-num:focus {
+            border-bottom: none !important;
+          }
+          .cwa-hero .csd-hero-form-captcha input {
+            border: none;
+            border-radius: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.42);
+            background: transparent;
+            width: 56px;
+            padding: 8px 0;
+          }
+        }
+
         @media (max-width: 768px) {
-          .cwa-hero { padding: 120px 14px 64px; }
-          .cwa-hero-title { font-size: clamp(30px, 8vw, 44px); }
-          .cwa-hero-lead { font-size: 15px; }
+          .cwa-hero {
+            padding: 130px 14px 60px;
+            min-height: auto;
+          }
+          .cwa-hero .csd-hero-left { transform: none; }
+          .cwa-hero-title {
+            font-size: clamp(24px, 6.6vw, 36px);
+            max-width: 100%;
+            margin-bottom: 16px;
+            line-height: 1.03;
+          }
+          .cwa-hero-lead {
+            font-size: 14px;
+            line-height: 1.58;
+            margin-bottom: 20px;
+          }
           .cwa-hero-cta-row { gap: 10px; margin-bottom: 40px; }
+          .cwa-hero .csd-hero-form-grid { grid-template-columns: 1fr; }
+          .cwa-hero .csd-hero-form-foot {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .cwa-hero .csd-hero-form-submit { width: 100%; }
+          .cwa-hero .csd-hero-form-shell {
+            padding: 28px 18px 40px;
+            border-radius: 22px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+          }
           .cwa-hero-metrics { grid-template-columns: repeat(2, 1fr); }
-          .cwa-hero-metric { padding: 14px 16px; border-right: 1px solid rgba(10,10,10,0.08); border-bottom: 1px solid rgba(10,10,10,0.08); }
+          .cwa-hero-metric { padding: 14px 16px; border-right: 1px solid rgba(255,255,255,0.18); border-bottom: 1px solid rgba(255,255,255,0.18); }
           .cwa-hero-metric:not(:first-child) { padding-left: 16px; }
           .cwa-hero-metric:nth-child(2) { border-right: 0; }
           .cwa-hero-metric:nth-child(3),
