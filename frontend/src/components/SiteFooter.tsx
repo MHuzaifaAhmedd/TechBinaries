@@ -12,6 +12,7 @@ import { FOOTER_NAV_COLS, FOOTER_SOCIAL } from "@/data/home";
 export default function SiteFooter() {
   return (
     <footer
+      className="site-footer"
       style={{
         background: "#fafaf9",
         color: "#0a0a0a",
@@ -37,24 +38,15 @@ export default function SiteFooter() {
 
       <div style={{ maxWidth: 1320, margin: "0 auto", position: "relative", zIndex: 1 }}>
         {/* ── GRID ── */}
-        <div
-          className="footer-grid"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(280px, 360px) max-content max-content minmax(320px, 460px)",
-            columnGap: 44,
-            rowGap: 48,
-            marginBottom: 50,
-          }}
-        >
+        <div className="footer-grid">
           {/* Brand column */}
-          <div>
+          <div className="footer-brand-col">
             <Link
               href="/"
               aria-label="TechBinaries homepage"
+              className="footer-brand-link"
               style={{
                 display: "inline-flex",
-                marginLeft: -18,
                 marginBottom: 14,
                 textDecoration: "none",
               }}
@@ -108,67 +100,72 @@ export default function SiteFooter() {
             </p>
           </div>
 
-          {/* Nav columns */}
-          {FOOTER_NAV_COLS.map((col) => (
-            <div key={col.heading}>
+          {/* Nav columns (paired so mobile can show Explore | Services in two columns) */}
+          <div className="footer-nav-pair">
+            {FOOTER_NAV_COLS.map((col) => (
               <div
-                style={{
-                  fontSize: 17,
-                  fontWeight: 700,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "rgba(64,64,64,1)",
-                  marginBottom: 16,
-                }}
+                key={col.heading}
+                className={`footer-nav-col footer-nav-col--${col.heading.toLowerCase()}`}
               >
-                {col.heading}
+                <div
+                  style={{
+                    fontSize: 17,
+                    fontWeight: 700,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: "rgba(64,64,64,1)",
+                    marginBottom: 16,
+                  }}
+                >
+                  {col.heading}
+                </div>
+                <ul
+                  style={{
+                    listStyle: "none",
+                    padding: 0,
+                    margin: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 13,
+                  }}
+                >
+                  {col.links.map((link) => (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        className="footer-nav-link"
+                        target={link.ext ? "_blank" : undefined}
+                        rel={link.ext ? "noreferrer" : undefined}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          color: "rgba(10,10,10,0.72)",
+                          textDecoration: "none",
+                          fontSize: 16,
+                          lineHeight: 1.35,
+                          transition: "color 0.25s",
+                        }}
+                      >
+                        <span className="footer-nav-link-text">{link.label}</span>
+                        {link.ext && (
+                          <span
+                            className="footer-nav-link-arrow"
+                            style={{ transition: "transform 0.22s, opacity 0.22s", opacity: 0.72 }}
+                          >
+                            ↗
+                          </span>
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 13,
-                }}
-              >
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="footer-nav-link"
-                      target={link.ext ? "_blank" : undefined}
-                      rel={link.ext ? "noreferrer" : undefined}
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6,
-                        color: "rgba(10,10,10,0.72)",
-                        textDecoration: "none",
-                        fontSize: 16,
-                        lineHeight: 1.35,
-                        transition: "color 0.25s",
-                      }}
-                    >
-                      <span className="footer-nav-link-text">{link.label}</span>
-                      {link.ext && (
-                        <span
-                          className="footer-nav-link-arrow"
-                          style={{ transition: "transform 0.22s, opacity 0.22s", opacity: 0.72 }}
-                        >
-                          ↗
-                        </span>
-                      )}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+            ))}
+          </div>
 
           {/* Newsletter column */}
-          <div style={{ maxWidth: 460, marginLeft: 28 }}>
+          <div className="footer-newsletter-col">
             <div
               style={{
                 fontSize: 17,
@@ -320,6 +317,32 @@ export default function SiteFooter() {
 
       {/* ── Footer-scoped styles ── */}
       <style>{`
+        .footer-grid {
+          display: grid;
+          grid-template-columns: minmax(280px, 360px) max-content minmax(320px, 460px);
+          column-gap: 44px;
+          row-gap: 48px;
+          margin-bottom: 50px;
+        }
+        .footer-grid > * {
+          min-width: 0;
+        }
+        .footer-nav-pair {
+          display: grid;
+          grid-template-columns: max-content max-content;
+          column-gap: 44px;
+          align-items: start;
+        }
+        .footer-nav-col {
+          min-width: 0;
+        }
+        .footer-brand-link {
+          margin-left: -18px;
+        }
+        .footer-newsletter-col {
+          max-width: 460px;
+          margin-left: 28px;
+        }
         .footer-newsletter-form:focus-within {
           border-color: rgba(10,10,10,0.28) !important;
           background: rgba(10,10,10,0.04) !important;
@@ -362,16 +385,76 @@ export default function SiteFooter() {
         }
         @media (max-width: 1100px) {
           .footer-grid {
-            grid-template-columns: minmax(280px,360px) max-content !important;
-            gap: 48px !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: 40px;
+            row-gap: 44px;
+          }
+          .footer-newsletter-col {
+            margin-left: 0;
+            max-width: none;
+            grid-column: 1 / -1;
+          }
+          .footer-nav-pair {
+            column-gap: 40px;
           }
         }
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
+          .site-footer {
+            padding: 56px 16px 28px !important;
+            border-top-left-radius: 48px !important;
+          }
           .footer-grid {
-            grid-template-columns: minmax(0,1fr) max-content !important;
-            gap: 32px 28px !important;
+            grid-template-columns: 1fr;
+            column-gap: 0;
+            row-gap: 36px;
+            margin-bottom: 40px;
+          }
+          .footer-nav-pair {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 16px;
+          }
+          .footer-nav-col--explore {
+            flex: 1 1 0;
+            min-width: 0;
+            order: 1;
+          }
+          .footer-nav-col--services {
+            flex: 1 1 0;
+            min-width: 0;
+            order: 2;
+          }
+          .footer-nav-pair .footer-nav-link-text {
+            word-break: break-word;
+          }
+          .footer-brand-link {
+            margin-left: 0;
+          }
+          .footer-newsletter-col {
+            margin-left: 0;
+            max-width: none;
+          }
+          .footer-newsletter-form {
+            flex-wrap: wrap;
+            row-gap: 8px;
+          }
+          .footer-newsletter-form input {
+            min-width: 0;
+            flex: 1 1 160px;
           }
           .footer-bottom { justify-content: flex-start !important; }
+        }
+        @media (max-width: 380px) {
+          .footer-newsletter-form {
+            padding-left: 14px !important;
+          }
+          .footer-newsletter-btn {
+            width: 100%;
+            flex: 1 1 100%;
+          }
         }
       `}</style>
     </footer>
