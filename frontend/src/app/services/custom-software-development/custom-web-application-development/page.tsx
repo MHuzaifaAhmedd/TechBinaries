@@ -2081,11 +2081,7 @@ export default function CustomWebAppPage() {
         ═══════════════════════════════════════════════════════════════ */}
         <section className="cwa-growth" aria-labelledby="cwa-growth-title">
           <div className="cwa-growth-inner">
-            <div className="cwa-sh cwa-section-head">
-              <div className="cwa-section-kicker">
-                <span className="cwa-section-kicker-dot" />
-                {GROWTH.kicker}
-              </div>
+            <div className="cwa-sh cwa-section-head cwa-growth-head-inline">
               <h2 id="cwa-growth-title" className="cwa-h2">
                 {GROWTH.title} <span className="cwa-italic-mute">{GROWTH.titleAccent}</span>
               </h2>
@@ -2098,11 +2094,6 @@ export default function CustomWebAppPage() {
                 <div className="cwa-growth-media">
                   <img src={GROWTH.image} alt={GROWTH.imageAlt} loading="lazy" />
                   <div className="cwa-growth-media-overlay" />
-
-                  <div className="cwa-growth-media-tag">
-                    <span className="cwa-growth-media-tag-dot" />
-                    Live system
-                  </div>
 
                   <div className="cwa-growth-media-progress" aria-hidden>
                     {GROWTH.pillars.map((_, i) => (
@@ -2161,10 +2152,6 @@ export default function CustomWebAppPage() {
           <div className="cwa-cost-inner">
             <div className="cwa-cost-split">
               <div className="cwa-cost-content cwa-sh">
-                <div className="cwa-section-kicker">
-                  <span className="cwa-section-kicker-dot" />
-                  {COST.kicker}
-                </div>
                 <h2 id="cwa-cost-title" className="cwa-h2">
                   {COST.title} <span className="cwa-italic-mute">{COST.titleAccent}</span>
                 </h2>
@@ -2208,10 +2195,6 @@ export default function CustomWebAppPage() {
         <section id="process" className="cwa-process-section" aria-labelledby="cwa-process-title">
           <div className="cwa-process-inner">
             <div className="cwa-sh cwa-section-head cwa-section-head--light">
-              <div className="cwa-section-kicker cwa-section-kicker--light">
-                <span className="cwa-section-kicker-dot" />
-                Process
-              </div>
               <h2 id="cwa-process-title" className="cwa-h2 cwa-h2-light">
                 How we build —{" "}
                 <span className="cwa-italic-light">six phases, one team.</span>
@@ -2256,10 +2239,6 @@ export default function CustomWebAppPage() {
         <section className="cwa-stack-section" aria-labelledby="cwa-stack-title">
           <div className="cwa-stack-inner">
             <div className="cwa-sh cwa-section-head">
-              <div className="cwa-section-kicker">
-                <span className="cwa-section-kicker-dot" />
-                Tooling
-              </div>
               <h2 id="cwa-stack-title" className="cwa-h2">
                 Tooling we <span className="cwa-italic-mute">trust.</span>
               </h2>
@@ -2351,10 +2330,6 @@ export default function CustomWebAppPage() {
         <section className="cwa-faq-section" aria-labelledby="cwa-faq-title">
           <div className="cwa-faq-layout">
             <div className="cwa-faq-aside cwa-sh">
-              <div className="cwa-section-kicker">
-                <span className="cwa-section-kicker-dot" />
-                Questions
-              </div>
               <h2 id="cwa-faq-title" className="cwa-h2">
                 Frequently <span className="cwa-italic-mute">asked.</span>
               </h2>
@@ -2407,10 +2382,6 @@ export default function CustomWebAppPage() {
           <div className="cwa-cta-inner">
             <div className="cwa-cta-grid">
               <div className="cwa-cta-left">
-                <div className="cwa-section-kicker cwa-section-kicker--light">
-                  <span className="cwa-section-kicker-dot" />
-                  Ready when you are
-                </div>
                 <h2 id="cwa-cta-title" className="cwa-cta-h2">
                   Ready to ship a web app{" "}
                   <span className="cwa-cta-h2-accent">that lasts?</span>
@@ -3280,6 +3251,21 @@ export default function CustomWebAppPage() {
         .cwa-growth-inner {
           max-width: 1320px;
           margin: 0 auto;
+        }
+        .cwa-growth-head-inline {
+          flex-direction: row;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: clamp(28px, 4vw, 64px);
+        }
+        .cwa-growth-head-inline .cwa-h2 {
+          margin: 0;
+          flex: 0 1 680px;
+        }
+        .cwa-growth-head-inline .cwa-h2-lead {
+          flex: 0 1 560px;
+          margin: 0 0 28px;
+          transform: translateY(-10px);
         }
         .cwa-growth-grid {
           display: grid;
@@ -4183,6 +4169,18 @@ export default function CustomWebAppPage() {
           .cwa-hero .csd-hero-right { max-width: 720px; margin: 0 auto; width: 100%; }
           .cwa-hero .csd-hero-form-shell { max-width: 100%; }
           .cwa-hero-canvas { max-width: 580px; margin: 0 auto; width: 100%; aspect-ratio: 16 / 17; }
+
+          .cwa-growth-head-inline {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
+          }
+          .cwa-growth-head-inline .cwa-h2,
+          .cwa-growth-head-inline .cwa-h2-lead {
+            flex: initial;
+            margin: 0;
+            transform: none;
+          }
 
           .cwa-growth-grid { grid-template-columns: 1fr; gap: 48px; }
           .cwa-growth-media-wrap { position: static; }
