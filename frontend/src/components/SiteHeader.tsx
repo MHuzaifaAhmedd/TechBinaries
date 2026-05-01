@@ -515,7 +515,33 @@ export default function SiteHeader() {
         aria-hidden={!mobileOpen}
       >
         <div className="site-drawer__scrim" onClick={() => setMobileOpen(false)} />
-        <div className="site-drawer__panel" role="dialog" aria-modal="true">
+        <div
+          className="site-drawer__panel"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Main navigation"
+        >
+          <button
+            type="button"
+            className="site-drawer__close"
+            onClick={() => setMobileOpen(false)}
+            aria-label="Close menu"
+          >
+            <svg
+              aria-hidden
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M5 5l10 10M15 5L5 15"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
           <nav className="site-drawer__nav">
             {NAV.map((item) => {
               if (item.mega) {
@@ -1304,6 +1330,32 @@ export default function SiteHeader() {
           transform: translateX(0);
         }
 
+        .site-drawer__close {
+          position: absolute;
+          top: max(16px, env(safe-area-inset-top, 0px));
+          right: max(16px, env(safe-area-inset-right, 0px));
+          z-index: 2;
+          width: 44px;
+          height: 44px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid var(--color-line);
+          border-radius: 50%;
+          background: var(--color-paper);
+          color: var(--color-ink);
+          cursor: pointer;
+          -webkit-tap-highlight-color: transparent;
+          transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+        .site-drawer__close:hover {
+          background: rgba(10, 10, 10, 0.06);
+          border-color: rgba(10, 10, 10, 0.2);
+        }
+        .site-drawer__close:active {
+          background: rgba(10, 10, 10, 0.1);
+        }
+
         .site-drawer__nav { display: flex; flex-direction: column; }
 
         .site-drawer__link {
@@ -1470,7 +1522,12 @@ export default function SiteHeader() {
           }
         }
         @media (max-width: 900px) {
-          .site-header__inner { padding: 0 20px; gap: 12px; }
+          .site-header__inner {
+            padding: 0 20px;
+            gap: 12px;
+            grid-template-columns: auto 1fr;
+          }
+          .site-header__right { justify-self: end; }
           .site-header__nav { display: none; }
           .site-header__cta { display: none; }
           .site-header__burger {

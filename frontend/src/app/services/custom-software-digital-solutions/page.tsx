@@ -1128,6 +1128,21 @@ export default function CustomSoftwarePage() {
             linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.5) 100%);
         }
 
+        /* Zoom background video to crop baked-in corner watermark (ultra-wide >1920px unchanged) */
+        @media (max-width: 1920px) and (min-width: 769px) {
+          .csd-hero-video {
+            transform: scale(1.12);
+            transform-origin: 42% 34%;
+            will-change: transform;
+          }
+        }
+        @media (max-width: 1280px) and (min-width: 769px) {
+          .csd-hero-video {
+            transform: scale(1.17);
+            transform-origin: 40% 32%;
+          }
+        }
+
         .csd-hero-inner {
           position: relative;
           z-index: 1;
@@ -2641,6 +2656,11 @@ export default function CustomSoftwarePage() {
         }
 
         @media (max-width: 768px) {
+          .csd-hero-video {
+            transform: scale(1.06);
+            transform-origin: 50% 38%;
+            will-change: transform;
+          }
           .csd-hero {
             padding: 130px 14px 60px;
             min-height: auto;
