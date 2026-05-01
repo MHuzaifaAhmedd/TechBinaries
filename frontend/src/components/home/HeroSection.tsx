@@ -118,9 +118,17 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
     <section
       ref={heroRef}
       style={{
-        minHeight: "100vh", display: "flex", flexDirection: "column",
-        justifyContent: "center", padding: "120px 20px 60px",
-        position: "relative", overflow: "hidden",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        // Header is fixed (~92px): old 120px top left only ~28px under nav; extra top + less bottom balances hero vertically.
+        paddingTop: "calc(var(--header-height) + clamp(60px, 7vh, 96px))",
+        paddingBottom: "clamp(28px, 4vh, 44px)",
+        paddingLeft: 20,
+        paddingRight: 20,
+        position: "relative",
+        overflow: "hidden",
       }}
     >
       {/* Hero background media */}
@@ -192,11 +200,11 @@ export default function HeroSection({ lenisRef }: HeroSectionProps) {
           style={{ display: "grid", gridTemplateColumns: "1.65fr 1fr", gap: 36, alignItems: "start", marginBottom: 56 }}
         >
           {/* LEFT — headline + copy + CTA */}
-          <div>
+          <div style={{ marginTop: "clamp(8px, 1.1vh, 16px)" }}>
             <h1
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(40px, 5.8vw, 96px)",
+                fontSize: "clamp(34px, 5vw, 80px)",
                 fontWeight: 500, lineHeight: 0.96,
                 letterSpacing: "-0.032em", margin: "0 0 48px",
                 color: "#ffffff",
