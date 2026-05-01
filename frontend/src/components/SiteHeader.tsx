@@ -225,7 +225,10 @@ export default function SiteHeader() {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setMegaOpen(false), 140);
   };
-  const darkHeroRoute = pathname === "/services/custom-software-digital-solutions";
+  // Full-bleed dark heroes: frosted bar + ink nav at top; transparent would read as "mixed" with the hero.
+  const darkHeroRoute =
+    pathname === "/" ||
+    pathname === "/services/custom-software-digital-solutions";
   const headerTheme = darkHeroRoute && !scrolled ? "dark" : "light";
 
   return (
@@ -830,9 +833,8 @@ export default function SiteHeader() {
         }
 
         /*
-          On the custom-software-digital-solutions hero route:
-          we keep the frosted-glass header background, but we want the initial
-          header content to be dark/black (same look as the "scrolled" state).
+          On full-bleed dark hero routes (home, CSD services):
+          frosted header bar with dark/black nav (same look as the scrolled state).
         */
         .site-header[data-theme="dark"][data-scrolled="false"] .site-header__brand-logo {
           filter: brightness(0) saturate(100%);
