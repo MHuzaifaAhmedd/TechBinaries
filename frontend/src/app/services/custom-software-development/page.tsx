@@ -26,15 +26,24 @@ const SUB_SERVICES = [
   {
     num: "02",
     bin: "0010",
-    title: "Mobile App Development",
-    desc: "Native and cross-platform iOS & Android apps that feel fast and ship on schedule.",
-    href: "/services/custom-software-development/mobile-app-development-ios-android",
+    title: "iOS App Development",
+    desc: "Native Swift and cross-platform iOS experiences tuned for performance, polish, and App Store readiness.",
+    href: "/services/custom-software-development/ios-app-development",
     accent: "#a3a3a3",
-    tags: ["iOS", "Android", "React Native", "Swift"],
+    tags: ["Swift", "UIKit", "SwiftUI", "React Native"],
   },
   {
     num: "03",
     bin: "0011",
+    title: "Android App Development",
+    desc: "Kotlin-first Android apps and shared codebases that feel native and scale with your product roadmap.",
+    href: "/services/custom-software-development/android-app-development",
+    accent: "#b8b8b8",
+    tags: ["Kotlin", "Jetpack", "Play Store", "React Native"],
+  },
+  {
+    num: "04",
+    bin: "0100",
     title: "SaaS Product Development",
     desc: "Multi-tenant SaaS platforms with billing, auth, analytics, and growth loops baked in.",
     href: "/services/custom-software-development/saas-product-development",
@@ -42,8 +51,8 @@ const SUB_SERVICES = [
     tags: ["Multi-tenant", "Billing", "Auth", "Analytics"],
   },
   {
-    num: "04",
-    bin: "0100",
+    num: "05",
+    bin: "0101",
     title: "UI/UX Design Systems",
     desc: "Design systems, component libraries, and product UX engineered for consistency at scale.",
     href: "/services/custom-software-development/ui-ux-design-systems",
@@ -51,8 +60,8 @@ const SUB_SERVICES = [
     tags: ["Design Systems", "Figma", "Tokens", "A11y"],
   },
   {
-    num: "05",
-    bin: "0101",
+    num: "06",
+    bin: "0110",
     title: "CMS & Admin Panel Development",
     desc: "Content systems and internal tools that empower teams without slowing them down.",
     href: "/services/custom-software-development/cms-admin-panel-development",
@@ -60,11 +69,11 @@ const SUB_SERVICES = [
     tags: ["Headless CMS", "Admin UI", "RBAC", "Workflows"],
   },
   {
-    num: "06",
-    bin: "0110",
+    num: "07",
+    bin: "0111",
     title: "High-Performance Landing Pages",
     desc: "Pixel-perfect, conversion-tuned landing pages with sub-second load and SEO baked in.",
-    href: "/services/custom-software-development/high-performance-landing-pages",
+    href: "/services/custom-software-development/high-performance-landing-page-development",
     accent: "#8a8a8a",
     tags: ["Core Web Vitals", "SEO", "A/B Ready", "CRO"],
   },
@@ -144,6 +153,10 @@ const FAQS = [
   { q: "Do you sign NDAs before discovery calls?",                 a: "Of course. Send us your NDA before the call and we'll have it back signed within the day. We also have a mutual NDA template if you'd prefer to use ours." },
 ];
 
+const HERO_PHONE_COUNTRY_CODES = [
+  "+92", "+1", "+44", "+971", "+91", "+61", "+49", "+966", "+65", "+86",
+];
+
 // ── COMPONENT ─────────────────────────────────────────────────────────────────
 
 export default function CustomSoftwarePage() {
@@ -208,7 +221,9 @@ export default function CustomSoftwarePage() {
     const ctx = gsap.context(() => {
       // ── HERO: split-character intro ──
       const heroTl = gsap.timeline({ delay: 0.1 });
-      const headlineChars = gsap.utils.toArray<HTMLElement>(".csd-h1-char");
+      const headlineChars = gsap.utils.toArray<HTMLElement>(
+        ".csd-h1-lines-desktop .csd-h1-char, .csd-h1-lines-mobile .csd-h1-char"
+      );
       heroTl.fromTo(
         headlineChars,
         { yPercent: 110, opacity: 0 },
@@ -372,33 +387,66 @@ export default function CustomSoftwarePage() {
               playsInline
               preload="metadata"
             >
-              <source src="/videos/hero-services-csds-video.mp4" type="video/mp4" />
+              <source
+                src="/videos/hero-services-csds-video.mp4"
+                type="video/mp4"
+                media="(min-width: 901px)"
+              />
             </video>
+            {/* Static hero on narrow viewports only; desktop/laptop keep video above */}
+            <img
+              className="csd-hero-mobile-bg"
+              src="/images/services/custom-software-development/mobile-custom-software-service-hero.jpeg"
+              alt=""
+              decoding="async"
+              fetchPriority="high"
+            />
             <div className="csd-hero-video-overlay" />
           </div>
 
           <div className="csd-hero-inner">
             <div className="csd-hero-main">
-              {/* LEFT — headline + CTAs + inline proof */}
+              {/* LEFT — mobile: spacer pushes copy lower over image; same headline & copy as desktop */}
               <div className="csd-hero-left">
+                <div className="csd-hero-mobile-spacer" aria-hidden />
+
                 <h1 className="csd-hero-title">
-                  <div className="csd-h1-line">
-                    {"Custom software".split("").map((c, i) => (
-                      <span key={`l1-${i}`} className="csd-h1-char">{c === " " ? "\u00A0" : c}</span>
-                    ))}
-                  </div>
-                  <div className="csd-h1-line">
-                    {"built for speed,".split("").map((c, i) => (
-                      <span key={`l2-${i}`} className="csd-h1-char" style={{ whiteSpace: "pre" }}>{c === " " ? "\u00A0" : c}</span>
-                    ))}
-                  </div>
-                  <div className="csd-h1-line">
-                    <span className="csd-h1-italic">
-                      {"scale & growth.".split("").map((c, i) => (
-                        <span key={`l3i-${i}`} className="csd-h1-char">{c}</span>
+                  <span className="csd-h1-lines-desktop" aria-hidden={isMobile}>
+                    <div className="csd-h1-line">
+                      {"Custom software".split("").map((c, i) => (
+                        <span key={`l1-${i}`} className="csd-h1-char">{c === " " ? "\u00A0" : c}</span>
                       ))}
-                    </span>
-                  </div>
+                    </div>
+                    <div className="csd-h1-line">
+                      {"built for speed,".split("").map((c, i) => (
+                        <span key={`l2-${i}`} className="csd-h1-char" style={{ whiteSpace: "pre" }}>{c === " " ? "\u00A0" : c}</span>
+                      ))}
+                    </div>
+                    <div className="csd-h1-line">
+                      <span className="csd-h1-italic">
+                        {"scale & growth.".split("").map((c, i) => (
+                          <span key={`l3i-${i}`} className="csd-h1-char">{c}</span>
+                        ))}
+                      </span>
+                    </div>
+                  </span>
+                  <span className="csd-h1-lines-mobile" aria-hidden={!isMobile}>
+                    <div className="csd-h1-line csd-h1-line-mobile">
+                      {"Custom software built for".split("").map((c, i) => (
+                        <span key={`m1-${i}`} className="csd-h1-char">{c === " " ? "\u00A0" : c}</span>
+                      ))}
+                    </div>
+                    <div className="csd-h1-line csd-h1-line-mobile">
+                      {"speed, ".split("").map((c, i) => (
+                        <span key={`m2-${i}`} className="csd-h1-char">{c === " " ? "\u00A0" : c}</span>
+                      ))}
+                      <span className="csd-h1-italic">
+                        {"scale & growth.".split("").map((c, i) => (
+                          <span key={`m3i-${i}`} className="csd-h1-char">{c}</span>
+                        ))}
+                      </span>
+                    </div>
+                  </span>
                 </h1>
 
                 <p className="csd-hero-fade csd-hero-lead" style={{ opacity: 0 }}>
@@ -432,9 +480,32 @@ export default function CustomSoftwarePage() {
                     </label>
 
                     <div className="csd-hero-form-grid">
-                      <label className="csd-hero-form-field">
+                      <label className="csd-hero-form-field csd-hero-form-field--phone">
                         <span>Contact Number</span>
-                        <input type="tel" placeholder="+92 Enter your number" />
+                        <div className="csd-hero-phone-row">
+                          <select
+                            className="csd-hero-phone-cc"
+                            name="countryCode"
+                            aria-label="Country calling code"
+                            defaultValue="+92"
+                          >
+                            {HERO_PHONE_COUNTRY_CODES.map((code) => (
+                              <option key={code} value={code}>
+                                {code}
+                              </option>
+                            ))}
+                          </select>
+                          <span className="csd-hero-phone-sep" aria-hidden />
+                          <input
+                            className="csd-hero-phone-num"
+                            type="tel"
+                            name="phoneNational"
+                            placeholder="Enter Your Number*"
+                            autoComplete="tel-national"
+                            aria-label="Phone number"
+                            required
+                          />
+                        </div>
                       </label>
                       <label className="csd-hero-form-field">
                         <span>Work Email</span>
@@ -1114,6 +1185,31 @@ export default function CustomSoftwarePage() {
           filter: saturate(1.08) contrast(1.04);
         }
 
+        .csd-hero-mobile-bg {
+          display: none;
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center 28%;
+          filter: saturate(1.08) contrast(1.04);
+        }
+
+        @media (max-width: 900px) {
+          .csd-hero-video {
+            display: none;
+          }
+          .csd-hero-mobile-bg {
+            display: block;
+          }
+          .csd-hero-video-overlay {
+            background:
+              linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.78) 55%, rgba(0,0,0,0.88) 100%),
+              linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.4) 100%);
+          }
+        }
+
         .csd-hero-video-overlay {
           position: absolute;
           inset: 0;
@@ -1207,6 +1303,18 @@ export default function CustomSoftwarePage() {
           max-width: 720px;
           text-shadow: 0 10px 30px rgba(0,0,0,0.34);
         }
+
+        .csd-hero-mobile-spacer {
+          display: none;
+        }
+
+        .csd-h1-lines-desktop {
+          display: block;
+        }
+        .csd-h1-lines-mobile {
+          display: none;
+        }
+
         .csd-h1-line {
           overflow: visible;
           padding-bottom: 0.075em;
@@ -1237,6 +1345,145 @@ export default function CustomSoftwarePage() {
           line-height: 1.7;
           margin: 0 0 32px;
           text-shadow: 0 6px 18px rgba(0,0,0,0.28);
+        }
+
+        @media (max-width: 900px) {
+          .csd-hero {
+            padding: clamp(96px, 14svh, 128px) 14px 0;
+          }
+          .csd-hero-mobile-spacer {
+            display: block;
+            flex: 1 1 auto;
+            min-height: min(26vh, 220px);
+            max-height: 44vh;
+          }
+          .csd-hero-left {
+            display: flex;
+            flex-direction: column;
+            min-height: min(58svh, 580px);
+            transform: none;
+            max-width: none;
+          }
+          .csd-hero-title {
+            font-size: clamp(28px, 7vw, 40px);
+            line-height: 1.02;
+            margin-bottom: 16px;
+          }
+          .csd-h1-lines-desktop {
+            display: none;
+          }
+          .csd-h1-lines-mobile {
+            display: block;
+          }
+          .csd-hero-lead {
+            font-size: 15px;
+            line-height: 1.62;
+            margin-bottom: 24px;
+            max-width: none;
+          }
+          .csd-hero-inner {
+            gap: 0;
+          }
+          .csd-hero-main {
+            min-height: auto;
+            gap: 0;
+          }
+          .csd-hero-right {
+            align-self: stretch;
+            width: 100%;
+            margin-top: 0;
+            align-items: stretch;
+          }
+          .csd-hero-form-shell {
+            max-width: none;
+            width: calc(100% + 28px);
+            margin-left: -14px;
+            margin-right: -14px;
+            border-radius: 22px 22px 0 0;
+            padding: 32px 20px 40px;
+            border-left: none;
+            border-right: none;
+            background: linear-gradient(180deg, #070707 0%, #121212 50%, #0a0a0a 100%);
+            box-shadow: 0 -20px 60px -20px rgba(0,0,0,0.5);
+          }
+          .csd-hero-form-subtitle {
+            max-width: none;
+          }
+          .csd-hero-form {
+            gap: 22px;
+          }
+          .csd-hero-form-field input,
+          .csd-hero-form-field select,
+          .csd-hero-form-field textarea {
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            border-bottom: 1px solid rgba(255,255,255,0.42);
+            padding: 10px 0 14px;
+            box-shadow: none;
+          }
+          .csd-hero-form-field textarea {
+            min-height: 100px;
+          }
+          .csd-hero-form-field input:focus,
+          .csd-hero-form-field select:focus,
+          .csd-hero-form-field textarea:focus {
+            border-bottom-color: rgba(96, 165, 250, 0.95);
+            box-shadow: none;
+            background: transparent;
+          }
+          .csd-hero-form-field select {
+            background-position:
+              calc(100% - 2px) calc(1em + 8px),
+              calc(100% + 1px) calc(1em + 8px);
+          }
+
+          .csd-hero-form-field--phone .csd-hero-phone-row {
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            border-bottom: 1px solid rgba(255,255,255,0.42);
+            box-shadow: none;
+            overflow: visible;
+          }
+          .csd-hero-form-field--phone:focus-within .csd-hero-phone-row {
+            border-bottom-color: rgba(96, 165, 250, 0.95);
+            box-shadow: none;
+            background: transparent;
+          }
+          .csd-hero-form-field--phone .csd-hero-phone-sep {
+            align-self: center;
+            height: 1.15em;
+            margin: 0 10px 0 0;
+            background: rgba(255,255,255,0.38);
+          }
+          .csd-hero-form-field--phone .csd-hero-phone-cc,
+          .csd-hero-form-field--phone .csd-hero-phone-num {
+            border-bottom: none !important;
+            padding: 10px 0 14px !important;
+          }
+          .csd-hero-form-field--phone .csd-hero-phone-cc {
+            min-width: 72px;
+            max-width: 96px;
+            padding-right: 22px !important;
+            color: rgba(255,255,255,0.72) !important;
+            background-position:
+              calc(100% - 2px) calc(1em + 6px),
+              calc(100% + 1px) calc(1em + 6px);
+          }
+          .csd-hero-form-field--phone .csd-hero-phone-cc:focus,
+          .csd-hero-form-field--phone .csd-hero-phone-num:focus {
+            border-bottom: none !important;
+          }
+
+          .csd-hero-form-captcha input {
+            border: none;
+            border-radius: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.42);
+            background: transparent;
+            width: 56px;
+            padding: 8px 0;
+          }
         }
 
         .csd-hero-cta-row {
@@ -1319,7 +1566,7 @@ export default function CustomSoftwarePage() {
         .csd-hero-form {
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 18px;
         }
         .csd-hero-form-grid {
           display: grid;
@@ -1338,18 +1585,46 @@ export default function CustomSoftwarePage() {
           text-transform: uppercase;
           color: rgba(255,255,255,0.74);
         }
+
+        .csd-hero-phone-row {
+          display: flex;
+          align-items: stretch;
+          width: 100%;
+          border: none;
+          border-radius: 0;
+          background: transparent;
+          border-bottom: 1px solid rgba(255,255,255,0.42);
+          overflow: visible;
+          transition: border-color 0.2s;
+        }
+        .csd-hero-form-field--phone:focus-within .csd-hero-phone-row {
+          border-bottom-color: rgba(96, 165, 250, 0.95);
+          box-shadow: none;
+          background: transparent;
+        }
+        .csd-hero-phone-sep {
+          width: 1px;
+          align-self: center;
+          height: 1.15em;
+          background: rgba(255,255,255,0.38);
+          flex-shrink: 0;
+          margin: 0 10px 0 0;
+        }
+
         .csd-hero-form-field input,
         .csd-hero-form-field select,
         .csd-hero-form-field textarea {
           width: 100%;
-          border: 1px solid rgba(255,255,255,0.24);
-          background: rgba(255,255,255,0.06);
+          border: none;
+          border-radius: 0;
+          background: transparent;
           color: #fff;
-          border-radius: 10px;
-          padding: 12px 12px;
+          border-bottom: 1px solid rgba(255,255,255,0.42);
+          padding: 10px 0 14px;
           font-size: 14px;
           outline: none;
-          transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+          box-shadow: none;
+          transition: border-color 0.2s;
         }
         .csd-hero-form-field textarea {
           resize: vertical;
@@ -1362,12 +1637,13 @@ export default function CustomSoftwarePage() {
         .csd-hero-form-field select {
           color: rgba(255,255,255,0.75);
           appearance: none;
+          background-color: transparent;
           background-image:
             linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.72) 50%),
             linear-gradient(135deg, rgba(255,255,255,0.72) 50%, transparent 50%);
           background-position:
-            calc(100% - 18px) calc(1em + 5px),
-            calc(100% - 13px) calc(1em + 5px);
+            calc(100% - 4px) calc(1em + 6px),
+            calc(100% - 0px) calc(1em + 6px);
           background-size: 5px 5px, 5px 5px;
           background-repeat: no-repeat;
         }
@@ -1384,10 +1660,75 @@ export default function CustomSoftwarePage() {
         .csd-hero-form-field input:focus,
         .csd-hero-form-field select:focus,
         .csd-hero-form-field textarea:focus {
-          border-color: rgba(59,130,246,0.8);
-          background: rgba(255,255,255,0.09);
-          box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+          border-bottom-color: rgba(96, 165, 250, 0.95);
+          box-shadow: none;
+          background: transparent;
         }
+
+        .csd-hero-form-field--phone .csd-hero-phone-cc,
+        .csd-hero-form-field--phone .csd-hero-phone-num {
+          width: auto !important;
+          border: none !important;
+          border-radius: 0 !important;
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+        .csd-hero-form-field--phone .csd-hero-phone-cc {
+          flex: 0 0 auto;
+          min-width: 84px;
+          max-width: 110px;
+          padding: 10px 26px 14px 0 !important;
+          color: rgba(255,255,255,0.78) !important;
+        }
+        .csd-hero-form-field--phone .csd-hero-phone-num {
+          flex: 1 1 auto;
+          min-width: 0;
+          padding: 10px 0 14px 0 !important;
+        }
+        .csd-hero-form-field--phone .csd-hero-phone-cc:focus,
+        .csd-hero-form-field--phone .csd-hero-phone-num:focus {
+          box-shadow: none !important;
+          border: none !important;
+          background: transparent !important;
+        }
+
+        /* Chrome / Edge autofill: keep dark shell + light text (no yellow/blue fill) */
+        .csd-hero-form input:-webkit-autofill,
+        .csd-hero-form input:-webkit-autofill:hover,
+        .csd-hero-form input:-webkit-autofill:focus,
+        .csd-hero-form input:-webkit-autofill:active,
+        .csd-hero-form textarea:-webkit-autofill,
+        .csd-hero-form textarea:-webkit-autofill:hover,
+        .csd-hero-form textarea:-webkit-autofill:focus,
+        .csd-hero-form textarea:-webkit-autofill:active,
+        .csd-hero-form select:-webkit-autofill,
+        .csd-hero-form select:-webkit-autofill:hover,
+        .csd-hero-form select:-webkit-autofill:focus,
+        .csd-hero-form select:-webkit-autofill:active {
+          -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
+          caret-color: #fff;
+          transition: background-color 99999s ease-out 0s;
+          -webkit-box-shadow: 0 0 0 1000px #0c0c0c inset !important;
+          box-shadow: 0 0 0 1000px #0c0c0c inset !important;
+        }
+        .csd-hero-form input:autofill,
+        .csd-hero-form textarea:autofill,
+        .csd-hero-form select:autofill {
+          -webkit-text-fill-color: rgba(255, 255, 255, 0.95);
+          color: rgba(255, 255, 255, 0.95) !important;
+        }
+
+        .csd-hero-form-field--phone .csd-hero-phone-cc:-webkit-autofill,
+        .csd-hero-form-field--phone .csd-hero-phone-cc:-webkit-autofill:hover,
+        .csd-hero-form-field--phone .csd-hero-phone-cc:-webkit-autofill:focus,
+        .csd-hero-form-field--phone .csd-hero-phone-num:-webkit-autofill,
+        .csd-hero-form-field--phone .csd-hero-phone-num:-webkit-autofill:hover,
+        .csd-hero-form-field--phone .csd-hero-phone-num:-webkit-autofill:focus {
+          -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
+          -webkit-box-shadow: 0 0 0 1000px #0c0c0c inset !important;
+          box-shadow: 0 0 0 1000px #0c0c0c inset !important;
+        }
+
         .csd-hero-form-foot {
           display: flex;
           align-items: center;
@@ -1403,13 +1744,19 @@ export default function CustomSoftwarePage() {
           flex-shrink: 0;
         }
         .csd-hero-form-captcha input {
-          width: 62px;
-          border: 1px solid rgba(255,255,255,0.24);
-          background: rgba(255,255,255,0.06);
+          width: 56px;
+          border: none;
+          border-radius: 0;
+          background: transparent;
           color: #fff;
-          border-radius: 8px;
-          padding: 8px 10px;
+          border-bottom: 1px solid rgba(255,255,255,0.42);
+          padding: 8px 0 10px;
           outline: none;
+          box-shadow: none;
+          transition: border-color 0.2s;
+        }
+        .csd-hero-form-captcha input:focus {
+          border-bottom-color: rgba(96, 165, 250, 0.95);
         }
         .csd-hero-form-submit {
           border: none;
@@ -2596,7 +2943,6 @@ export default function CustomSoftwarePage() {
           }
           .csd-hero-left {
             max-width: 760px;
-            transform: translateY(18px);
           }
           .csd-hero-right { max-width: 720px; margin: 0 auto; width: 100%; }
           .csd-hero-form-shell { max-width: 100%; }
@@ -2665,30 +3011,39 @@ export default function CustomSoftwarePage() {
           .csd-faq-aside { position: static; }
         }
 
-        @media (max-width: 768px) {
-          .csd-hero-video {
-            transform: scale(1.06);
-            transform-origin: 50% 38%;
-            will-change: transform;
+        @media (max-width: 1100px) and (min-width: 901px) {
+          .csd-hero-left {
+            transform: translateY(18px);
           }
+        }
+
+        @media (max-width: 768px) {
           .csd-hero {
             padding: 130px 14px 60px;
             min-height: auto;
           }
           .csd-hero-left { transform: none; }
           .csd-hero-title {
-            font-size: clamp(30px, 8.2vw, 48px);
+            font-size: clamp(24px, 6.6vw, 36px);
             max-width: 100%;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
+            line-height: 1.03;
           }
-          .csd-hero-lead { font-size: 16px; }
+          .csd-hero-lead {
+            font-size: 14px;
+            line-height: 1.58;
+            margin-bottom: 20px;
+          }
           .csd-hero-proof {
             grid-template-columns: 1fr 1fr;
             gap: 20px;
           }
           .csd-hero-form-shell {
-            padding: 22px 16px 18px;
-            border-radius: 16px;
+            padding: 28px 18px 40px;
+            border-radius: 22px 22px 0 0;
+            width: calc(100% + 28px);
+            margin-left: -14px;
+            margin-right: -14px;
           }
           .csd-hero-form-grid { grid-template-columns: 1fr; }
           .csd-hero-form-foot {

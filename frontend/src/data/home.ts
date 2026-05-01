@@ -31,7 +31,7 @@ export const SERVICES = [
   },
   {
     num: "03",
-    title: "Search Visibility & Digital Authority",
+    title: "Search Visibility SEO",
     kicker: "Technical SEO and long-term organic growth",
     desc: "We strengthen your search foundation with technical SEO, content architecture, and monitoring systems that compound organic visibility over time.",
     deliverables: [
@@ -130,8 +130,8 @@ export const FOOTER_NAV_COLS = [
     heading: "Services",
     links: [
       { label: "Custom Software Development", href: "/services/custom-software-development", ext: false },
-      { label: "Growth & Performance Engineering", href: "#services", ext: false },
-      { label: "Search Visibility & Digital Authority", href: "#services", ext: false },
+      { label: "Growth & Performance Engineering", href: "/services/growth-performance-engineering", ext: false },
+      { label: "Search Visibility SEO", href: "/services/search-visibility-seo", ext: false },
     ],
   },
   {
