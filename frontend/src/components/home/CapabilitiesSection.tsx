@@ -343,20 +343,26 @@ export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef
                     className="cap-slat-collapsed"
                     style={{
                       position: "absolute", inset: 0, display: "flex", flexDirection: "column",
-                      alignItems: "center", justifyContent: "space-between", padding: "22px 0",
+                      alignItems: "center", padding: "22px 0",
                       pointerEvents: isActive ? "none" : "auto",
                     }}
                   >
-                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: s.accent, flexShrink: 0, boxShadow: `0 0 0 4px ${s.accent}1a` }} />
                     <div
                       style={{
-                        writingMode: "vertical-rl", transform: "rotate(180deg)",
-                        fontFamily: "var(--font-display)", fontSize: 13, fontWeight: 500,
-                        letterSpacing: "0.28em", textTransform: "uppercase",
-                        color: "rgba(250,250,249,0.82)", whiteSpace: "nowrap", lineHeight: 1,
+                        flex: 1, minHeight: 0, width: "100%", display: "flex",
+                        alignItems: "center", justifyContent: "center",
                       }}
                     >
-                      {s.title}
+                      <div
+                        style={{
+                          writingMode: "vertical-rl", transform: "rotate(180deg)",
+                          fontFamily: "var(--font-display)", fontSize: 13, fontWeight: 500,
+                          letterSpacing: "0.28em", textTransform: "uppercase",
+                          color: "rgba(250,250,249,0.82)", whiteSpace: "nowrap", lineHeight: 1,
+                        }}
+                      >
+                        {s.title}
+                      </div>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, flexShrink: 0 }}>
                       <span style={{ width: 20, height: 1, background: "rgba(250,250,249,0.18)" }} />
@@ -392,8 +398,7 @@ export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef
 
                     {/* Meta row */}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative", zIndex: 1, marginBottom: 24 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <span style={{ width: 10, height: 10, borderRadius: "50%", background: s.accent, boxShadow: "0 0 0 4px rgba(255,255,255,0.06)" }} />
+                      <div style={{ display: "flex", alignItems: "center", minWidth: 0, paddingRight: 16 }}>
                         <span style={{ fontFamily: "var(--font-display)", fontSize: 12, fontWeight: 500, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.62)" }}>
                           Capability {s.num} <span style={{ opacity: 0.4, margin: "0 6px" }}>/</span> {s.kicker}
                         </span>
@@ -491,7 +496,6 @@ export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef
                     aria-expanded={isOpen}
                     onClick={() => setMobileOpenCap(isOpen ? null : i)}
                   >
-                    <span className="cap-mobile__dot" style={{ background: s.accent }} aria-hidden />
                     <span className="cap-mobile__num">{s.num}</span>
                     <span className="cap-mobile__name">{s.title}</span>
                     <span className="cap-mobile__chev" aria-hidden>
@@ -511,10 +515,7 @@ export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef
                       <div className="cap-mobile__deliver-label">What we deliver</div>
                       <ul className="cap-mobile__deliver" role="list">
                         {s.deliverables.map((d, di) => (
-                          <li key={di}>
-                            <span className="cap-mobile__deliver-num">0{di + 1}</span>
-                            <span>{d}</span>
-                          </li>
+                          <li key={di}>{d}</li>
                         ))}
                       </ul>
                       <div className="cap-mobile__tags">

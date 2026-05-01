@@ -3,7 +3,7 @@
 export const SERVICES = [
   {
     num: "01",
-    title: "Custom Software & Digital Solutions",
+    title: "Custom Software Development",
     kicker: "Web, mobile, SaaS, and product UX delivery",
     desc: "We design and build custom digital products from interface systems to production-ready applications tailored to your business goals.",
     deliverables: [
@@ -13,7 +13,6 @@ export const SERVICES = [
       "UI/UX Design Systems",
     ],
     tags: ["Web Apps", "Mobile Apps", "SaaS", "UI/UX"],
-    accent: "#f472b6",
     glyph: "◒",
   },
   {
@@ -28,7 +27,6 @@ export const SERVICES = [
       "A/B Testing & Experimentation Systems",
     ],
     tags: ["Conversion", "Funnels", "Analytics", "A/B Testing"],
-    accent: "#a3e635",
     glyph: "◐",
   },
   {
@@ -43,7 +41,6 @@ export const SERVICES = [
       "Keyword & Search Intent Mapping",
     ],
     tags: ["Technical SEO", "Indexing", "Content", "Search Growth"],
-    accent: "#38bdf8",
     glyph: "◑",
   },
 ];
@@ -132,7 +129,7 @@ export const FOOTER_NAV_COLS = [
   {
     heading: "Services",
     links: [
-      { label: "Custom Software & Digital Solutions", href: "#services", ext: false },
+      { label: "Custom Software Development", href: "/services/custom-software-development", ext: false },
       { label: "Growth & Performance Engineering", href: "#services", ext: false },
       { label: "Search Visibility & Digital Authority", href: "#services", ext: false },
     ],
