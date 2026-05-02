@@ -1050,61 +1050,63 @@ export default function CustomWebAppPage() {
 
         {/* ═══════════════════════════════════════════════════════════════
             SECTION 7 — FINAL CTA (Task 3)
-            Headline, lead, actions, metric strip on page background.
+            Flat section bg; gray gradient only on .cwa-ncta-card.
         ═══════════════════════════════════════════════════════════════ */}
         <section className="cwa-ncta" aria-labelledby="cwa-ncta-title">
           <div className="cwa-ncta-inner">
-            <h2 id="cwa-ncta-title" className="cwa-ncta-title">
-              <span className="cwa-ncta-head">
-                {CTA.headline.split("").map((c, i) => (
-                  <span key={`h-${i}`} className="cwa-ncta-char">
-                    {c === " " ? "\u00A0" : c}
-                  </span>
-                ))}
-                {" "}
-                <span className="cwa-ncta-italic">
-                  {CTA.headlineItalic.split("").map((c, i) => (
-                    <span key={`i-${i}`} className="cwa-ncta-char">
+            <div className="cwa-ncta-card">
+              <h2 id="cwa-ncta-title" className="cwa-ncta-title">
+                <span className="cwa-ncta-head">
+                  {CTA.headline.split("").map((c, i) => (
+                    <span key={`h-${i}`} className="cwa-ncta-char">
                       {c === " " ? "\u00A0" : c}
                     </span>
                   ))}
+                  {" "}
+                  <span className="cwa-ncta-italic">
+                    {CTA.headlineItalic.split("").map((c, i) => (
+                      <span key={`i-${i}`} className="cwa-ncta-char">
+                        {c === " " ? "\u00A0" : c}
+                      </span>
+                    ))}
+                  </span>
                 </span>
-              </span>
-            </h2>
+              </h2>
 
-            <p className="cwa-ncta-lead cwa-ncta-fade">{CTA.lead}</p>
+              <p className="cwa-ncta-lead cwa-ncta-fade">{CTA.lead}</p>
 
-            <div className="cwa-ncta-actions cwa-ncta-fade">
-              <Link href={CTA.primaryCta.href} className="cwa-ncta-btn">
-                <span className="cwa-ncta-btn-label">{CTA.primaryCta.label}</span>
-                <span className="cwa-ncta-btn-arrow" aria-hidden>
-                  <svg width="14" height="14" viewBox="0 0 14 14">
-                    <path
-                      d="M3 7h8 M7 3l4 4-4 4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-              </Link>
+              <div className="cwa-ncta-actions cwa-ncta-fade">
+                <Link href={CTA.primaryCta.href} className="cwa-ncta-btn">
+                  <span className="cwa-ncta-btn-label">{CTA.primaryCta.label}</span>
+                  <span className="cwa-ncta-btn-arrow" aria-hidden>
+                    <svg width="14" height="14" viewBox="0 0 14 14">
+                      <path
+                        d="M3 7h8 M7 3l4 4-4 4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </Link>
 
-              <a href={`mailto:${CTA.email}`} className="cwa-ncta-mail">
-                <span className="cwa-ncta-mail-k">or email</span>
-                <span className="cwa-ncta-mail-v">{CTA.email}</span>
-              </a>
+                <a href={`mailto:${CTA.email}`} className="cwa-ncta-mail">
+                  <span className="cwa-ncta-mail-k">or email</span>
+                  <span className="cwa-ncta-mail-v">{CTA.email}</span>
+                </a>
+              </div>
+
+              <dl className="cwa-ncta-rows cwa-ncta-fade">
+                {CTA.rows.map((r) => (
+                  <div key={r.k} className="cwa-ncta-row">
+                    <dt>{r.k}</dt>
+                    <dd>{r.v}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
-
-            <dl className="cwa-ncta-rows cwa-ncta-fade">
-              {CTA.rows.map((r) => (
-                <div key={r.k} className="cwa-ncta-row">
-                  <dt>{r.k}</dt>
-                  <dd>{r.v}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
         </section>
 
@@ -2195,10 +2197,13 @@ export default function CustomWebAppPage() {
 
         /* ═══════════════════════════════════════════════════════════════
            SECTION 7 — FINAL CTA (Task 3)
-           Closing scale (not hero-sized) — tight vertical rhythm + metric strip.
+           Section stays flat off-white; gradient lives only on .cwa-ncta-card.
         ═══════════════════════════════════════════════════════════════ */
         .cwa-ncta {
-          padding: clamp(56px, 7vw, 88px) 20px clamp(48px, 6vw, 72px);
+          padding:
+            clamp(56px, 7vw, 88px)
+            20px
+            clamp(48px, 6vw, 72px);
           background: #fafaf9;
           border-top: 1px solid rgba(10,10,10,0.08);
           position: relative;
@@ -2215,6 +2220,35 @@ export default function CustomWebAppPage() {
           position: relative;
           max-width: 1100px;
           margin: 0 auto;
+        }
+
+        /* Card — top bloom + linear fade to section color; no bottom shadow/radial so edge blends to white */
+        .cwa-ncta-card {
+          border-radius: 18px 18px 0 0;
+          padding: clamp(28px, 4.2vw, 44px) clamp(24px, 3.5vw, 40px);
+          margin-top: clamp(12px, 2vw, 28px);
+          margin-bottom: clamp(18px, 3.5vw, 32px);
+          background:
+            radial-gradient(ellipse 115% 62% at 50% -8%, rgba(255,255,255,0.48) 0%, rgba(255,255,255,0.12) 38%, transparent 62%),
+            linear-gradient(
+              180deg,
+              #e9e8e6 0%,
+              #e7e6e3 10%,
+              #e5e4e1 22%,
+              #e6e5e2 34%,
+              #eae9e7 46%,
+              #ecebe9 56%,
+              #eeecea 66%,
+              #f1f0ed 76%,
+              #f5f4f2 86%,
+              #f8f7f5 93%,
+              #fafaf9 100%
+            );
+          border-top: 1px solid rgba(10,10,10,0.06);
+          border-left: 1px solid rgba(10,10,10,0.06);
+          border-right: 1px solid rgba(10,10,10,0.06);
+          border-bottom: none;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
         }
 
         /* Headline — character-split for ticker-style reveal; scale matches a closing CTA, not a hero */
@@ -2256,7 +2290,7 @@ export default function CustomWebAppPage() {
           align-items: center;
           flex-wrap: wrap;
           gap: 22px 32px;
-          margin-bottom: clamp(28px, 4vw, 44px);
+          margin-bottom: clamp(22px, 3vw, 30px);
         }
         .cwa-ncta-btn {
           display: inline-flex;
@@ -2321,11 +2355,12 @@ export default function CustomWebAppPage() {
           background-size: 0% 1px;
         }
 
-        /* Bottom metric strip — clean inline list with dividers */
+        /* Metric strip — inside card; no bottom rule so it fades into section white */
         .cwa-ncta-rows {
           margin: 0;
-          padding: clamp(16px, 2vw, 22px) 0 0;
-          border-top: 1px solid rgba(10,10,10,0.12);
+          padding: clamp(18px, 2.2vw, 26px) 0 0;
+          border-top: 1px solid rgba(10,10,10,0.1);
+          border-bottom: none;
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 0;
@@ -2599,9 +2634,15 @@ export default function CustomWebAppPage() {
             padding-top: clamp(48px, 10vw, 72px);
             padding-bottom: clamp(44px, 9vw, 64px);
           }
+          .cwa-ncta-card {
+            border-radius: 14px 14px 0 0;
+            padding: 24px 18px 26px;
+            margin-top: clamp(8px, 3vw, 20px);
+            margin-bottom: clamp(14px, 4vw, 24px);
+          }
           .cwa-ncta-title { font-size: clamp(24px, 6.2vw, 32px); max-width: none; }
           .cwa-ncta-lead { font-size: 14.5px; margin-bottom: 22px; }
-          .cwa-ncta-actions { gap: 18px; margin-bottom: 28px; }
+          .cwa-ncta-actions { gap: 18px; }
           .cwa-ncta-btn-label { padding: 14px 12px 14px 22px; }
           .cwa-ncta-btn-arrow { padding: 0 18px 0 12px; }
           .cwa-ncta-mail-v { font-size: 16px; }
