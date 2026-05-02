@@ -346,12 +346,8 @@ export default function CustomWebAppPage() {
   }, [heroServiceOpen]);
 
   useEffect(() => {
-    if (!heroServiceOpen) return;
-    if (isHeroNarrow) {
-      setHeroServiceMenuBox(null);
-    } else {
-      measureHeroServiceMenu();
-    }
+    if (!heroServiceOpen || isHeroNarrow) return;
+    measureHeroServiceMenu();
   }, [isHeroNarrow, heroServiceOpen]);
 
   // Lenis smooth scroll
@@ -776,9 +772,9 @@ export default function CustomWebAppPage() {
               src="/images/services/custom-software-development/cwad-service-hero-mobile.jpeg"
               alt=""
               fill
-              sizes="100vw"
+              sizes="(max-width: 900px) calc(100vw - 28px), 1px"
               decoding="async"
-              preload
+              priority
             />
             <div className="cwa-hero-bg-overlay" />
             <div className="cwa-hero-bg-spotlight" />

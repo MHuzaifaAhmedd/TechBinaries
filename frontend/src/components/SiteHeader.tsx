@@ -131,7 +131,8 @@ export default function SiteHeader() {
   // Full-bleed dark heroes: frosted bar + ink nav at top; transparent would read as "mixed" with the hero.
   const darkHeroRoute =
     pathname === "/" ||
-    pathname.startsWith("/services/custom-software-development");
+    pathname.startsWith("/services/custom-software-development") ||
+    pathname === "/careers";
   const headerTheme = darkHeroRoute && !scrolled ? "dark" : "light";
 
   return (
@@ -153,6 +154,7 @@ export default function SiteHeader() {
                 className="site-header__brand-logo"
                 sizes="(max-width: 480px) 170px, 220px"
                 priority
+                loading="eager"
               />
             </span>
           </Link>

@@ -303,12 +303,8 @@ export default function CustomSoftwarePage() {
   }, [heroServiceOpen]);
 
   useEffect(() => {
-    if (!heroServiceOpen) return;
-    if (isHeroNarrow) {
-      setHeroServiceMenuBox(null);
-    } else {
-      measureHeroServiceMenu();
-    }
+    if (!heroServiceOpen || isHeroNarrow) return;
+    measureHeroServiceMenu();
   }, [isHeroNarrow, heroServiceOpen]);
 
   useEffect(() => {
