@@ -274,18 +274,19 @@ export default function ContactPage() {
                     <div key={group.title} className="contact-service-group">
                       <div className="contact-service-group-heading">{group.title}</div>
                       <div className="contact-service-group-items">
-                        {group.items.map((service) => {
-                          const checked = contactForm.services.includes(service);
-                          return (
-                            <label key={service} className="contact-check contact-check--nested">
-                              <input type="checkbox" checked={checked} onChange={() => toggleService(service)} />
-                              <span className="contact-service-glyph" aria-hidden>
-                                ›
-                              </span>
-                              <span>{service}</span>
-                            </label>
-                          );
-                        })}
+                        {group.items.map((service) => (
+                          <label key={service} className="contact-check contact-check--nested">
+                            <input
+                              type="checkbox"
+                              checked={contactForm.services.includes(service)}
+                              onChange={() => toggleService(service)}
+                            />
+                            <span className="contact-service-glyph" aria-hidden>
+                              ›
+                            </span>
+                            <span>{service}</span>
+                          </label>
+                        ))}
                       </div>
                     </div>
                   ))}
