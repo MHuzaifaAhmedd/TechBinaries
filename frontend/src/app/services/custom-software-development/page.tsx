@@ -3402,7 +3402,6 @@ export default function CustomSoftwarePage() {
         @media (max-width: 1100px) {
           .csd-hero-main {
             grid-template-columns: 1fr;
-            gap: 64px;
             min-height: auto;
           }
           .csd-hero-left {
@@ -3476,6 +3475,9 @@ export default function CustomSoftwarePage() {
         }
 
         @media (max-width: 1100px) and (min-width: 901px) {
+          .csd-hero-main {
+            gap: 64px;
+          }
           .csd-hero-left {
             transform: translateY(18px);
           }
