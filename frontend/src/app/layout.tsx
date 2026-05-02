@@ -30,7 +30,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "TechBinaries — Software Development Studio",
+  title: {
+    default: "TechBinaries | Software Development Studio",
+    template: "%s | TechBinaries",
+  },
   description:
     "We partner with ambitious companies to design, build, and scale software products. From zero to production — and beyond.",
   icons: {
