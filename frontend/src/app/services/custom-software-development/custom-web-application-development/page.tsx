@@ -1076,6 +1076,7 @@ export default function CustomWebAppPage() {
                   src={COST.image}
                   alt={COST.imageAlt}
                   fill
+                  className="cwa-cost-media-img"
                   sizes="(max-width: 900px) 100vw, 46vw"
                   loading="lazy"
                 />
@@ -2273,12 +2274,16 @@ export default function CustomWebAppPage() {
           position: relative; overflow: hidden; background: #0a0a0a;
           border-radius: clamp(20px, 2.4vw, 28px); min-height: 420px;
         }
-        .cwa-cost-media img {
+        .cwa-cost-media img,
+        .cwa-cost-media-img {
           width: 100%; height: 100%; object-fit: cover;
           filter: saturate(1.06) contrast(1.04);
           transition: transform 1.2s cubic-bezier(0.22,1,0.36,1);
         }
-        .cwa-cost-media:hover img { transform: scale(1.04); }
+        @media (hover: hover) {
+          .cwa-cost-media:hover img,
+          .cwa-cost-media:hover .cwa-cost-media-img { transform: scale(1.04); }
+        }
         .cwa-cost-media-overlay {
           position: absolute; inset: 0;
           background: linear-gradient(180deg, rgba(10,10,10,0.12) 0%, rgba(10,10,10,0.55) 100%);
@@ -2946,8 +2951,21 @@ export default function CustomWebAppPage() {
           .cwa-pillar-metric { font-size: 11px; padding: 6px 12px; }
           .cwa-pillar-desc { font-size: 15px; line-height: 1.7; }
 
-          .cwa-cost-split { grid-template-columns: 1fr; gap: 40px; }
-          .cwa-cost-media { min-height: 320px; aspect-ratio: 16 / 9; }
+          .cwa-cost-split {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            width: 100%;
+          }
+          .cwa-cost-split > * { min-width: 0; }
+          .cwa-cost-media {
+            min-height: 320px;
+            aspect-ratio: 16 / 9;
+            width: 100%;
+            max-width: 100%;
+            justify-self: stretch;
+          }
+          /* Photo is composed with the laptop on the right; center crop reads as off-balance on narrow viewports */
+          .cwa-cost-media-img { object-position: right center; }
           .cwa-fail-grid { grid-template-columns: repeat(2, 1fr); }
 
           .cwa-process-steps { padding-left: 48px; }
@@ -3114,6 +3132,13 @@ export default function CustomWebAppPage() {
           /* Reduce motion impact on mobile — no transform shift when active */
           .cwa-pillar-row { opacity: 0.55; transform: none; }
           .cwa-pillar-row[data-active="true"] { opacity: 1; transform: none; }
+
+          /* Cost section: constrain inner width so media aligns with padded section edge */
+          .cwa-cost-inner { width: 100%; box-sizing: border-box; }
+          .cwa-cost-media {
+            margin-left: auto;
+            margin-right: auto;
+          }
 
           .cwa-fail-grid { grid-template-columns: 1fr; gap: 18px; }
           .cwa-fail-card-body { padding: 20px 18px 22px; }
