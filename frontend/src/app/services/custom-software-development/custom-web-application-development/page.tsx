@@ -917,7 +917,7 @@ export default function CustomWebAppPage() {
               </h2>
               <p className="cwa-h2-lead">
                 Mature, production-ready stacks — picked for your problem,
-                not because they're new.
+                not because they&apos;re new.
               </p>
             </div>
 
@@ -968,15 +968,15 @@ export default function CustomWebAppPage() {
                         <span className="cwa-syn-brace">{"{"}</span>
                         <span className="cwa-syn-prop"> name</span>
                         <span className="cwa-syn-punct">: </span>
-                        <span className="cwa-syn-str">"{it.name}"</span>
+                        <span className="cwa-syn-str">&quot;{it.name}&quot;</span>
                         <span className="cwa-syn-punct">, </span>
                         <span className="cwa-syn-prop">v</span>
                         <span className="cwa-syn-punct">: </span>
-                        <span className="cwa-syn-str">"{it.v}"</span>
+                        <span className="cwa-syn-str">&quot;{it.v}&quot;</span>
                         <span className="cwa-syn-punct">, </span>
                         <span className="cwa-syn-prop">role</span>
                         <span className="cwa-syn-punct">: </span>
-                        <span className="cwa-syn-str">"{it.role}"</span>
+                        <span className="cwa-syn-str">&quot;{it.role}&quot;</span>
                         <span className="cwa-syn-brace"> {"}"}</span>
                         <span className="cwa-syn-punct">,</span>
                       </span>
@@ -1007,7 +1007,7 @@ export default function CustomWebAppPage() {
                 Frequently <span className="cwa-italic-mute">asked.</span>
               </h2>
               <p className="cwa-h2-lead cwa-faq-lead">
-                Real questions from real prospects. If yours isn't here, send us a
+                Real questions from real prospects. If yours isn&apos;t here, send us a
                 note — we answer every inquiry within 24 hours.
               </p>
               <Link href="/contact" className="cwa-faq-cta">

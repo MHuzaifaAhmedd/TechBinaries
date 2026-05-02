@@ -1,12 +1,37 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { TESTIMONIALS } from "@/data/home";
 
 // ── TestimonialsSection ───────────────────────────────────────────────────────
 // Sliding testimonial carousel — auto-advances every 3.8 s with left/right
 // arrow controls. On mobile shows 1 card, on desktop shows 3.
 // ─────────────────────────────────────────────────────────────────────────────
+
+type ArrowButtonProps = {
+  label: string;
+  onClick: () => void;
+  char: string;
+};
+
+function ArrowBtn({ label, onClick, char }: ArrowButtonProps) {
+  return (
+    <button
+      aria-label={label}
+      onClick={onClick}
+      suppressHydrationWarning
+      style={{
+        width: 42, height: 42, borderRadius: "50%",
+        border: "1px solid rgba(0,0,0,0.2)",
+        background: "#fff", color: "#111",
+        fontSize: 20, lineHeight: 1, cursor: "pointer",
+        flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: 0,
+      }}
+    >
+      {char}
+    </button>
+  );
+}
 
 export default function TestimonialsSection() {
   const [isMobile, setIsMobile] = useState(false);
@@ -88,23 +113,6 @@ export default function TestimonialsSection() {
     );
     setSlideDirection(null);
   };
-
-  const ArrowBtn = ({ label, onClick, char }: { label: string; onClick: () => void; char: string }) => (
-    <button
-      aria-label={label}
-      onClick={onClick}
-      suppressHydrationWarning
-      style={{
-        width: 42, height: 42, borderRadius: "50%",
-        border: "1px solid rgba(0,0,0,0.2)",
-        background: "#fff", color: "#111",
-        fontSize: 20, lineHeight: 1, cursor: "pointer",
-        flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: 0,
-      }}
-    >
-      {char}
-    </button>
-  );
 
   return (
     <section
