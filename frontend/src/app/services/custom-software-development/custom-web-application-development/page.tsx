@@ -77,18 +77,59 @@ const GROWTH = {
 
 const COST = {
   image:
-    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1400&q=80&auto=format&fit=crop",
-  imageAlt: "Analytics dashboard showing performance metrics",
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=80&auto=format&fit=crop",
+  imageAlt:
+    "Product owner reviewing web analytics and KPIs on a laptop after shipping a web application",
   kicker: "What goes wrong",
   title: "The cost of getting it",
   titleAccent: "wrong.",
   lead:
     "Most failed web apps don't fail at launch — they fail in the first 90 days. The pattern is consistent and almost always preventable.",
   failures: [
-    { stat: "53%",   label: "Bounce above 3s",     h: "Bloated bundles",          d: "Megabytes of unused JavaScript collapse mobile performance and quietly kill conversion on slower networks." },
-    { stat: "4.2×",  label: "Slower velocity",     h: "Brittle architecture",     d: "Tightly coupled services and shared databases turn every new feature into a coordination tax." },
-    { stat: "67%",   label: "Bugs found by users", h: "Missing observability",    d: "Without structured logs, traces, and RUM, you discover regressions from customer tickets — not dashboards." },
-    { stat: "26%",   label: "Excluded users",      h: "No accessibility",         d: "Skipping WCAG and keyboard support narrows your audience and makes refactors dramatically more expensive." },
+    {
+      stat: "53%",
+      label: "Bounce above 3s",
+      h: "Bloated bundles",
+      d: "Megabytes of unused JavaScript collapse mobile performance and quietly kill conversion on slower networks.",
+      image:
+        "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=80&auto=format&fit=crop",
+      imageAlt:
+        "Developer building a web application with HTML and JavaScript visible on a laptop screen",
+      theme: "perf",
+    },
+    {
+      stat: "4.2×",
+      label: "Slower velocity",
+      h: "Brittle architecture",
+      d: "Tightly coupled services and shared databases turn every new feature into a coordination tax.",
+      image:
+        "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900&q=80&auto=format&fit=crop",
+      imageAlt:
+        "Engineering team collaborating on architecture and APIs for a web platform",
+      theme: "arch",
+    },
+    {
+      stat: "67%",
+      label: "Bugs found by users",
+      h: "Missing observability",
+      d: "Without structured logs, traces, and RUM, you discover regressions from customer tickets — not dashboards.",
+      image:
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop",
+      imageAlt:
+        "Monitoring dashboard with charts for uptime and errors on a live web service",
+      theme: "obs",
+    },
+    {
+      stat: "26%",
+      label: "Excluded users",
+      h: "No accessibility",
+      d: "Skipping WCAG and keyboard support narrows your audience and makes refactors dramatically more expensive.",
+      image:
+        "https://images.unsplash.com/photo-1574887427561-d3d5d58c9273?w=900&q=80&auto=format&fit=crop",
+      imageAlt:
+        "Person using a refreshable braille display—assistive technology for accessing web and digital content",
+      theme: "a11y",
+    },
   ],
   close:
     "We engineer around every one of these failure modes — performance, architecture, observability, accessibility — as defaults, not upsells.",
@@ -657,17 +698,32 @@ export default function CustomWebAppPage() {
             </div>
 
             <div className="cwa-fail-grid">
-              {COST.failures.map((f, i) => (
-                <article key={f.h} className="cwa-fail-card">
-                  <div className="cwa-fail-card-top">
-                    <span className="cwa-fail-card-idx">F—{String(i + 1).padStart(2, "0")}</span>
-                    <span className="cwa-fail-card-arrow" aria-hidden>↗</span>
+              {COST.failures.map((f) => (
+                <article
+                  key={f.h}
+                  className="cwa-fail-card"
+                  data-theme={f.theme}
+                >
+                  <div className="cwa-fail-card-visual">
+                    <img
+                      src={f.image}
+                      alt={f.imageAlt}
+                      loading="lazy"
+                      className="cwa-fail-card-img"
+                    />
+                    <div className="cwa-fail-card-visual-grad" aria-hidden />
+                    <span className="cwa-fail-card-arrow" aria-hidden>
+                      ↗
+                    </span>
                   </div>
-                  <div className="cwa-fail-card-stat">{f.stat}</div>
-                  <div className="cwa-fail-card-label">{f.label}</div>
-                  <div className="cwa-fail-card-divider" />
-                  <h3 className="cwa-fail-card-h">{f.h}</h3>
-                  <p className="cwa-fail-card-d">{f.d}</p>
+                  <div className="cwa-fail-card-body">
+                    <div className="cwa-fail-card-metric">
+                      <span className="cwa-fail-card-stat">{f.stat}</span>
+                      <span className="cwa-fail-card-label">{f.label}</span>
+                    </div>
+                    <h3 className="cwa-fail-card-h">{f.h}</h3>
+                    <p className="cwa-fail-card-d">{f.d}</p>
+                  </div>
                 </article>
               ))}
             </div>
@@ -1536,58 +1592,176 @@ export default function CustomWebAppPage() {
         }
 
         .cwa-fail-grid {
-          display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
-          border-top: 1px solid rgba(10,10,10,0.1);
-          border-left: 1px solid rgba(10,10,10,0.1);
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 22px;
+          margin-top: clamp(8px, 2vw, 20px);
         }
         .cwa-fail-card {
-          padding: 32px 28px 36px;
-          border-right: 1px solid rgba(10,10,10,0.1);
-          border-bottom: 1px solid rgba(10,10,10,0.1);
-          display: flex; flex-direction: column;
-          background: #fafaf9; position: relative;
-          transition: background 0.3s ease; overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          overflow: hidden;
+          border-radius: 18px;
+          background: #ffffff;
+          border: 1px solid rgba(10, 10, 10, 0.07);
+          box-shadow:
+            0 1px 2px rgba(10, 10, 10, 0.04),
+            0 12px 40px -18px rgba(10, 10, 10, 0.18);
+          transition:
+            transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 0.35s ease;
         }
-        .cwa-fail-card::before {
-          content: ""; position: absolute; left: 0; right: 0; top: 0;
-          height: 2px; background: #0a0a0a;
-          transform: scaleX(0); transform-origin: left;
-          transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+        .cwa-fail-card:hover {
+          transform: translateY(-6px);
+          box-shadow:
+            0 4px 8px rgba(10, 10, 10, 0.06),
+            0 28px 56px -24px rgba(10, 10, 10, 0.28);
+          border-color: rgba(10, 10, 10, 0.12);
         }
-        .cwa-fail-card:hover { background: rgba(10,10,10,0.025); }
-        .cwa-fail-card:hover::before { transform: scaleX(1); }
-        .cwa-fail-card-top {
-          display: flex; justify-content: space-between; align-items: center;
-          margin-bottom: 20px;
+        .cwa-fail-card-visual {
+          position: relative;
+          aspect-ratio: 16 / 10;
+          overflow: hidden;
+          background: #e8e8e6;
         }
-        .cwa-fail-card-idx {
-          font-family: var(--font-mono); font-size: 11px; font-weight: 500;
-          letter-spacing: 0.1em; color: rgba(10,10,10,0.4);
+        .cwa-fail-card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transform: scale(1.02);
+          transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .cwa-fail-card:hover .cwa-fail-card-img {
+          transform: scale(1.08);
+        }
+        .cwa-fail-card-visual-grad {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: linear-gradient(
+            180deg,
+            rgba(10, 10, 10, 0.05) 0%,
+            rgba(10, 10, 10, 0.35) 100%
+          );
+          transition: opacity 0.4s ease;
+        }
+        .cwa-fail-card[data-theme="perf"] .cwa-fail-card-visual-grad {
+          background: linear-gradient(
+            145deg,
+            rgba(180, 83, 9, 0.15) 0%,
+            rgba(10, 10, 10, 0.5) 100%
+          );
+        }
+        .cwa-fail-card[data-theme="arch"] .cwa-fail-card-visual-grad {
+          background: linear-gradient(
+            145deg,
+            rgba(30, 58, 138, 0.2) 0%,
+            rgba(10, 10, 10, 0.55) 100%
+          );
+        }
+        .cwa-fail-card[data-theme="obs"] .cwa-fail-card-visual-grad {
+          background: linear-gradient(
+            145deg,
+            rgba(5, 150, 105, 0.18) 0%,
+            rgba(10, 10, 10, 0.52) 100%
+          );
+        }
+        .cwa-fail-card[data-theme="a11y"] .cwa-fail-card-visual-grad {
+          background: linear-gradient(
+            145deg,
+            rgba(124, 58, 237, 0.14) 0%,
+            rgba(10, 10, 10, 0.48) 100%
+          );
         }
         .cwa-fail-card-arrow {
-          font-size: 14px; color: rgba(10,10,10,0.3);
-          transition: color 0.3s, transform 0.3s;
+          position: absolute;
+          top: 14px;
+          right: 14px;
+          z-index: 2;
+          width: 34px;
+          height: 34px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 15px;
+          color: #fafaf9;
+          border-radius: 10px;
+          background: rgba(10, 10, 10, 0.35);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          transition: color 0.3s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+            background 0.3s ease;
         }
         .cwa-fail-card:hover .cwa-fail-card-arrow {
-          color: #0a0a0a; transform: translate(2px, -2px);
+          background: rgba(255, 255, 255, 0.95);
+          color: #0a0a0a;
+          transform: translate(3px, -3px);
+        }
+        .cwa-fail-card-body {
+          padding: 22px 22px 26px;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          gap: 0;
+          background: linear-gradient(180deg, #ffffff 0%, #fafaf9 100%);
+        }
+        .cwa-fail-card-metric {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: baseline;
+          gap: 10px 14px;
+          margin-bottom: 14px;
+          padding-bottom: 16px;
+          border-bottom: 1px solid rgba(10, 10, 10, 0.07);
         }
         .cwa-fail-card-stat {
           font-family: var(--font-display);
-          font-size: clamp(40px, 4.4vw, 60px);
-          font-weight: 500; letter-spacing: -0.045em;
-          line-height: 0.92; color: #0a0a0a;
-          font-variant-numeric: tabular-nums; margin-bottom: 8px;
+          font-size: clamp(36px, 3.8vw, 52px);
+          font-weight: 500;
+          letter-spacing: -0.045em;
+          line-height: 0.95;
+          color: #0a0a0a;
+          font-variant-numeric: tabular-nums;
         }
         .cwa-fail-card-label {
-          font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
-          text-transform: uppercase; color: rgba(10,10,10,0.55); margin-bottom: 22px;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(10, 10, 10, 0.48);
+          max-width: 140px;
+          line-height: 1.35;
         }
-        .cwa-fail-card-divider { height: 1px; background: rgba(10,10,10,0.1); margin-bottom: 16px; }
         .cwa-fail-card-h {
-          font-family: var(--font-display); font-size: 17px; font-weight: 500;
-          letter-spacing: -0.018em; line-height: 1.2; color: #0a0a0a; margin: 0 0 8px;
+          font-family: var(--font-display);
+          font-size: clamp(16px, 1.35vw, 18px);
+          font-weight: 500;
+          letter-spacing: -0.02em;
+          line-height: 1.25;
+          color: #0a0a0a;
+          margin: 0 0 10px;
         }
-        .cwa-fail-card-d { font-size: 13.5px; line-height: 1.62; color: rgba(10,10,10,0.6); margin: 0; }
+        .cwa-fail-card-d {
+          font-size: 13.5px;
+          line-height: 1.65;
+          color: rgba(10, 10, 10, 0.58);
+          margin: 0;
+          flex: 1;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cwa-fail-card {
+            transition-duration: 0.01ms;
+          }
+          .cwa-fail-card:hover {
+            transform: none;
+          }
+          .cwa-fail-card:hover .cwa-fail-card-img {
+            transform: scale(1.02);
+          }
+        }
 
         /* ═══════════════════════════════════════════════════════════════
            SECTION 4 — PROCESS
@@ -2047,9 +2221,9 @@ export default function CustomWebAppPage() {
           .cwa-pillar-body { grid-template-columns: 1fr; row-gap: 10px; }
           .cwa-pillar-metric { grid-row: auto; justify-self: start; }
 
-          .cwa-fail-grid { grid-template-columns: 1fr; }
-          .cwa-fail-card:nth-child(odd) { border-right: 0; }
-          .cwa-fail-card { border-right: 0 !important; padding: 26px 22px 28px; }
+          .cwa-fail-grid { grid-template-columns: 1fr; gap: 18px; }
+          .cwa-fail-card-body { padding: 20px 18px 22px; }
+          .cwa-fail-card-visual { aspect-ratio: 16 / 9; }
 
           .cwa-process-steps { padding-left: 36px; }
           .cwa-process-line { left: 14px; }
