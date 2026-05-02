@@ -228,6 +228,8 @@ export default function CustomWebAppPage() {
     maxHeight: number;
   } | null>(null);
   const [isHeroNarrow, setIsHeroNarrow] = useState(false);
+  /** Matches hero narrow layout breakpoint (two-line headline, same as parent CSD page). */
+  const [isMobile, setIsMobile] = useState(false);
   const heroServiceBtnRef = useRef<HTMLButtonElement>(null);
   const heroServiceMenuRef = useRef<HTMLDivElement>(null);
   const heroServiceSheetRef = useRef<HTMLDivElement>(null);
@@ -236,6 +238,15 @@ export default function CustomWebAppPage() {
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(max-width: 768px)");
     const update = () => setIsHeroNarrow(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 900px)");
+    const update = () => setIsMobile(mq.matches);
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
@@ -779,21 +790,40 @@ export default function CustomWebAppPage() {
                 <div className="csd-hero-mobile-spacer" aria-hidden />
                 <div className="cwa-hero-copy">
                   <h1 id="cwa-hero-title" className="cwa-hero-title">
-                    <span className="cwa-h1-line">
-                      {PAGE.headline1.split("").map((c, i) => (
-                        <span key={`a-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
-                      ))}
-                    </span>
-                    <span className="cwa-h1-line">
-                      {PAGE.headline2.split("").map((c, i) => (
-                        <span key={`b-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
-                      ))}
-                    </span>
-                    <span className="cwa-h1-line">
-                      <span className="cwa-h1-italic">
-                        {PAGE.headlineItalic.split("").map((c, i) => (
-                          <span key={`c-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
+                    <span className="cwa-h1-lines-desktop" aria-hidden={isMobile}>
+                      <span className="cwa-h1-line">
+                        {PAGE.headline1.split("").map((c, i) => (
+                          <span key={`a-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
                         ))}
+                      </span>
+                      <span className="cwa-h1-line">
+                        {PAGE.headline2.split("").map((c, i) => (
+                          <span key={`b-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
+                        ))}
+                      </span>
+                      <span className="cwa-h1-line">
+                        <span className="cwa-h1-italic">
+                          {PAGE.headlineItalic.split("").map((c, i) => (
+                            <span key={`c-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
+                          ))}
+                        </span>
+                      </span>
+                    </span>
+                    <span className="cwa-h1-lines-mobile" aria-hidden={!isMobile}>
+                      <span className="cwa-h1-line cwa-h1-line-mobile">
+                        {`${PAGE.headline1} engineered`.split("").map((c, i) => (
+                          <span key={`m1-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
+                        ))}
+                      </span>
+                      <span className="cwa-h1-line cwa-h1-line-mobile">
+                        {"for ".split("").map((c, i) => (
+                          <span key={`m2-${i}`} className="cwa-h1-char" style={{ whiteSpace: "pre" }}>{c === " " ? "\u00A0" : c}</span>
+                        ))}
+                        <span className="cwa-h1-italic">
+                          {PAGE.headlineItalic.split("").map((c, i) => (
+                            <span key={`m3i-${i}`} className="cwa-h1-char">{c === " " ? "\u00A0" : c}</span>
+                          ))}
+                        </span>
                       </span>
                     </span>
                   </h1>
@@ -1918,6 +1948,8 @@ export default function CustomWebAppPage() {
           margin: 0 0 26px; color: #fff; max-width: 720px;
           text-shadow: 0 10px 30px rgba(0,0,0,0.34);
         }
+        .cwa-h1-lines-desktop { display: block; }
+        .cwa-h1-lines-mobile { display: none; }
         .cwa-h1-line {
           overflow: visible; padding-bottom: 0.075em; display: block;
           white-space: nowrap; width: 100%;
@@ -2983,6 +3015,8 @@ export default function CustomWebAppPage() {
             min-height: min(58svh, 580px); transform: none; max-width: none;
           }
           .cwa-hero-title { font-size: clamp(28px, 7vw, 40px); line-height: 1.02; margin-bottom: 16px; }
+          .cwa-h1-lines-desktop { display: none; }
+          .cwa-h1-lines-mobile { display: block; }
           .cwa-hero-lead { font-size: 15px; line-height: 1.62; margin-bottom: 24px; max-width: none; }
           .cwa-hero-inner { gap: 0; }
           .cwa-hero .csd-hero-main { min-height: auto; gap: 0; }
