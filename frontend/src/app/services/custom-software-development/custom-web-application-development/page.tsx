@@ -3014,7 +3014,7 @@ export default function CustomWebAppPage() {
             display: flex; flex-direction: column;
             min-height: min(58svh, 580px); transform: none; max-width: none;
           }
-          .cwa-hero-title { font-size: clamp(28px, 7vw, 40px); line-height: 1.02; margin-bottom: 16px; }
+          .cwa-hero-title { font-size: clamp(30px, 7.2vw, 42px); line-height: 1.02; margin-bottom: 16px; }
           .cwa-h1-lines-desktop { display: none; }
           .cwa-h1-lines-mobile { display: block; }
           .cwa-hero-lead { font-size: 15px; line-height: 1.62; margin-bottom: 24px; max-width: none; }
@@ -3035,7 +3035,7 @@ export default function CustomWebAppPage() {
           .cwa-hero { padding: 130px 14px 60px; min-height: auto; }
           .cwa-hero .csd-hero-left { transform: none; }
           .cwa-hero-title {
-            font-size: clamp(24px, 6.6vw, 36px);
+            font-size: clamp(26px, 7vw, 38px);
             max-width: 100%; margin-bottom: 16px; line-height: 1.03;
           }
           .cwa-hero-lead { font-size: 14px; line-height: 1.58; margin-bottom: 20px; }
