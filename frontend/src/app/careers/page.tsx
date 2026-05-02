@@ -3229,20 +3229,43 @@ export default function CareersPage() {
           gap: clamp(28px, 4vh, 52px);
         }
 
-        /* Header sits above the scenes; smaller than the page H2 default */
+        /* Title + lead: one row, first-line baselines aligned; heading width = text only */
         .cr-dna-header {
           flex-shrink: 0;
           margin-bottom: 0;
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: baseline;
+          column-gap: clamp(12px, 1.8vw, 22px);
+          row-gap: 8px;
         }
         .cr-dna-header .cr-h2 {
           font-size: clamp(28px, 3.4vw, 44px);
-          margin: 12px 0 12px;
-          max-width: 700px;
+          margin: 0;
+          flex: 0 0 auto;
+          max-width: none;
+          width: max-content;
+          line-height: 1.06;
         }
         .cr-dna-header .cr-h2-lead {
           font-size: 14.5px;
-          line-height: 1.6;
-          max-width: 540px;
+          line-height: 1.35;
+          margin: 0;
+          flex: 0 1 auto;
+          min-width: 0;
+          max-width: min(52ch, 100%);
+          /* Optical: small type sits low vs display H2 with align-items: baseline */
+          transform: translateY(calc(-0.2em - 2px));
+        }
+
+        /* Desktop: span full inner width; pin lead to the right padding edge */
+        @media (min-width: 1101px) {
+          .cr-dna-header {
+            width: 100%;
+          }
+          .cr-dna-header .cr-h2-lead {
+            margin-left: auto;
+          }
         }
 
         /* Scenes + orbit — flex column; progress bar pinned to bottom */
@@ -3744,8 +3767,15 @@ export default function CareersPage() {
           }
           .cr-dna-header .cr-h2 {
             font-size: clamp(34px, 4.6vw, 52px);
+            width: auto;
+            max-width: 100%;
           }
-          .cr-dna-header .cr-h2-lead { font-size: 16px; line-height: 1.7; }
+          .cr-dna-header .cr-h2-lead {
+            font-size: 16px;
+            line-height: 1.7;
+            min-width: 0;
+            max-width: none;
+          }
           .cr-dna-scenes { display: none; }
           .cr-dna-cards {
             display: flex;
