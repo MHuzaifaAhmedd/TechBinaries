@@ -1978,6 +1978,8 @@ export default function CareersPage() {
   const heroRef = useRef<HTMLElement | null>(null);
   const tickerRef = useRef<HTMLDivElement | null>(null);
   const valuesListRef = useRef<HTMLDivElement | null>(null);
+  const dnaOrbitWrapRef = useRef<HTMLDivElement | null>(null);
+  const dnaCursorRingRef = useRef<HTMLDivElement | null>(null);
 
   // Lenis smooth scroll
   useEffect(() => {
@@ -2166,11 +2168,10 @@ export default function CareersPage() {
     return () => ctx.revert();
   }, []);
 
-  // ── DNA — PINNED SEQUENTIAL REPLACEMENT (desktop only) ──
-  // Section pins to viewport. Scroll progress maps 0→1 to active principle
-  // index 0→4. Outgoing scene slides right + fades; incoming scene slides
-  // up + fades in. CSS handles the per-state transforms via [data-rel].
-  // Mobile (≤1100px or coarse pointer) gets stacked clean cards instead.
+  // ── DNA — PINNED: OVAL ORBIT + DETAIL (desktop only) ──
+  // Scroll progress drives (1) which principle is “active” for copy/glyphs and
+  // (2) continuous rotation of five nodes along an ellipse — front = sharp,
+  // back of orbit = faded (binary / 0·1 depth cue). Mobile: stacked cards.
   useEffect(() => {
     const list = valuesListRef.current;
     if (!list) return;
@@ -2184,9 +2185,78 @@ export default function CareersPage() {
         if (!stage) return;
 
         const totalScenes = DNA.values.length;
-        // 0.85 viewport-heights of scroll per principle. Higher = slower beat.
         const distancePerScene = 0.85;
         const totalDistance = totalScenes * distancePerScene;
+
+        let lastOrbitProgress = 0;
+
+        const updateDnaCursorRing = (progress: number) => {
+          const ring = dnaCursorRingRef.current;
+          if (!ring) return;
+          const arc = ring.querySelector<SVGCircleElement>("[data-ring-arc]");
+          if (arc) arc.setAttribute("stroke-dashoffset", String(1 - progress));
+          const pct = ring.querySelector("[data-ring-pct]");
+          if (pct) pct.textContent = String(Math.round(progress * 100));
+        };
+
+        const onStageMove = (e: MouseEvent) => {
+          const ring = dnaCursorRingRef.current;
+          if (!ring) return;
+          ring.style.left = `${e.clientX}px`;
+          ring.style.top = `${e.clientY}px`;
+          ring.dataset.visible = "true";
+          updateDnaCursorRing(lastOrbitProgress);
+        };
+
+        const onStageLeave = () => {
+          const ring = dnaCursorRingRef.current;
+          if (ring) ring.dataset.visible = "false";
+        };
+
+        const updateOrbit = (progress: number) => {
+          if (
+            typeof window !== "undefined" &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ) {
+            return;
+          }
+          const wrap = dnaOrbitWrapRef.current;
+          if (!wrap) return;
+          const nodes = wrap.querySelectorAll<HTMLElement>(".cr-dna-orbit-node");
+          if (!nodes.length) return;
+
+          const w = wrap.clientWidth || 1;
+          const h = wrap.clientHeight || 1;
+          const rx = w * 0.44;
+          const ry = h * 0.42;
+          const cx = w / 2;
+          const cy = h / 2;
+
+          nodes.forEach((node, i) => {
+            const theta =
+              Math.PI / 2 +
+              (2 * Math.PI * (i - progress * (totalScenes - 1))) / totalScenes;
+            const x = cx + rx * Math.cos(theta);
+            const y = cy + ry * Math.sin(theta);
+            // depth: 1 = front (bottom of oval), 0 = back (top)
+            const depth = (Math.sin(theta) + 1) / 2;
+            const opacity = 0.18 + depth * 0.82;
+            const scale = 0.64 + depth * 0.36;
+            const blurPx = (1 - depth) * 3.4;
+            const z = Math.round(100 + depth * 100);
+            const tiltDeg = (1 - depth) * 12;
+
+            node.style.setProperty("--ob-x", `${x}px`);
+            node.style.setProperty("--ob-y", `${y}px`);
+            node.style.setProperty("--ob-o", String(opacity));
+            node.style.setProperty("--ob-s", String(scale));
+            node.style.setProperty("--ob-b", `${blurPx}px`);
+            node.style.setProperty("--ob-z", String(z));
+            node.style.setProperty("--ob-d", String(depth));
+            node.style.setProperty("--ob-rx", `${tiltDeg}deg`);
+            node.dataset.front = depth > 0.52 ? "true" : "false";
+          });
+        };
 
         const trigger = ScrollTrigger.create({
           trigger: stage,
@@ -2198,13 +2268,30 @@ export default function CareersPage() {
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
+            lastOrbitProgress = self.progress;
             const raw = self.progress * totalScenes;
             const idx = Math.min(totalScenes - 1, Math.max(0, Math.floor(raw)));
             setActiveValue((prev) => (prev === idx ? prev : idx));
+            updateOrbit(self.progress);
+            updateDnaCursorRing(self.progress);
           },
         });
 
+        stage.addEventListener("mousemove", onStageMove);
+        stage.addEventListener("mouseleave", onStageLeave);
+
+        const onResize = () => updateOrbit(lastOrbitProgress);
+        window.addEventListener("resize", onResize);
+        requestAnimationFrame(() => {
+          lastOrbitProgress = trigger.progress ?? 0;
+          updateOrbit(lastOrbitProgress);
+          updateDnaCursorRing(lastOrbitProgress);
+        });
+
         return () => {
+          stage.removeEventListener("mousemove", onStageMove);
+          stage.removeEventListener("mouseleave", onStageLeave);
+          window.removeEventListener("resize", onResize);
           trigger.kill();
         };
       }
@@ -2259,6 +2346,50 @@ export default function CareersPage() {
           mixBlendMode: "multiply",
         }}
       />
+
+      {/* DNA section: cursor-follow ring = full scroll through pinned range (0–100%), desktop only */}
+      <div
+        ref={dnaCursorRingRef}
+        className="cr-dna-cursor-ring"
+        data-visible="false"
+        aria-hidden="true"
+      >
+        <div className="cr-dna-cursor-ring-inner">
+          <svg
+            className="cr-dna-cursor-ring-svg"
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
+            aria-hidden
+          >
+            <circle
+              cx="28"
+              cy="28"
+              r="22"
+              fill="none"
+              stroke="rgba(250,250,249,0.14)"
+              strokeWidth="2"
+            />
+            <circle
+              data-ring-arc
+              cx="28"
+              cy="28"
+              r="22"
+              fill="none"
+              stroke="#fafaf9"
+              strokeWidth="2"
+              strokeLinecap="round"
+              transform="rotate(-90 28 28)"
+              pathLength="1"
+              strokeDasharray="1"
+              strokeDashoffset="1"
+            />
+          </svg>
+          <span className="cr-dna-cursor-ring-pct" data-ring-pct>
+            0
+          </span>
+        </div>
+      </div>
 
       <div
         style={{
@@ -2459,11 +2590,10 @@ export default function CareersPage() {
 
         {/* ═══════════════════════════════════════════════════════════════
             SECTION 3 — THE TECH BINARIES STANDARD
-            Desktop: pinned scroll-jacking. One principle visible at a time.
-            Sequential replacement — outgoing slides right + fades, incoming
-            slides up from below + fades in. CSS handles state transitions
-            via [data-rel="active|past|future"].
-            Mobile: stacked clean cards, no pin, no scroll-jacking.
+            Desktop: pinned scroll. Five principles ride an elliptical orbit;
+            scroll rotates the orbit so each kicker sweeps to the front (sharp)
+            while the rear of the oval fades — binary 0/1 depth. Detail copy
+            + glyph swap per active step. Mobile: stacked cards, no pin.
         ═══════════════════════════════════════════════════════════════ */}
         <section className="cr-dna" aria-labelledby="cr-dna-title">
           <div className="cr-dna-stage">
@@ -2476,68 +2606,164 @@ export default function CareersPage() {
                 <p className="cr-h2-lead cr-h2-lead--light">{DNA.lead}</p>
               </div>
 
-              {/* DESKTOP — sequential replacement scenes (one visible at a time) */}
+              {/* DESKTOP — oval orbit + detail stack */}
               <div className="cr-dna-scenes" ref={valuesListRef} aria-live="polite">
-                {DNA.values.map((v, i) => {
-                  const rel =
-                    i === activeValue ? "active" :
-                    i < activeValue ? "past" :
-                    "future";
-                  return (
-                    <article
-                      key={v.n}
-                      className="cr-dna-scene"
-                      data-rel={rel}
-                      aria-hidden={rel !== "active"}
+                <div className="cr-dna-desktop-split">
+                  <div
+                    className="cr-dna-orbit-wrap"
+                    ref={dnaOrbitWrapRef}
+                    aria-hidden
+                  >
+                    <svg
+                      className="cr-dna-orbit-ellipse"
+                      viewBox="0 0 400 320"
+                      preserveAspectRatio="xMidYMid meet"
+                      aria-hidden
                     >
-                      <div className="cr-dna-scene-grid">
-                        {/* LEFT — meta + glyph */}
-                        <div className="cr-dna-scene-aside">
-                          <div className="cr-dna-scene-meta">
-                            <span className="cr-dna-scene-num">{v.n}</span>
-                            <span className="cr-dna-scene-divider" aria-hidden />
-                            <span className="cr-dna-scene-kicker">{v.kicker}</span>
-                          </div>
-                          <div className="cr-dna-scene-glyph" aria-hidden>
-                            <svg viewBox="0 0 80 80" width="100%" height="100%">
-                              {v.glyph}
-                            </svg>
+                      <defs>
+                        <linearGradient
+                          id="cr-dna-orbit-stroke"
+                          x1="0%"
+                          y1="15%"
+                          x2="92%"
+                          y2="88%"
+                        >
+                          <stop offset="0%" stopColor="rgba(250,250,249,0.07)" />
+                          <stop offset="42%" stopColor="rgba(250,250,249,0.28)" />
+                          <stop offset="100%" stopColor="rgba(250,250,249,0.08)" />
+                        </linearGradient>
+                        <radialGradient id="cr-dna-orbit-fill" cx="50%" cy="46%" r="58%">
+                          <stop offset="0%" stopColor="rgba(250,250,249,0.045)" />
+                          <stop offset="70%" stopColor="rgba(250,250,249,0.01)" />
+                          <stop offset="100%" stopColor="rgba(250,250,249,0)" />
+                        </radialGradient>
+                        <filter
+                          id="cr-dna-orbit-glow"
+                          x="-35%"
+                          y="-35%"
+                          width="170%"
+                          height="170%"
+                        >
+                          <feGaussianBlur stdDeviation="1.6" result="b" />
+                          <feMerge>
+                            <feMergeNode in="b" />
+                            <feMergeNode in="SourceGraphic" />
+                          </feMerge>
+                        </filter>
+                      </defs>
+                      <g
+                        className="cr-dna-orbit-ellipse-rot"
+                        transform="rotate(-15 200 160)"
+                      >
+                        <ellipse
+                          cx="200"
+                          cy="160"
+                          rx="178"
+                          ry="138"
+                          fill="url(#cr-dna-orbit-fill)"
+                          stroke="none"
+                        />
+                        <ellipse
+                          cx="200"
+                          cy="160"
+                          rx="178"
+                          ry="138"
+                          fill="none"
+                          stroke="rgba(250,250,249,0.06)"
+                          strokeWidth="10"
+                          opacity="0.35"
+                          filter="url(#cr-dna-orbit-glow)"
+                        />
+                        <ellipse
+                          cx="200"
+                          cy="160"
+                          rx="178"
+                          ry="138"
+                          fill="none"
+                          stroke="url(#cr-dna-orbit-stroke)"
+                          strokeWidth="1.25"
+                          strokeDasharray="3 11"
+                          strokeLinecap="round"
+                          filter="url(#cr-dna-orbit-glow)"
+                        />
+                        <ellipse
+                          cx="200"
+                          cy="160"
+                          rx="178"
+                          ry="138"
+                          fill="none"
+                          stroke="rgba(250,250,249,0.11)"
+                          strokeWidth="0.5"
+                          strokeDasharray="1 18"
+                          opacity="0.85"
+                        />
+                      </g>
+                    </svg>
+                    <div className="cr-dna-orbit-nodes">
+                      {DNA.values.map((v, i) => (
+                        <div
+                          key={v.n}
+                          className="cr-dna-orbit-node"
+                          data-front="false"
+                        >
+                          <div className="cr-dna-orbit-node-inner">
+                            <span className="cr-dna-orbit-node-sheen" aria-hidden />
+                            <div className="cr-dna-orbit-node-top">
+                              <span className="cr-dna-orbit-trace" aria-hidden>
+                                <span className="cr-dna-orbit-trace-line" />
+                                <span className="cr-dna-orbit-bin">
+                                  <span className="cr-dna-orbit-bit" />
+                                  <span className="cr-dna-orbit-bit cr-dna-orbit-bit--dim" />
+                                </span>
+                              </span>
+                              <span className="cr-dna-orbit-chip">
+                                {String(i + 1).padStart(2, "0")}
+                              </span>
+                            </div>
+                            <div className="cr-dna-orbit-idx-panel">
+                              <span className="cr-dna-orbit-idx">{v.n}</span>
+                            </div>
+                            <p className="cr-dna-orbit-kicker">{v.kicker}</p>
                           </div>
                         </div>
-
-                        {/* RIGHT — head + body */}
-                        <div className="cr-dna-scene-content">
-                          <h3 className="cr-dna-scene-head">{v.head}</h3>
-                          <p className="cr-dna-scene-body">{v.body}</p>
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
-
-                {/* Bottom progress strip — sticky to stage bottom */}
-                <div className="cr-dna-progress" aria-hidden>
-                  <div className="cr-dna-progress-bars">
-                    {DNA.values.map((_, i) => (
-                      <span
-                        key={i}
-                        className="cr-dna-progress-bar"
-                        data-state={
-                          i < activeValue ? "done" :
-                          i === activeValue ? "active" :
-                          "pending"
-                        }
-                      />
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                  <div className="cr-dna-progress-meta">
-                    <span className="cr-dna-progress-current">
-                      {String(activeValue + 1).padStart(2, "0")}
-                    </span>
-                    <span className="cr-dna-progress-sep">/</span>
-                    <span className="cr-dna-progress-total">
-                      {String(DNA.values.length).padStart(2, "0")}
-                    </span>
+
+                  <div className="cr-dna-scene-stack">
+                    {DNA.values.map((v, i) => {
+                      const rel =
+                        i === activeValue ? "active" :
+                        i < activeValue ? "past" :
+                        "future";
+                      return (
+                        <article
+                          key={v.n}
+                          className="cr-dna-scene"
+                          data-rel={rel}
+                          aria-hidden={rel !== "active"}
+                        >
+                          <div className="cr-dna-scene-grid cr-dna-scene-grid--detail">
+                            <div className="cr-dna-scene-aside">
+                              <div className="cr-dna-scene-meta">
+                                <span className="cr-dna-scene-num">{v.n}</span>
+                                <span className="cr-dna-scene-divider" aria-hidden />
+                                <span className="cr-dna-scene-kicker">{v.kicker}</span>
+                              </div>
+                              <div className="cr-dna-scene-glyph" aria-hidden>
+                                <svg viewBox="0 0 80 80" width="100%" height="100%">
+                                  {v.glyph}
+                                </svg>
+                              </div>
+                            </div>
+                            <div className="cr-dna-scene-content">
+                              <h3 className="cr-dna-scene-head">{v.head}</h3>
+                              <p className="cr-dna-scene-body">{v.body}</p>
+                            </div>
+                          </div>
+                        </article>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -3126,18 +3352,13 @@ export default function CareersPage() {
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           SECTION 3 — STANDARD (pinned sequential replacement)
+           SECTION 3 — STANDARD (pinned: elliptical orbit + detail stack)
 
-           Layout philosophy:
-           - .cr-dna-stage = the pinned element (height: 100vh)
-           - .cr-dna-scenes = absolutely-positioned scene container
-           - .cr-dna-scene = one principle, all stacked on top of each other
-           - data-rel = "active" | "past" | "future" drives the transitions
-           - Active is centered, fully visible
-           - Past slides RIGHT + fades out
-           - Future starts BELOW (translateY) + fades in when it becomes active
-           - The previous + next states never animate at the same time —
-             cleanest possible swap.
+           - .cr-dna-stage = pinned viewport
+           - .cr-dna-desktop-split = orbit (left) + stacked scenes (right)
+           - Orbit nodes: JS sets --ob-x/--ob-y (px), --ob-o, --ob-s, --ob-b, --ob-z
+           - Front of oval = full opacity; back = faded + slight blur (binary depth)
+           - .cr-dna-scene data-rel drives cross-fade / slide for detail column
         ═══════════════════════════════════════════════════════════════ */
         .cr-dna {
           background: #0a0a0a;
@@ -3153,6 +3374,13 @@ export default function CareersPage() {
           align-items: stretch;
           position: relative;
           overflow: hidden;
+        }
+        /* Custom ring replaces default cursor on desktop DNA pin (see .cr-dna-cursor-ring) */
+        @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+          .cr-dna-stage,
+          .cr-dna-stage * {
+            cursor: none !important;
+          }
         }
         /* Subtle grid texture */
         .cr-dna-stage::before {
@@ -3193,18 +3421,267 @@ export default function CareersPage() {
           max-width: 540px;
         }
 
-        /* Scenes container — everything from the heading down lives here */
+        /* Scenes + orbit — flex column; progress bar pinned to bottom */
         .cr-dna-scenes {
           position: relative;
           flex: 1 1 auto;
           min-height: 0;
+          display: flex;
+          flex-direction: column;
         }
+
+        .cr-dna-desktop-split {
+          flex: 1 1 auto;
+          min-height: 0;
+          display: grid;
+          grid-template-columns: minmax(240px, 0.92fr) minmax(300px, 1.08fr);
+          /* Space between orbit column and detail copy — orbit layout/JS unchanged */
+          gap: clamp(44px, 6.5vw, 88px);
+          align-items: center;
+        }
+
+        .cr-dna-orbit-wrap {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 1.12 / 1;
+          max-height: min(52vh, 520px);
+          min-height: 268px;
+          justify-self: center;
+          align-self: center;
+        }
+
+        .cr-dna-orbit-ellipse {
+          position: absolute;
+          inset: -6%;
+          width: 112%;
+          height: 112%;
+          pointer-events: none;
+          overflow: visible;
+        }
+
+        .cr-dna-orbit-nodes {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          perspective: 1180px;
+          perspective-origin: 48% 36%;
+          transform-style: preserve-3d;
+        }
+
+        .cr-dna-orbit-node {
+          position: absolute;
+          left: var(--ob-x, 0px);
+          top: var(--ob-y, 0px);
+          width: max-content;
+          max-width: min(288px, 36vw);
+          transform: translate3d(-50%, -50%, 0) scale(var(--ob-s, 1))
+            rotateX(var(--ob-rx, 0deg));
+          transform-origin: 50% 80%;
+          opacity: var(--ob-o, 1);
+          filter: blur(var(--ob-b, 0px));
+          z-index: var(--ob-z, 1);
+          will-change: transform, opacity, filter;
+          pointer-events: none;
+        }
+
+        .cr-dna-orbit-node-inner {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          width: 100%;
+          min-width: 208px;
+          border-radius: 17px;
+          border: 1px solid transparent;
+          background:
+            linear-gradient(
+              158deg,
+              rgba(22, 22, 24, 0.94) 0%,
+              rgba(10, 10, 12, 0.9) 48%,
+              rgba(14, 14, 16, 0.92) 100%
+            )
+            padding-box,
+            linear-gradient(
+              128deg,
+              rgba(255, 255, 255, 0.26) 0%,
+              rgba(255, 255, 255, 0.05) 38%,
+              rgba(255, 255, 255, 0.14) 100%
+            )
+            border-box;
+          background-origin: padding-box, border-box;
+          background-clip: padding-box, border-box;
+          backdrop-filter: blur(24px) saturate(150%);
+          -webkit-backdrop-filter: blur(24px) saturate(150%);
+          box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.11) inset,
+            0
+              calc(6px + (1 - var(--ob-d, 1)) * 20px)
+              calc(28px + (1 - var(--ob-d, 1)) * 36px)
+              rgba(0, 0, 0, calc(0.42 + (1 - var(--ob-d, 1)) * 0.38)),
+            0 0 0 1px rgba(0, 0, 0, 0.45) inset;
+          overflow: hidden;
+        }
+
+        .cr-dna-orbit-node[data-front="true"] .cr-dna-orbit-node-inner {
+          box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.2) inset,
+            0 0 0 1px rgba(255, 255, 255, 0.07),
+            0 0 72px -12px rgba(250, 250, 249, 0.07),
+            0 28px 56px -22px rgba(0, 0, 0, 0.92),
+            0 0 0 1px rgba(0, 0, 0, 0.5) inset;
+        }
+
+        .cr-dna-orbit-node-sheen {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            102deg,
+            transparent 36%,
+            rgba(255, 255, 255, 0.06) 48%,
+            transparent 58%
+          );
+          pointer-events: none;
+          opacity: 0.65;
+        }
+
+        .cr-dna-orbit-node-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 11px 15px 9px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .cr-dna-orbit-trace {
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          min-width: 0;
+        }
+
+        .cr-dna-orbit-trace-line {
+          width: 24px;
+          height: 1px;
+          flex-shrink: 0;
+          background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(250, 250, 249, 0.4) 100%
+          );
+        }
+
+        .cr-dna-orbit-bin {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .cr-dna-orbit-bit {
+          width: 7px;
+          height: 7px;
+          border-radius: 2px;
+          background: #fafaf9;
+          box-shadow:
+            0 0 14px rgba(250, 250, 249, 0.35),
+            0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+        }
+
+        .cr-dna-orbit-bit--dim {
+          background: rgba(250, 250, 249, 0.22);
+          box-shadow: none;
+        }
+
+        .cr-dna-orbit-node[data-front="false"] .cr-dna-orbit-bit:first-child {
+          opacity: 0.5;
+        }
+
+        .cr-dna-orbit-node[data-front="false"] .cr-dna-orbit-bit--dim {
+          opacity: 0.4;
+        }
+
+        .cr-dna-orbit-chip {
+          flex-shrink: 0;
+          font-family: var(--font-mono);
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          color: rgba(250, 250, 249, 0.52);
+          padding: 5px 8px;
+          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.11);
+          background: rgba(0, 0, 0, 0.4);
+          line-height: 1;
+        }
+
+        .cr-dna-orbit-node[data-front="true"] .cr-dna-orbit-chip {
+          color: rgba(250, 250, 249, 0.92);
+          border-color: rgba(255, 255, 255, 0.24);
+          background: rgba(255, 255, 255, 0.07);
+        }
+
+        .cr-dna-orbit-idx-panel {
+          margin: 13px 15px 11px;
+          padding: 15px 17px;
+          border-radius: 13px;
+          background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.55) 0%,
+            rgba(0, 0, 0, 0.38) 100%
+          );
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow:
+            0 0 0 1px rgba(0, 0, 0, 0.55) inset,
+            0 10px 28px -18px rgba(0, 0, 0, 0.95);
+        }
+
+        .cr-dna-orbit-idx {
+          font-family: var(--font-mono);
+          font-size: clamp(28px, 3.2vw, 36px);
+          font-weight: 500;
+          font-style: normal;
+          letter-spacing: 0.06em;
+          line-height: 1;
+          color: rgba(250, 250, 249, 0.88);
+          display: block;
+          font-variant-numeric: lining-nums;
+        }
+
+        .cr-dna-orbit-node[data-front="true"] .cr-dna-orbit-idx {
+          color: #fafaf9;
+          letter-spacing: 0.08em;
+          text-shadow: 0 0 36px rgba(250, 250, 249, 0.12);
+        }
+
+        .cr-dna-orbit-kicker {
+          margin: 0;
+          padding: 12px 15px 15px;
+          font-family: var(--font-mono);
+          font-size: 9.5px;
+          font-weight: 600;
+          letter-spacing: 0.17em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.76);
+          line-height: 1.45;
+          border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .cr-dna-orbit-node[data-front="false"] .cr-dna-orbit-kicker {
+          color: rgba(255, 255, 255, 0.48);
+        }
+
+        .cr-dna-scene-stack {
+          position: relative;
+          width: 100%;
+          min-height: min(42vh, 420px);
+          flex: 1 1 auto;
+        }
+
         .cr-dna-scene {
           position: absolute;
           inset: 0;
           display: flex;
           align-items: center;
-          /* Default: hide via opacity + tiny z-index trick */
           opacity: 0;
           pointer-events: none;
           will-change: transform, opacity;
@@ -3235,6 +3712,11 @@ export default function CareersPage() {
           grid-template-columns: 280px 1fr;
           gap: clamp(40px, 5vw, 88px);
           align-items: center;
+        }
+
+        .cr-dna-scene-grid--detail {
+          grid-template-columns: minmax(200px, 260px) 1fr;
+          gap: clamp(28px, 4vw, 64px);
         }
 
         /* LEFT — meta + glyph */
@@ -3311,56 +3793,53 @@ export default function CareersPage() {
           max-width: 56ch;
         }
 
-        /* Bottom progress strip */
-        .cr-dna-progress {
-          position: absolute;
+        /* Cursor-following ring: 0–100% = full DNA pinned scroll (not per phase) */
+        .cr-dna-cursor-ring {
+          position: fixed;
           left: 0;
-          right: 0;
-          bottom: 0;
+          top: 0;
+          width: 56px;
+          height: 56px;
+          margin: 0;
+          padding: 0;
+          pointer-events: none;
+          z-index: 9998;
+          transform: translate(-50%, -50%);
+          opacity: 0;
+          transition: opacity 0.14s ease;
+        }
+        .cr-dna-cursor-ring[data-visible="true"] {
+          opacity: 1;
+        }
+        .cr-dna-cursor-ring-inner {
+          position: relative;
+          width: 56px;
+          height: 56px;
+        }
+        .cr-dna-cursor-ring-svg {
+          display: block;
+          filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.55));
+        }
+        .cr-dna-cursor-ring-pct {
+          position: absolute;
+          inset: 0;
           display: flex;
           align-items: center;
-          gap: 24px;
-          padding: 18px 0;
-          border-top: 1px solid rgba(255,255,255,0.08);
-          z-index: 5;
-        }
-        .cr-dna-progress-bars {
-          display: flex;
-          gap: 6px;
-          flex: 1 1 auto;
-        }
-        .cr-dna-progress-bar {
-          height: 2px;
-          flex: 1 1 0;
-          border-radius: 999px;
-          background: rgba(255,255,255,0.12);
-          transition:
-            background 0.55s cubic-bezier(0.32,0.72,0.24,1),
-            transform 0.55s cubic-bezier(0.32,0.72,0.24,1);
-          transform-origin: left center;
-        }
-        .cr-dna-progress-bar[data-state="done"] {
-          background: rgba(255,255,255,0.55);
-        }
-        .cr-dna-progress-bar[data-state="active"] {
-          background: #fafaf9;
-          transform: scaleY(1.6);
-        }
-        .cr-dna-progress-meta {
-          display: inline-flex;
-          align-items: baseline;
-          gap: 4px;
+          justify-content: center;
           font-family: var(--font-mono);
           font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.1em;
-          color: rgba(255,255,255,0.7);
+          font-weight: 700;
+          letter-spacing: 0.02em;
+          color: #fafaf9;
           font-variant-numeric: tabular-nums;
-          flex-shrink: 0;
+          line-height: 1;
         }
-        .cr-dna-progress-current { color: #fafaf9; }
-        .cr-dna-progress-sep { opacity: 0.5; padding: 0 2px; }
-        .cr-dna-progress-total { opacity: 0.6; }
+
+        @media (max-width: 1100px) {
+          .cr-dna-cursor-ring {
+            display: none !important;
+          }
+        }
 
         /* Hide mobile cards on desktop */
         .cr-dna-cards { display: none; }
@@ -3878,6 +4357,10 @@ export default function CareersPage() {
 
         /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
+          .cr-dna-stage,
+          .cr-dna-stage * {
+            cursor: revert !important;
+          }
           .cr-ticker-track { animation: none !important; }
           .cr-life-img { transition: none; }
           .cr-life-item:hover .cr-life-img { transform: none; }
@@ -3893,7 +4376,41 @@ export default function CareersPage() {
           .cr-dna-scene-glyph {
             transition: none !important;
           }
-          .cr-dna-progress-bar { transition: none !important; }
+          /* Orbit: static column; JS-set transforms overridden */
+          .cr-dna-orbit-wrap {
+            aspect-ratio: auto;
+            min-height: 0;
+            max-height: none;
+          }
+          .cr-dna-orbit-ellipse { display: none; }
+          .cr-dna-orbit-nodes {
+            position: static;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 4px 0 12px;
+          }
+          .cr-dna-orbit-node {
+            position: relative !important;
+            left: auto !important;
+            top: auto !important;
+            max-width: 100%;
+            transform: none !important;
+            opacity: 0.92 !important;
+            filter: none !important;
+            z-index: 1 !important;
+          }
+          .cr-dna-orbit-node-sheen {
+            display: none;
+          }
+          .cr-dna-orbit-node[data-front="true"] .cr-dna-orbit-node-inner,
+          .cr-dna-orbit-node[data-front="false"] .cr-dna-orbit-node-inner {
+            background: rgba(18, 18, 20, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: 0 8px 28px -12px rgba(0, 0, 0, 0.6);
+          }
         }
       `}</style>
     </>
