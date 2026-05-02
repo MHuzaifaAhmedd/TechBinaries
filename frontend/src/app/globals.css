@@ -271,10 +271,27 @@ body {
     box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.07);
   }
 
-  .contact-service-grid {
+  .contact-service-groups {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px 18px;
+    gap: 22px 28px;
+    align-items: start;
+  }
+
+  .contact-service-group-heading {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.35;
+    color: #0a0a0a;
+    margin: 0 0 10px;
+  }
+
+  .contact-service-group-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
   .contact-check {
@@ -285,6 +302,19 @@ body {
     font-size: 14px;
     color: rgba(10, 10, 10, 0.78);
     line-height: 1.4;
+  }
+
+  .contact-check--nested {
+    gap: 6px;
+  }
+
+  .contact-check--nested .contact-service-glyph {
+    color: rgba(10, 10, 10, 0.32);
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: 1px;
+    flex-shrink: 0;
+    user-select: none;
   }
 
   .contact-check input {
@@ -324,7 +354,7 @@ body {
       grid-template-columns: 1fr 1fr;
     }
 
-    .contact-service-grid {
+    .contact-service-groups {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
@@ -337,7 +367,7 @@ body {
 
     .contact-grid-3,
     .contact-grid-2,
-    .contact-service-grid {
+    .contact-service-groups {
       grid-template-columns: 1fr;
     }
   }
