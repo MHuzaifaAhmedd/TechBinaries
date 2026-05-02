@@ -5,23 +5,43 @@ import Script from "next/script";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
-const CONTACT_SERVICE_OPTIONS = [
-  "Paid Media Conversion",
-  "Search Ads Management",
-  "Social Conversion Ads",
-  "Landing Page Funnel Design",
-  "Revenue Funnel Build-Out",
-  "ROI Tracking & Performance Insights",
-  "Email Marketing Campaigns & CRM Automation",
-  "Email Broadcast System",
-  "Automated Email Funnel",
-  "CRM Implementation",
-  "Mobile App & Web Solutions",
-  "Custom Web Solutions",
-  "CMS Development Services",
-  "Web UI/UX Design Services",
-  "SEO Growth Tracking",
-];
+/** Pillar + sub-service labels (checkbox values). Labels are unique across groups. */
+const CONTACT_SERVICE_GROUPS = [
+  {
+    title: "Custom Software Development",
+    items: [
+      "Custom Web Application Development",
+      "iOS App Development",
+      "Android App Development",
+      "SaaS Product Development",
+      "UI/UX Design Systems",
+      "CMS & Admin Panel Development",
+      "High-Performance Landing Pages",
+    ],
+  },
+  {
+    title: "Growth & Performance Engineering",
+    items: [
+      "Conversion-Focused Landing Systems",
+      "Funnel Architecture & Optimization",
+      "Performance Tracking Dashboards",
+      "User Behavior Analytics Integration",
+      "A/B Testing & Experimentation Systems",
+      "Data-Driven Growth Optimization",
+    ],
+  },
+  {
+    title: "Search Visibility SEO",
+    items: [
+      "Technical SEO Optimization",
+      "Website Performance & Indexing Improvements",
+      "Scalable Content Architecture",
+      "Keyword & Search Intent Mapping",
+      "Competitor & Market Analysis Tools",
+      "Search Growth Monitoring Systems",
+    ],
+  },
+] as const;
 
 type ContactFormData = {
   firstName: string;
@@ -236,17 +256,39 @@ export default function ContactPage() {
               </div>
 
               <div style={{ marginTop: 20 }}>
-                <p style={{ margin: "0 0 12px", fontFamily: "var(--font-display)", fontSize: 24, letterSpacing: "-0.02em" }}>Services *</p>
-                <div className="contact-service-grid">
-                  {CONTACT_SERVICE_OPTIONS.map((service) => {
-                    const checked = contactForm.services.includes(service);
-                    return (
-                      <label key={service} className="contact-check">
-                        <input type="checkbox" checked={checked} onChange={() => toggleService(service)} />
-                        <span>{service}</span>
-                      </label>
-                    );
-                  })}
+                <p
+                  style={{
+                    margin: "0 0 16px",
+                    fontFamily: "var(--font-body)",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: "rgba(10,10,10,0.5)",
+                  }}
+                >
+                  Services *
+                </p>
+                <div className="contact-service-groups" role="group" aria-label="Services of interest">
+                  {CONTACT_SERVICE_GROUPS.map((group) => (
+                    <div key={group.title} className="contact-service-group">
+                      <div className="contact-service-group-heading">{group.title}</div>
+                      <div className="contact-service-group-items">
+                        {group.items.map((service) => {
+                          const checked = contactForm.services.includes(service);
+                          return (
+                            <label key={service} className="contact-check contact-check--nested">
+                              <input type="checkbox" checked={checked} onChange={() => toggleService(service)} />
+                              <span className="contact-service-glyph" aria-hidden>
+                                ›
+                              </span>
+                              <span>{service}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
