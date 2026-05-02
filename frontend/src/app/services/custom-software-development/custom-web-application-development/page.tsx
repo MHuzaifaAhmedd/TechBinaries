@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
+import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -598,12 +599,14 @@ export default function CustomWebAppPage() {
                 media="(min-width: 901px)"
               />
             </video>
-            <img
+            <Image
               className="cwa-hero-mobile-bg"
               src="/images/services/custom-software-development/cwad-service-hero-mobile.jpeg"
               alt=""
+              fill
+              sizes="100vw"
               decoding="async"
-              fetchPriority="high"
+              preload
             />
             <div className="cwa-hero-bg-overlay" />
             <div className="cwa-hero-bg-spotlight" />
@@ -750,10 +753,12 @@ export default function CustomWebAppPage() {
                   <div className="cwa-growth-media">
                     <div className="cwa-growth-media-stack" aria-hidden>
                       {GROWTH.pillars.map((p, i) => (
-                        <img
+                        <Image
                           key={p.n}
                           src={p.image}
                           alt={p.imageAlt}
+                          fill
+                          sizes="(max-width: 900px) 100vw, 46vw"
                           loading={i === 0 ? "eager" : "lazy"}
                           className="cwa-growth-media-img"
                           data-active={activePillar === i ? "true" : "false"}
@@ -827,7 +832,13 @@ export default function CustomWebAppPage() {
               </div>
 
               <div className="cwa-cost-media" aria-hidden>
-                <img src={COST.image} alt={COST.imageAlt} loading="lazy" />
+                <Image
+                  src={COST.image}
+                  alt={COST.imageAlt}
+                  fill
+                  sizes="(max-width: 900px) 100vw, 46vw"
+                  loading="lazy"
+                />
                 <div className="cwa-cost-media-overlay" />
               </div>
             </div>
@@ -840,9 +851,11 @@ export default function CustomWebAppPage() {
                   data-theme={f.theme}
                 >
                   <div className="cwa-fail-card-visual">
-                    <img
+                    <Image
                       src={f.image}
                       alt={f.imageAlt}
+                      fill
+                      sizes="(max-width: 900px) 100vw, 25vw"
                       loading="lazy"
                       className="cwa-fail-card-img"
                     />

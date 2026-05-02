@@ -27,7 +27,16 @@
 //   );
 // }
 import type { Metadata } from "next";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-jakarta",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -47,17 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
-      <head>
-        {/* Plus Jakarta Sans is used as the body / secondary typeface.
-            Kamerik 105 Cyrillic is self-hosted — see @font-face in globals.css. */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`h-full ${plusJakartaSans.variable}`}>
       <body className="min-h-full flex flex-col antialiased">{children}</body>
     </html>
   );

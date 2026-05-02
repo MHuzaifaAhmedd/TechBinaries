@@ -453,11 +453,10 @@
 
 "use client";
 
-import { useEffect, useRef, useState, MutableRefObject } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
-import Lenis from "@studio-freight/lenis";
 import { HERO_VERBS, BUILDING_NOW } from "@/data/home";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -473,11 +472,7 @@ gsap.registerPlugin(ScrollTrigger);
 // in one viewport without overflow.
 // ─────────────────────────────────────────────────────────────────────────────
 
-interface HeroSectionProps {
-  lenisRef: MutableRefObject<Lenis | null>;
-}
-
-export default function HeroSection({ lenisRef }: HeroSectionProps) {
+export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
   const heroTerminalRef = useRef<HTMLDivElement>(null);
   const [rotatingVerb, setRotatingVerb] = useState(0);

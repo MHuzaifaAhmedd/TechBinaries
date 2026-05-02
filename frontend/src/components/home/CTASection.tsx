@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -53,7 +54,14 @@ export default function CTASection() {
         <div aria-hidden style={{ position: "absolute", top: "-20%", right: "-10%", width: 560, height: 560, background: "radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%)", pointerEvents: "none" }} />
         {/* Decorative image */}
         <div aria-hidden style={{ position: "absolute", right: 40, bottom: -40, width: "clamp(260px, 28vw, 440px)", opacity: 0.28, userSelect: "none", pointerEvents: "none" }}>
-          <img src="/images/product-land.png" alt="" draggable={false} style={{ display: "block", width: "100%", height: "auto" }} />
+          <Image
+            src="/images/product-land.png"
+            alt=""
+            width={1024}
+            height={1024}
+            draggable={false}
+            style={{ display: "block", width: "100%", height: "auto" }}
+          />
         </div>
 
         <div style={{ position: "relative", zIndex: 1, maxWidth: 760 }}>
