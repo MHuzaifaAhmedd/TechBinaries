@@ -1790,8 +1790,6 @@ const HERO = {
 };
 
 const FILTER = {
-  bin: "Who gets in",
-  index: "02 / 05",
   title: "We hire",
   titleAccent: "deliberately.",
   lead:
@@ -1819,8 +1817,6 @@ const FILTER = {
 };
 
 const DNA = {
-  bin: "The standard",
-  index: "03 / 05",
   title: "The Tech Binaries",
   titleAccent: "standard.",
   lead:
@@ -1916,8 +1912,6 @@ const DNA = {
 };
 
 const LIFE = {
-  bin: "What it's like",
-  index: "04 / 05",
   title: "Working here,",
   titleAccent: "honestly.",
   lead:
@@ -1959,8 +1953,6 @@ const LIFE = {
 };
 
 const APPLY = {
-  bin: "Apply",
-  index: "05 / 05",
   // Headline split for character reveal
   headlineLead: "Ready to work",
   headlineItalic: "on something real?",
@@ -2156,18 +2148,6 @@ export default function CareersPage() {
           }
         );
       }
-      // Apply rule sweep
-      gsap.fromTo(
-        ".cr-apply-rule",
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          duration: 1.1,
-          ease: "power3.out",
-          transformOrigin: "left center",
-          scrollTrigger: { trigger: ".cr-apply", start: "top 72%", once: true },
-        }
-      );
       gsap.utils.toArray<HTMLElement>(".cr-apply-fade").forEach((el, i) => {
         gsap.fromTo(
           el,
@@ -2397,11 +2377,6 @@ export default function CareersPage() {
         <section className="cr-filter" aria-labelledby="cr-filter-title">
           <div className="cr-filter-inner">
             <div className="cr-sh cr-section-head">
-              <div className="cr-section-meta">
-                <span className="cr-section-bin">{FILTER.bin}</span>
-                <span className="cr-section-rule" aria-hidden />
-                <span className="cr-section-index">{FILTER.index}</span>
-              </div>
               <h2 id="cr-filter-title" className="cr-h2">
                 {FILTER.title}{" "}
                 <span className="cr-italic-mute">{FILTER.titleAccent}</span>
@@ -2494,15 +2469,6 @@ export default function CareersPage() {
           <div className="cr-dna-stage">
             <div className="cr-dna-inner">
               <div className="cr-sh cr-section-head cr-section-head--light cr-dna-header">
-                <div className="cr-section-meta">
-                  <span className="cr-section-bin cr-section-bin--light">
-                    {DNA.bin}
-                  </span>
-                  <span className="cr-section-rule cr-section-rule--light" aria-hidden />
-                  <span className="cr-section-index cr-section-index--light">
-                    {DNA.index}
-                  </span>
-                </div>
                 <h2 id="cr-dna-title" className="cr-h2 cr-h2--light">
                   {DNA.title}{" "}
                   <span className="cr-italic-light">{DNA.titleAccent}</span>
@@ -2606,11 +2572,6 @@ export default function CareersPage() {
         <section className="cr-life" aria-labelledby="cr-life-title">
           <div className="cr-life-inner">
             <div className="cr-sh cr-section-head">
-              <div className="cr-section-meta">
-                <span className="cr-section-bin">{LIFE.bin}</span>
-                <span className="cr-section-rule" aria-hidden />
-                <span className="cr-section-index">{LIFE.index}</span>
-              </div>
               <h2 id="cr-life-title" className="cr-h2">
                 {LIFE.title} <span className="cr-italic-mute">{LIFE.titleAccent}</span>
               </h2>
@@ -2654,12 +2615,6 @@ export default function CareersPage() {
         ═══════════════════════════════════════════════════════════════ */}
         <section className="cr-apply" aria-labelledby="cr-apply-title">
           <div className="cr-apply-inner">
-            <div className="cr-apply-top cr-apply-fade" style={{ opacity: 0 }}>
-              <span className="cr-apply-bin">{APPLY.bin}</span>
-              <span className="cr-apply-rule" aria-hidden />
-              <span className="cr-apply-index">{APPLY.index}</span>
-            </div>
-
             <h2 id="cr-apply-title" className="cr-apply-title">
               <span className="cr-apply-line">
                 {APPLY.headlineLead.split("").map((c, i) => (
