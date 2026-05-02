@@ -186,7 +186,6 @@ const FAQS = [
 
 // CTA — Task 3: replacement design data
 const CTA = {
-  bin: "Next step",
   // Headline split for animation
   headline: "Let's build the web app",
   headlineItalic: "you actually want.",
@@ -537,14 +536,6 @@ export default function CustomWebAppPage() {
             scrollTrigger: { trigger: ".cwa-ncta", start: "top 75%", once: true },
           });
       });
-      // Animated underline rule that sweeps in
-      gsap.fromTo(".cwa-ncta-rule",
-        { scaleX: 0 },
-        {
-          scaleX: 1, duration: 1.2, ease: "power3.out",
-          transformOrigin: "left center",
-          scrollTrigger: { trigger: ".cwa-ncta", start: "top 70%", once: true },
-        });
     });
     return () => ctx.revert();
   }, []);
@@ -1059,29 +1050,18 @@ export default function CustomWebAppPage() {
 
         {/* ═══════════════════════════════════════════════════════════════
             SECTION 7 — FINAL CTA (Task 3)
-            Minimal editorial layout — bin number + animated rule + oversized
-            type, single-column on the left with metric strip on the right.
-            No card-in-card boxes, no grid lines, no gradient halos.
-            All on the page background — feels like a bespoke closing statement,
-            not a duplicated landing-page block.
+            Headline, lead, actions, metric strip on page background.
         ═══════════════════════════════════════════════════════════════ */}
         <section className="cwa-ncta" aria-labelledby="cwa-ncta-title">
           <div className="cwa-ncta-inner">
-            <div className="cwa-ncta-top cwa-ncta-fade">
-              <span className="cwa-ncta-bin">{CTA.bin}</span>
-              <span className="cwa-ncta-rule" aria-hidden />
-              <span className="cwa-ncta-bin-meta">07 / 07</span>
-            </div>
-
             <h2 id="cwa-ncta-title" className="cwa-ncta-title">
-              <span className="cwa-ncta-line">
+              <span className="cwa-ncta-head">
                 {CTA.headline.split("").map((c, i) => (
                   <span key={`h-${i}`} className="cwa-ncta-char">
                     {c === " " ? "\u00A0" : c}
                   </span>
                 ))}
-              </span>
-              <span className="cwa-ncta-line">
+                {" "}
                 <span className="cwa-ncta-italic">
                   {CTA.headlineItalic.split("").map((c, i) => (
                     <span key={`i-${i}`} className="cwa-ncta-char">
@@ -2215,11 +2195,10 @@ export default function CustomWebAppPage() {
 
         /* ═══════════════════════════════════════════════════════════════
            SECTION 7 — FINAL CTA (Task 3)
-           Editorial layout — open page background, no card-in-card.
-           A single column of escalating type with a metric strip below.
+           Closing scale (not hero-sized) — tight vertical rhythm + metric strip.
         ═══════════════════════════════════════════════════════════════ */
         .cwa-ncta {
-          padding: clamp(96px, 14vw, 180px) 20px clamp(80px, 10vw, 140px);
+          padding: clamp(56px, 7vw, 88px) 20px clamp(48px, 6vw, 72px);
           background: #fafaf9;
           border-top: 1px solid rgba(10,10,10,0.08);
           position: relative;
@@ -2238,56 +2217,19 @@ export default function CustomWebAppPage() {
           margin: 0 auto;
         }
 
-        /* Top row — bin number + animated rule + section index */
-        .cwa-ncta-top {
-          display: flex;
-          align-items: center;
-          gap: 18px;
-          margin-bottom: clamp(36px, 5vw, 56px);
-        }
-        .cwa-ncta-bin {
-          font-family: var(--font-mono);
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: #0a0a0a;
-          padding: 6px 12px;
-          border: 1px solid rgba(10,10,10,0.18);
-          border-radius: 999px;
-          white-space: nowrap;
-        }
-        .cwa-ncta-rule {
-          display: block;
-          flex: 1 1 auto;
-          height: 1px;
-          background: #0a0a0a;
-          transform-origin: left center;
-          transform: scaleX(0);
-        }
-        .cwa-ncta-bin-meta {
-          font-family: var(--font-mono);
-          font-size: 11px;
-          font-weight: 500;
-          letter-spacing: 0.08em;
-          color: rgba(10,10,10,0.5);
-          white-space: nowrap;
-        }
-
-        /* Headline — character-split for ticker-style reveal */
+        /* Headline — character-split for ticker-style reveal; scale matches a closing CTA, not a hero */
         .cwa-ncta-title {
           font-family: var(--font-display);
-          font-size: clamp(40px, 7.5vw, 110px);
+          font-size: clamp(28px, 3.4vw, 44px);
           font-weight: 500;
-          letter-spacing: -0.045em;
-          line-height: 0.95;
-          margin: 0 0 clamp(28px, 3.5vw, 44px);
+          letter-spacing: -0.032em;
+          line-height: 1.14;
+          margin: 0 0 clamp(14px, 2vw, 22px);
+          max-width: 22em;
           color: #0a0a0a;
         }
-        .cwa-ncta-line {
-          display: block;
-          padding-bottom: 0.06em;
-          overflow: visible;
+        .cwa-ncta-head {
+          display: inline;
         }
         .cwa-ncta-char {
           display: inline-block;
@@ -2301,11 +2243,11 @@ export default function CustomWebAppPage() {
 
         /* Lead paragraph */
         .cwa-ncta-lead {
-          font-size: clamp(15px, 1.3vw, 17px);
+          font-size: clamp(15px, 1.25vw, 16px);
           color: rgba(10,10,10,0.65);
-          line-height: 1.7;
-          margin: 0 0 clamp(36px, 5vw, 56px);
-          max-width: 56ch;
+          line-height: 1.65;
+          margin: 0 0 clamp(22px, 3vw, 32px);
+          max-width: 52ch;
         }
 
         /* Actions row — primary button + email anchor */
@@ -2313,8 +2255,8 @@ export default function CustomWebAppPage() {
           display: flex;
           align-items: center;
           flex-wrap: wrap;
-          gap: 28px 36px;
-          margin-bottom: clamp(48px, 6vw, 72px);
+          gap: 22px 32px;
+          margin-bottom: clamp(28px, 4vw, 44px);
         }
         .cwa-ncta-btn {
           display: inline-flex;
@@ -2382,7 +2324,7 @@ export default function CustomWebAppPage() {
         /* Bottom metric strip — clean inline list with dividers */
         .cwa-ncta-rows {
           margin: 0;
-          padding: clamp(20px, 2.5vw, 28px) 0 0;
+          padding: clamp(16px, 2vw, 22px) 0 0;
           border-top: 1px solid rgba(10,10,10,0.12);
           display: grid;
           grid-template-columns: repeat(4, 1fr);
@@ -2654,15 +2596,12 @@ export default function CustomWebAppPage() {
 
           /* CTA mobile — single column metrics, larger tap targets */
           .cwa-ncta {
-            padding-top: clamp(72px, 14vw, 96px);
-            padding-bottom: clamp(64px, 12vw, 88px);
+            padding-top: clamp(48px, 10vw, 72px);
+            padding-bottom: clamp(44px, 9vw, 64px);
           }
-          .cwa-ncta-top { gap: 12px; margin-bottom: 28px; }
-          .cwa-ncta-bin { font-size: 10px; padding: 5px 10px; }
-          .cwa-ncta-bin-meta { font-size: 10px; }
-          .cwa-ncta-title { font-size: clamp(36px, 11vw, 56px); }
-          .cwa-ncta-lead { font-size: 14.5px; margin-bottom: 32px; }
-          .cwa-ncta-actions { gap: 22px; margin-bottom: 40px; }
+          .cwa-ncta-title { font-size: clamp(24px, 6.2vw, 32px); max-width: none; }
+          .cwa-ncta-lead { font-size: 14.5px; margin-bottom: 22px; }
+          .cwa-ncta-actions { gap: 18px; margin-bottom: 28px; }
           .cwa-ncta-btn-label { padding: 14px 12px 14px 22px; }
           .cwa-ncta-btn-arrow { padding: 0 18px 0 12px; }
           .cwa-ncta-mail-v { font-size: 16px; }
