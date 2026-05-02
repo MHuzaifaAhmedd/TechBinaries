@@ -1661,7 +1661,7 @@ export default function CustomSoftwarePage() {
             max-width: none;
           }
           .csd-hero-title {
-            font-size: clamp(28px, 7vw, 40px);
+            font-size: clamp(30px, 7.2vw, 42px);
             line-height: 1.02;
             margin-bottom: 16px;
           }
@@ -3488,7 +3488,7 @@ export default function CustomSoftwarePage() {
           }
           .csd-hero-left { transform: none; }
           .csd-hero-title {
-            font-size: clamp(24px, 6.6vw, 36px);
+            font-size: clamp(26px, 7vw, 38px);
             max-width: 100%;
             margin-bottom: 16px;
             line-height: 1.03;
