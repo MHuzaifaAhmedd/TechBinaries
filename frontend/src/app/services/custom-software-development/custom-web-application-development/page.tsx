@@ -690,10 +690,6 @@ export default function CustomWebAppPage() {
               <div className="cwa-cost-media" aria-hidden>
                 <img src={COST.image} alt={COST.imageAlt} loading="lazy" />
                 <div className="cwa-cost-media-overlay" />
-                <div className="cwa-cost-media-tag">
-                  <span className="cwa-cost-media-tag-pulse" />
-                  Failure modes · 90-day
-                </div>
               </div>
             </div>
 
@@ -1573,22 +1569,6 @@ export default function CustomWebAppPage() {
           position: absolute; inset: 0;
           background: linear-gradient(180deg, rgba(10,10,10,0.12) 0%, rgba(10,10,10,0.55) 100%);
           pointer-events: none;
-        }
-        .cwa-cost-media-tag {
-          position: absolute; bottom: 22px; left: 22px;
-          display: inline-flex; align-items: center; gap: 10px;
-          padding: 8px 14px; background: rgba(255,255,255,0.95);
-          border-radius: 999px; font-size: 11px; font-weight: 700;
-          letter-spacing: 0.14em; text-transform: uppercase; color: #0a0a0a;
-        }
-        .cwa-cost-media-tag-pulse {
-          width: 6px; height: 6px; border-radius: 50%;
-          background: #ef4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
-          animation: cwa-pulse 1.8s ease-in-out infinite;
-        }
-        @keyframes cwa-pulse {
-          0%, 100% { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2); }
-          50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.05); }
         }
 
         .cwa-fail-grid {
