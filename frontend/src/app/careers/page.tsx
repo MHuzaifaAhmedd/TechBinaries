@@ -1755,7 +1755,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
 import Image from "next/image";
-import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -1952,22 +1951,6 @@ const LIFE = {
   ],
 };
 
-const APPLY = {
-  // Headline split for character reveal
-  headlineLead: "Ready to work",
-  headlineItalic: "on something real?",
-  lead:
-    "We're always on the lookout for developers, engineers, and problem-solvers who want to build things that last. Browse current openings — or if you don't see your role, send your work directly. If you're good, we'll find a way.",
-  primaryCta: { label: "View open positions", href: "/careers/positions" },
-  email: "careers@techbinaries.com",
-  microMeta: [
-    { k: "Reply",     v: "Within 5 days" },
-    { k: "Process",   v: "3 conversations" },
-    { k: "Decision",  v: "Within 2 weeks" },
-    { k: "Location",  v: "Global · remote" },
-  ],
-};
-
 // ── COMPONENT ────────────────────────────────────────────────────────────────
 
 export default function CareersPage() {
@@ -2130,37 +2113,6 @@ export default function CareersPage() {
             ease: "power3.out",
             delay: i % 2 === 0 ? 0 : 0.12,
             scrollTrigger: { trigger: el, start: "top 84%", once: true },
-          }
-        );
-      });
-
-      // Apply hero — character reveal on scroll
-      const applyChars = gsap.utils.toArray<HTMLElement>(".cr-apply-char");
-      if (applyChars.length) {
-        gsap.fromTo(
-          applyChars,
-          { yPercent: 110, opacity: 0 },
-          {
-            yPercent: 0,
-            opacity: 1,
-            duration: 0.95,
-            stagger: { each: 0.013 },
-            ease: "power4.out",
-            scrollTrigger: { trigger: ".cr-apply", start: "top 75%", once: true },
-          }
-        );
-      }
-      gsap.utils.toArray<HTMLElement>(".cr-apply-fade").forEach((el, i) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 18 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.75,
-            ease: "power3.out",
-            delay: 0.5 + i * 0.08,
-            scrollTrigger: { trigger: ".cr-apply", start: "top 75%", once: true },
           }
         );
       });
@@ -2832,74 +2784,6 @@ export default function CareersPage() {
                 </article>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════════════
-            SECTION 5 — APPLY (Open Roles + Fallback)
-            Editorial closing statement, single CTA, mailto fallback.
-        ═══════════════════════════════════════════════════════════════ */}
-        <section className="cr-apply" aria-labelledby="cr-apply-title">
-          <div className="cr-apply-inner">
-            <h2 id="cr-apply-title" className="cr-apply-title">
-              <span className="cr-apply-line">
-                {APPLY.headlineLead.split("").map((c, i) => (
-                  <span key={`a-${i}`} className="cr-apply-char">
-                    {c === " " ? "\u00A0" : c}
-                  </span>
-                ))}
-              </span>
-              <span className="cr-apply-line">
-                <span className="cr-apply-italic">
-                  {APPLY.headlineItalic.split("").map((c, i) => (
-                    <span key={`b-${i}`} className="cr-apply-char">
-                      {c === " " ? "\u00A0" : c}
-                    </span>
-                  ))}
-                </span>
-              </span>
-            </h2>
-
-            <p className="cr-apply-fade cr-apply-lead" style={{ opacity: 0 }}>
-              {APPLY.lead}
-            </p>
-
-            <div
-              className="cr-apply-fade cr-apply-actions"
-              style={{ opacity: 0 }}
-            >
-              <Link href={APPLY.primaryCta.href} className="cr-apply-btn">
-                <span className="cr-apply-btn-label">
-                  {APPLY.primaryCta.label}
-                </span>
-                <span className="cr-apply-btn-arrow" aria-hidden>
-                  <svg width="14" height="14" viewBox="0 0 14 14">
-                    <path
-                      d="M3 7h8 M7 3l4 4-4 4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-              </Link>
-
-              <a href={`mailto:${APPLY.email}`} className="cr-apply-mail">
-                <span className="cr-apply-mail-k">or send your work to</span>
-                <span className="cr-apply-mail-v">{APPLY.email}</span>
-              </a>
-            </div>
-
-            <dl className="cr-apply-fade cr-apply-meta" style={{ opacity: 0 }}>
-              {APPLY.microMeta.map((m) => (
-                <div key={m.k} className="cr-apply-meta-row">
-                  <dt>{m.k}</dt>
-                  <dd>{m.v}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
         </section>
 
@@ -3942,197 +3826,6 @@ export default function CareersPage() {
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           SECTION 5 — APPLY (editorial closing)
-        ═══════════════════════════════════════════════════════════════ */
-        .cr-apply {
-          padding: clamp(112px, 16vw, 200px) 20px clamp(96px, 12vw, 160px);
-          background: #fafaf9;
-          border-top: 1px solid rgba(10,10,10,0.08);
-          position: relative;
-        }
-        .cr-apply::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          background:
-            radial-gradient(ellipse 70% 50% at 50% 0%, rgba(10,10,10,0.05) 0%, transparent 70%);
-        }
-        .cr-apply-inner {
-          position: relative;
-          max-width: 1100px;
-          margin: 0 auto;
-        }
-
-        .cr-apply-top {
-          display: flex;
-          align-items: center;
-          gap: 18px;
-          margin-bottom: clamp(36px, 5vw, 56px);
-        }
-        .cr-apply-bin {
-          font-family: var(--font-mono);
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: #0a0a0a;
-          padding: 6px 12px;
-          border: 1px solid rgba(10,10,10,0.18);
-          border-radius: 999px;
-          white-space: nowrap;
-        }
-        .cr-apply-rule {
-          display: block;
-          flex: 1 1 auto;
-          height: 1px;
-          background: #0a0a0a;
-          transform-origin: left center;
-          transform: scaleX(0);
-        }
-        .cr-apply-index {
-          font-family: var(--font-mono);
-          font-size: 11px;
-          font-weight: 500;
-          letter-spacing: 0.08em;
-          color: rgba(10,10,10,0.5);
-          white-space: nowrap;
-        }
-
-        .cr-apply-title {
-          font-family: var(--font-display);
-          font-size: clamp(40px, 7.5vw, 110px);
-          font-weight: 500;
-          letter-spacing: -0.045em;
-          line-height: 0.95;
-          margin: 0 0 clamp(32px, 4vw, 48px);
-          color: #0a0a0a;
-        }
-        .cr-apply-line {
-          display: block;
-          padding-bottom: 0.06em;
-          overflow: visible;
-        }
-        .cr-apply-char {
-          display: inline-block;
-          will-change: transform, opacity;
-        }
-        .cr-apply-italic {
-          font-style: italic;
-          font-weight: 400;
-          color: rgba(10,10,10,0.5);
-        }
-
-        .cr-apply-lead {
-          font-size: clamp(15px, 1.3vw, 17px);
-          color: rgba(10,10,10,0.65);
-          line-height: 1.7;
-          margin: 0 0 clamp(36px, 5vw, 56px);
-          max-width: 56ch;
-        }
-
-        .cr-apply-actions {
-          display: flex;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 28px 36px;
-          margin-bottom: clamp(48px, 6vw, 72px);
-        }
-        .cr-apply-btn {
-          display: inline-flex;
-          align-items: stretch;
-          padding: 0;
-          background: #0a0a0a;
-          color: #fafaf9;
-          text-decoration: none;
-          border-radius: 999px;
-          overflow: hidden;
-          font-size: 14px;
-          font-weight: 500;
-          letter-spacing: -0.005em;
-          transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
-        }
-        .cr-apply-btn:hover { transform: translateY(-2px); }
-        .cr-apply-btn-label { padding: 16px 14px 16px 24px; }
-        .cr-apply-btn-arrow {
-          padding: 0 22px 0 14px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          border-left: 1px solid rgba(255,255,255,0.18);
-          transition: background 0.3s, color 0.3s;
-        }
-        .cr-apply-btn:hover .cr-apply-btn-arrow {
-          background: #fafaf9;
-          color: #0a0a0a;
-        }
-
-        .cr-apply-mail {
-          display: inline-flex;
-          flex-direction: column;
-          gap: 2px;
-          color: #0a0a0a;
-          text-decoration: none;
-          line-height: 1.2;
-        }
-        .cr-apply-mail-k {
-          font-family: var(--font-mono);
-          font-size: 10px;
-          font-weight: 600;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.4);
-        }
-        .cr-apply-mail-v {
-          font-family: var(--font-display);
-          font-size: 17px;
-          font-weight: 500;
-          letter-spacing: -0.018em;
-          color: #0a0a0a;
-          background-image: linear-gradient(currentColor, currentColor);
-          background-size: 100% 1px;
-          background-position: 0 100%;
-          background-repeat: no-repeat;
-          transition: background-size 0.35s cubic-bezier(0.22,1,0.36,1);
-        }
-        .cr-apply-mail:hover .cr-apply-mail-v { background-size: 0% 1px; }
-
-        .cr-apply-meta {
-          margin: 0;
-          padding: clamp(20px, 2.5vw, 28px) 0 0;
-          border-top: 1px solid rgba(10,10,10,0.12);
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 0;
-        }
-        .cr-apply-meta-row {
-          padding: 0 24px;
-          border-right: 1px solid rgba(10,10,10,0.08);
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        .cr-apply-meta-row:first-child { padding-left: 0; }
-        .cr-apply-meta-row:last-child { border-right: 0; padding-right: 0; }
-        .cr-apply-meta-row dt {
-          font-family: var(--font-mono);
-          font-size: 10px;
-          font-weight: 600;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.45);
-          margin: 0;
-        }
-        .cr-apply-meta-row dd {
-          font-family: var(--font-display);
-          font-size: clamp(15px, 1.3vw, 17px);
-          font-weight: 500;
-          letter-spacing: -0.018em;
-          color: #0a0a0a;
-          margin: 0;
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
            RESPONSIVE
         ═══════════════════════════════════════════════════════════════ */
         @media (max-width: 1100px) {
@@ -4244,19 +3937,6 @@ export default function CareersPage() {
           }
           .cr-life-item[data-side="R"] .cr-life-visual { order: 0; }
           .cr-life-item[data-side="R"] .cr-life-body { order: 1; }
-
-          .cr-apply-meta { grid-template-columns: repeat(2, 1fr); }
-          .cr-apply-meta-row {
-            padding: 18px 18px 18px 0;
-            border-right: 1px solid rgba(10,10,10,0.08);
-            border-bottom: 1px solid rgba(10,10,10,0.08);
-          }
-          .cr-apply-meta-row:nth-child(2) { border-right: 0; padding-right: 0; }
-          .cr-apply-meta-row:nth-child(3) { padding-left: 0; }
-          .cr-apply-meta-row:nth-child(3),
-          .cr-apply-meta-row:nth-child(4) { border-bottom: 0; }
-          .cr-apply-meta-row:first-child { padding-left: 0; }
-          .cr-apply-meta-row:last-child { padding-right: 0; }
         }
 
         @media (max-width: 768px) {
@@ -4282,8 +3962,7 @@ export default function CareersPage() {
 
           .cr-filter,
           .cr-dna,
-          .cr-life,
-          .cr-apply {
+          .cr-life {
             padding-left: 14px;
             padding-right: 14px;
           }
@@ -4339,20 +4018,6 @@ export default function CareersPage() {
           .cr-life-body { gap: 12px; }
           .cr-life-h { font-size: 22px; line-height: 1.15; }
           .cr-life-d { font-size: 14px; line-height: 1.65; }
-
-          .cr-apply { padding-top: clamp(80px, 14vw, 112px); }
-          .cr-apply-top { gap: 12px; margin-bottom: 28px; }
-          .cr-apply-title { font-size: clamp(34px, 11vw, 52px); }
-          .cr-apply-lead { font-size: 14.5px; margin-bottom: 32px; }
-          .cr-apply-actions { gap: 22px; margin-bottom: 36px; }
-          .cr-apply-btn-label { padding: 14px 12px 14px 22px; }
-          .cr-apply-btn-arrow { padding: 0 18px 0 12px; }
-          .cr-apply-mail-v { font-size: 16px; }
-          .cr-apply-meta { grid-template-columns: 1fr 1fr; }
-          .cr-apply-meta-row { padding: 14px 14px 14px 0; }
-          .cr-apply-meta-row:nth-child(odd) { padding-left: 0; }
-          .cr-apply-meta-row:nth-child(even) { padding-right: 0; border-right: 0; }
-          .cr-apply-meta-row dd { font-size: 15px; }
         }
 
         /* Reduced motion */
