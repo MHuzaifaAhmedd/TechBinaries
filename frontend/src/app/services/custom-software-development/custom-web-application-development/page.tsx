@@ -1,5 +1,10 @@
 
-//version 4
+
+//version 5
+//version 5 — based on user's version 4 with three updates:
+//  Task 1: Mobile responsiveness for "growth engine" pinned section
+//  Task 2: Custom progress-ring cursor for the pinned scroll-jacking
+//  Task 3: New minimal final CTA design (replaces landing-page-style block)
 
 // Custom Web Application Development — Premium sub-service template
 // Reusable layout: replace DATA constants for other sub-services.
@@ -179,6 +184,24 @@ const FAQS = [
   { q: "What happens after launch?",                   a: "We offer SLA-backed maintenance retainers covering monitoring, security patches, bug fixes, and feature work. Many clients keep us on as a fractional engineering team. All code and infrastructure transfer to you on day one." },
 ];
 
+// CTA — Task 3: replacement design data
+const CTA = {
+  bin: "Next step",
+  // Headline split for animation
+  headline: "Let's build the web app",
+  headlineItalic: "you actually want.",
+  lead:
+    "Free 30-minute discovery call. You'll talk directly with an engineer and a strategist — no sales pitch, just a real conversation about your problem and timeline.",
+  primaryCta: { label: "Book a discovery call", href: "/contact" },
+  email: "hello@techbinaries.com",
+  rows: [
+    { k: "Response",    v: "Within 24h"      },
+    { k: "MVP timeline", v: "8–12 weeks"     },
+    { k: "Engagement",  v: "Fixed or T&M"    },
+    { k: "Based",       v: "Global · remote" },
+  ],
+};
+
 // ── COMPONENT ─────────────────────────────────────────────────────────────────
 
 export default function CustomWebAppPage() {
@@ -187,6 +210,12 @@ export default function CustomWebAppPage() {
   const [activeStack, setActiveStack] = useState(0);
   const lenisRef = useRef<Lenis | null>(null);
   const pillarListRef = useRef<HTMLOListElement | null>(null);
+
+  // Task 2 refs — for the custom progress-ring cursor
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const cursorRef = useRef<HTMLDivElement | null>(null);
+  const cursorRingRef = useRef<SVGCircleElement | null>(null);
+  const cursorIndexRef = useRef<HTMLSpanElement | null>(null);
 
   // Lenis smooth scroll
   useEffect(() => {
@@ -238,76 +267,150 @@ export default function CustomWebAppPage() {
     return () => ctx.revert();
   }, []);
 
-  // ── PINNED SCROLL-JACKING FOR GROWTH PILLARS ──
-  // The .cwa-growth-stage element is pinned to the viewport. Scroll progress
-  // through the pin-spacer (length defined by `end`) drives `activePillar`.
-  // Each pillar gets ~1 viewport-height of dwell time, so users see each
-  // image + content for a full beat before moving on.
-  // Disabled below 1100px (mobile/tablet) — pinning + small viewports = bad UX.
+  // ── PINNED SCROLL-JACKING + PROGRESS-RING CURSOR (TASK 2) ──
+  // Desktop only. The .cwa-growth-stage element pins to the viewport.
+  // Scroll progress drives:
+  //   1) `activePillar` (existing behavior)
+  //   2) The progress-ring cursor — visible while pin is active and the user's
+  //      cursor is over the stage. The ring shows progress within the *current*
+  //      pillar (not total), so it fills, snaps to next, fills again ×4.
+  // Mobile falls back to natural scroll with no pin and no cursor (Task 1).
   useEffect(() => {
     const list = pillarListRef.current;
     if (!list) return;
 
     const mm = gsap.matchMedia();
 
-    mm.add("(min-width: 1101px)", () => {
-      const stage = document.querySelector<HTMLElement>(".cwa-growth-stage");
-      if (!stage) return;
+    mm.add(
+      {
+        isDesktop: "(min-width: 1101px) and (hover: hover) and (pointer: fine)",
+        isTouchOrSmall: "(max-width: 1100px), (hover: none), (pointer: coarse)",
+      },
+      (context) => {
+        const { isDesktop, isTouchOrSmall } = context.conditions as {
+          isDesktop: boolean;
+          isTouchOrSmall: boolean;
+        };
 
-      const rows = gsap.utils.toArray<HTMLElement>(".cwa-pillar-row", list);
-      if (!rows.length) return;
+        // ── DESKTOP: pin + progress-ring cursor ──
+        if (isDesktop) {
+          const stage = stageRef.current;
+          if (!stage) return;
 
-      const totalScenes = rows.length;
-      // Distance the user must scroll while pinned, in viewport heights.
-      // 1 vh per pillar = comfortable cinematic pacing.
-      const distancePerPillar = 1; // tweak to taste: 0.8 = faster, 1.2 = slower
-      const totalDistance = totalScenes * distancePerPillar;
+          const rows = gsap.utils.toArray<HTMLElement>(".cwa-pillar-row", list);
+          if (!rows.length) return;
 
-      const trigger = ScrollTrigger.create({
-        trigger: stage,
-        start: "top top",
-        end: () => `+=${window.innerHeight * totalDistance}`,
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.6, // small scrub smooths the index transitions
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          // Map 0 → 1 progress to pillar index 0 → totalScenes - 1
-          const raw = self.progress * totalScenes;
-          const idx = Math.min(totalScenes - 1, Math.max(0, Math.floor(raw)));
-          setActivePillar((prev) => (prev === idx ? prev : idx));
-        },
-      });
+          const totalScenes = rows.length;
+          const distancePerPillar = 1; // viewport-heights per pillar
+          const totalDistance = totalScenes * distancePerPillar;
 
-      return () => {
-        trigger.kill();
-      };
-    });
+          // Ring math — circumference for SVG stroke-dashoffset progress
+          const ring = cursorRingRef.current;
+          const RADIUS = 22;
+          const CIRC = 2 * Math.PI * RADIUS;
+          if (ring) {
+            ring.style.strokeDasharray = `${CIRC}`;
+            ring.style.strokeDashoffset = `${CIRC}`;
+          }
 
-    // Below 1101px: no pin. Use the simple progress-based tracking so the
-    // list still highlights the right pillar as the user scrolls naturally.
-    mm.add("(max-width: 1100px)", () => {
-      const rows = gsap.utils.toArray<HTMLElement>(".cwa-pillar-row", list);
-      if (!rows.length) return;
+          // Cursor follow — quickTo for buttery 60fps positioning
+          const cursorEl = cursorRef.current;
+          let xTo: ((v: number) => void) | null = null;
+          let yTo: ((v: number) => void) | null = null;
+          if (cursorEl) {
+            xTo = gsap.quickTo(cursorEl, "x", { duration: 0.18, ease: "power3.out" });
+            yTo = gsap.quickTo(cursorEl, "y", { duration: 0.18, ease: "power3.out" });
+          }
 
-      const trigger = ScrollTrigger.create({
-        trigger: list,
-        start: "top center",
-        end: "bottom center",
-        onUpdate: (self) => {
-          const idx = Math.min(
-            rows.length - 1,
-            Math.max(0, Math.floor(self.progress * rows.length))
-          );
-          setActivePillar((prev) => (prev === idx ? prev : idx));
-        },
-      });
+          let isInsideStage = false;
 
-      return () => {
-        trigger.kill();
-      };
-    });
+          const handleMove = (e: MouseEvent) => {
+            if (!cursorEl || !xTo || !yTo) return;
+            xTo(e.clientX);
+            yTo(e.clientY);
+          };
+          const handleEnter = () => {
+            isInsideStage = true;
+            if (cursorEl) cursorEl.setAttribute("data-visible", "true");
+          };
+          const handleLeave = () => {
+            isInsideStage = false;
+            if (cursorEl) cursorEl.setAttribute("data-visible", "false");
+          };
+
+          stage.addEventListener("mousemove", handleMove);
+          stage.addEventListener("mouseenter", handleEnter);
+          stage.addEventListener("mouseleave", handleLeave);
+
+          const trigger = ScrollTrigger.create({
+            trigger: stage,
+            start: "top top",
+            end: () => `+=${window.innerHeight * totalDistance}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.6,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const raw = self.progress * totalScenes;
+              const idx = Math.min(totalScenes - 1, Math.max(0, Math.floor(raw)));
+              setActivePillar((prev) => (prev === idx ? prev : idx));
+
+              // Per-pillar progress (0 → 1) for ring fill
+              const localProgress = Math.min(1, Math.max(0, raw - idx));
+              if (ring) {
+                ring.style.strokeDashoffset = `${CIRC * (1 - localProgress)}`;
+              }
+              if (cursorIndexRef.current) {
+                cursorIndexRef.current.textContent = `${String(idx + 1).padStart(2, "0")}/${String(totalScenes).padStart(2, "0")}`;
+              }
+            },
+            onEnter: () => {
+              if (cursorEl && isInsideStage) cursorEl.setAttribute("data-visible", "true");
+            },
+            onLeave: () => {
+              if (cursorEl) cursorEl.setAttribute("data-visible", "false");
+            },
+            onEnterBack: () => {
+              if (cursorEl && isInsideStage) cursorEl.setAttribute("data-visible", "true");
+            },
+            onLeaveBack: () => {
+              if (cursorEl) cursorEl.setAttribute("data-visible", "false");
+            },
+          });
+
+          return () => {
+            stage.removeEventListener("mousemove", handleMove);
+            stage.removeEventListener("mouseenter", handleEnter);
+            stage.removeEventListener("mouseleave", handleLeave);
+            trigger.kill();
+          };
+        }
+
+        // ── MOBILE / TOUCH: natural scroll, no pin, no cursor ──
+        if (isTouchOrSmall) {
+          const rows = gsap.utils.toArray<HTMLElement>(".cwa-pillar-row", list);
+          if (!rows.length) return;
+
+          const trigger = ScrollTrigger.create({
+            trigger: list,
+            start: "top center",
+            end: "bottom center",
+            onUpdate: (self) => {
+              const idx = Math.min(
+                rows.length - 1,
+                Math.max(0, Math.floor(self.progress * rows.length))
+              );
+              setActivePillar((prev) => (prev === idx ? prev : idx));
+            },
+          });
+
+          return () => {
+            trigger.kill();
+          };
+        }
+      }
+    );
 
     return () => mm.revert();
   }, []);
@@ -414,12 +517,33 @@ export default function CustomWebAppPage() {
           });
       });
 
-      // ── FINAL CTA ──
-      gsap.fromTo(".cwa-cta-inner",
-        { opacity: 0, y: 50 },
+      // ── FINAL CTA (Task 3) — character-split headline + reveal ──
+      const ctaChars = gsap.utils.toArray<HTMLElement>(".cwa-ncta-char");
+      if (ctaChars.length) {
+        gsap.fromTo(ctaChars,
+          { yPercent: 110, opacity: 0 },
+          {
+            yPercent: 0, opacity: 1, duration: 0.9,
+            stagger: { each: 0.014 }, ease: "power4.out",
+            scrollTrigger: { trigger: ".cwa-ncta", start: "top 75%", once: true },
+          });
+      }
+      gsap.utils.toArray<HTMLElement>(".cwa-ncta-fade").forEach((el, i) => {
+        gsap.fromTo(el,
+          { opacity: 0, y: 18 },
+          {
+            opacity: 1, y: 0, duration: 0.75, ease: "power3.out",
+            delay: 0.4 + i * 0.08,
+            scrollTrigger: { trigger: ".cwa-ncta", start: "top 75%", once: true },
+          });
+      });
+      // Animated underline rule that sweeps in
+      gsap.fromTo(".cwa-ncta-rule",
+        { scaleX: 0 },
         {
-          opacity: 1, y: 0, duration: 1, ease: "power3.out",
-          scrollTrigger: { trigger: ".cwa-cta-inner", start: "top 85%" },
+          scaleX: 1, duration: 1.2, ease: "power3.out",
+          transformOrigin: "left center",
+          scrollTrigger: { trigger: ".cwa-ncta", start: "top 70%", once: true },
         });
     });
     return () => ctx.revert();
@@ -442,6 +566,31 @@ export default function CustomWebAppPage() {
           backgroundSize: "180px 180px", opacity: 0.028, mixBlendMode: "multiply",
         }}
       />
+
+      {/* TASK 2: Progress-ring cursor (desktop only, hidden by default) */}
+      <div className="cwa-cursor" ref={cursorRef} aria-hidden data-visible="false">
+        <svg className="cwa-cursor-svg" viewBox="0 0 56 56" width="56" height="56">
+          <circle
+            className="cwa-cursor-track"
+            cx="28" cy="28" r="22"
+            fill="none"
+            stroke="rgba(255,255,255,0.18)"
+            strokeWidth="2"
+          />
+          <circle
+            className="cwa-cursor-ring"
+            ref={cursorRingRef}
+            cx="28" cy="28" r="22"
+            fill="none"
+            stroke="#fafaf9"
+            strokeWidth="2"
+            strokeLinecap="round"
+            transform="rotate(-90 28 28)"
+          />
+        </svg>
+        <span className="cwa-cursor-index" ref={cursorIndexRef}>01/04</span>
+        <span className="cwa-cursor-dot" aria-hidden />
+      </div>
 
       <div style={{ background: "#fafaf9", color: "#0a0a0a", fontFamily: "var(--font-body)", overflowX: "hidden" }}>
         <SiteHeader />
@@ -591,12 +740,11 @@ export default function CustomWebAppPage() {
 
         {/* ═══════════════════════════════════════════════════════════════
             SECTION 2 — WHY A CUSTOM WEB APP IS A GROWTH ENGINE
-            Pinned scroll-jacking: section is pinned to viewport while user
-            scrolls through 4 pillars. Each pillar gets ~1vh of scroll dwell.
-            Image and text crossfade together as activePillar changes.
+            Pinned scroll-jacking on desktop with progress-ring cursor.
+            On mobile/tablet/touch: natural scroll, image stacks above text.
         ═══════════════════════════════════════════════════════════════ */}
         <section className="cwa-growth" aria-labelledby="cwa-growth-title">
-          <div className="cwa-growth-stage">
+          <div className="cwa-growth-stage" ref={stageRef}>
             <div className="cwa-growth-inner">
               <div className="cwa-sh cwa-section-head cwa-growth-head-inline">
                 <h2 id="cwa-growth-title" className="cwa-h2">
@@ -645,7 +793,7 @@ export default function CustomWebAppPage() {
                   </div>
                 </div>
 
-                {/* RIGHT — pillars (active one fully visible, others muted) */}
+                {/* RIGHT — pillars */}
                 <ol className="cwa-pillar-list" ref={pillarListRef}>
                   {GROWTH.pillars.map((p, i) => (
                     <li
@@ -910,55 +1058,73 @@ export default function CustomWebAppPage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════
-            SECTION 7 — FINAL CTA
+            SECTION 7 — FINAL CTA (Task 3)
+            Minimal editorial layout — bin number + animated rule + oversized
+            type, single-column on the left with metric strip on the right.
+            No card-in-card boxes, no grid lines, no gradient halos.
+            All on the page background — feels like a bespoke closing statement,
+            not a duplicated landing-page block.
         ═══════════════════════════════════════════════════════════════ */}
-        <section className="cwa-cta-section" aria-labelledby="cwa-cta-title">
-          <div className="cwa-cta-inner">
-            <div className="cwa-cta-grid">
-              <div className="cwa-cta-left">
-                <h2 id="cwa-cta-title" className="cwa-cta-h2">
-                  Ready to ship a web app{" "}
-                  <span className="cwa-cta-h2-accent">that lasts?</span>
-                </h2>
-                <p className="cwa-cta-lead">
-                  Free 30-minute discovery call. You'll talk directly with an
-                  engineer and a strategist — no sales pitch, just a real
-                  conversation about your problem and timeline.
-                </p>
-                <div className="cwa-cta-actions">
-                  <Link href="/contact" className="cwa-cta-primary-light">
-                    <span>Book a discovery call</span>
-                    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
-                      <path d="M2.5 6h7M6 2.5L9.5 6 6 9.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </Link>
-                  <a href="mailto:hello@techbinaries.com" className="cwa-cta-mail">
-                    hello@techbinaries.com
-                  </a>
-                </div>
-              </div>
-
-              <div className="cwa-cta-right">
-                <dl className="cwa-cta-meta">
-                  <div className="cwa-cta-meta-item">
-                    <dt>Response time</dt>
-                    <dd>Within 24h</dd>
-                  </div>
-                  <div className="cwa-cta-meta-item">
-                    <dt>MVP timeline</dt>
-                    <dd>8–12 weeks</dd>
-                  </div>
-                  <div className="cwa-cta-meta-item">
-                    <dt>Engagement</dt>
-                    <dd>Fixed or T&amp;M</dd>
-                  </div>
-                  <div className="cwa-cta-meta-item">
-                    <dt>Based in</dt>
-                    <dd>Global · remote</dd>
-                  </div>
-                </dl>
-              </div>
+        <section className="cwa-ncta" aria-labelledby="cwa-ncta-title">
+          <div className="cwa-ncta-inner">
+            <div className="cwa-ncta-top cwa-ncta-fade">
+              <span className="cwa-ncta-bin">{CTA.bin}</span>
+              <span className="cwa-ncta-rule" aria-hidden />
+              <span className="cwa-ncta-bin-meta">07 / 07</span>
             </div>
+
+            <h2 id="cwa-ncta-title" className="cwa-ncta-title">
+              <span className="cwa-ncta-line">
+                {CTA.headline.split("").map((c, i) => (
+                  <span key={`h-${i}`} className="cwa-ncta-char">
+                    {c === " " ? "\u00A0" : c}
+                  </span>
+                ))}
+              </span>
+              <span className="cwa-ncta-line">
+                <span className="cwa-ncta-italic">
+                  {CTA.headlineItalic.split("").map((c, i) => (
+                    <span key={`i-${i}`} className="cwa-ncta-char">
+                      {c === " " ? "\u00A0" : c}
+                    </span>
+                  ))}
+                </span>
+              </span>
+            </h2>
+
+            <p className="cwa-ncta-lead cwa-ncta-fade">{CTA.lead}</p>
+
+            <div className="cwa-ncta-actions cwa-ncta-fade">
+              <Link href={CTA.primaryCta.href} className="cwa-ncta-btn">
+                <span className="cwa-ncta-btn-label">{CTA.primaryCta.label}</span>
+                <span className="cwa-ncta-btn-arrow" aria-hidden>
+                  <svg width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                      d="M3 7h8 M7 3l4 4-4 4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </Link>
+
+              <a href={`mailto:${CTA.email}`} className="cwa-ncta-mail">
+                <span className="cwa-ncta-mail-k">or email</span>
+                <span className="cwa-ncta-mail-v">{CTA.email}</span>
+              </a>
+            </div>
+
+            <dl className="cwa-ncta-rows cwa-ncta-fade">
+              {CTA.rows.map((r) => (
+                <div key={r.k} className="cwa-ncta-row">
+                  <dt>{r.k}</dt>
+                  <dd>{r.v}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </section>
 
@@ -975,8 +1141,7 @@ export default function CustomWebAppPage() {
         .cwa-fail-card,
         .cwa-proc-step,
         .cwa-stack-line,
-        .cwa-faq-row,
-        .cwa-cta-inner {
+        .cwa-faq-row {
           will-change: transform, opacity;
         }
 
@@ -1008,6 +1173,74 @@ export default function CustomWebAppPage() {
           margin-bottom: clamp(48px, 6vw, 80px);
         }
         .cwa-section-head--light .cwa-h2 { color: #fafaf9; }
+
+        /* ═══════════════════════════════════════════════════════════════
+           TASK 2 — PROGRESS-RING CURSOR (desktop only)
+        ═══════════════════════════════════════════════════════════════ */
+        .cwa-cursor {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 56px;
+          height: 56px;
+          margin: -28px 0 0 -28px;
+          pointer-events: none;
+          z-index: 9998;
+          opacity: 0;
+          transform: translate3d(-100px, -100px, 0);
+          transition: opacity 0.35s cubic-bezier(0.22,1,0.36,1);
+          mix-blend-mode: difference;
+          display: none; /* shown only on desktop via media query below */
+        }
+        @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+          .cwa-cursor { display: block; }
+        }
+        .cwa-cursor[data-visible="true"] { opacity: 1; }
+        .cwa-cursor-svg {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          overflow: visible;
+        }
+        .cwa-cursor-ring {
+          transition: stroke-dashoffset 0.15s linear;
+        }
+        .cwa-cursor-dot {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 4px;
+          height: 4px;
+          margin: -2px 0 0 -2px;
+          border-radius: 50%;
+          background: #fafaf9;
+        }
+        .cwa-cursor-index {
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-top: 10px;
+          transform: translateX(-50%);
+          font-family: var(--font-mono);
+          font-size: 10px;
+          font-weight: 500;
+          letter-spacing: 0.12em;
+          color: #fafaf9;
+          background: rgba(10,10,10,0.85);
+          padding: 4px 8px;
+          border-radius: 999px;
+          white-space: nowrap;
+        }
+
+        /* When the cursor is over the pinned stage, hide the native cursor.
+           We only do this where the custom cursor is supported. */
+        @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+          .cwa-growth-stage,
+          .cwa-growth-stage * {
+            cursor: none !important;
+          }
+        }
 
         /* ═══════════════════════════════════════════════════════════════
            SECTION 1 — HERO
@@ -1274,8 +1507,6 @@ export default function CustomWebAppPage() {
           background: #f5f5f4;
           border-top: 1px solid rgba(10,10,10,0.06);
         }
-        /* Stage = the element ScrollTrigger pins. It must equal viewport height
-           so the section fills the screen exactly while pinned. */
         .cwa-growth-stage {
           height: 100vh;
           min-height: 720px;
@@ -1330,7 +1561,6 @@ export default function CustomWebAppPage() {
           background: #0a0a0a;
           box-shadow: 0 50px 100px -50px rgba(10,10,10,0.4);
         }
-        /* Stacked images — only data-active is visible, smooth crossfade */
         .cwa-growth-media-stack {
           position: absolute;
           inset: 0;
@@ -1984,77 +2214,205 @@ export default function CustomWebAppPage() {
         .cwa-faq-row[data-open="true"] .cwa-faq-a-inner { padding-bottom: 26px; }
 
         /* ═══════════════════════════════════════════════════════════════
-           SECTION 7 — FINAL CTA
+           SECTION 7 — FINAL CTA (Task 3)
+           Editorial layout — open page background, no card-in-card.
+           A single column of escalating type with a metric strip below.
         ═══════════════════════════════════════════════════════════════ */
-        .cwa-cta-section { padding: 64px 20px 80px; background: #fafaf9; }
-        .cwa-cta-inner {
-          max-width: 1320px; margin: 0 auto;
-          padding: clamp(72px, 9vw, 120px) clamp(32px, 5vw, 80px);
-          background: #0a0a0a; color: #fafaf9;
-          border-radius: 28px; position: relative; overflow: hidden;
+        .cwa-ncta {
+          padding: clamp(96px, 14vw, 180px) 20px clamp(80px, 10vw, 140px);
+          background: #fafaf9;
+          border-top: 1px solid rgba(10,10,10,0.08);
+          position: relative;
         }
-        .cwa-cta-inner::before {
-          content: ""; position: absolute; inset: 0;
-          background-image:
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-          background-size: 56px 56px;
-          mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, transparent 90%);
-          -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, transparent 90%);
+        .cwa-ncta::before {
+          content: "";
+          position: absolute;
+          inset: 0;
           pointer-events: none;
+          background-image:
+            radial-gradient(ellipse 60% 50% at 50% 0%, rgba(10,10,10,0.04) 0%, transparent 70%);
         }
-        .cwa-cta-grid {
-          position: relative; z-index: 1;
-          display: grid; grid-template-columns: 1.3fr 1fr;
-          gap: clamp(48px, 6vw, 96px); align-items: end;
+        .cwa-ncta-inner {
+          position: relative;
+          max-width: 1100px;
+          margin: 0 auto;
         }
-        .cwa-cta-h2 {
-          font-family: var(--font-display);
-          font-size: clamp(36px, 5.2vw, 72px);
-          font-weight: 500; letter-spacing: -0.04em; line-height: 0.98;
-          margin: 0 0 24px; color: #fafaf9; max-width: 620px;
+
+        /* Top row — bin number + animated rule + section index */
+        .cwa-ncta-top {
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          margin-bottom: clamp(36px, 5vw, 56px);
         }
-        .cwa-cta-h2-accent { font-style: italic; font-weight: 400; color: rgba(255,255,255,0.55); }
-        .cwa-cta-lead {
-          font-size: 16px; line-height: 1.7; color: rgba(255,255,255,0.65);
-          margin: 0 0 36px; max-width: 520px;
-        }
-        .cwa-cta-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-        .cwa-cta-primary-light {
-          display: inline-flex; align-items: center; gap: 10px;
-          padding: 15px 28px; background: #fafaf9; color: #0a0a0a;
-          text-decoration: none; font-size: 14px; font-weight: 500;
+        .cwa-ncta-bin {
+          font-family: var(--font-mono);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: #0a0a0a;
+          padding: 6px 12px;
+          border: 1px solid rgba(10,10,10,0.18);
           border-radius: 999px;
-          transition: background 0.25s, transform 0.25s;
+          white-space: nowrap;
         }
-        .cwa-cta-primary-light:hover { background: #e7e5e4; transform: translateY(-2px); }
-        .cwa-cta-primary-light svg { transition: transform 0.25s; }
-        .cwa-cta-primary-light:hover svg { transform: translateX(2px); }
-        .cwa-cta-mail {
-          font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.65);
-          text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.25);
-          padding-bottom: 2px; transition: color 0.2s, border-color 0.2s;
+        .cwa-ncta-rule {
+          display: block;
+          flex: 1 1 auto;
+          height: 1px;
+          background: #0a0a0a;
+          transform-origin: left center;
+          transform: scaleX(0);
         }
-        .cwa-cta-mail:hover { color: #fafaf9; border-color: #fafaf9; }
-        .cwa-cta-right { display: flex; flex-direction: column; align-items: stretch; }
-        .cwa-cta-meta {
-          display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 0;
-          border-top: 1px solid rgba(255,255,255,0.12);
-          border-left: 1px solid rgba(255,255,255,0.12);
+        .cwa-ncta-bin-meta {
+          font-family: var(--font-mono);
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.08em;
+          color: rgba(10,10,10,0.5);
+          white-space: nowrap;
         }
-        .cwa-cta-meta-item {
-          padding: 22px 24px;
-          border-right: 1px solid rgba(255,255,255,0.12);
-          border-bottom: 1px solid rgba(255,255,255,0.12);
-          background: rgba(255,255,255,0.02);
+
+        /* Headline — character-split for ticker-style reveal */
+        .cwa-ncta-title {
+          font-family: var(--font-display);
+          font-size: clamp(40px, 7.5vw, 110px);
+          font-weight: 500;
+          letter-spacing: -0.045em;
+          line-height: 0.95;
+          margin: 0 0 clamp(28px, 3.5vw, 44px);
+          color: #0a0a0a;
         }
-        .cwa-cta-meta-item dt {
-          font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
-          text-transform: uppercase; color: rgba(255,255,255,0.5); margin: 0 0 8px;
+        .cwa-ncta-line {
+          display: block;
+          padding-bottom: 0.06em;
+          overflow: visible;
         }
-        .cwa-cta-meta-item dd {
-          font-family: var(--font-display); font-size: 17px; font-weight: 500;
-          letter-spacing: -0.018em; color: #fafaf9; margin: 0;
+        .cwa-ncta-char {
+          display: inline-block;
+          will-change: transform, opacity;
+        }
+        .cwa-ncta-italic {
+          font-style: italic;
+          font-weight: 400;
+          color: rgba(10,10,10,0.5);
+        }
+
+        /* Lead paragraph */
+        .cwa-ncta-lead {
+          font-size: clamp(15px, 1.3vw, 17px);
+          color: rgba(10,10,10,0.65);
+          line-height: 1.7;
+          margin: 0 0 clamp(36px, 5vw, 56px);
+          max-width: 56ch;
+        }
+
+        /* Actions row — primary button + email anchor */
+        .cwa-ncta-actions {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 28px 36px;
+          margin-bottom: clamp(48px, 6vw, 72px);
+        }
+        .cwa-ncta-btn {
+          display: inline-flex;
+          align-items: stretch;
+          padding: 0;
+          background: #0a0a0a;
+          color: #fafaf9;
+          text-decoration: none;
+          border-radius: 999px;
+          overflow: hidden;
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: -0.005em;
+          transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+        }
+        .cwa-ncta-btn:hover { transform: translateY(-2px); }
+        .cwa-ncta-btn-label {
+          padding: 16px 14px 16px 24px;
+        }
+        .cwa-ncta-btn-arrow {
+          padding: 0 22px 0 14px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-left: 1px solid rgba(255,255,255,0.18);
+          transition: background 0.3s, color 0.3s;
+        }
+        .cwa-ncta-btn:hover .cwa-ncta-btn-arrow {
+          background: #fafaf9;
+          color: #0a0a0a;
+        }
+
+        .cwa-ncta-mail {
+          display: inline-flex;
+          flex-direction: column;
+          gap: 2px;
+          color: #0a0a0a;
+          text-decoration: none;
+          line-height: 1.2;
+        }
+        .cwa-ncta-mail-k {
+          font-family: var(--font-mono);
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.4);
+        }
+        .cwa-ncta-mail-v {
+          font-family: var(--font-display);
+          font-size: 17px;
+          font-weight: 500;
+          letter-spacing: -0.018em;
+          color: #0a0a0a;
+          background-image: linear-gradient(currentColor, currentColor);
+          background-size: 100% 1px;
+          background-position: 0 100%;
+          background-repeat: no-repeat;
+          transition: background-size 0.35s cubic-bezier(0.22,1,0.36,1);
+        }
+        .cwa-ncta-mail:hover .cwa-ncta-mail-v {
+          background-size: 0% 1px;
+        }
+
+        /* Bottom metric strip — clean inline list with dividers */
+        .cwa-ncta-rows {
+          margin: 0;
+          padding: clamp(20px, 2.5vw, 28px) 0 0;
+          border-top: 1px solid rgba(10,10,10,0.12);
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0;
+        }
+        .cwa-ncta-row {
+          padding: 0 24px;
+          border-right: 1px solid rgba(10,10,10,0.08);
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .cwa-ncta-row:first-child { padding-left: 0; }
+        .cwa-ncta-row:last-child { border-right: 0; padding-right: 0; }
+        .cwa-ncta-row dt {
+          font-family: var(--font-mono);
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.45);
+          margin: 0;
+        }
+        .cwa-ncta-row dd {
+          font-family: var(--font-display);
+          font-size: clamp(15px, 1.3vw, 17px);
+          font-weight: 500;
+          letter-spacing: -0.018em;
+          color: #0a0a0a;
+          margin: 0;
         }
 
         /* ═══════════════════════════════════════════════════════════════
@@ -2068,10 +2426,14 @@ export default function CustomWebAppPage() {
           .cwa-hero .csd-hero-right { max-width: 720px; margin: 0 auto; width: 100%; }
           .cwa-hero .csd-hero-form-shell { max-width: 100%; }
 
+          /* TASK 1: Mobile/tablet treatment of growth section.
+             Release the pin layout — natural flow, image first then text.
+             No 100vh stage, no clamped image height, no sticky-cursor styles. */
           .cwa-growth-stage {
             height: auto;
             min-height: 0;
-            padding: clamp(80px, 10vw, 140px) 20px;
+            padding: clamp(72px, 9vw, 120px) 20px;
+            overflow: visible;
           }
           .cwa-growth-inner { gap: clamp(40px, 5vw, 64px); }
           .cwa-growth-head-inline {
@@ -2085,8 +2447,8 @@ export default function CustomWebAppPage() {
             flex: initial; margin: 0; transform: none;
             font-size: 16px; line-height: 1.7;
           }
-          .cwa-growth-grid { grid-template-columns: 1fr; gap: 48px; align-items: start; }
-          .cwa-growth-media-wrap { position: static; }
+          .cwa-growth-grid { grid-template-columns: 1fr; gap: 40px; align-items: start; }
+          .cwa-growth-media-wrap { position: static; align-self: stretch; }
           .cwa-growth-media {
             aspect-ratio: 16 / 11; max-width: 720px; max-height: none; margin: 0 auto;
           }
@@ -2136,7 +2498,20 @@ export default function CustomWebAppPage() {
 
           .cwa-faq-layout { grid-template-columns: 1fr; gap: 48px; }
           .cwa-faq-aside { position: static; }
-          .cwa-cta-grid { grid-template-columns: 1fr; gap: 48px; align-items: start; }
+
+          /* CTA tablet — 2x2 metric strip */
+          .cwa-ncta-rows { grid-template-columns: repeat(2, 1fr); gap: 0; }
+          .cwa-ncta-row {
+            padding: 18px 18px 18px 0;
+            border-right: 1px solid rgba(10,10,10,0.08);
+            border-bottom: 1px solid rgba(10,10,10,0.08);
+          }
+          .cwa-ncta-row:nth-child(2) { border-right: 0; padding-right: 0; }
+          .cwa-ncta-row:nth-child(3) { padding-left: 0; }
+          .cwa-ncta-row:nth-child(3),
+          .cwa-ncta-row:nth-child(4) { border-bottom: 0; }
+          .cwa-ncta-row:first-child { padding-left: 0; }
+          .cwa-ncta-row:last-child { padding-right: 0; }
         }
 
         @media (max-width: 1100px) and (min-width: 901px) {
@@ -2192,14 +2567,72 @@ export default function CustomWebAppPage() {
             margin-left: auto; margin-right: auto;
           }
 
-          .cwa-growth, .cwa-cost, .cwa-stack-section, .cwa-faq-section, .cwa-process-section {
+          .cwa-growth, .cwa-cost, .cwa-stack-section, .cwa-faq-section, .cwa-process-section, .cwa-ncta {
             padding-left: 14px; padding-right: 14px;
           }
 
-          .cwa-pillar-row { grid-template-columns: 40px 1fr; gap: 16px; padding: 24px 0 26px; }
-          .cwa-pillar-marker-num { font-size: 22px; }
-          .cwa-pillar-body { grid-template-columns: 1fr; row-gap: 10px; }
-          .cwa-pillar-metric { grid-row: auto; justify-self: start; }
+          /* TASK 1: Mobile-specific growth tightening */
+          .cwa-growth-stage {
+            padding: 64px 14px;
+          }
+          .cwa-growth-head-inline .cwa-h2 {
+            font-size: clamp(28px, 7vw, 38px);
+          }
+          .cwa-growth-head-inline .cwa-h2-lead {
+            font-size: 14.5px; line-height: 1.65;
+          }
+          .cwa-growth-grid { gap: 32px; }
+          .cwa-growth-media {
+            aspect-ratio: 4 / 3;
+            border-radius: 16px;
+          }
+          /* Disable image scale-in transition on mobile so swapping is instant
+             — the slow scale-in feels laggy on touch devices and the user
+             never sits on a single pillar long enough to need it. */
+          .cwa-growth-media-img {
+            transition: opacity 0.4s ease;
+            transform: none;
+          }
+          .cwa-growth-media-img[data-active="true"] {
+            transform: none;
+          }
+          .cwa-growth-media-progress { top: 14px; right: 14px; }
+          .cwa-growth-media-progress span { width: 14px; }
+          .cwa-growth-media-progress span[data-active="true"] { width: 22px; }
+          .cwa-growth-media-active {
+            left: 14px; right: 14px; bottom: 14px;
+            padding: 12px 14px; gap: 14px;
+            border-radius: 10px;
+          }
+          .cwa-growth-media-active-num { font-size: 28px; }
+          .cwa-growth-media-active-k { font-size: 16px; }
+          .cwa-growth-media-active-v { font-size: 11.5px; }
+
+          .cwa-pillar-list { border: 0; }
+          .cwa-pillar-row {
+            grid-template-columns: 36px 1fr;
+            gap: 14px;
+            padding: 22px 0 24px;
+          }
+          .cwa-pillar-marker-num { font-size: 20px; }
+          .cwa-pillar-marker-line { height: 22px; }
+          .cwa-pillar-row[data-active="true"] .cwa-pillar-marker-line { height: 36px; }
+          .cwa-pillar-body {
+            grid-template-columns: 1fr;
+            row-gap: 8px;
+            column-gap: 12px;
+          }
+          .cwa-pillar-title { font-size: 18px; }
+          .cwa-pillar-metric {
+            grid-row: auto;
+            justify-self: start;
+            font-size: 10.5px;
+            padding: 4px 10px;
+          }
+          .cwa-pillar-desc { font-size: 13.5px; line-height: 1.62; }
+          /* Reduce motion impact on mobile — no transform shift when active */
+          .cwa-pillar-row { opacity: 0.55; transform: none; }
+          .cwa-pillar-row[data-active="true"] { opacity: 1; transform: none; }
 
           .cwa-fail-grid { grid-template-columns: 1fr; gap: 18px; }
           .cwa-fail-card-body { padding: 20px 18px 22px; }
@@ -2219,11 +2652,34 @@ export default function CustomWebAppPage() {
           .cwa-faq-q-icon { width: 26px; height: 26px; }
           .cwa-faq-a-inner { padding-left: 48px; font-size: 14px; }
 
-          .cwa-cta-section { padding: 48px 14px 56px; }
-          .cwa-cta-inner { padding: 56px 26px; border-radius: 18px; }
-          .cwa-cta-h2 { font-size: clamp(28px, 9vw, 42px); }
-          .cwa-cta-meta { grid-template-columns: 1fr; }
-          .cwa-cta-meta-item:last-child { border-bottom: 0; }
+          /* CTA mobile — single column metrics, larger tap targets */
+          .cwa-ncta {
+            padding-top: clamp(72px, 14vw, 96px);
+            padding-bottom: clamp(64px, 12vw, 88px);
+          }
+          .cwa-ncta-top { gap: 12px; margin-bottom: 28px; }
+          .cwa-ncta-bin { font-size: 10px; padding: 5px 10px; }
+          .cwa-ncta-bin-meta { font-size: 10px; }
+          .cwa-ncta-title { font-size: clamp(36px, 11vw, 56px); }
+          .cwa-ncta-lead { font-size: 14.5px; margin-bottom: 32px; }
+          .cwa-ncta-actions { gap: 22px; margin-bottom: 40px; }
+          .cwa-ncta-btn-label { padding: 14px 12px 14px 22px; }
+          .cwa-ncta-btn-arrow { padding: 0 18px 0 12px; }
+          .cwa-ncta-mail-v { font-size: 16px; }
+          .cwa-ncta-rows { grid-template-columns: 1fr 1fr; }
+          .cwa-ncta-row { padding: 14px 14px 14px 0; }
+          .cwa-ncta-row:nth-child(odd) { padding-left: 0; }
+          .cwa-ncta-row:nth-child(even) { padding-right: 0; border-right: 0; }
+          .cwa-ncta-row dd { font-size: 15px; }
+        }
+
+        /* Reduced motion — disable cursor follow & heavy transitions */
+        @media (prefers-reduced-motion: reduce) {
+          .cwa-cursor { display: none !important; }
+          .cwa-growth-stage, .cwa-growth-stage * { cursor: auto !important; }
+          .cwa-growth-media-img { transition: opacity 0.2s ease; transform: none; }
+          .cwa-growth-media-img[data-active="true"] { transform: none; }
+          .cwa-pillar-row { transition: opacity 0.2s ease; transform: none !important; }
         }
       `}</style>
     </>
