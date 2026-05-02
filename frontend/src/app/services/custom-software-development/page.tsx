@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
+import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -394,12 +395,14 @@ export default function CustomSoftwarePage() {
               />
             </video>
             {/* Static hero on narrow viewports only; desktop/laptop keep video above */}
-            <img
+            <Image
               className="csd-hero-mobile-bg"
               src="/images/services/custom-software-development/mobile-custom-software-service-hero.jpeg"
               alt=""
+              fill
+              sizes="100vw"
               decoding="async"
-              fetchPriority="high"
+              preload
             />
             <div className="csd-hero-video-overlay" />
           </div>
@@ -601,9 +604,11 @@ export default function CustomSoftwarePage() {
           <div className="csd-cost-grid">
             {/* LEFT — image */}
             <div className="csd-cost-media" aria-hidden>
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&q=80&auto=format&fit=crop"
                 alt=""
+                fill
+                sizes="(max-width: 900px) 100vw, 48vw"
                 loading="lazy"
               />
               <div className="csd-cost-media-overlay" />
@@ -877,9 +882,11 @@ export default function CustomSoftwarePage() {
 
             {/* RIGHT — image */}
             <div className="csd-vp-media" aria-hidden>
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80&auto=format&fit=crop"
                 alt=""
+                fill
+                sizes="(max-width: 900px) 100vw, 48vw"
                 loading="lazy"
               />
               <div className="csd-vp-media-overlay" />

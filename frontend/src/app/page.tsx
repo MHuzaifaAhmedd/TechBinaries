@@ -153,7 +153,7 @@ export default function HomePage() {
       >
         <SiteHeader />
 
-        <HeroSection lenisRef={lenisRef} />
+        <HeroSection />
 
         <CapabilitiesSection
           lenisRef={lenisRef}

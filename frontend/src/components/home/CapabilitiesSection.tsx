@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, MutableRefObject } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
@@ -290,8 +291,12 @@ export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef
                 transition: "opacity 220ms ease",
               }}
             >
-              <img
-                src="/images/product-land.png" alt="" draggable={false}
+              <Image
+                src="/images/product-land.png"
+                alt=""
+                width={1024}
+                height={1024}
+                draggable={false}
                 style={{ width: "min(66vw, 900px)", maxWidth: "100%", height: "auto", opacity: 0.36, filter: "brightness(1.12) contrast(1.12)", userSelect: "none" }}
               />
             </div>
