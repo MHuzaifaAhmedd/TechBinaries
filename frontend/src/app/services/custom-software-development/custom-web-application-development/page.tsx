@@ -10,7 +10,7 @@
 // Reusable layout: replace DATA constants for other sub-services.
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -1311,17 +1311,37 @@ export default function CustomWebAppPage() {
             <div className="cwa-ncta-card">
               <h2 id="cwa-ncta-title" className="cwa-ncta-title">
                 <span className="cwa-ncta-head">
-                  {CTA.headline.split("").map((c, i) => (
-                    <span key={`h-${i}`} className="cwa-ncta-char">
-                      {c === " " ? "\u00A0" : c}
-                    </span>
-                  ))}
-                  {" "}
-                  <span className="cwa-ncta-italic">
-                    {CTA.headlineItalic.split("").map((c, i) => (
-                      <span key={`i-${i}`} className="cwa-ncta-char">
-                        {c === " " ? "\u00A0" : c}
+                  {CTA.headline.split(/\s+/).map((word, wi) => (
+                    <Fragment key={`h-w-${wi}`}>
+                      {wi > 0 ? (
+                        <span className="cwa-ncta-char">{"\u00A0"}</span>
+                      ) : null}
+                      <span className="cwa-ncta-word">
+                        {word.split("").map((c, i) => (
+                          <span key={`h-${wi}-${i}`} className="cwa-ncta-char">
+                            {c === " " ? "\u00A0" : c}
+                          </span>
+                        ))}
                       </span>
+                    </Fragment>
+                  ))}
+                  <span className="cwa-ncta-head-gap" aria-hidden>
+                    {"\u00A0"}
+                  </span>
+                  <span className="cwa-ncta-italic">
+                    {CTA.headlineItalic.split(/\s+/).map((word, wi) => (
+                      <Fragment key={`i-w-${wi}`}>
+                        {wi > 0 ? (
+                          <span className="cwa-ncta-char">{"\u00A0"}</span>
+                        ) : null}
+                        <span className="cwa-ncta-word">
+                          {word.split("").map((c, i) => (
+                            <span key={`i-${wi}-${i}`} className="cwa-ncta-char">
+                              {c === " " ? "\u00A0" : c}
+                            </span>
+                          ))}
+                        </span>
+                      </Fragment>
                     ))}
                   </span>
                 </span>
@@ -2772,6 +2792,7 @@ export default function CustomWebAppPage() {
         .cwa-ncta-head {
           display: inline;
         }
+        /* Word wrappers are neutral on desktop (inline). Mobile uses inline-block + nowrap — see 768px block. */
         .cwa-ncta-char {
           display: inline-block;
           will-change: transform, opacity;
@@ -3169,17 +3190,61 @@ export default function CustomWebAppPage() {
             margin-top: clamp(8px, 3vw, 20px);
             margin-bottom: clamp(14px, 4vw, 24px);
           }
-          .cwa-ncta-title { font-size: clamp(24px, 6.2vw, 32px); max-width: none; }
+          .cwa-ncta-title {
+            font-size: clamp(22px, 5.8vw, 32px);
+            max-width: none;
+            line-height: 1.18;
+            word-break: normal;
+            overflow-wrap: break-word;
+          }
+          .cwa-ncta-word {
+            display: inline-block;
+            white-space: nowrap;
+          }
+          .cwa-ncta-head-gap { display: none; }
+          .cwa-ncta-italic {
+            display: block;
+            margin-top: 0.22em;
+            margin-left: 0;
+          }
           .cwa-ncta-lead { font-size: 14.5px; margin-bottom: 22px; }
-          .cwa-ncta-actions { gap: 18px; }
+          .cwa-ncta-actions {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 16px;
+          }
+          .cwa-ncta-btn {
+            width: 100%;
+            max-width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
+          }
+          .cwa-ncta-mail {
+            align-items: center;
+            text-align: center;
+            align-self: center;
+          }
+          .cwa-ncta-mail-v {
+            font-size: 16px;
+            overflow-wrap: anywhere;
+          }
           .cwa-ncta-btn-label { padding: 14px 12px 14px 22px; }
           .cwa-ncta-btn-arrow { padding: 0 18px 0 12px; }
-          .cwa-ncta-mail-v { font-size: 16px; }
           .cwa-ncta-rows { grid-template-columns: 1fr 1fr; }
           .cwa-ncta-row { padding: 14px 14px 14px 0; }
           .cwa-ncta-row:nth-child(odd) { padding-left: 0; }
           .cwa-ncta-row:nth-child(even) { padding-right: 0; border-right: 0; }
           .cwa-ncta-row dd { font-size: 15px; }
+        }
+
+        @media (max-width: 380px) {
+          .cwa-ncta-rows { grid-template-columns: 1fr; }
+          .cwa-ncta-row {
+            padding: 12px 0;
+            border-right: 0;
+            border-bottom: 1px solid rgba(10,10,10,0.08);
+          }
+          .cwa-ncta-row:last-child { border-bottom: 0; }
         }
 
         /* Reduced motion — disable cursor follow & heavy transitions */
