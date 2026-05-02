@@ -1,7 +1,8 @@
 //version 3
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
@@ -9,6 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { SERVICE_CATEGORIES } from "@/data/serviceCategories";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -164,6 +166,17 @@ export default function CustomSoftwarePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [isMobile, setIsMobile] = useState(false);
   const [hoveredBuild, setHoveredBuild] = useState<number>(0);
+  const [heroServiceOpen, setHeroServiceOpen] = useState(false);
+  const [heroService, setHeroService] = useState<{ href: string; label: string } | null>(null);
+  const [heroServiceMenuBox, setHeroServiceMenuBox] = useState<{
+    top: number;
+    left: number;
+    width: number;
+    maxHeight: number;
+  } | null>(null);
+  const heroServiceBtnRef = useRef<HTMLButtonElement>(null);
+  const heroServiceMenuRef = useRef<HTMLDivElement>(null);
+  const heroServiceSheetRef = useRef<HTMLDivElement>(null);
 
   const isLenisScrollingRef = useRef(false);
   const hoverLockTimeoutRef = useRef<number | null>(null);
@@ -184,6 +197,119 @@ export default function CustomSoftwarePage() {
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
+
+  const [isHeroNarrow, setIsHeroNarrow] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 768px)");
+    const update = () => setIsHeroNarrow(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const measureHeroServiceMenu = () => {
+    const btn = heroServiceBtnRef.current;
+    if (!btn) return;
+    const r = btn.getBoundingClientRect();
+    const gap = 4;
+    const top = r.bottom + gap;
+    const spaceBelow = window.innerHeight - top - 12;
+    const maxHeight = Math.min(280, Math.max(120, spaceBelow));
+    setHeroServiceMenuBox({ top, left: r.left, width: r.width, maxHeight });
+  };
+
+  const openHeroServiceMenu = () => {
+    const narrow =
+      typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
+    setIsHeroNarrow(narrow);
+    if (narrow) {
+      setHeroServiceMenuBox(null);
+      setHeroServiceOpen(true);
+      return;
+    }
+    measureHeroServiceMenu();
+    setHeroServiceOpen(true);
+  };
+
+  const closeHeroServiceMenu = () => {
+    setHeroServiceOpen(false);
+    setHeroServiceMenuBox(null);
+  };
+
+  useLayoutEffect(() => {
+    if (!heroServiceOpen) return;
+    const menu = heroServiceMenuRef.current;
+    if (menu) menu.scrollTop = 0;
+  }, [heroServiceOpen]);
+
+  useEffect(() => {
+    if (!heroServiceOpen || isHeroNarrow) return;
+    const onMove = () => measureHeroServiceMenu();
+    window.addEventListener("scroll", onMove, true);
+    window.addEventListener("resize", onMove);
+    const vv = window.visualViewport;
+    vv?.addEventListener("resize", onMove);
+    vv?.addEventListener("scroll", onMove);
+    const lenis = lenisRef.current;
+    const offLenis = lenis?.on("scroll", onMove);
+    return () => {
+      window.removeEventListener("scroll", onMove, true);
+      window.removeEventListener("resize", onMove);
+      vv?.removeEventListener("resize", onMove);
+      vv?.removeEventListener("scroll", onMove);
+      offLenis?.();
+    };
+  }, [heroServiceOpen, isHeroNarrow]);
+
+  useEffect(() => {
+    if (!heroServiceOpen || !isHeroNarrow) return;
+    const lenis = lenisRef.current;
+    lenis?.stop();
+    return () => {
+      lenis?.start();
+    };
+  }, [heroServiceOpen, isHeroNarrow]);
+
+  useEffect(() => {
+    if (!heroServiceOpen) return;
+    if (!isHeroNarrow) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [heroServiceOpen, isHeroNarrow]);
+
+  useEffect(() => {
+    if (!heroServiceOpen) return;
+    const onDown = (e: PointerEvent) => {
+      const t = e.target as Node;
+      if (heroServiceBtnRef.current?.contains(t)) return;
+      if (heroServiceMenuRef.current?.contains(t)) return;
+      if (heroServiceSheetRef.current?.contains(t)) return;
+      closeHeroServiceMenu();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeHeroServiceMenu();
+    };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [heroServiceOpen]);
+
+  useEffect(() => {
+    if (!heroServiceOpen) return;
+    if (isHeroNarrow) {
+      setHeroServiceMenuBox(null);
+    } else {
+      measureHeroServiceMenu();
+    }
+  }, [isHeroNarrow, heroServiceOpen]);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -351,6 +477,41 @@ export default function CustomSoftwarePage() {
     fonts.ready.then(() => { ScrollTrigger.refresh(); });
   }, []);
 
+  const heroServiceOptionNodes = SERVICE_CATEGORIES.map((cat) => (
+    <div key={cat.id} className="csd-hero-service-dd-group">
+      <div className="csd-hero-service-dd-group-label" aria-hidden>
+        {cat.title}
+      </div>
+      <button
+        type="button"
+        role="option"
+        aria-selected={heroService?.href === cat.href}
+        className="csd-hero-service-dd-option"
+        onClick={() => {
+          setHeroService({ href: cat.href, label: `${cat.title} (overview)` });
+          closeHeroServiceMenu();
+        }}
+      >
+        {cat.title} (overview)
+      </button>
+      {cat.links.map((link) => (
+        <button
+          key={link.href}
+          type="button"
+          role="option"
+          aria-selected={heroService?.href === link.href}
+          className="csd-hero-service-dd-option"
+          onClick={() => {
+            setHeroService({ href: link.href, label: link.label });
+            closeHeroServiceMenu();
+          }}
+        >
+          {link.label}
+        </button>
+      ))}
+    </div>
+  ));
+
   return (
     <>
       {/* GRAIN OVERLAY */}
@@ -477,10 +638,26 @@ export default function CustomSoftwarePage() {
                   </p>
 
                   <form className="csd-hero-form" onSubmit={(e) => e.preventDefault()}>
-                    <label className="csd-hero-form-field">
-                      <span>Name</span>
-                      <input type="text" placeholder="Your name" />
-                    </label>
+                    <div className="csd-hero-form-grid">
+                      <label className="csd-hero-form-field">
+                        <span>First Name</span>
+                        <input
+                          type="text"
+                          name="firstName"
+                          placeholder="First name"
+                          autoComplete="given-name"
+                        />
+                      </label>
+                      <label className="csd-hero-form-field">
+                        <span>Last Name</span>
+                        <input
+                          type="text"
+                          name="lastName"
+                          placeholder="Last name"
+                          autoComplete="family-name"
+                        />
+                      </label>
+                    </div>
 
                     <div className="csd-hero-form-grid">
                       <label className="csd-hero-form-field csd-hero-form-field--phone">
@@ -516,16 +693,49 @@ export default function CustomSoftwarePage() {
                       </label>
                     </div>
 
-                    <label className="csd-hero-form-field">
-                      <span>Budget Range</span>
-                      <select defaultValue="">
-                        <option value="" disabled>Select a budget range</option>
-                        <option value="under-10k">Under $10k</option>
-                        <option value="10k-25k">$10k - $25k</option>
-                        <option value="25k-50k">$25k - $50k</option>
-                        <option value="50k-plus">$50k+</option>
-                      </select>
-                    </label>
+                    <div className="csd-hero-form-grid">
+                      <label className="csd-hero-form-field">
+                        <span>Budget Range</span>
+                        <select name="budgetRange" defaultValue="">
+                          <option value="" disabled>Select a budget range</option>
+                          <option value="under-10k">Under $10k</option>
+                          <option value="10k-25k">$10k - $25k</option>
+                          <option value="25k-50k">$25k - $50k</option>
+                          <option value="50k-plus">$50k+</option>
+                        </select>
+                      </label>
+                      <label className="csd-hero-form-field">
+                        <span>Services</span>
+                        <div className="csd-hero-service-dd">
+                          <input
+                            type="hidden"
+                            name="serviceInterest"
+                            value={heroService?.href ?? ""}
+                          />
+                          <button
+                            ref={heroServiceBtnRef}
+                            type="button"
+                            className={`csd-hero-service-dd-trigger${heroService ? "" : " csd-hero-service-dd-trigger--placeholder"}`}
+                            aria-expanded={heroServiceOpen}
+                            aria-haspopup="listbox"
+                            aria-controls="hero-service-listbox"
+                            id="hero-service-trigger"
+                            aria-label="Service you are interested in"
+                            onClick={() =>
+                              heroServiceOpen ? closeHeroServiceMenu() : openHeroServiceMenu()
+                            }
+                          >
+                            <span className="csd-hero-service-dd-value">
+                              {heroService ? heroService.label : "Select a service"}
+                            </span>
+                            <span
+                              className={`csd-hero-service-dd-chevron${heroServiceOpen ? " csd-hero-service-dd-chevron--open" : ""}`}
+                              aria-hidden
+                            />
+                          </button>
+                        </div>
+                      </label>
+                    </div>
 
                     <label className="csd-hero-form-field">
                       <span>Describe your project</span>
@@ -1077,6 +1287,85 @@ export default function CustomSoftwarePage() {
         </section>
         <SiteFooter />
       </div>
+
+      {heroServiceOpen && typeof document !== "undefined"
+        ? createPortal(
+            isHeroNarrow ? (
+              <>
+                <div
+                  className="csd-hero-service-dd-backdrop"
+                  aria-hidden
+                  onPointerDown={(e) => {
+                    e.preventDefault();
+                    closeHeroServiceMenu();
+                  }}
+                />
+                <div
+                  ref={heroServiceSheetRef}
+                  className="csd-hero-service-dd-sheet"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="hero-service-sheet-title"
+                >
+                  <div className="csd-hero-service-dd-sheet-grab" aria-hidden />
+                  <div className="csd-hero-service-dd-sheet-head">
+                    <span id="hero-service-sheet-title">Services</span>
+                    <button
+                      type="button"
+                      className="csd-hero-service-dd-sheet-close"
+                      aria-label="Close service picker"
+                      onClick={closeHeroServiceMenu}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
+                        <path
+                          d="M5 5l8 8M13 5l-8 8"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div
+                    ref={heroServiceMenuRef}
+                    id="hero-service-listbox"
+                    className="csd-hero-service-dd-menu csd-hero-service-dd-menu--sheet"
+                    role="listbox"
+                    aria-labelledby="hero-service-trigger"
+                    data-lenis-prevent
+                    data-lenis-prevent-wheel
+                    data-lenis-prevent-touch
+                  >
+                    {heroServiceOptionNodes}
+                  </div>
+                </div>
+              </>
+            ) : heroServiceMenuBox ? (
+              <div
+                ref={heroServiceMenuRef}
+                id="hero-service-listbox"
+                className="csd-hero-service-dd-menu"
+                role="listbox"
+                aria-labelledby="hero-service-trigger"
+                data-lenis-prevent
+                data-lenis-prevent-wheel
+                data-lenis-prevent-touch
+                style={{
+                  position: "fixed",
+                  top: heroServiceMenuBox.top,
+                  left: heroServiceMenuBox.left,
+                  width: heroServiceMenuBox.width,
+                  maxHeight: heroServiceMenuBox.maxHeight,
+                  zIndex: 10050,
+                }}
+              >
+                {heroServiceOptionNodes}
+              </div>
+            ) : null,
+            document.body
+          )
+        : null}
 
       <style>{`
         /* ═══════════════════════════════════════════════════════════════
@@ -1670,6 +1959,174 @@ export default function CustomSoftwarePage() {
           border-bottom-color: rgba(96, 165, 250, 0.95);
           box-shadow: none;
           background: transparent;
+        }
+
+        .csd-hero-service-dd {
+          position: relative;
+          width: 100%;
+        }
+        .csd-hero-service-dd-trigger {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          width: 100%;
+          margin: 0;
+          border: none;
+          border-radius: 0;
+          background: transparent;
+          color: #fff;
+          border-bottom: 1px solid rgba(255,255,255,0.42);
+          padding: 10px 0 14px;
+          font-size: 14px;
+          line-height: 1.3;
+          text-align: left;
+          cursor: pointer;
+          outline: none;
+          box-shadow: none;
+          transition: border-color 0.2s;
+        }
+        .csd-hero-service-dd-trigger--placeholder {
+          color: rgba(255,255,255,0.65);
+        }
+        .csd-hero-service-dd-trigger:focus-visible,
+        .csd-hero-service-dd-trigger:hover {
+          border-bottom-color: rgba(96, 165, 250, 0.95);
+        }
+        .csd-hero-service-dd-value {
+          flex: 1;
+          min-width: 0;
+        }
+        .csd-hero-service-dd-chevron {
+          flex-shrink: 0;
+          width: 0;
+          height: 0;
+          border-left: 4px solid transparent;
+          border-right: 4px solid transparent;
+          border-top: 5px solid rgba(255,255,255,0.72);
+          transform: translateY(1px);
+          transition: transform 0.2s ease;
+        }
+        .csd-hero-service-dd-chevron--open {
+          transform: rotate(180deg) translateY(-1px);
+        }
+        .csd-hero-service-dd-menu {
+          box-sizing: border-box;
+          overflow-y: auto;
+          overflow-x: hidden;
+          overscroll-behavior: contain;
+          touch-action: pan-y;
+          -webkit-overflow-scrolling: touch;
+          background: #fff;
+          border: 1px solid rgba(0,0,0,0.1);
+          border-radius: 10px;
+          box-shadow: 0 16px 48px rgba(0,0,0,0.28);
+          padding: 6px 0 8px;
+        }
+        .csd-hero-service-dd-group {
+          padding: 0 0 4px;
+        }
+        .csd-hero-service-dd-group-label {
+          padding: 8px 14px 4px;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.45);
+        }
+        .csd-hero-service-dd-option {
+          display: block;
+          width: 100%;
+          border: none;
+          background: transparent;
+          text-align: left;
+          padding: 9px 14px;
+          font-size: 13px;
+          line-height: 1.35;
+          color: #0a0a0a;
+          cursor: pointer;
+          transition: background 0.12s ease;
+        }
+        .csd-hero-service-dd-option:hover,
+        .csd-hero-service-dd-option:focus-visible {
+          background: rgba(59, 130, 246, 0.12);
+          outline: none;
+        }
+        .csd-hero-service-dd-option[aria-selected="true"] {
+          background: rgba(59, 130, 246, 0.18);
+        }
+
+        .csd-hero-service-dd-backdrop {
+          position: fixed;
+          inset: 0;
+          z-index: 10049;
+          background: rgba(0, 0, 0, 0.5);
+          touch-action: none;
+        }
+        .csd-hero-service-dd-sheet {
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 10050;
+          display: flex;
+          flex-direction: column;
+          max-height: min(85dvh, 620px);
+          background: #fff;
+          border-radius: 18px 18px 0 0;
+          box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.35);
+          padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        .csd-hero-service-dd-sheet-grab {
+          flex-shrink: 0;
+          width: 40px;
+          height: 5px;
+          margin: 10px auto 6px;
+          border-radius: 999px;
+          background: rgba(0, 0, 0, 0.15);
+        }
+        .csd-hero-service-dd-sheet-head {
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 4px 12px 12px 18px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+          font-family: var(--font-display);
+          font-size: 18px;
+          font-weight: 500;
+          letter-spacing: -0.02em;
+          color: #0a0a0a;
+        }
+        .csd-hero-service-dd-sheet-close {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          margin: 0;
+          padding: 0;
+          border: none;
+          border-radius: 10px;
+          background: transparent;
+          color: rgba(10, 10, 10, 0.55);
+          cursor: pointer;
+        }
+        .csd-hero-service-dd-sheet-close:hover,
+        .csd-hero-service-dd-sheet-close:focus-visible {
+          background: rgba(0, 0, 0, 0.06);
+          color: #0a0a0a;
+          outline: none;
+        }
+        .csd-hero-service-dd-menu--sheet {
+          flex: 1 1 auto;
+          min-height: 0;
+          max-height: none;
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
+          padding: 4px 0 12px;
         }
 
         .csd-hero-form-field--phone .csd-hero-phone-cc,
