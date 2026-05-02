@@ -1826,86 +1826,45 @@ const DNA = {
       kicker: "Quality is the default",
       head: "Precision over speed",
       body: "We move fast, but we don't move sloppy. Quality isn't a phase — it's the default. A shipped feature that breaks under load is worse than a delayed one that holds.",
-      // Crosshair / target — precision
-      glyph: (
-        <>
-          <circle cx="40" cy="40" r="30" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.35" />
-          <circle cx="40" cy="40" r="18" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.55" />
-          <circle cx="40" cy="40" r="6" fill="currentColor" />
-          <line x1="40" y1="4" x2="40" y2="14" stroke="currentColor" strokeWidth="1" opacity="0.7" />
-          <line x1="40" y1="66" x2="40" y2="76" stroke="currentColor" strokeWidth="1" opacity="0.7" />
-          <line x1="4" y1="40" x2="14" y2="40" stroke="currentColor" strokeWidth="1" opacity="0.7" />
-          <line x1="66" y1="40" x2="76" y2="40" stroke="currentColor" strokeWidth="1" opacity="0.7" />
-        </>
-      ),
+      visual:
+        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=900&q=80&auto=format&fit=crop",
+      visualAlt: "Developer focused on code quality at a workstation",
     },
     {
       n: "II",
       kicker: "Solve, don't close",
       head: "Own the problem, not the task",
       body: "Your job isn't to close tickets. It's to solve what's actually broken. Tickets are descriptions of problems — not contracts that limit your responsibility.",
-      // Concentric squares — look beyond the brief
-      glyph: (
-        <>
-          <rect x="14" y="14" width="52" height="52" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3" />
-          <rect x="22" y="22" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.55" />
-          <rect x="32" y="32" width="16" height="16" fill="currentColor" />
-          <line x1="40" y1="4" x2="40" y2="14" stroke="currentColor" strokeWidth="1" opacity="0.7" strokeDasharray="2 2" />
-          <line x1="40" y1="66" x2="40" y2="76" stroke="currentColor" strokeWidth="1" opacity="0.7" strokeDasharray="2 2" />
-        </>
-      ),
+      visual:
+        "https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&q=80&auto=format&fit=crop",
+      visualAlt: "Team collaborating at a table with laptops",
     },
     {
       n: "III",
       kicker: "Best idea wins",
       head: "No rank, just results",
       body: "The best idea wins, regardless of who said it. Junior engineers push back on architecture decisions here — that's expected, not tolerated.",
-      // Three nodes connected — flat hierarchy
-      glyph: (
-        <>
-          <circle cx="40" cy="14" r="6" fill="currentColor" />
-          <circle cx="14" cy="58" r="6" fill="currentColor" />
-          <circle cx="66" cy="58" r="6" fill="currentColor" />
-          <line x1="40" y1="20" x2="14" y2="52" stroke="currentColor" strokeWidth="1" opacity="0.45" />
-          <line x1="40" y1="20" x2="66" y2="52" stroke="currentColor" strokeWidth="1" opacity="0.45" />
-          <line x1="20" y1="58" x2="60" y2="58" stroke="currentColor" strokeWidth="1" opacity="0.45" />
-          <circle cx="40" cy="14" r="12" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3" />
-          <circle cx="14" cy="58" r="12" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3" />
-          <circle cx="66" cy="58" r="12" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3" />
-        </>
-      ),
+      visual:
+        "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=900&q=80&auto=format&fit=crop",
+      visualAlt: "Team in a meeting discussing ideas together",
     },
     {
       n: "IV",
       kicker: "Compound or fade",
       head: "Sharpen or stagnate",
       body: "The industry moves. Either you're keeping up or you're falling behind. We invest in people who invest in themselves — and we expect that investment to compound.",
-      // Ascending bars — growth
-      glyph: (
-        <>
-          <rect x="10" y="50" width="10" height="20" fill="currentColor" opacity="0.35" />
-          <rect x="26" y="40" width="10" height="30" fill="currentColor" opacity="0.55" />
-          <rect x="42" y="26" width="10" height="44" fill="currentColor" opacity="0.75" />
-          <rect x="58" y="10" width="10" height="60" fill="currentColor" />
-          <line x1="6" y1="70" x2="74" y2="70" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-        </>
-      ),
+      visual:
+        "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=900&q=80&auto=format&fit=crop",
+      visualAlt: "Open book and notes representing continuous learning",
     },
     {
       n: "V",
       kicker: "Direct, not diplomatic",
       head: "Say it straight",
       body: "No politics, no ego protection, no sugarcoating. If something's wrong, we say it — and fix it. Direct feedback is a sign of respect; silence is the real disrespect.",
-      // Straight arrow — directness
-      glyph: (
-        <>
-          <line x1="6" y1="40" x2="68" y2="40" stroke="currentColor" strokeWidth="2" />
-          <path d="M62 32 L72 40 L62 48" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="14" cy="40" r="3" fill="currentColor" />
-          <line x1="6" y1="20" x2="40" y2="20" stroke="currentColor" strokeWidth="1" opacity="0.3" />
-          <line x1="6" y1="60" x2="40" y2="60" stroke="currentColor" strokeWidth="1" opacity="0.3" />
-        </>
-      ),
+      visual:
+        "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&q=80&auto=format&fit=crop",
+      visualAlt: "Colleagues having a direct, candid conversation",
     },
   ],
 };
@@ -1917,7 +1876,6 @@ const LIFE = {
     "A short list because we'd rather over-deliver than over-promise. These are the things we actually do — not the things every careers page says.",
   benefits: [
     {
-      tag: "Real work",
       h: "Real projects, real stakes",
       d: "You'll work on software that actual businesses depend on. Production systems, real users, real revenue. Not internal tools no one uses.",
       visual:
@@ -1925,7 +1883,6 @@ const LIFE = {
       visualAlt: "Team collaborating on production software",
     },
     {
-      tag: "Growth",
       h: "We pay for your growth",
       d: "Courses, certifications, conferences. If it makes you better, we'll back it. Our budget for learning isn't a perk — it's a line item.",
       visual:
@@ -1933,7 +1890,6 @@ const LIFE = {
       visualAlt: "Books and notebooks for continued learning",
     },
     {
-      tag: "Comp",
       h: "Competitive salary + bonuses",
       d: "Good work gets rewarded. Performance bonuses are paid against shipped outcomes — not just at annual reviews when budgets allow.",
       visual:
@@ -1941,7 +1897,6 @@ const LIFE = {
       visualAlt: "Financial reward and compensation",
     },
     {
-      tag: "Boundaries",
       h: "Work that respects your life",
       d: "High standards during work hours. Your time outside them is yours. We don't message on weekends and we don't make heroes out of people who burn out.",
       visual:
@@ -2121,9 +2076,9 @@ export default function CareersPage() {
   }, []);
 
   // ── DNA — PINNED: OVAL ORBIT + DETAIL (desktop only) ──
-  // Scroll progress drives (1) which principle is “active” for copy/glyphs and
+  // Scroll progress drives (1) which principle is “active” for copy and
   // (2) continuous rotation of five nodes along an ellipse — front = sharp,
-  // back of orbit = faded (binary / 0·1 depth cue). Mobile: stacked cards.
+  // back of orbit = slightly softer than front (depth cue). Mobile: stacked cards.
   useEffect(() => {
     const list = valuesListRef.current;
     if (!list) return;
@@ -2192,9 +2147,9 @@ export default function CareersPage() {
             const y = cy + ry * Math.sin(theta);
             // depth: 1 = front (bottom of oval), 0 = back (top)
             const depth = (Math.sin(theta) + 1) / 2;
-            const opacity = 0.18 + depth * 0.82;
+            const opacity = 0.4 + depth * 0.6;
             const scale = 0.64 + depth * 0.36;
-            const blurPx = (1 - depth) * 3.4;
+            const blurPx = (1 - depth) * 1.35;
             const z = Math.round(100 + depth * 100);
             const tiltDeg = (1 - depth) * 12;
 
@@ -2545,7 +2500,7 @@ export default function CareersPage() {
             Desktop: pinned scroll. Five principles ride an elliptical orbit;
             scroll rotates the orbit so each kicker sweeps to the front (sharp)
             while the rear of the oval fades — binary 0/1 depth. Detail copy
-            + glyph swap per active step. Mobile: stacked cards, no pin.
+            tracks the active step. Mobile: stacked cards, no pin.
         ═══════════════════════════════════════════════════════════════ */}
         <section className="cr-dna" aria-labelledby="cr-dna-title">
           <div className="cr-dna-stage">
@@ -2580,23 +2535,23 @@ export default function CareersPage() {
                           x2="92%"
                           y2="88%"
                         >
-                          <stop offset="0%" stopColor="rgba(250,250,249,0.07)" />
-                          <stop offset="42%" stopColor="rgba(250,250,249,0.28)" />
-                          <stop offset="100%" stopColor="rgba(250,250,249,0.08)" />
+                          <stop offset="0%" stopColor="rgba(250,250,249,0.22)" />
+                          <stop offset="42%" stopColor="rgba(250,250,249,0.42)" />
+                          <stop offset="100%" stopColor="rgba(250,250,249,0.2)" />
                         </linearGradient>
                         <radialGradient id="cr-dna-orbit-fill" cx="50%" cy="46%" r="58%">
-                          <stop offset="0%" stopColor="rgba(250,250,249,0.045)" />
-                          <stop offset="70%" stopColor="rgba(250,250,249,0.01)" />
+                          <stop offset="0%" stopColor="rgba(250,250,249,0.028)" />
+                          <stop offset="70%" stopColor="rgba(250,250,249,0.006)" />
                           <stop offset="100%" stopColor="rgba(250,250,249,0)" />
                         </radialGradient>
                         <filter
                           id="cr-dna-orbit-glow"
-                          x="-35%"
-                          y="-35%"
-                          width="170%"
-                          height="170%"
+                          x="-20%"
+                          y="-20%"
+                          width="140%"
+                          height="140%"
                         >
-                          <feGaussianBlur stdDeviation="1.6" result="b" />
+                          <feGaussianBlur stdDeviation="0.55" result="b" />
                           <feMerge>
                             <feMergeNode in="b" />
                             <feMergeNode in="SourceGraphic" />
@@ -2621,33 +2576,11 @@ export default function CareersPage() {
                           rx="178"
                           ry="138"
                           fill="none"
-                          stroke="rgba(250,250,249,0.06)"
-                          strokeWidth="10"
-                          opacity="0.35"
-                          filter="url(#cr-dna-orbit-glow)"
-                        />
-                        <ellipse
-                          cx="200"
-                          cy="160"
-                          rx="178"
-                          ry="138"
-                          fill="none"
                           stroke="url(#cr-dna-orbit-stroke)"
-                          strokeWidth="1.25"
-                          strokeDasharray="3 11"
+                          strokeWidth="2.15"
                           strokeLinecap="round"
+                          strokeLinejoin="round"
                           filter="url(#cr-dna-orbit-glow)"
-                        />
-                        <ellipse
-                          cx="200"
-                          cy="160"
-                          rx="178"
-                          ry="138"
-                          fill="none"
-                          stroke="rgba(250,250,249,0.11)"
-                          strokeWidth="0.5"
-                          strokeDasharray="1 18"
-                          opacity="0.85"
                         />
                       </g>
                     </svg>
@@ -2673,7 +2606,22 @@ export default function CareersPage() {
                               </span>
                             </div>
                             <div className="cr-dna-orbit-idx-panel">
-                              <span className="cr-dna-orbit-idx">{v.n}</span>
+                              <div className="cr-dna-orbit-visual">
+                                <Image
+                                  src={v.visual}
+                                  alt={v.visualAlt}
+                                  fill
+                                  sizes="(min-width: 1101px) 272px, 100vw"
+                                  className="cr-dna-orbit-img"
+                                />
+                                <div
+                                  className="cr-dna-orbit-visual-overlay"
+                                  aria-hidden
+                                />
+                                <span className="cr-dna-orbit-idx-badge">
+                                  {v.n}
+                                </span>
+                              </div>
                             </div>
                             <p className="cr-dna-orbit-kicker">{v.kicker}</p>
                           </div>
@@ -2695,23 +2643,9 @@ export default function CareersPage() {
                           data-rel={rel}
                           aria-hidden={rel !== "active"}
                         >
-                          <div className="cr-dna-scene-grid cr-dna-scene-grid--detail">
-                            <div className="cr-dna-scene-aside">
-                              <div className="cr-dna-scene-meta">
-                                <span className="cr-dna-scene-num">{v.n}</span>
-                                <span className="cr-dna-scene-divider" aria-hidden />
-                                <span className="cr-dna-scene-kicker">{v.kicker}</span>
-                              </div>
-                              <div className="cr-dna-scene-glyph" aria-hidden>
-                                <svg viewBox="0 0 80 80" width="100%" height="100%">
-                                  {v.glyph}
-                                </svg>
-                              </div>
-                            </div>
-                            <div className="cr-dna-scene-content">
-                              <h3 className="cr-dna-scene-head">{v.head}</h3>
-                              <p className="cr-dna-scene-body">{v.body}</p>
-                            </div>
+                          <div className="cr-dna-scene-content">
+                            <h3 className="cr-dna-scene-head">{v.head}</h3>
+                            <p className="cr-dna-scene-body">{v.body}</p>
                           </div>
                         </article>
                       );
@@ -2725,17 +2659,27 @@ export default function CareersPage() {
               <ol className="cr-dna-cards" role="list">
                 {DNA.values.map((v) => (
                   <li key={v.n} className="cr-dna-card">
-                    <div className="cr-dna-card-top">
-                      <span className="cr-dna-card-num">{v.n}</span>
-                      <span className="cr-dna-card-glyph" aria-hidden>
-                        <svg viewBox="0 0 80 80" width="100%" height="100%">
-                          {v.glyph}
-                        </svg>
+                    <div className="cr-dna-card-visual">
+                      <Image
+                        src={v.visual}
+                        alt={v.visualAlt}
+                        fill
+                        sizes="(max-width: 1100px) 100vw, 400px"
+                        className="cr-dna-card-img"
+                      />
+                      <div
+                        className="cr-dna-card-visual-overlay"
+                        aria-hidden
+                      />
+                      <span className="cr-dna-card-kicker-tag">{v.kicker}</span>
+                      <span className="cr-dna-card-num" aria-hidden>
+                        {v.n}
                       </span>
                     </div>
-                    <span className="cr-dna-card-kicker">{v.kicker}</span>
-                    <h3 className="cr-dna-card-head">{v.head}</h3>
-                    <p className="cr-dna-card-body">{v.body}</p>
+                    <div className="cr-dna-card-text">
+                      <h3 className="cr-dna-card-head">{v.head}</h3>
+                      <p className="cr-dna-card-body">{v.body}</p>
+                    </div>
                   </li>
                 ))}
               </ol>
@@ -2772,12 +2716,8 @@ export default function CareersPage() {
                       className="cr-life-img"
                     />
                     <div className="cr-life-visual-overlay" />
-                    <span className="cr-life-tag">{b.tag}</span>
                   </div>
                   <div className="cr-life-body">
-                    <span className="cr-life-num" aria-hidden>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
                     <h3 className="cr-life-h">{b.h}</h3>
                     <p className="cr-life-d">{b.d}</p>
                   </div>
@@ -3253,7 +3193,7 @@ export default function CareersPage() {
         .cr-dna-stage {
           height: 100vh;
           min-height: 640px;
-          padding: clamp(120px, 16vh, 160px) 20px clamp(80px, 10vh, 120px);
+          padding: clamp(100px, 14vh, 148px) clamp(20px, 4vw, 40px) clamp(72px, 9vh, 112px);
           display: flex;
           align-items: stretch;
           position: relative;
@@ -3282,11 +3222,11 @@ export default function CareersPage() {
         .cr-dna-inner {
           position: relative;
           width: 100%;
-          max-width: 1240px;
+          max-width: 1280px;
           margin: 0 auto;
           display: flex;
           flex-direction: column;
-          gap: clamp(36px, 5vh, 64px);
+          gap: clamp(28px, 4vh, 52px);
         }
 
         /* Header sits above the scenes; smaller than the page H2 default */
@@ -3318,9 +3258,8 @@ export default function CareersPage() {
           flex: 1 1 auto;
           min-height: 0;
           display: grid;
-          grid-template-columns: minmax(240px, 0.92fr) minmax(300px, 1.08fr);
-          /* Space between orbit column and detail copy — orbit layout/JS unchanged */
-          gap: clamp(44px, 6.5vw, 88px);
+          grid-template-columns: minmax(220px, 1fr) minmax(300px, 1.05fr);
+          gap: clamp(44px, 6vw, 80px);
           align-items: center;
         }
 
@@ -3399,9 +3338,9 @@ export default function CareersPage() {
           box-shadow:
             0 1px 0 rgba(255, 255, 255, 0.11) inset,
             0
-              calc(6px + (1 - var(--ob-d, 1)) * 20px)
-              calc(28px + (1 - var(--ob-d, 1)) * 36px)
-              rgba(0, 0, 0, calc(0.42 + (1 - var(--ob-d, 1)) * 0.38)),
+              calc(6px + (1 - var(--ob-d, 1)) * 16px)
+              calc(28px + (1 - var(--ob-d, 1)) * 28px)
+              rgba(0, 0, 0, calc(0.38 + (1 - var(--ob-d, 1)) * 0.28)),
             0 0 0 1px rgba(0, 0, 0, 0.45) inset;
           overflow: hidden;
         }
@@ -3505,36 +3444,73 @@ export default function CareersPage() {
         }
 
         .cr-dna-orbit-idx-panel {
-          margin: 13px 15px 11px;
-          padding: 15px 17px;
+          margin: 10px 14px 9px;
+          padding: 0;
+          border: none;
+          background: transparent;
+          box-shadow: none;
           border-radius: 13px;
+          overflow: hidden;
+        }
+
+        .cr-dna-orbit-visual {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 4 / 3;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          box-shadow:
+            0 0 0 1px rgba(0, 0, 0, 0.35) inset,
+            0 14px 36px -20px rgba(0, 0, 0, 0.75);
+        }
+
+        .cr-dna-orbit-img {
+          object-fit: cover;
+        }
+
+        .cr-dna-orbit-visual-overlay {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
           background: linear-gradient(
             180deg,
-            rgba(0, 0, 0, 0.55) 0%,
-            rgba(0, 0, 0, 0.38) 100%
+            rgba(0, 0, 0, 0.05) 0%,
+            rgba(0, 0, 0, 0.42) 100%
           );
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow:
-            0 0 0 1px rgba(0, 0, 0, 0.55) inset,
-            0 10px 28px -18px rgba(0, 0, 0, 0.95);
         }
 
-        .cr-dna-orbit-idx {
+        .cr-dna-orbit-node[data-front="false"] .cr-dna-orbit-visual-overlay {
+          background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.12) 0%,
+            rgba(0, 0, 0, 0.52) 100%
+          );
+        }
+
+        .cr-dna-orbit-idx-badge {
+          position: absolute;
+          left: 9px;
+          top: 9px;
+          z-index: 1;
           font-family: var(--font-mono);
-          font-size: clamp(28px, 3.2vw, 36px);
-          font-weight: 500;
-          font-style: normal;
-          letter-spacing: 0.06em;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
           line-height: 1;
-          color: rgba(250, 250, 249, 0.88);
-          display: block;
-          font-variant-numeric: lining-nums;
+          color: #fafaf9;
+          padding: 6px 9px;
+          border-radius: 7px;
+          border: 1px solid rgba(255, 255, 255, 0.28);
+          background: rgba(0, 0, 0, 0.48);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
         }
 
-        .cr-dna-orbit-node[data-front="true"] .cr-dna-orbit-idx {
-          color: #fafaf9;
-          letter-spacing: 0.08em;
-          text-shadow: 0 0 36px rgba(250, 250, 249, 0.12);
+        .cr-dna-orbit-node[data-front="true"] .cr-dna-orbit-idx-badge {
+          border-color: rgba(255, 255, 255, 0.38);
+          background: rgba(0, 0, 0, 0.4);
         }
 
         .cr-dna-orbit-kicker {
@@ -3551,7 +3527,7 @@ export default function CareersPage() {
         }
 
         .cr-dna-orbit-node[data-front="false"] .cr-dna-orbit-kicker {
-          color: rgba(255, 255, 255, 0.48);
+          color: rgba(255, 255, 255, 0.62);
         }
 
         .cr-dna-scene-stack {
@@ -3590,91 +3566,28 @@ export default function CareersPage() {
           z-index: 1;
         }
 
-        .cr-dna-scene-grid {
-          width: 100%;
-          display: grid;
-          grid-template-columns: 280px 1fr;
-          gap: clamp(40px, 5vw, 88px);
-          align-items: center;
-        }
-
-        .cr-dna-scene-grid--detail {
-          grid-template-columns: minmax(200px, 260px) 1fr;
-          gap: clamp(28px, 4vw, 64px);
-        }
-
-        /* LEFT — meta + glyph */
-        .cr-dna-scene-aside {
-          display: flex;
-          flex-direction: column;
-          gap: 28px;
-          align-items: flex-start;
-        }
-        .cr-dna-scene-meta {
-          display: inline-flex;
-          align-items: center;
-          gap: 14px;
-        }
-        .cr-dna-scene-num {
-          font-family: var(--font-display);
-          font-size: 22px;
-          font-weight: 500;
-          font-style: italic;
-          letter-spacing: -0.02em;
-          color: #fafaf9;
-          padding: 5px 10px;
-          border: 1px solid rgba(255,255,255,0.22);
-          border-radius: 6px;
-          line-height: 1;
-          font-variant-numeric: tabular-nums;
-        }
-        .cr-dna-scene-divider {
-          width: 18px;
-          height: 1px;
-          background: rgba(255,255,255,0.25);
-        }
-        .cr-dna-scene-kicker {
-          font-family: var(--font-mono);
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: rgba(255,255,255,0.65);
-        }
-        .cr-dna-scene-glyph {
-          width: clamp(160px, 14vw, 220px);
-          height: clamp(160px, 14vw, 220px);
-          color: rgba(255,255,255,0.85);
-          opacity: 0;
-          transform: scale(0.94) rotate(-2deg);
-          transition:
-            opacity 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s,
-            transform 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s;
-        }
-        .cr-dna-scene[data-rel="active"] .cr-dna-scene-glyph {
-          opacity: 1;
-          transform: scale(1) rotate(0deg);
-        }
-
-        /* RIGHT — head + body */
+        /* Detail copy — single column; orbit cards already show index + kicker */
         .cr-dna-scene-content {
-          max-width: 640px;
+          width: 100%;
+          max-width: min(40rem, 100%);
+          margin: 0;
+          padding: 0;
         }
         .cr-dna-scene-head {
           font-family: var(--font-display);
-          font-size: clamp(32px, 4vw, 56px);
+          font-size: clamp(32px, 3.6vw, 52px);
           font-weight: 500;
           letter-spacing: -0.038em;
-          line-height: 1.04;
+          line-height: 1.05;
           color: #fafaf9;
-          margin: 0 0 22px;
+          margin: 0 0 clamp(18px, 2.2vh, 26px);
         }
         .cr-dna-scene-body {
-          font-size: clamp(15px, 1.15vw, 18px);
-          line-height: 1.7;
-          color: rgba(255,255,255,0.7);
+          font-size: clamp(15px, 1.12vw, 18px);
+          line-height: 1.72;
+          color: rgba(255,255,255,0.72);
           margin: 0;
-          max-width: 56ch;
+          max-width: 48ch;
         }
 
         /* Cursor-following ring: 0–100% = full DNA pinned scroll (not per phase) */
@@ -3780,34 +3693,12 @@ export default function CareersPage() {
           background:
             linear-gradient(180deg, rgba(10,10,10,0.05) 0%, rgba(10,10,10,0.4) 100%);
         }
-        .cr-life-tag {
-          position: absolute;
-          top: 18px;
-          left: 18px;
-          font-family: var(--font-mono);
-          font-size: 10px;
-          font-weight: 700;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: #0a0a0a;
-          background: rgba(255,255,255,0.95);
-          padding: 6px 11px;
-          border-radius: 999px;
-          backdrop-filter: blur(8px);
-        }
 
         .cr-life-body {
           display: flex;
           flex-direction: column;
           gap: 16px;
           max-width: 520px;
-        }
-        .cr-life-num {
-          font-family: var(--font-mono);
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.14em;
-          color: rgba(10,10,10,0.4);
         }
         .cr-life-h {
           font-family: var(--font-display);
@@ -3866,53 +3757,81 @@ export default function CareersPage() {
           }
           .cr-dna-card {
             position: relative;
-            padding: 28px 28px 30px;
+            padding: 0;
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 16px;
-            background: rgba(255,255,255,0.02);
+            background: rgba(12, 12, 14, 0.65);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            transition: border-color 0.3s ease, background 0.3s ease;
+            overflow: hidden;
+            transition: border-color 0.3s ease, background 0.3s ease,
+              box-shadow 0.3s ease;
           }
           .cr-dna-card:hover {
             border-color: rgba(255,255,255,0.18);
-            background: rgba(255,255,255,0.035);
+            background: rgba(16, 16, 18, 0.72);
+            box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.65);
           }
-          .cr-dna-card-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 14px;
-          }
-          .cr-dna-card-num {
-            font-family: var(--font-display);
-            font-size: 22px;
-            font-weight: 500;
-            font-style: italic;
-            letter-spacing: -0.02em;
-            color: #fafaf9;
-            padding: 5px 10px;
-            border: 1px solid rgba(255,255,255,0.22);
-            border-radius: 6px;
-            line-height: 1;
-            font-variant-numeric: tabular-nums;
-          }
-          .cr-dna-card-glyph {
-            width: 56px;
-            height: 56px;
-            color: rgba(255,255,255,0.7);
+          .cr-dna-card-visual {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
             flex-shrink: 0;
           }
-          .cr-dna-card-kicker {
+          .cr-dna-card-img {
+            object-fit: cover;
+          }
+          .cr-dna-card-visual-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(
+              180deg,
+              rgba(0, 0, 0, 0.05) 35%,
+              rgba(0, 0, 0, 0.55) 100%
+            );
+          }
+          .cr-dna-card-kicker-tag {
+            position: absolute;
+            left: 14px;
+            bottom: 12px;
+            right: 56px;
+            z-index: 1;
             font-family: var(--font-mono);
-            font-size: 10.5px;
-            font-weight: 600;
+            font-size: 9px;
+            font-weight: 700;
             letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.55);
+            line-height: 1.35;
+            color: rgba(250, 250, 249, 0.92);
+            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.85);
+          }
+          .cr-dna-card-num {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            z-index: 1;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 600;
+            font-style: normal;
+            letter-spacing: 0.1em;
+            color: #fafaf9;
+            padding: 6px 10px;
+            border: 1px solid rgba(255,255,255,0.28);
+            border-radius: 8px;
+            line-height: 1;
+            background: rgba(0, 0, 0, 0.42);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+          }
+          .cr-dna-card-text {
+            padding: 22px 26px 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
           }
           .cr-dna-card-head {
             font-family: var(--font-display);
@@ -4005,16 +3924,29 @@ export default function CareersPage() {
           .cr-filter-cell-text { font-size: 14px; line-height: 1.5; }
 
           /* DNA mobile cards — tighter padding */
-          .cr-dna-card { padding: 22px 20px 24px; gap: 12px; border-radius: 14px; }
-          .cr-dna-card-num { font-size: 18px; padding: 4px 8px; }
-          .cr-dna-card-glyph { width: 44px; height: 44px; }
-          .cr-dna-card-kicker { font-size: 10px; }
+          .cr-dna-card { border-radius: 14px; }
+          .cr-dna-card-visual { aspect-ratio: 16 / 11; }
+          .cr-dna-card-kicker-tag {
+            left: 12px;
+            bottom: 10px;
+            right: 50px;
+            font-size: 8.5px;
+          }
+          .cr-dna-card-num {
+            font-size: 12px;
+            padding: 5px 8px;
+            right: 10px;
+            top: 10px;
+          }
+          .cr-dna-card-text {
+            padding: 18px 18px 22px;
+            gap: 10px;
+          }
           .cr-dna-card-head { font-size: 20px; line-height: 1.15; }
           .cr-dna-card-body { font-size: 13.5px; line-height: 1.65; }
 
           .cr-life-grid { gap: 56px; }
           .cr-life-visual { aspect-ratio: 16 / 11; border-radius: 14px; }
-          .cr-life-tag { top: 12px; left: 12px; font-size: 9px; padding: 5px 9px; }
           .cr-life-body { gap: 12px; }
           .cr-life-h { font-size: 22px; line-height: 1.15; }
           .cr-life-d { font-size: 14px; line-height: 1.65; }
@@ -4036,9 +3968,6 @@ export default function CareersPage() {
           .cr-dna-scene[data-rel="active"],
           .cr-dna-scene[data-rel="past"],
           .cr-dna-scene[data-rel="future"] {
-            transition: none !important;
-          }
-          .cr-dna-scene-glyph {
             transition: none !important;
           }
           /* Orbit: static column; JS-set transforms overridden */
