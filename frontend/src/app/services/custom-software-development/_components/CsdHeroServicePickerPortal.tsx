@@ -4,12 +4,31 @@ import { SERVICE_CATEGORIES } from "@/data/serviceCategories";
 import { createPortal } from "react-dom";
 import type { UseCsdHeroServiceMenuResult } from "../_hooks/useCsdHeroServiceMenu";
 
+export const CSD_HERO_PICKER_DOM_IDS_DEFAULT = {
+  trigger: "hero-service-trigger",
+  listbox: "hero-service-listbox",
+  sheetTitle: "hero-service-sheet-title",
+} as const;
+
+export type CsdHeroPickerDomIds = {
+  trigger: string;
+  listbox: string;
+  sheetTitle: string;
+};
+
 export type CsdHeroServicePickerPortalProps = {
   heroMenu: UseCsdHeroServiceMenuResult;
   isHeroNarrow: boolean;
+  /** When omitted, CSD defaults apply (parent page unchanged). */
+  pickerDomIds?: CsdHeroPickerDomIds;
 };
 
-export function CsdHeroServicePickerPortal({ heroMenu, isHeroNarrow }: CsdHeroServicePickerPortalProps) {
+export function CsdHeroServicePickerPortal({
+  heroMenu,
+  isHeroNarrow,
+  pickerDomIds,
+}: CsdHeroServicePickerPortalProps) {
+  const ids: CsdHeroPickerDomIds = { ...CSD_HERO_PICKER_DOM_IDS_DEFAULT, ...pickerDomIds };
   const {
     heroServiceOpen,
     heroService,
@@ -73,11 +92,11 @@ export function CsdHeroServicePickerPortal({ heroMenu, isHeroNarrow }: CsdHeroSe
           className="csd-hero-service-dd-sheet"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="hero-service-sheet-title"
+          aria-labelledby={ids.sheetTitle}
         >
           <div className="csd-hero-service-dd-sheet-grab" aria-hidden />
           <div className="csd-hero-service-dd-sheet-head">
-            <span id="hero-service-sheet-title">Services</span>
+            <span id={ids.sheetTitle}>Services</span>
             <button
               type="button"
               className="csd-hero-service-dd-sheet-close"
@@ -97,10 +116,10 @@ export function CsdHeroServicePickerPortal({ heroMenu, isHeroNarrow }: CsdHeroSe
           </div>
           <div
             ref={heroServiceMenuRef}
-            id="hero-service-listbox"
+            id={ids.listbox}
             className="csd-hero-service-dd-menu csd-hero-service-dd-menu--sheet"
             role="listbox"
-            aria-labelledby="hero-service-trigger"
+            aria-labelledby={ids.trigger}
             data-lenis-prevent
             data-lenis-prevent-wheel
             data-lenis-prevent-touch
@@ -112,10 +131,10 @@ export function CsdHeroServicePickerPortal({ heroMenu, isHeroNarrow }: CsdHeroSe
     ) : heroServiceMenuBox ? (
       <div
         ref={heroServiceMenuRef}
-        id="hero-service-listbox"
+        id={ids.listbox}
         className="csd-hero-service-dd-menu"
         role="listbox"
-        aria-labelledby="hero-service-trigger"
+        aria-labelledby={ids.trigger}
         data-lenis-prevent
         data-lenis-prevent-wheel
         data-lenis-prevent-touch
