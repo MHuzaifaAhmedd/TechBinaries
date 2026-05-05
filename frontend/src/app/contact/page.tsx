@@ -216,42 +216,88 @@ export default function ContactPage() {
             <form onSubmit={handleContactSubmit} className="contact-form-shell" noValidate>
               <div className="contact-grid-3">
                 <label className="contact-field">
+                  <input
+                    type="text"
+                    required
+                    placeholder=" "
+                    value={contactForm.firstName}
+                    onChange={(e) => setContactForm((prev) => ({ ...prev, firstName: e.target.value }))}
+                  />
                   <span>First Name *</span>
-                  <input type="text" required value={contactForm.firstName} onChange={(e) => setContactForm((prev) => ({ ...prev, firstName: e.target.value }))} />
                 </label>
                 <label className="contact-field">
+                  <input
+                    type="text"
+                    required
+                    placeholder=" "
+                    value={contactForm.lastName}
+                    onChange={(e) => setContactForm((prev) => ({ ...prev, lastName: e.target.value }))}
+                  />
                   <span>Last Name *</span>
-                  <input type="text" required value={contactForm.lastName} onChange={(e) => setContactForm((prev) => ({ ...prev, lastName: e.target.value }))} />
                 </label>
                 <label className="contact-field">
+                  <input
+                    type="text"
+                    required
+                    placeholder=" "
+                    value={contactForm.company}
+                    onChange={(e) => setContactForm((prev) => ({ ...prev, company: e.target.value }))}
+                  />
                   <span>Company / Organization *</span>
-                  <input type="text" required value={contactForm.company} onChange={(e) => setContactForm((prev) => ({ ...prev, company: e.target.value }))} />
                 </label>
               </div>
 
               <div className="contact-grid-3">
                 <label className="contact-field">
+                  <input
+                    type="url"
+                    placeholder=" "
+                    value={contactForm.website}
+                    onChange={(e) => setContactForm((prev) => ({ ...prev, website: e.target.value }))}
+                  />
                   <span>Website</span>
-                  <input type="url" value={contactForm.website} onChange={(e) => setContactForm((prev) => ({ ...prev, website: e.target.value }))} placeholder="https://" />
                 </label>
                 <label className="contact-field">
+                  <input
+                    type="email"
+                    required
+                    placeholder=" "
+                    value={contactForm.email}
+                    onChange={(e) => setContactForm((prev) => ({ ...prev, email: e.target.value }))}
+                  />
                   <span>Email Address *</span>
-                  <input type="email" required value={contactForm.email} onChange={(e) => setContactForm((prev) => ({ ...prev, email: e.target.value }))} />
                 </label>
                 <label className="contact-field">
+                  <input
+                    type="tel"
+                    required
+                    placeholder=" "
+                    value={contactForm.phone}
+                    onChange={(e) => setContactForm((prev) => ({ ...prev, phone: e.target.value }))}
+                  />
                   <span>Phone Number *</span>
-                  <input type="tel" required value={contactForm.phone} onChange={(e) => setContactForm((prev) => ({ ...prev, phone: e.target.value }))} />
                 </label>
               </div>
 
               <div className="contact-grid-2">
                 <label className="contact-field">
+                  <input
+                    type="text"
+                    required
+                    placeholder=" "
+                    value={contactForm.budget}
+                    onChange={(e) => setContactForm((prev) => ({ ...prev, budget: e.target.value }))}
+                  />
                   <span>Monthly Marketing Budget *</span>
-                  <input type="text" required value={contactForm.budget} onChange={(e) => setContactForm((prev) => ({ ...prev, budget: e.target.value }))} placeholder="e.g. $10,000 - $30,000" />
                 </label>
                 <label className="contact-field">
+                  <input
+                    type="text"
+                    placeholder=" "
+                    value={contactForm.hearAbout}
+                    onChange={(e) => setContactForm((prev) => ({ ...prev, hearAbout: e.target.value }))}
+                  />
                   <span>How did you hear about us?</span>
-                  <input type="text" value={contactForm.hearAbout} onChange={(e) => setContactForm((prev) => ({ ...prev, hearAbout: e.target.value }))} />
                 </label>
               </div>
 
@@ -293,15 +339,15 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <label className="contact-field" style={{ marginTop: 16 }}>
-                <span>Tell us about your business *</span>
+              <label className="contact-field contact-field--textarea" style={{ marginTop: 16 }}>
                 <textarea
                   required
                   rows={5}
+                  placeholder=" "
                   value={contactForm.message}
                   onChange={(e) => setContactForm((prev) => ({ ...prev, message: e.target.value }))}
-                  placeholder="Include goals, timeline, current stack, and what outcome you want."
                 />
+                <span>Tell us about your business *</span>
               </label>
 
               <label className="contact-check" style={{ marginTop: 16 }}>
