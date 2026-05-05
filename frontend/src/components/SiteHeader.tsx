@@ -134,6 +134,7 @@ export default function SiteHeader() {
     pathname.startsWith("/services/custom-software-development") ||
     pathname === "/careers";
   const headerTheme = darkHeroRoute && !scrolled ? "dark" : "light";
+  const aboutHeroViewport = pathname === "/about" && !scrolled;
 
   return (
     <>
@@ -141,6 +142,7 @@ export default function SiteHeader() {
         className="site-header"
         data-scrolled={scrolled ? "true" : "false"}
         data-theme={headerTheme}
+        data-about-hero={aboutHeroViewport ? "true" : "false"}
         onMouseLeave={scheduleCloseMega}
       >
         <div className="site-header__inner">
@@ -148,7 +150,7 @@ export default function SiteHeader() {
           <Link href="/" className="site-header__brand" aria-label="TechBinaries — home">
             <span className="site-header__brand-logo-wrap" aria-hidden>
               <Image
-                src="/images/header-logo.png"
+                src={aboutHeroViewport ? "/images/header-logo-white.png" : "/images/header-logo.png"}
                 alt="TechBinaries"
                 fill
                 className="site-header__brand-logo"
@@ -792,6 +794,17 @@ export default function SiteHeader() {
         }
         .site-header[data-theme="dark"][data-scrolled="false"] .site-header__burger span {
           background: var(--color-ink);
+        }
+        .site-header[data-about-hero="true"] .site-header__brand-logo {
+          filter: none;
+        }
+        .site-header[data-about-hero="true"] .site-header__nav-link {
+          color: rgba(255, 255, 255, 0.82);
+        }
+        .site-header[data-about-hero="true"] .site-header__nav-link:hover,
+        .site-header[data-about-hero="true"] .site-header__nav-link:focus-visible {
+          color: #fafaf9;
+          background: rgba(255, 255, 255, 0.1);
         }
         .site-header__burger span:nth-child(1) { top: 13px; }
         .site-header__burger span:nth-child(2) { top: 19px; }
