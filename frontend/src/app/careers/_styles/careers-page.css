@@ -202,6 +202,44 @@
   background: linear-gradient(180deg, rgba(44,44,44,0.62) 0%, rgba(18,18,18,0.82) 100%);
 }
 
+/* Laptop-only hero tuning: keep ticker logos in first viewport */
+@media (min-width: 901px) and (max-width: 1440px) {
+  .cr-hero {
+    min-height: 100svh;
+    padding: clamp(176px, 20vh, 220px) 20px 84px;
+  }
+  .cr-hero-meta {
+    margin-bottom: clamp(24px, 3.6vw, 48px);
+  }
+  .cr-hero-title {
+    font-size: clamp(34px, 5.2vw, 76px);
+    line-height: 0.9;
+    margin-bottom: clamp(28px, 3.8vw, 48px);
+  }
+  .cr-hero-bottom {
+    gap: clamp(24px, 3.2vw, 52px);
+  }
+  .cr-hero-lead {
+    font-size: clamp(14.5px, 1.02vw, 16px);
+  }
+  .cr-hero-pull {
+    padding: 20px 24px 22px;
+  }
+  .cr-ticker {
+    height: 64px;
+  }
+  .cr-ticker-logo-item {
+    width: clamp(80px, 6.2vw, 102px);
+    height: clamp(46px, 4.4vw, 58px);
+    margin: 0 8px;
+    border-radius: 12px;
+  }
+  .cr-ticker-logo-svg {
+    width: clamp(28px, 2.2vw, 36px);
+    height: clamp(28px, 2.2vw, 36px);
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════
    SECTION 2 — FILTER
 ═══════════════════════════════════════════════════════════════ */

@@ -2747,6 +2747,21 @@ export default function AboutPage() {
         /* ═══════════════════════════════════════════════════════════════
            RESPONSIVE
         ═══════════════════════════════════════════════════════════════ */
+        @media (max-width: 1920px) and (min-width: 901px) {
+          .ab-hero-video {
+            transform: scale(1.12);
+            transform-origin: 42% 34%;
+            will-change: transform;
+          }
+        }
+
+        @media (max-width: 1280px) and (min-width: 901px) {
+          .ab-hero-video {
+            transform: scale(1.17);
+            transform-origin: 40% 32%;
+          }
+        }
+
         @media (max-width: 1200px) {
           .ab-cap-pin-inner {
             grid-template-columns: minmax(180px, 220px) 1fr;

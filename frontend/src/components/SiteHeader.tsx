@@ -129,13 +129,16 @@ export default function SiteHeader() {
     closeTimer.current = setTimeout(() => setMegaOpen(false), 140);
   };
   // Routes that keep a frosted header treatment at top-of-page.
-  const darkHeroRoute =
-    pathname.startsWith("/services/custom-software-development") ||
-    pathname === "/careers";
+  const darkHeroRoute = false;
   const headerTheme = darkHeroRoute && !scrolled ? "dark" : "light";
   // Routes where header should blend directly into the hero at load.
   const blendedHeroViewport =
-    (pathname === "/about" || pathname === "/") && !scrolled;
+    (pathname === "/" ||
+      pathname === "/about" ||
+      pathname === "/careers" ||
+      pathname === "/services" ||
+      pathname.startsWith("/services/")) &&
+    !scrolled;
 
   return (
     <>
