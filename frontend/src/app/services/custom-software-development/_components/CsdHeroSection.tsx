@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { RefObject } from "react";
-import { HERO_PHONE_COUNTRY_CODES } from "../_lib/csd-data";
 import type { CsdHeroServiceValue } from "../_lib/csd-hero-service-types";
+import { CsdHeroLeadForm } from "./CsdHeroLeadForm";
 import { CsdHeroHeadline } from "./CsdHeroHeadline";
 
 export type CsdHeroMenuProps = {
@@ -99,108 +99,13 @@ export function CsdHeroSection({ isMobile, heroMenu }: Props) {
                 Tell our experts about your goals and get a tailored consultation plan.
               </p>
 
-              <form className="csd-hero-form" onSubmit={(e) => e.preventDefault()}>
-                <div className="csd-hero-form-grid">
-                  <label className="csd-hero-form-field">
-                    <span>First Name</span>
-                    <input type="text" name="firstName" placeholder="First name" autoComplete="given-name" />
-                  </label>
-                  <label className="csd-hero-form-field">
-                    <span>Last Name</span>
-                    <input type="text" name="lastName" placeholder="Last name" autoComplete="family-name" />
-                  </label>
-                </div>
-
-                <div className="csd-hero-form-grid">
-                  <label className="csd-hero-form-field csd-hero-form-field--phone">
-                    <span>Contact Number</span>
-                    <div className="csd-hero-phone-row">
-                      <select
-                        className="csd-hero-phone-cc"
-                        name="countryCode"
-                        aria-label="Country calling code"
-                        defaultValue="+92"
-                      >
-                        {HERO_PHONE_COUNTRY_CODES.map((code) => (
-                          <option key={code} value={code}>
-                            {code}
-                          </option>
-                        ))}
-                      </select>
-                      <span className="csd-hero-phone-sep" aria-hidden />
-                      <input
-                        className="csd-hero-phone-num"
-                        type="tel"
-                        name="phoneNational"
-                        placeholder="Enter Your Number*"
-                        autoComplete="tel-national"
-                        aria-label="Phone number"
-                        required
-                      />
-                    </div>
-                  </label>
-                  <label className="csd-hero-form-field">
-                    <span>Work Email</span>
-                    <input type="email" placeholder="Enter your email address" />
-                  </label>
-                </div>
-
-                <div className="csd-hero-form-grid">
-                  <label className="csd-hero-form-field">
-                    <span>Budget Range</span>
-                    <select name="budgetRange" defaultValue="">
-                      <option value="" disabled>
-                        Select a budget range
-                      </option>
-                      <option value="under-10k">Under $10k</option>
-                      <option value="10k-25k">$10k - $25k</option>
-                      <option value="25k-50k">$25k - $50k</option>
-                      <option value="50k-plus">$50k+</option>
-                    </select>
-                  </label>
-                  <label className="csd-hero-form-field">
-                    <span>Services</span>
-                    <div className="csd-hero-service-dd">
-                      <input type="hidden" name="serviceInterest" value={heroService?.href ?? ""} />
-                      <button
-                        ref={heroServiceBtnRef}
-                        type="button"
-                        className={`csd-hero-service-dd-trigger${heroService ? "" : " csd-hero-service-dd-trigger--placeholder"}`}
-                        aria-expanded={heroServiceOpen}
-                        aria-haspopup="listbox"
-                        aria-controls="hero-service-listbox"
-                        id="hero-service-trigger"
-                        aria-label="Service you are interested in"
-                        onClick={() => (heroServiceOpen ? closeHeroServiceMenu() : openHeroServiceMenu())}
-                      >
-                        <span className="csd-hero-service-dd-value">
-                          {heroService ? heroService.label : "Select a service"}
-                        </span>
-                        <span
-                          className={`csd-hero-service-dd-chevron${heroServiceOpen ? " csd-hero-service-dd-chevron--open" : ""}`}
-                          aria-hidden
-                        />
-                      </button>
-                    </div>
-                  </label>
-                </div>
-
-                <label className="csd-hero-form-field">
-                  <span>Describe your project</span>
-                  <textarea rows={3} placeholder="Describe your project" />
-                </label>
-
-                <div className="csd-hero-form-foot">
-                  <div className="csd-hero-form-captcha">
-                    <span>5 + 2 =</span>
-                    <input type="text" inputMode="numeric" aria-label="Simple captcha answer" />
-                  </div>
-                  <button type="submit" className="csd-hero-form-submit">
-                    Schedule a Technical Consultation
-                  </button>
-                </div>
-                <p className="csd-hero-form-note">Fast, high-touch engagement under strict NDA protection.</p>
-              </form>
+              <CsdHeroLeadForm
+                heroMenu={heroMenu}
+                serviceControls={{
+                  listboxId: "hero-service-listbox",
+                  triggerId: "hero-service-trigger",
+                }}
+              />
             </div>
           </div>
         </div>
