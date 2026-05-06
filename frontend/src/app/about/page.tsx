@@ -2542,6 +2542,7 @@ const CAPABILITIES = {
       stat: "End-to-end",
       statLabel: "From schema to shipped",
       accent: "#d4c4a8",
+      coverSrc: "/images/about/fpos-card-image0.jpeg",
       deliverables: ["Architecture", "Implementation", "Infrastructure", "Monitoring"],
     },
     {
@@ -2554,6 +2555,7 @@ const CAPABILITIES = {
       stat: "<1.2s",
       statLabel: "Median LCP, in production",
       accent: "#b8c4d4",
+      coverSrc: "/images/about/fpos-card-image1.jpeg",
       deliverables: ["Headless CMS", "Edge runtime", "SEO foundations", "Author tooling"],
     },
     {
@@ -2566,6 +2568,7 @@ const CAPABILITIES = {
       stat: "1 source",
       statLabel: "Of truth, always",
       accent: "#c4b8a8",
+      coverSrc: "/images/about/fpos-card-image2.jpeg",
       deliverables: ["Warehouse", "Experiments", "Lifecycle flows", "Attribution"],
     },
     {
@@ -2578,6 +2581,7 @@ const CAPABILITIES = {
       stat: "p95",
       statLabel: "Is the only honest metric",
       accent: "#a8b8c4",
+      coverSrc: "/images/about/fpos-card-image3.jpeg",
       deliverables: ["CWV audit", "Bundle work", "DB tuning", "Caching strategy"],
     },
   ],
@@ -3522,66 +3526,78 @@ export default function AboutPage() {
                       } as React.CSSProperties
                     }
                   >
-                    {/* Decorative corner marks */}
-                    <span className="ab-cap-card-corner ab-cap-card-corner--tl" aria-hidden />
-                    <span className="ab-cap-card-corner ab-cap-card-corner--tr" aria-hidden />
-                    <span className="ab-cap-card-corner ab-cap-card-corner--bl" aria-hidden />
-                    <span className="ab-cap-card-corner ab-cap-card-corner--br" aria-hidden />
-
-                    {/* Top meta row */}
-                    <header className="ab-cap-card-top">
-                      <div className="ab-cap-card-meta">
-                        <span className="ab-cap-card-roman">{item.roman}</span>
-                        <span className="ab-cap-card-divider" />
-                        <span className="ab-cap-card-tagline">Practice {item.n}</span>
-                      </div>
-                      <div className="ab-cap-card-stat-block">
-                        <span className="ab-cap-card-stat">{item.stat}</span>
-                        <span className="ab-cap-card-stat-label">
-                          {item.statLabel}
-                        </span>
-                      </div>
-                    </header>
-
-                    <span className="ab-cap-card-rule" aria-hidden />
-
-                    {/* Body — headline + copy */}
-                    <div className="ab-cap-card-body">
-                      <h3 className="ab-cap-card-head">{item.head}</h3>
-                      <p className="ab-cap-card-copy">{item.body}</p>
-                    </div>
-
-                    {/* Deliverables — small grid */}
-                    <div className="ab-cap-card-delivs">
-                      {item.deliverables.map((d, di) => (
-                        <div key={di} className="ab-cap-card-deliv">
-                          <span className="ab-cap-card-deliv-num">
-                            {String(di + 1).padStart(2, "0")}
-                          </span>
-                          <span className="ab-cap-card-deliv-label">{d}</span>
+                    <div className="ab-cap-card-layout">
+                      <figure className="ab-cap-card-figure">
+                        <span className="ab-cap-card-accent-bar" aria-hidden />
+                        <div className="ab-cap-card-figure-mask">
+                          <Image
+                            src={item.coverSrc}
+                            alt=""
+                            fill
+                            sizes="(max-width: 1200px) 100vw, 32vw"
+                            className="ab-cap-card-photo"
+                            draggable={false}
+                          />
+                          <span className="ab-cap-card-figure-tone" aria-hidden />
                         </div>
-                      ))}
-                    </div>
+                      </figure>
 
-                    {/* Tag chips */}
-                    <div className="ab-cap-card-tags">
-                      {item.tags.map((t, ti) => (
-                        <span key={ti} className="ab-cap-card-tag">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
+                      <div className="ab-cap-card-sheet">
+                        <header className="ab-cap-card-rail-head">
+                          <div className="ab-cap-card-rail-meta">
+                            <span className="ab-cap-card-rail-roman">{item.roman}</span>
+                            <span className="ab-cap-card-rail-slash" aria-hidden>
+                              /
+                            </span>
+                            <span className="ab-cap-card-rail-practice">
+                              Practice {item.n}
+                            </span>
+                          </div>
+                          <div className="ab-cap-card-stat-block">
+                            <span className="ab-cap-card-stat">{item.stat}</span>
+                            <span className="ab-cap-card-stat-label">
+                              {item.statLabel}
+                            </span>
+                          </div>
+                        </header>
 
-                    {/* Footer — page number / accent line */}
-                    <footer className="ab-cap-card-footer">
-                      <span className="ab-cap-card-footer-mark">●</span>
-                      <span className="ab-cap-card-footer-text">
-                        {item.shortHead} — Tech Binaries
-                      </span>
-                      <span className="ab-cap-card-footer-page">
-                        {item.n} / 04
-                      </span>
-                    </footer>
+                        <span className="ab-cap-card-rule" aria-hidden />
+
+                        <div className="ab-cap-card-body">
+                          <h3 className="ab-cap-card-head">{item.head}</h3>
+                          <p className="ab-cap-card-copy">{item.body}</p>
+                        </div>
+
+                        <div className="ab-cap-card-delivs">
+                          {item.deliverables.map((d, di) => (
+                            <div key={di} className="ab-cap-card-deliv">
+                              <span className="ab-cap-card-deliv-num">
+                                {String(di + 1).padStart(2, "0")}
+                              </span>
+                              <span className="ab-cap-card-deliv-label">{d}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="ab-cap-card-tags">
+                          {item.tags.map((t, ti) => (
+                            <span key={ti} className="ab-cap-card-tag">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+
+                        <footer className="ab-cap-card-footer">
+                          <span className="ab-cap-card-footer-mark">●</span>
+                          <span className="ab-cap-card-footer-text">
+                            {item.shortHead.toUpperCase()} — TECH BINARIES
+                          </span>
+                          <span className="ab-cap-card-footer-page">
+                            {item.n} / 04
+                          </span>
+                        </footer>
+                      </div>
+                    </div>
                   </article>
                 ))}
               </div>
@@ -3599,25 +3615,49 @@ export default function AboutPage() {
           {/* Mobile fallback — simple stacked cards */}
           <div className="ab-cap-mobile">
             {CAPABILITIES.items.map((item) => (
-              <article key={item.n} className="ab-cap-mobile-card">
-                <div className="ab-cap-mobile-top">
-                  <span className="ab-cap-mobile-num">{item.n}</span>
-                  <span className="ab-cap-mobile-roman">{item.roman}</span>
+              <article
+                key={item.n}
+                className="ab-cap-mobile-card"
+                style={
+                  {
+                    "--card-accent": item.accent,
+                  } as React.CSSProperties
+                }
+              >
+                <div className="ab-cap-mobile-figure">
+                  <span className="ab-cap-mobile-accent-bar" aria-hidden />
+                  <div className="ab-cap-mobile-figure-mask">
+                    <Image
+                      src={item.coverSrc}
+                      alt=""
+                      fill
+                      sizes="(max-width: 900px) 100vw, 28vw"
+                      className="ab-cap-mobile-photo"
+                      draggable={false}
+                    />
+                    <span className="ab-cap-mobile-figure-tone" aria-hidden />
+                  </div>
                 </div>
-                <h3 className="ab-cap-mobile-head">{item.head}</h3>
-                <p className="ab-cap-mobile-body">{item.body}</p>
-                <div className="ab-cap-mobile-stat">
-                  <span className="ab-cap-mobile-stat-val">{item.stat}</span>
-                  <span className="ab-cap-mobile-stat-lbl">
-                    {item.statLabel}
-                  </span>
-                </div>
-                <div className="ab-cap-mobile-tags">
-                  {item.tags.map((t, ti) => (
-                    <span key={ti} className="ab-cap-mobile-tag">
-                      {t}
+                <div className="ab-cap-mobile-sheet">
+                  <div className="ab-cap-mobile-top">
+                    <span className="ab-cap-mobile-num">{item.n}</span>
+                    <span className="ab-cap-mobile-roman">{item.roman}</span>
+                  </div>
+                  <h3 className="ab-cap-mobile-head">{item.head}</h3>
+                  <p className="ab-cap-mobile-body">{item.body}</p>
+                  <div className="ab-cap-mobile-stat">
+                    <span className="ab-cap-mobile-stat-val">{item.stat}</span>
+                    <span className="ab-cap-mobile-stat-lbl">
+                      {item.statLabel}
                     </span>
-                  ))}
+                  </div>
+                  <div className="ab-cap-mobile-tags">
+                    {item.tags.map((t, ti) => (
+                      <span key={ti} className="ab-cap-mobile-tag">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </article>
             ))}
@@ -4515,260 +4555,259 @@ export default function AboutPage() {
           padding: 0;
           perspective: 2000px;
         }
+        /* Capability slide — editorial (photo strip + typography; no deco sidebar) */
         .ab-cap-card {
           position: absolute;
           inset: 0;
           background: #fafaf9;
-          border-radius: 16px;
-          padding: clamp(16px, 2.1vw, 28px);
-          display: grid;
-          grid-template-rows: auto auto auto auto auto auto;
-          gap: clamp(9px, 1vw, 14px);
+          border-radius: 10px;
+          border: 1px solid rgba(10,10,10,0.12);
+          padding: 0;
+          display: block;
           will-change: transform, opacity, filter;
           transform-origin: center bottom;
           box-shadow:
-            0 1px 0 rgba(255,255,255,0.6) inset,
-            0 30px 60px -28px rgba(10,10,10,0.18),
-            0 6px 16px -8px rgba(10,10,10,0.08);
+            0 1px 0 rgba(255,255,255,0.92) inset,
+            0 28px 64px -40px rgba(10,10,10,0.22);
           overflow: hidden;
           isolation: isolate;
         }
-        /* Accent gradient wash from top-right */
-        .ab-cap-card::before {
-          content: "";
-          position: absolute;
-          top: -20%;
-          right: -15%;
-          width: 60%;
-          height: 70%;
-          background: radial-gradient(
-            ellipse at top right,
-            var(--card-accent, #d4c4a8) 0%,
-            transparent 70%
-          );
-          opacity: 0.32;
-          pointer-events: none;
-          z-index: 0;
+        .ab-cap-card-layout {
+          height: 100%;
+          display: grid;
+          grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.4fr);
+          align-items: stretch;
+          position: relative;
+          z-index: 1;
         }
-        /* Subtle paper grain */
-        .ab-cap-card::after {
-          content: "";
+        .ab-cap-card-figure {
+          margin: 0;
+          padding: 0;
+          position: relative;
+          min-height: 0;
+          align-self: stretch;
+          background: #eae9e8;
+        }
+        .ab-cap-card-accent-bar {
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 5px;
+          background: var(--card-accent, #d4c4a8);
+          z-index: 3;
+          pointer-events: none;
+        }
+        .ab-cap-card-figure-mask {
           position: absolute;
           inset: 0;
-          background-image:
-            linear-gradient(rgba(10,10,10,0.012) 1px, transparent 1px);
-          background-size: 100% 6px;
-          pointer-events: none;
-          z-index: 0;
-          opacity: 0.5;
+          overflow: hidden;
         }
-
-        /* Decorative corner ticks */
-        .ab-cap-card-corner {
+        .ab-cap-card-photo {
+          object-fit: cover;
+          filter: saturate(0.88) contrast(1.04);
+          transform: scale(1.02);
+          transform-origin: center;
+        }
+        .ab-cap-card-figure-tone {
           position: absolute;
-          width: 14px;
-          height: 14px;
-          z-index: 1;
+          inset: 0;
+          background:
+            linear-gradient(125deg,
+              color-mix(in srgb, var(--card-accent, #d4c4a8) 28%, transparent) 0%,
+              transparent 55%
+            ),
+            linear-gradient(to top,
+              rgba(10,10,10,0.22) 0%,
+              transparent 42%
+            );
+          mix-blend-mode: multiply;
           pointer-events: none;
         }
-        .ab-cap-card-corner::before,
-        .ab-cap-card-corner::after {
-          content: "";
-          position: absolute;
-          background: rgba(10,10,10,0.32);
-        }
-        .ab-cap-card-corner::before {
-          width: 14px;
-          height: 1px;
-        }
-        .ab-cap-card-corner::after {
-          width: 1px;
-          height: 14px;
-        }
-        .ab-cap-card-corner--tl { top: 14px; left: 14px; }
-        .ab-cap-card-corner--tl::before { top: 0; left: 0; }
-        .ab-cap-card-corner--tl::after { top: 0; left: 0; }
-        .ab-cap-card-corner--tr { top: 14px; right: 14px; }
-        .ab-cap-card-corner--tr::before { top: 0; right: 0; }
-        .ab-cap-card-corner--tr::after { top: 0; right: 0; }
-        .ab-cap-card-corner--bl { bottom: 14px; left: 14px; }
-        .ab-cap-card-corner--bl::before { bottom: 0; left: 0; }
-        .ab-cap-card-corner--bl::after { bottom: 0; left: 0; }
-        .ab-cap-card-corner--br { bottom: 14px; right: 14px; }
-        .ab-cap-card-corner--br::before { bottom: 0; right: 0; }
-        .ab-cap-card-corner--br::after { bottom: 0; right: 0; }
-
-        .ab-cap-card-top {
-          position: relative;
-          z-index: 2;
+        .ab-cap-card-sheet {
+          padding:
+            clamp(22px, 2.8vw, 36px)
+            clamp(22px, 3.2vw, 40px)
+            clamp(20px, 2.6vw, 32px);
           display: flex;
-          align-items: flex-start;
+          flex-direction: column;
+          gap: clamp(14px, 1.6vw, 18px);
+          min-width: 0;
           justify-content: space-between;
-          gap: 14px;
+        }
+        .ab-cap-card-rail-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 16px;
           flex-wrap: wrap;
         }
-        .ab-cap-card-meta {
+        .ab-cap-card-rail-meta {
           display: flex;
-          align-items: center;
-          gap: 14px;
+          align-items: baseline;
+          gap: 10px;
+          flex-wrap: wrap;
         }
-        .ab-cap-card-roman {
+        .ab-cap-card-rail-roman {
           font-family: var(--font-display);
-          font-size: clamp(24px, 2.6vw, 38px);
+          font-size: clamp(26px, 2.75vw, 40px);
           font-weight: 400;
           font-style: italic;
           letter-spacing: -0.04em;
           line-height: 1;
           color: #0a0a0a;
         }
-        .ab-cap-card-divider {
-          width: 1px;
-          height: 24px;
-          background: rgba(10,10,10,0.18);
-        }
-        .ab-cap-card-tagline {
+        .ab-cap-card-rail-slash {
           font-family: var(--font-mono);
-          font-size: 9px;
+          font-size: 14px;
+          font-weight: 500;
+          color: rgba(10,10,10,0.28);
+          line-height: 1;
+          transform: translateY(-2px);
+        }
+        .ab-cap-card-rail-practice {
+          font-family: var(--font-mono);
+          font-size: 9.5px;
           font-weight: 600;
-          letter-spacing: 0.14em;
+          letter-spacing: 0.16em;
           text-transform: uppercase;
-          color: rgba(10,10,10,0.55);
+          color: rgba(10,10,10,0.48);
+          line-height: 1;
         }
         .ab-cap-card-stat-block {
           display: flex;
           flex-direction: column;
           align-items: flex-end;
-          gap: 3px;
-          padding-left: 12px;
+          gap: 6px;
+          padding-left: 16px;
           border-left: 1px solid rgba(10,10,10,0.14);
           will-change: opacity, transform;
         }
         .ab-cap-card-stat {
           font-family: var(--font-display);
-          font-size: clamp(16px, 1.5vw, 22px);
+          font-size: clamp(20px, 2vw, 28px);
           font-weight: 500;
           font-style: italic;
-          letter-spacing: -0.02em;
+          letter-spacing: -0.03em;
           line-height: 1;
           color: #0a0a0a;
         }
         .ab-cap-card-stat-label {
           font-family: var(--font-mono);
-          font-size: 8px;
+          font-size: 8.5px;
           font-weight: 500;
-          letter-spacing: 0.1em;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
-          color: rgba(10,10,10,0.5);
+          color: rgba(10,10,10,0.48);
           text-align: right;
-          line-height: 1.4;
-          max-width: 18ch;
+          line-height: 1.45;
+          max-width: 20ch;
         }
-
         .ab-cap-card-rule {
-          position: relative;
-          z-index: 2;
           display: block;
           height: 1px;
           background: linear-gradient(
             90deg,
-            rgba(10,10,10,0.18) 0%,
-            rgba(10,10,10,0.06) 60%,
+            rgba(10,10,10,0.19) 0%,
+            rgba(10,10,10,0.07) 70%,
             transparent 100%
           );
           will-change: opacity, transform;
+          flex-shrink: 0;
         }
-
         .ab-cap-card-body {
-          position: relative;
-          z-index: 2;
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 10px;
+          flex-shrink: 0;
         }
         .ab-cap-card-head {
           font-family: var(--font-display);
-          font-size: clamp(20px, 2.2vw, 32px);
+          font-size: clamp(24px, 2.85vw, 38px);
           font-weight: 500;
-          letter-spacing: -0.034em;
-          line-height: 1.05;
+          letter-spacing: -0.038em;
+          line-height: 1.04;
           margin: 0;
           color: #0a0a0a;
-          max-width: 16ch;
+          max-width: 18ch;
         }
         .ab-cap-card-copy {
-          font-size: clamp(11.5px, 0.84vw, 13.5px);
-          line-height: 1.5;
+          font-size: clamp(12.5px, 0.92vw, 14.5px);
+          line-height: 1.6;
           color: rgba(10,10,10,0.62);
           margin: 0;
           max-width: 56ch;
         }
-
         .ab-cap-card-delivs {
-          position: relative;
-          z-index: 2;
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 8px;
-          padding: 10px 0;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 12px 16px;
+          padding: clamp(12px, 1.35vw, 16px) 0;
           border-top: 1px solid rgba(10,10,10,0.1);
           border-bottom: 1px solid rgba(10,10,10,0.1);
         }
         .ab-cap-card-deliv {
           display: flex;
           flex-direction: column;
-          gap: 4px;
+          gap: 6px;
           will-change: opacity, transform;
+          min-width: 0;
         }
         .ab-cap-card-deliv-num {
           font-family: var(--font-mono);
           font-size: 10px;
           font-weight: 600;
           letter-spacing: 0.12em;
-          color: rgba(10,10,10,0.4);
+          color: rgba(10,10,10,0.38);
         }
         .ab-cap-card-deliv-label {
           font-family: var(--font-display);
-          font-size: 11px;
+          font-size: clamp(11px, 0.92vw, 12.5px);
           font-weight: 500;
-          letter-spacing: -0.01em;
+          letter-spacing: -0.012em;
+          line-height: 1.35;
           color: #0a0a0a;
         }
-
         .ab-cap-card-tags {
-          position: relative;
-          z-index: 2;
           display: flex;
           flex-wrap: wrap;
-          gap: 6px;
+          gap: 0;
+          align-items: baseline;
+          row-gap: 4px;
+        }
+        .ab-cap-card-tags .ab-cap-card-tag:not(:first-child)::before {
+          content: "·";
+          margin: 0 8px;
+          color: rgba(10,10,10,0.28);
+          font-weight: 500;
+          font-size: 12px;
         }
         .ab-cap-card-tag {
           font-family: var(--font-mono);
-          font-size: 9px;
+          font-size: 9.5px;
           font-weight: 500;
-          letter-spacing: 0.08em;
+          letter-spacing: 0.06em;
           text-transform: uppercase;
-          color: rgba(10,10,10,0.7);
-          padding: 4px 8px;
-          border: 1px solid rgba(10,10,10,0.14);
-          border-radius: 5px;
-          background: rgba(255,255,255,0.5);
+          color: rgba(10,10,10,0.58);
           will-change: opacity, transform;
+          border: none;
+          border-radius: 0;
+          background: transparent;
+          padding: 0;
         }
-
         .ab-cap-card-footer {
-          position: relative;
-          z-index: 2;
           margin-top: auto;
           display: flex;
           align-items: center;
           gap: 12px;
-          padding-top: 8px;
+          padding-top: 6px;
           font-family: var(--font-mono);
           font-size: 10px;
           font-weight: 500;
           letter-spacing: 0.14em;
           text-transform: uppercase;
-          color: rgba(10,10,10,0.45);
+          color: rgba(10,10,10,0.42);
+          flex-shrink: 0;
         }
         .ab-cap-card-footer-mark {
           font-size: 6px;
@@ -4776,6 +4815,7 @@ export default function AboutPage() {
         }
         .ab-cap-card-footer-text {
           flex: 1;
+          min-width: 0;
         }
         .ab-cap-card-footer-page {
           color: #0a0a0a;
@@ -5123,6 +5163,17 @@ export default function AboutPage() {
             grid-template-columns: minmax(180px, 220px) 1fr;
             gap: 32px;
           }
+          .ab-cap-card-layout {
+            grid-template-columns: 1fr;
+          }
+          .ab-cap-card-figure {
+            aspect-ratio: 16 / 11;
+            max-height: 260px;
+          }
+          .ab-cap-card-sheet {
+            flex: 1;
+            min-height: 0;
+          }
           .ab-cap-card-delivs {
             grid-template-columns: repeat(2, 1fr);
           }
@@ -5157,42 +5208,66 @@ export default function AboutPage() {
           .ab-cap-mobile-card {
             position: relative;
             background: #fafaf9;
-            border-radius: 20px;
-            padding: 24px;
+            border-radius: 12px;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 0;
+            border: 1px solid rgba(10,10,10,0.12);
             box-shadow:
-              0 1px 0 rgba(255,255,255,0.6) inset,
-              0 12px 28px -16px rgba(10,10,10,0.18);
+              0 1px 0 rgba(255,255,255,0.9) inset,
+              0 20px 46px -34px rgba(10,10,10,0.2);
             overflow: hidden;
             will-change: opacity, transform;
           }
-          .ab-cap-mobile-card::before {
-            content: "";
+          .ab-cap-mobile-figure {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: #eae9e8;
+            flex-shrink: 0;
+          }
+          .ab-cap-mobile-accent-bar {
             position: absolute;
-            top: -20%;
-            right: -15%;
-            width: 70%;
-            height: 70%;
-            background: radial-gradient(
-              ellipse at top right,
-              rgba(212,196,168,0.32) 0%,
-              transparent 70%
-            );
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: var(--card-accent, #d4c4a8);
+            z-index: 3;
             pointer-events: none;
           }
-          .ab-cap-mobile-card:nth-child(2)::before {
-            background: radial-gradient(ellipse at top right, rgba(184,196,212,0.32) 0%, transparent 70%);
+          .ab-cap-mobile-figure-mask {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
           }
-          .ab-cap-mobile-card:nth-child(3)::before {
-            background: radial-gradient(ellipse at top right, rgba(196,184,168,0.32) 0%, transparent 70%);
+          .ab-cap-mobile-photo {
+            object-fit: cover;
+            filter: saturate(0.88) contrast(1.04);
           }
-          .ab-cap-mobile-card:nth-child(4)::before {
-            background: radial-gradient(ellipse at top right, rgba(168,184,196,0.32) 0%, transparent 70%);
+          .ab-cap-mobile-figure-tone {
+            position: absolute;
+            inset: 0;
+            background:
+              linear-gradient(125deg,
+                color-mix(in srgb, var(--card-accent, #d4c4a8) 26%, transparent) 0%,
+                transparent 55%
+              ),
+              linear-gradient(to top,
+                rgba(10,10,10,0.14) 0%,
+                transparent 45%
+              );
+            mix-blend-mode: multiply;
+            pointer-events: none;
+          }
+          .ab-cap-mobile-sheet {
+            padding: 22px 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
           }
           .ab-cap-mobile-top {
-            position: relative;
             display: flex;
             align-items: baseline;
             justify-content: space-between;
@@ -5257,20 +5332,25 @@ export default function AboutPage() {
           .ab-cap-mobile-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            position: relative;
+            gap: 0;
+            align-items: baseline;
+          }
+          .ab-cap-mobile-tags .ab-cap-mobile-tag:not(:first-child)::before {
+            content: "·";
+            margin: 0 7px;
+            color: rgba(10,10,10,0.26);
+            font-weight: 600;
           }
           .ab-cap-mobile-tag {
             font-family: var(--font-mono);
             font-size: 10px;
             font-weight: 500;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
-            color: rgba(10,10,10,0.7);
-            padding: 5px 8px;
-            border: 1px solid rgba(10,10,10,0.14);
-            border-radius: 5px;
-            background: rgba(255,255,255,0.5);
+            color: rgba(10,10,10,0.58);
+            padding: 0;
+            border: none;
+            background: transparent;
           }
         }
 
