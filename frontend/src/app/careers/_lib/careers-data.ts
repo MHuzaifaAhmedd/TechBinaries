@@ -137,9 +137,9 @@ export const LIFE = {
 } as const;
 
 export const OPENINGS = {
-  title: "Open roles,",
-  titleAccent: "right now.",
-  lead: "We're not hiring to fill seats. Each role below exists because we have real work that needs a specific kind of person.",
+  title: "Open positions,",
+  titleAccent: "active now.",
+  lead: "Every opening below is live and tied to current delivery work. Pick the role that matches your strengths and apply directly.",
   roles: [
     {
       id: "senior-fullstack",

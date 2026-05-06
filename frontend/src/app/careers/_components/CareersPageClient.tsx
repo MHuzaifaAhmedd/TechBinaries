@@ -10,6 +10,7 @@ import { useCareersSectionReveals } from "../_hooks/useCareersSectionReveals";
 import { useCareersLifeMosaic } from "../_hooks/useCareersLifeMosaic";
 import { useCareersDnaScroll } from "../_hooks/useCareersDnaScroll";
 import { useCareersFontRefresh } from "../_hooks/useCareersFontRefresh";
+import { useCareersRolesPinScroll } from "../_hooks/useCareersRolesPinScroll";
 import { CareersGrainOverlay } from "./CareersGrainOverlay";
 import { CareersDnaCursorRing } from "./CareersDnaCursorRing";
 import { CareersHeroSection } from "./CareersHeroSection";
@@ -36,6 +37,7 @@ export function CareersPageClient() {
   useCareersLifeMosaic();
   useCareersDnaScroll(dnaStageRef, dnaCursorRingRef, setActiveValueStable);
   useCareersFontRefresh();
+  useCareersRolesPinScroll();
 
   return (
     <>

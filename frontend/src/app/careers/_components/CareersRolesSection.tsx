@@ -1,77 +1,71 @@
-import type { CSSProperties } from "react";
 import { OPENINGS } from "../_lib/careers-data";
 
 export function CareersRolesSection() {
+  type Role = (typeof OPENINGS.roles)[number];
+  const totalOpenRoles = OPENINGS.roles.length;
+  const rolesByDept = OPENINGS.roles.reduce<Record<string, Role[]>>((acc, role) => {
+    acc[role.dept] = [...(acc[role.dept] ?? []), role];
+    return acc;
+  }, {});
+
   return (
     <section className="cr-roles" aria-labelledby="cr-roles-title">
       <div className="cr-roles-inner">
-        <div className="cr-sh cr-section-head">
-          <h2 id="cr-roles-title" className="cr-h2">
-            {OPENINGS.title} <span className="cr-italic-mute">{OPENINGS.titleAccent}</span>
-          </h2>
-          <p className="cr-h2-lead">{OPENINGS.lead}</p>
-        </div>
+        <div className="cr-roles-board">
+          <aside className="cr-roles-aside" aria-label="Open roles summary">
+            <h2 id="cr-roles-title" className="cr-h2">
+              {OPENINGS.title} <span className="cr-italic-mute">{OPENINGS.titleAccent}</span>
+            </h2>
+            <p className="cr-h2-lead">{OPENINGS.lead}</p>
+            <div className="cr-roles-stat">
+              <span className="cr-roles-stat-label">Open roles</span>
+              <strong className="cr-roles-stat-count">{totalOpenRoles}</strong>
+            </div>
+          </aside>
 
-        <div className="cr-roles-list" role="list">
-          {OPENINGS.roles.map((role, i) => (
-            <article
-              key={role.id}
-              className="cr-role-row"
-              role="listitem"
-              style={{ "--i": i } as CSSProperties}
-            >
-              <div className="cr-role-left">
-                <span className="cr-role-dept">{role.dept}</span>
-                <h3 className="cr-role-title">{role.title}</h3>
-              </div>
+          <div className="cr-roles-content">
+            <div className="cr-roles-scroll-viewport">
+              <div className="cr-roles-scroll-track">
+                {Object.entries(rolesByDept).map(([dept, roles]) => (
+                  <section key={dept} className="cr-role-group" aria-label={`${dept} openings`}>
+                    <header className="cr-role-group-head">
+                      <h3 className="cr-role-group-title">{dept}</h3>
+                      <span className="cr-role-group-count">
+                        {roles.length} {roles.length === 1 ? "opening" : "openings"}
+                      </span>
+                    </header>
 
-              <div className="cr-role-mid">
-                <div className="cr-role-meta">
-                  <span className="cr-role-meta-item">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-                      <circle cx="6" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.3" />
-                      <path
-                        d="M6 12C6 12 2 8.5 2 5a4 4 0 0 1 8 0c0 3.5-4 7-4 7Z"
-                        stroke="currentColor"
-                        strokeWidth="1.3"
-                        fill="none"
-                      />
-                    </svg>
-                    {role.location}
-                  </span>
-                  <span className="cr-role-dot" aria-hidden />
-                  <span className="cr-role-meta-item">{role.type}</span>
-                </div>
-                <div className="cr-role-tags" aria-label="Required skills">
-                  {role.tags.map((tag) => (
-                    <span key={tag} className="cr-role-tag">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
+                    <div className="cr-role-ledger" role="list">
+                      {roles.map((role) => (
+                        <article key={role.id} className="cr-role-row" role="listitem">
+                          <div className="cr-role-main">
+                            <h4 className="cr-role-title">{role.title}</h4>
+                            <div className="cr-role-meta">
+                              <span className="cr-role-meta-item">{role.location}</span>
+                              <span className="cr-role-meta-dot" aria-hidden />
+                              <span className="cr-role-meta-item">{role.type}</span>
+                            </div>
+                            <p className="cr-role-blurb">{role.blurb}</p>
+                            <div className="cr-role-tags" aria-label="Required skills">
+                              {role.tags.map((tag) => (
+                                <span key={tag} className="cr-role-tag">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
 
-              <div className="cr-role-right">
-                <p className="cr-role-blurb">{role.blurb}</p>
-                <a
-                  href={`/careers/${role.id}`}
-                  className="cr-role-cta"
-                  aria-label={`Apply for ${role.title}`}
-                >
-                  <span>Apply</span>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                    <path
-                      d="M3 7h8M7.5 3.5 11 7l-3.5 3.5"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </a>
+                          <a href={`/careers/${role.id}`} className="cr-role-cta" aria-label={`Apply for ${role.title}`}>
+                            Apply
+                          </a>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
+                ))}
               </div>
-            </article>
-          ))}
+            </div>
+          </div>
         </div>
 
         <p className="cr-roles-footnote">
