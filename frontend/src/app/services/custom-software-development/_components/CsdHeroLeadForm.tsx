@@ -2,6 +2,7 @@
 
 import { FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import { HERO_PHONE_COUNTRY_CODES } from "../_lib/csd-data";
+import { MARKETING_BUDGET_OPTIONS } from "@/lib/marketing-budget-ranges";
 
 type HeroMenuValue = {
   href: string;
@@ -236,10 +237,11 @@ export function CsdHeroLeadForm({ heroMenu, serviceControls }: Props) {
             <option value="" disabled>
               Select a budget range
             </option>
-            <option value="under-10k">Under $10k</option>
-            <option value="10k-25k">$10k - $25k</option>
-            <option value="25k-50k">$25k - $50k</option>
-            <option value="50k-plus">$50k+</option>
+            {MARKETING_BUDGET_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
           </select>
         </label>
         <label className="csd-hero-form-field">

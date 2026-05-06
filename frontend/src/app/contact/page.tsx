@@ -4,6 +4,10 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { ContactBudgetSelect } from "./_components/ContactBudgetSelect";
+import { ContactHearAboutSelect } from "./_components/ContactHearAboutSelect";
+import { formatContactHearAbout } from "@/lib/contact-hear-about-options";
+import { marketingBudgetLabel } from "@/lib/marketing-budget-ranges";
 
 /** Pillar + sub-service labels (checkbox values). Labels are unique across groups. */
 const CONTACT_SERVICE_GROUPS = [
@@ -51,7 +55,8 @@ type ContactFormData = {
   email: string;
   phone: string;
   budget: string;
-  hearAbout: string;
+  hearAboutChannel: string;
+  hearAboutOther: string;
   message: string;
   services: string[];
   consent: boolean;
@@ -93,7 +98,8 @@ export default function ContactPage() {
     email: "",
     phone: "",
     budget: "",
-    hearAbout: "",
+    hearAboutChannel: "",
+    hearAboutOther: "",
     message: "",
     services: [],
     consent: false,
@@ -143,6 +149,18 @@ export default function ContactPage() {
       setFormError("Please complete the reCAPTCHA challenge.");
       return;
     }
+    if (!contactForm.budget.trim()) {
+      setFormError("Please select a monthly marketing budget.");
+      return;
+    }
+    if (!contactForm.hearAboutChannel.trim()) {
+      setFormError("Please tell us how you heard about us.");
+      return;
+    }
+    if (contactForm.hearAboutChannel === "other" && !contactForm.hearAboutOther.trim()) {
+      setFormError("Please specify how you heard about us (Other).");
+      return;
+    }
     if (contactForm.services.length === 0) {
       setFormError("Please choose at least one service.");
       return;
@@ -155,10 +173,16 @@ export default function ContactPage() {
     setSubmitting(true);
 
     try {
+      const { hearAboutChannel, hearAboutOther, ...contactRest } = contactForm;
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...contactForm, captchaToken }),
+        body: JSON.stringify({
+          ...contactRest,
+          budget: marketingBudgetLabel(contactForm.budget),
+          hearAbout: formatContactHearAbout(hearAboutChannel, hearAboutOther),
+          captchaToken,
+        }),
       });
 
       const payload = (await response.json()) as { message?: string };
@@ -173,7 +197,8 @@ export default function ContactPage() {
         email: "",
         phone: "",
         budget: "",
-        hearAbout: "",
+        hearAboutChannel: "",
+        hearAboutOther: "",
         message: "",
         services: [],
         consent: false,
@@ -280,25 +305,20 @@ export default function ContactPage() {
               </div>
 
               <div className="contact-grid-2">
-                <label className="contact-field">
-                  <input
-                    type="text"
-                    required
-                    placeholder=" "
-                    value={contactForm.budget}
-                    onChange={(e) => setContactForm((prev) => ({ ...prev, budget: e.target.value }))}
-                  />
-                  <span>Monthly Marketing Budget *</span>
-                </label>
-                <label className="contact-field">
-                  <input
-                    type="text"
-                    placeholder=" "
-                    value={contactForm.hearAbout}
-                    onChange={(e) => setContactForm((prev) => ({ ...prev, hearAbout: e.target.value }))}
-                  />
-                  <span>How did you hear about us?</span>
-                </label>
+                <ContactBudgetSelect
+                  value={contactForm.budget}
+                  onChange={(budget) => setContactForm((prev) => ({ ...prev, budget }))}
+                />
+                <ContactHearAboutSelect
+                  channelValue={contactForm.hearAboutChannel}
+                  onChannelChange={(hearAboutChannel) =>
+                    setContactForm((prev) => ({ ...prev, hearAboutChannel }))
+                  }
+                  otherDetail={contactForm.hearAboutOther}
+                  onOtherDetailChange={(hearAboutOther) =>
+                    setContactForm((prev) => ({ ...prev, hearAboutOther }))
+                  }
+                />
               </div>
 
               <div style={{ marginTop: 20 }}>
