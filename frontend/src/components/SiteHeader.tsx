@@ -128,13 +128,14 @@ export default function SiteHeader() {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setMegaOpen(false), 140);
   };
-  // Full-bleed dark heroes: frosted bar + ink nav at top; transparent would read as "mixed" with the hero.
+  // Routes that keep a frosted header treatment at top-of-page.
   const darkHeroRoute =
-    pathname === "/" ||
     pathname.startsWith("/services/custom-software-development") ||
     pathname === "/careers";
   const headerTheme = darkHeroRoute && !scrolled ? "dark" : "light";
-  const aboutHeroViewport = pathname === "/about" && !scrolled;
+  // Routes where header should blend directly into the hero at load.
+  const blendedHeroViewport =
+    (pathname === "/about" || pathname === "/") && !scrolled;
 
   return (
     <>
@@ -142,7 +143,7 @@ export default function SiteHeader() {
         className="site-header"
         data-scrolled={scrolled ? "true" : "false"}
         data-theme={headerTheme}
-        data-about-hero={aboutHeroViewport ? "true" : "false"}
+        data-hero-blend={blendedHeroViewport ? "true" : "false"}
         onMouseLeave={scheduleCloseMega}
       >
         <div className="site-header__inner">
@@ -150,7 +151,7 @@ export default function SiteHeader() {
           <Link href="/" className="site-header__brand" aria-label="TechBinaries — home">
             <span className="site-header__brand-logo-wrap" aria-hidden>
               <Image
-                src={aboutHeroViewport ? "/images/header-logo-white.png" : "/images/header-logo.png"}
+                src={blendedHeroViewport ? "/images/header-logo-white.png" : "/images/header-logo.png"}
                 alt="TechBinaries"
                 fill
                 className="site-header__brand-logo"
@@ -601,6 +602,12 @@ export default function SiteHeader() {
           -webkit-backdrop-filter: saturate(180%) blur(20px);
           border-bottom-color: var(--color-line);
         }
+        .site-header[data-hero-blend="true"] {
+          background: transparent !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          border-bottom-color: transparent !important;
+        }
 
         /* On the dark hero route, show frosted glass immediately */
         .site-header[data-theme="dark"][data-scrolled="false"] {
@@ -795,14 +802,14 @@ export default function SiteHeader() {
         .site-header[data-theme="dark"][data-scrolled="false"] .site-header__burger span {
           background: var(--color-ink);
         }
-        .site-header[data-about-hero="true"] .site-header__brand-logo {
+        .site-header[data-hero-blend="true"] .site-header__brand-logo {
           filter: none;
         }
-        .site-header[data-about-hero="true"] .site-header__nav-link {
+        .site-header[data-hero-blend="true"] .site-header__nav-link {
           color: rgba(255, 255, 255, 0.82);
         }
-        .site-header[data-about-hero="true"] .site-header__nav-link:hover,
-        .site-header[data-about-hero="true"] .site-header__nav-link:focus-visible {
+        .site-header[data-hero-blend="true"] .site-header__nav-link:hover,
+        .site-header[data-hero-blend="true"] .site-header__nav-link:focus-visible {
           color: #fafaf9;
           background: rgba(255, 255, 255, 0.1);
         }
