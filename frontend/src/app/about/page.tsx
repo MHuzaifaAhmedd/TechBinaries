@@ -2893,9 +2893,13 @@ export default function AboutPage() {
       const section = capRef.current;
       if (!section) return;
 
+      const pinEl = section.querySelector<HTMLElement>(".ab-cap-pin");
+      if (!pinEl) return;
+
       const cards = gsap.utils.toArray<HTMLElement>(".ab-cap-card");
       const total = cards.length;
       if (!total) return;
+      const segments = total - 1;
 
       // Initial state — first card visible, rest below
       cards.forEach((card, i) => {
@@ -2929,28 +2933,28 @@ export default function AboutPage() {
           stagger: 0.1,
           ease: "expo.out",
           scrollTrigger: {
-            trigger: ".ab-cap-header",
-            start: "top 80%",
+            trigger: pinEl,
+            start: "top 70%",
             once: true,
           },
         }
       );
 
       // Build the pinned timeline
-      // Total scroll distance = (cards - 1) screens for transitions + holds
-      const segments = total - 1; // 3 transitions for 4 cards
+      // Total scroll distance scales with viewport so pin lock feels stable
       const holdRatio = 0.35; // portion of each segment spent holding the card
-      const transitionRatio = 1 - holdRatio;
 
       const masterTL = gsap.timeline({
         scrollTrigger: {
-          trigger: ".ab-cap-pin",
+          trigger: pinEl,
           start: "top top",
-          end: () => `+=${window.innerHeight * (segments + 0.6)}`,
-          scrub: 0.8,
-          pin: ".ab-cap-pin",
+          end: () => `+=${window.innerHeight * 0.9 * (segments + 1)}`,
+          scrub: 1,
+          pin: pinEl,
           pinSpacing: true,
           anticipatePin: 1,
+          fastScrollEnd: false,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
             // Active index based on progress
             const raw = self.progress * segments;
@@ -3027,7 +3031,7 @@ export default function AboutPage() {
           stagger: 0.06,
           ease: "expo.out",
           scrollTrigger: {
-            trigger: ".ab-cap-pin",
+            trigger: ".ab-cap",
             start: "top 60%",
             once: true,
           },
@@ -3039,10 +3043,11 @@ export default function AboutPage() {
         strokeDashoffset: 0,
         ease: "none",
         scrollTrigger: {
-          trigger: ".ab-cap-pin",
+          trigger: pinEl,
           start: "top top",
-          end: () => `+=${window.innerHeight * (segments + 0.6)}`,
+          end: () => `+=${window.innerHeight * 0.9 * (segments + 1)}`,
           scrub: 0.8,
+          invalidateOnRefresh: true,
         },
       });
 
@@ -3055,7 +3060,7 @@ export default function AboutPage() {
   useEffect(() => {
     if (!isMobile) return;
     const ctx = gsap.context(() => {
-      gsap.utils.toArray<HTMLElement>(".ab-cap-mobile-card").forEach((card, i) => {
+      gsap.utils.toArray<HTMLElement>(".ab-cap-mobile-card").forEach((card) => {
         gsap.fromTo(
           card,
           { opacity: 0, y: 60 },
@@ -3417,21 +3422,21 @@ export default function AboutPage() {
             SECTION 3 — CAPABILITIES (REBUILT — pinned stacking deck)
         ═══════════════════════════════════════════════════════════════ */}
         <section ref={capRef} className="ab-cap" aria-labelledby="ab-cap-title">
-          {/* Pre-pin header */}
-          <div className="ab-cap-header">
-            <h2 id="ab-cap-title" className="ab-cap-h2">
-              {CAPABILITIES.title}{" "}
-              <span className="ab-italic-mute">
-                {CAPABILITIES.titleAccent}
-              </span>
-            </h2>
-            <p className="ab-cap-lead">{CAPABILITIES.lead}</p>
-          </div>
-
-          {/* The pinned area */}
+          {/* The pinned area — now contains the header too */}
           <div className="ab-cap-pin">
             <div className="ab-cap-pin-bg" aria-hidden>
               <div className="ab-cap-grain" />
+            </div>
+
+            {/* Header now lives INSIDE pin so it stays visible while pinned */}
+            <div className="ab-cap-header">
+              <h2 id="ab-cap-title" className="ab-cap-h2">
+                {CAPABILITIES.title}{" "}
+                <span className="ab-italic-mute">
+                  {CAPABILITIES.titleAccent}
+                </span>
+              </h2>
+              <p className="ab-cap-lead">{CAPABILITIES.lead}</p>
             </div>
 
             <div className="ab-cap-pin-inner">
@@ -4300,9 +4305,12 @@ export default function AboutPage() {
         /* Pre-pin header */
         .ab-cap-header {
           position: relative;
+          z-index: 2;
+          flex-shrink: 0;
           max-width: 1320px;
           margin: 0 auto;
-          padding: clamp(96px, 13vw, 160px) clamp(24px, 4vw, 64px) clamp(56px, 7vw, 90px);
+          width: 100%;
+          padding: clamp(60px, 9vh, 96px) clamp(24px, 4vw, 64px) clamp(20px, 3vh, 32px);
           text-align: center;
           display: flex;
           flex-direction: column;
@@ -4310,17 +4318,18 @@ export default function AboutPage() {
         }
         .ab-cap-h2 {
           font-family: var(--font-display);
-          font-size: clamp(38px, 5.6vw, 80px);
+          font-size: clamp(32px, 4.6vw, 64px);
           font-weight: 500;
           letter-spacing: -0.04em;
           line-height: 1;
-          margin: 0 0 22px;
-          max-width: 22ch;
+          margin: 0 0 16px;
+          max-width: none;
+          white-space: nowrap;
         }
         .ab-cap-lead {
-          font-size: clamp(15px, 1.18vw, 17px);
+          font-size: clamp(14px, 1vw, 16px);
           color: rgba(10,10,10,0.62);
-          line-height: 1.7;
+          line-height: 1.6;
           margin: 0;
           max-width: 60ch;
         }
@@ -4328,10 +4337,11 @@ export default function AboutPage() {
         /* Pinned area */
         .ab-cap-pin {
           position: relative;
-          height: 84vh;
-          min-height: 600px;
+          height: 100vh;
           overflow: hidden;
           background: #f5f5f4;
+          display: flex;
+          flex-direction: column;
         }
 
         .ab-cap-pin-bg {
@@ -4355,14 +4365,17 @@ export default function AboutPage() {
         .ab-cap-pin-inner {
           position: relative;
           z-index: 2;
-          height: 100%;
+          flex: 1;
+          min-height: 0;
           max-width: 1280px;
           margin: 0 auto;
-          padding: clamp(24px, 3.4vh, 48px) clamp(18px, 3vw, 40px);
+          width: 100%;
+          padding: clamp(8px, 1.5vh, 20px) clamp(18px, 3vw, 40px) clamp(56px, 8vh, 80px);
           display: grid;
           grid-template-columns: minmax(170px, 220px) 1fr;
           gap: clamp(20px, 2.4vw, 36px);
           align-items: stretch;
+          transform: none;
         }
 
         /* LEFT RAIL */
@@ -4498,9 +4511,8 @@ export default function AboutPage() {
         .ab-cap-stage {
           position: relative;
           height: 100%;
-          min-height: 360px;
-          max-height: 520px;
-          padding: clamp(8px, 1.2vh, 14px) clamp(8px, 1vw, 14px);
+          min-height: 280px;
+          padding: 0;
           perspective: 2000px;
         }
         .ab-cap-card {
@@ -5290,8 +5302,9 @@ export default function AboutPage() {
           .ab-h2 { font-size: clamp(30px, 8.5vw, 48px); }
           .ab-h2-lead { font-size: 14.5px; line-height: 1.65; }
           .ab-cap-h2 { font-size: clamp(30px, 9vw, 48px); }
+          .ab-cap-h2 { white-space: normal; }
           .ab-cap-lead { font-size: 14.5px; }
-          .ab-cap-header { padding: clamp(72px, 12vw, 110px) 16px clamp(40px, 7vw, 64px); }
+          .ab-cap-header { padding: 0 16px; }
 
           .ab-pillars-divider-logo { width: 22px; }
           .ab-pillar-overlay { padding: 16px; }
