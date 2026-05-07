@@ -194,8 +194,12 @@ export function ChatWidget() {
         </span>
       </button>
 
-      {isOpen ? (
-        <section className="tb-chat__panel" id="techbinaries-chat-panel" aria-label="TechBinaries AI chat">
+      <section
+        className="tb-chat__panel"
+        id="techbinaries-chat-panel"
+        aria-label="TechBinaries AI chat"
+        aria-hidden={!isOpen}
+      >
           <header className="tb-chat__header">
             <img
               className="tb-chat__header-logo"
@@ -291,8 +295,7 @@ export function ChatWidget() {
               </div>
             </div>
           </form>
-        </section>
-      ) : null}
+      </section>
     </div>
   );
 }

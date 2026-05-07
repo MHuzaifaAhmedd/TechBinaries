@@ -68,9 +68,13 @@ type NavItem = {
 const NAV: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services", mega: true },
-  { label: "Insights", href: "/insights" },
+  { label: "Insights", href: "/blogs" },
   { label: "About", href: "/about" },
   { label: "Careers", href: "/careers" },
+];
+
+const INSIGHTS_LINKS = [
+  { label: "Blogs", href: "/blogs" },
 ];
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -79,6 +83,7 @@ export default function SiteHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
+  const [insightsOpen, setInsightsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   // Mobile-only: which category accordion is currently expanded inside the
   // drawer's Services section. -1 = none.
@@ -88,6 +93,7 @@ export default function SiteHeader() {
   // Hover-intent timer — keeps the menu open while the cursor travels
   // diagonally from the trigger button to the panel.
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const insightsCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Scroll → compact state
   useEffect(() => {
@@ -122,11 +128,23 @@ export default function SiteHeader() {
 
   const openMega = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
+    if (insightsCloseTimer.current) clearTimeout(insightsCloseTimer.current);
+    setInsightsOpen(false);
     setMegaOpen(true);
   };
   const scheduleCloseMega = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setMegaOpen(false), 140);
+  };
+  const openInsights = () => {
+    if (insightsCloseTimer.current) clearTimeout(insightsCloseTimer.current);
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setMegaOpen(false);
+    setInsightsOpen(true);
+  };
+  const scheduleCloseInsights = () => {
+    if (insightsCloseTimer.current) clearTimeout(insightsCloseTimer.current);
+    insightsCloseTimer.current = setTimeout(() => setInsightsOpen(false), 140);
   };
   // Routes that keep a frosted header treatment at top-of-page.
   const darkHeroRoute = false;
@@ -135,6 +153,8 @@ export default function SiteHeader() {
   const blendedHeroViewport =
     (pathname === "/" ||
       pathname === "/about" ||
+      pathname === "/blogs" ||
+      pathname.startsWith("/blog/") ||
       pathname === "/careers" ||
       pathname === "/services" ||
       pathname.startsWith("/services/")) &&
@@ -147,7 +167,10 @@ export default function SiteHeader() {
         data-scrolled={scrolled ? "true" : "false"}
         data-theme={headerTheme}
         data-hero-blend={blendedHeroViewport ? "true" : "false"}
-        onMouseLeave={scheduleCloseMega}
+        onMouseLeave={() => {
+          scheduleCloseMega();
+          scheduleCloseInsights();
+        }}
       >
         <div className="site-header__inner">
           {/* ── Logo ── */}
@@ -181,7 +204,13 @@ export default function SiteHeader() {
                       className="site-header__nav-link"
                       aria-haspopup="true"
                       aria-expanded={megaOpen}
-                      onClick={() => setMegaOpen((v) => !v)}
+                      onClick={() =>
+                        setMegaOpen((v) => {
+                          const next = !v;
+                          if (next) setInsightsOpen(false);
+                          return next;
+                        })
+                      }
                       suppressHydrationWarning
                     >
                       {item.label}
@@ -203,6 +232,48 @@ export default function SiteHeader() {
                         />
                       </svg>
                     </button>
+                  </div>
+                );
+              }
+              if (item.label === "Insights") {
+                return (
+                  <div
+                    key={item.label}
+                    className="site-header__nav-item"
+                    onMouseEnter={openInsights}
+                    onMouseLeave={scheduleCloseInsights}
+                  >
+                    <Link href={item.href} className="site-header__nav-link">
+                      {item.label}
+                      <svg
+                        aria-hidden
+                        width="10"
+                        height="10"
+                        viewBox="0 0 10 10"
+                        className="site-header__chevron"
+                        data-open={insightsOpen ? "true" : "false"}
+                      >
+                        <path
+                          d="M2 3.5 L5 6.5 L8 3.5"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </Link>
+                    <div className="site-header__mini-menu" data-open={insightsOpen ? "true" : "false"}>
+                      <ul className="site-header__mini-menu-list" role="list">
+                        {INSIGHTS_LINKS.map((link) => (
+                          <li key={link.href}>
+                            <Link href={link.href} className="site-header__mini-menu-link">
+                              {link.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 );
               }
@@ -708,6 +779,52 @@ export default function SiteHeader() {
         }
         .site-header__chevron[data-open="true"] {
           transform: rotate(180deg);
+        }
+        .site-header__mini-menu {
+          position: absolute;
+          top: calc(100% + 8px);
+          left: 50%;
+          transform: translateX(-50%) translateY(-6px);
+          width: 260px;
+          background: #fff;
+          border: 1px solid rgba(10, 10, 10, 0.1);
+          border-radius: 12px;
+          box-shadow: 0 20px 42px -28px rgba(10, 10, 10, 0.35);
+          padding: 8px;
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+          transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0.22s;
+          z-index: 20;
+        }
+        .site-header__mini-menu[data-open="true"] {
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+          transform: translateX(-50%) translateY(0);
+          transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0s;
+        }
+        .site-header__mini-menu-list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+        .site-header__mini-menu-link {
+          display: block;
+          text-decoration: none;
+          color: rgba(10, 10, 10, 0.72);
+          font-family: var(--font-body);
+          font-size: 13px;
+          padding: 10px 12px;
+          border-radius: 8px;
+          transition: background 0.18s ease, color 0.18s ease;
+        }
+        .site-header__mini-menu-link:hover {
+          background: rgba(10, 10, 10, 0.05);
+          color: #0a0a0a;
         }
 
         /* ── Right cluster ── */
