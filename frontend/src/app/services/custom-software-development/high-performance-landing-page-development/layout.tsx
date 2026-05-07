@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import "./_styles/cwa-page.css";
 
 export const metadata: Metadata = {
   title: "High-Performance Landing Pages",

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./_styles/custom-software-page.css";
+import "./_styles/cwa-page.shared.css";
 
 export const metadata: Metadata = {
   title: "Custom Software Development",
