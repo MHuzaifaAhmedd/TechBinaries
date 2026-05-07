@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+openai
+motor
+httpx
+python-dotenv
