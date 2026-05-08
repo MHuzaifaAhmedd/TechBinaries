@@ -163,12 +163,26 @@ const POSTS = [
 ];
 
 const NEWSLETTER = {
-  headline: "No noise.",
-  headlineAccent: "Just signal.",
-  lead: "One email when we publish something worth reading. No digests, no promotions, no cadence for cadence's sake.",
   placeholder: "your@email.com",
   cta: "Subscribe",
 };
+
+const LATEST_NEWS = [
+  {
+    title: "AI Governance Playbook for 2026 Product Teams",
+    brief: "A practical framework for shipping AI features with policy guardrails, audit trails, and clear ownership from day one.",
+    date: "May 02, 2026",
+    slug: "ai-governance-playbook-2026",
+    image: "/images/blog/post-cover-2.jpg",
+  },
+  {
+    title: "Serverless Cost Traps We Keep Seeing in New Builds",
+    brief: "The three architecture mistakes that quietly inflate cloud bills, plus the quick checks to catch them before launch.",
+    date: "Apr 30, 2026",
+    slug: "serverless-cost-traps-new-builds",
+    image: "/images/blog/post-cover-4.jpg",
+  },
+];
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 
@@ -301,24 +315,25 @@ export default function BlogsPage() {
   // ── GRID POSTS REVEAL ──
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.utils.toArray<HTMLElement>(".bl-stream-row").forEach((card, i) => {
-        gsap.fromTo(
-          card,
-          { opacity: 0, y: 56 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.95,
-            ease: "expo.out",
-            delay: (i % 2) * 0.07,
-            scrollTrigger: {
-              trigger: card,
-              start: "top 88%",
-              once: true,
-            },
-          }
-        );
-      });
+      const cards = gsap.utils.toArray<HTMLElement>(".bl-stream-row");
+      if (!cards.length) return;
+
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 56 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.88,
+          stagger: 0.14,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: ".bl-stream-scroll-track",
+            start: "top 82%",
+            once: true,
+          },
+        }
+      );
 
     });
     return () => ctx.revert();
@@ -635,19 +650,6 @@ export default function BlogsPage() {
                     </div>
                   </div>
 
-                  <div className="bl-side-card">
-                    <h4 className="bl-side-heading">By the numbers</h4>
-                    <div className="bl-side-stats">
-                      <div className="bl-side-stat">
-                        <strong>{POSTS.length}+ </strong>
-                        <span>articles published</span>
-                      </div>
-                      <div className="bl-side-stat">
-                        <strong>{CATEGORIES.length - 1}+ </strong>
-                        <span>active categories</span>
-                      </div>
-                    </div>
-                  </div>
                 </aside>
               </div>
             )}
@@ -666,49 +668,33 @@ export default function BlogsPage() {
           </div>
 
           <div className="bl-nl-inner">
-            <div className="bl-nl-text">
-              <h2 id="bl-nl-title" className="bl-nl-headline">
-                {NEWSLETTER.headline}{" "}
-                <span className="bl-nl-italic">{NEWSLETTER.headlineAccent}</span>
-              </h2>
-              <p className="bl-nl-lead">{NEWSLETTER.lead}</p>
-            </div>
-
-            {!subscribed ? (
-              <form
-                className="bl-nl-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (email) setSubscribed(true);
-                }}
-              >
-                <div className="bl-nl-input-wrap">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={NEWSLETTER.placeholder}
-                    className="bl-nl-input"
-                    required
-                    aria-label="Email address"
-                  />
-                  <button type="submit" className="bl-nl-btn">
-                    <span className="bl-nl-btn-label">{NEWSLETTER.cta}</span>
-                    <span className="bl-nl-btn-arrow" aria-hidden>
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M3 8h10M8.5 3.5L13 8l-4.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                  </button>
-                </div>
-                <p className="bl-nl-disclaimer">No spam. Unsubscribe any time.</p>
-              </form>
-            ) : (
-              <div className="bl-nl-success">
-                <span className="bl-nl-success-icon" aria-hidden>✓</span>
-                <span className="bl-nl-success-text">You're in. We'll be in touch when it's worth it.</span>
+            <div className="bl-nl-latest">
+              <h2 id="bl-nl-title" className="bl-nl-latest-heading">Latest news</h2>
+              <div className="bl-nl-latest-grid">
+                {LATEST_NEWS.map((item) => (
+                  <article key={item.slug} className="bl-nl-latest-card">
+                    <Link href={`/blog/${item.slug}`} className="bl-nl-latest-thumb-link" aria-label={`Open ${item.title}`}>
+                      <figure className="bl-nl-latest-thumb">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          sizes="(max-width: 900px) 100vw, 240px"
+                          className="bl-nl-latest-thumb-img"
+                        />
+                      </figure>
+                    </Link>
+                    <h3 className="bl-nl-latest-title">
+                      <Link href={`/blog/${item.slug}`} className="bl-nl-latest-link">
+                        {item.title}
+                      </Link>
+                    </h3>
+                    <p className="bl-nl-latest-brief">{item.brief}</p>
+                    <time className="bl-nl-latest-date">{item.date}</time>
+                  </article>
+                ))}
               </div>
-            )}
+            </div>
           </div>
         </section>
 
@@ -1298,7 +1284,7 @@ export default function BlogsPage() {
            ARTICLES STREAM
         ═══════════════════════════════════════ */
         .bl-stream {
-          background: linear-gradient(180deg, #f2f2f1 0%, #f7f7f6 100%);
+          background: transparent;
           padding: clamp(56px, 8vw, 96px) 24px clamp(80px, 12vw, 140px);
           border-top: 1px solid rgba(10,10,10,0.07);
         }
@@ -1334,38 +1320,42 @@ export default function BlogsPage() {
           align-items: start;
         }
         .bl-stream-main {
-          border: 1px solid rgba(10,10,10,0.08);
-          background: #fbfbfa;
+          border: none;
+          background: transparent;
           border-radius: 18px;
-          overflow: hidden;
-          box-shadow: 0 22px 50px -34px rgba(10,10,10,0.24);
+          overflow: visible;
+          box-shadow: none;
         }
         .bl-stream-scroll-viewport {
-          height: min(77vh, 760px);
+          height: min(84vh, 860px);
           overflow: hidden;
         }
         .bl-stream-scroll-track {
           display: flex;
           flex-direction: column;
+          gap: clamp(12px, 1.7vw, 18px);
+          padding: 4px clamp(14px, 1.8vw, 18px) clamp(14px, 1.8vw, 18px);
         }
         .bl-stream-row {
           position: relative;
           padding: clamp(16px, 2vw, 22px);
-          border-bottom: 1px solid rgba(10,10,10,0.07);
-          background: #fbfbfa;
+          border: 1px solid rgba(10,10,10,0.08);
+          border-radius: 14px;
+          background: #fff;
           display: grid;
           grid-template-columns: minmax(0, 1fr) minmax(320px, 36%);
           gap: clamp(14px, 1.8vw, 22px);
           align-items: stretch;
-          transition: background 0.3s ease, box-shadow 0.35s ease;
+          transition: background 0.3s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+          box-shadow: none;
           will-change: transform, opacity;
         }
         .bl-stream-row::before {
           content: "";
           position: absolute;
           left: 0;
-          top: 16px;
-          bottom: 16px;
+          top: 18px;
+          bottom: 18px;
           width: 3px;
           border-radius: 99px;
           background: linear-gradient(180deg, rgba(10,10,10,0.16) 0%, rgba(10,10,10,0.3) 100%);
@@ -1374,14 +1364,12 @@ export default function BlogsPage() {
         }
         .bl-stream-row:hover {
           background: #fff;
-          box-shadow: inset 0 0 0 1px rgba(10,10,10,0.05);
+          border-color: rgba(10,10,10,0.12);
+          box-shadow: inset 0 0 0 1px rgba(10,10,10,0.04);
         }
         .bl-stream-row:hover::before {
           opacity: 0.9;
           width: 5px;
-        }
-        .bl-stream-row:last-child {
-          border-bottom: none;
         }
         .bl-stream-row-main {
           display: flex;
@@ -1592,17 +1580,42 @@ export default function BlogsPage() {
         .bl-side-topics {
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
+          gap: 10px;
         }
         .bl-side-topic {
-          padding: 6px 9px;
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 32px;
+          padding: 0 14px;
           border-radius: 999px;
-          border: 1px solid rgba(10,10,10,0.08);
-          background: #f0f0ef;
-          font-family: var(--font-mono);
-          font-size: 9px;
-          letter-spacing: 0.04em;
-          color: rgba(10,10,10,0.65);
+          border: 1px solid rgba(10,10,10,0.16);
+          background: #ffffff;
+          font-family: var(--font-body);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.03em;
+          text-transform: uppercase;
+          color: #0a0a0a;
+          box-shadow: 0 1px 0 rgba(255,255,255,0.95) inset;
+          transition:
+            transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 0.28s ease,
+            color 0.28s ease,
+            background 0.28s ease,
+            box-shadow 0.28s ease;
+          cursor: default;
+          user-select: none;
+        }
+        .bl-side-topic:hover {
+          transform: translateY(-1px);
+          border-color: rgba(10,10,10,0.28);
+          color: #0a0a0a;
+          background: #ffffff;
+          box-shadow:
+            0 1px 0 rgba(255,255,255,0.98) inset,
+            0 8px 16px -14px rgba(10,10,10,0.4);
         }
         .bl-side-stats {
           display: grid;
@@ -1647,9 +1660,9 @@ export default function BlogsPage() {
         ═══════════════════════════════════════ */
         .bl-nl {
           position: relative;
-          padding: clamp(96px, 14vw, 160px) 24px clamp(96px, 14vw, 160px);
-          background: #0a0a0a;
-          color: #fafaf9;
+          padding: clamp(44px, 7vw, 72px) 24px;
+          background: #efefed;
+          color: #0a0a0a;
           overflow: hidden;
           isolation: isolate;
         }
@@ -1694,8 +1707,8 @@ export default function BlogsPage() {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(255,255,255,0.024) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.024) 1px, transparent 1px);
+            linear-gradient(rgba(10,10,10,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(10,10,10,0.03) 1px, transparent 1px);
           background-size: 80px 80px;
           mask-image: radial-gradient(ellipse 80% 100% at 50% 50%, black 20%, transparent 90%);
           -webkit-mask-image: radial-gradient(ellipse 80% 100% at 50% 50%, black 20%, transparent 90%);
@@ -1703,40 +1716,103 @@ export default function BlogsPage() {
         .bl-nl-vignette {
           position: absolute;
           inset: 0;
-          background: radial-gradient(ellipse 90% 70% at 50% 50%, transparent 30%, rgba(10,10,10,0.42) 100%);
+          background: radial-gradient(ellipse 90% 70% at 50% 50%, transparent 35%, rgba(255,255,255,0.24) 100%);
         }
         .bl-nl-inner {
           position: relative;
           z-index: 2;
-          max-width: 1080px;
+          max-width: 760px;
           margin: 0 auto;
           width: 100%;
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: clamp(40px, 6vw, 80px);
-          align-items: center;
+          grid-template-columns: 1fr;
+          gap: clamp(20px, 3vw, 36px);
+          align-items: start;
           will-change: transform, opacity;
         }
-        .bl-nl-headline {
+        .bl-nl-latest-heading {
           font-family: var(--font-display);
-          font-size: clamp(40px, 5.5vw, 80px);
-          font-weight: 400;
-          letter-spacing: -0.045em;
-          line-height: 0.98;
-          margin: 0 0 18px;
-          color: #fff;
+          font-size: clamp(28px, 3vw, 40px);
+          font-weight: 500;
+          letter-spacing: -0.03em;
+          line-height: 1;
+          margin: 0 0 10px;
+          color: #0a0a0a;
         }
-        .bl-nl-italic {
-          font-style: italic;
-          font-weight: 300;
-          color: rgba(255,255,255,0.72);
+        .bl-nl-latest-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 10px;
         }
-        .bl-nl-lead {
-          font-size: clamp(14px, 1.1vw, 16px);
-          line-height: 1.7;
-          color: rgba(255,255,255,0.56);
+        .bl-nl-latest-card {
+          padding: 10px;
+          border-radius: 10px;
+          border: 1px solid rgba(10,10,10,0.1);
+          background: rgba(255,255,255,0.6);
+          // min-height: 360px;
+        }
+        .bl-nl-latest-thumb-link {
+          display: block;
+          text-decoration: none;
+          margin-bottom: 8px;
+        }
+        .bl-nl-latest-thumb {
+          position: relative;
           margin: 0;
-          max-width: 46ch;
+          width: 100%;
+          aspect-ratio: 16 / 10;
+          border-radius: 9px;
+          overflow: hidden;
+          background: rgba(10,10,10,0.08);
+        }
+        .bl-nl-latest-thumb-img {
+          object-fit: cover;
+          transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .bl-nl-latest-card:hover .bl-nl-latest-thumb-img {
+          transform: scale(1.04);
+        }
+        .bl-nl-latest-title {
+          margin: 0 0 6px;
+          font-family: var(--font-display);
+          font-size: 15px;
+          line-height: 1.2;
+          letter-spacing: -0.015em;
+        }
+        .bl-nl-latest-link {
+          color: #0a0a0a;
+          text-decoration: none;
+          transition: opacity 0.25s ease;
+        }
+        .bl-nl-latest-link:hover {
+          opacity: 0.7;
+        }
+        .bl-nl-latest-brief {
+          margin: 0 0 8px;
+          font-size: 11.5px;
+          line-height: 1.45;
+          color: rgba(10,10,10,0.64);
+        }
+        .bl-nl-latest-date {
+          font-family: var(--font-mono);
+          font-size: 9px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.52);
+        }
+        .bl-nl-subscribe {
+          display: grid;
+          gap: 10px;
+          align-content: start;
+          padding-top: 44px;
+        }
+        .bl-nl-subscribe-title {
+          margin: 0;
+          font-family: var(--font-display);
+          font-size: clamp(22px, 2.2vw, 30px);
+          line-height: 1.05;
+          letter-spacing: -0.02em;
+          color: #0a0a0a;
         }
         .bl-nl-form {
           display: flex;
@@ -1747,15 +1823,15 @@ export default function BlogsPage() {
           display: flex;
           align-items: center;
           gap: 0;
-          background: rgba(255,255,255,0.06);
-          border: 1px solid rgba(255,255,255,0.14);
+          background: rgba(255,255,255,0.7);
+          border: 1px solid rgba(10,10,10,0.16);
           border-radius: 999px;
-          padding: 5px 5px 5px 22px;
+          padding: 4px 4px 4px 16px;
           transition: border-color 0.3s ease, background 0.3s ease;
         }
         .bl-nl-input-wrap:focus-within {
-          border-color: rgba(255,255,255,0.36);
-          background: rgba(255,255,255,0.08);
+          border-color: rgba(10,10,10,0.3);
+          background: rgba(255,255,255,0.85);
         }
         .bl-nl-input {
           flex: 1;
@@ -1763,22 +1839,22 @@ export default function BlogsPage() {
           border: none;
           outline: none;
           font-family: var(--font-display);
-          font-size: 15px;
+          font-size: 13px;
           font-weight: 400;
           letter-spacing: -0.01em;
-          color: #fafaf9;
+          color: #0a0a0a;
           min-width: 0;
         }
-        .bl-nl-input::placeholder { color: rgba(255,255,255,0.3); }
+        .bl-nl-input::placeholder { color: rgba(10,10,10,0.45); }
         .bl-nl-btn {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          padding: 12px 20px;
+          gap: 8px;
+          padding: 9px 14px;
           background: #fafaf9;
           color: #0a0a0a;
           font-family: var(--font-display);
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 500;
           letter-spacing: -0.01em;
           border: none;
@@ -1800,40 +1876,30 @@ export default function BlogsPage() {
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          background: #0a0a0a;
-          color: #fafaf9;
+          background: #e4e4e1;
+          color: #0a0a0a;
           transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .bl-nl-btn:hover .bl-nl-btn-arrow { transform: translateX(3px); }
-        .bl-nl-disclaimer {
-          font-family: var(--font-mono);
-          font-size: 10px;
-          font-weight: 500;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: rgba(255,255,255,0.3);
-          margin: 0;
-          padding-left: 8px;
-        }
         .bl-nl-success {
           display: flex;
           align-items: center;
           gap: 16px;
           padding: 24px 28px;
-          background: rgba(255,255,255,0.06);
-          border: 1px solid rgba(255,255,255,0.14);
+          background: rgba(255,255,255,0.62);
+          border: 1px solid rgba(10,10,10,0.12);
           border-radius: 12px;
         }
         .bl-nl-success-icon {
           width: 40px;
           height: 40px;
           border-radius: 50%;
-          border: 1.5px solid rgba(255,255,255,0.4);
+          border: 1.5px solid rgba(10,10,10,0.3);
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 16px;
-          color: rgba(255,255,255,0.85);
+          color: rgba(10,10,10,0.75);
           flex-shrink: 0;
         }
         .bl-nl-success-text {
@@ -1842,7 +1908,7 @@ export default function BlogsPage() {
           font-weight: 400;
           font-style: italic;
           letter-spacing: -0.014em;
-          color: rgba(255,255,255,0.78);
+          color: rgba(10,10,10,0.72);
         }
 
         /* ═══════════════════════════════════════
@@ -1883,7 +1949,10 @@ export default function BlogsPage() {
           .bl-featured-figure { min-height: 300px; }
           .bl-nl-inner {
             grid-template-columns: 1fr;
-            gap: 36px;
+            gap: 22px;
+          }
+          .bl-nl-latest-grid {
+            grid-template-columns: 1fr;
           }
           .bl-stream-aside {
             grid-template-columns: 1fr;
@@ -1904,7 +1973,9 @@ export default function BlogsPage() {
           .bl-hero {
             min-height: min(78vh, 720px);
           }
-          .bl-nl-lead { max-width: 100%; }
+          .bl-nl-subscribe {
+            padding-top: 0;
+          }
         }
         @media (max-width: 700px) {
           .bl-hero { padding: 0 16px; min-height: 74svh; }
@@ -1934,7 +2005,6 @@ export default function BlogsPage() {
             min-height: 220px;
           }
           .bl-nl { padding-inline: 16px; }
-          .bl-nl-headline { font-size: clamp(32px, 10vw, 56px); }
           .bl-nl-input-wrap { flex-direction: column; border-radius: 12px; padding: 14px 16px; gap: 12px; }
           .bl-nl-input { font-size: 14px; }
           .bl-nl-btn { width: 100%; justify-content: center; border-radius: 8px; }
