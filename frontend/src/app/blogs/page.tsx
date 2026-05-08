@@ -59,20 +59,20 @@ const HERO = {
 const CATEGORIES = ["All", "Engineering", "Product", "Performance", "Growth", "Culture"];
 
 const FEATURED = {
-  category: "Engineering",
+  category: "Newsroom",
   readTime: "9 min read",
-  date: "Apr 28, 2026",
-  title: "Why we stopped writing tests first (and what we do instead)",
+  date: "May 8, 2026",
+  title: "The State of Software Development in 2026: Trends, Challenges, and Opportunities",
   excerpt:
-    "TDD is sound in theory. In production, with real deadlines and evolving requirements, the calculus changes. Here's how we restructured our QA philosophy without sacrificing correctness.",
+    "Software development is entering an AI-augmented era. This report explores the biggest trends, required skills, and strategic opportunities shaping engineering in 2026.",
   author: {
-    name: "Zain Mirza",
-    role: "Lead Engineer",
+    name: "Senior Content Strategist",
+    role: "Tech Binaries Editorial",
     avatar: "/images/blog/author-zain.jpg",
   },
-  cover: "/images/blog/featured-cover.jpg",
-  slug: "why-we-stopped-writing-tests-first",
-  tags: ["TypeScript", "Testing", "Architecture"],
+  cover: "/images/blogs/state-of-software-development-2026/title.jpg",
+  slug: "state-of-software-development-2026",
+  tags: ["AI Development", "Cloud", "Engineering Trends"],
 };
 
 const POSTS = [
@@ -419,7 +419,7 @@ export default function BlogsPage() {
         }}
       />
 
-      <div style={{ background: "#fafaf9", color: "#0a0a0a", fontFamily: "var(--font-body)", overflowX: "hidden" }}>
+      <div style={{ background: "#fafaf9", color: "#0a0a0a", fontFamily: "var(--font-display)", overflowX: "hidden" }}>
         <SiteHeader />
 
         {/* ════════════════════════════════════════════════
@@ -470,7 +470,7 @@ export default function BlogsPage() {
         <section className="bl-featured" aria-labelledby="bl-featured-title">
           <div className="bl-featured-inner">
             <article className="bl-featured-card">
-              <Link href={`/blog/${FEATURED.slug}`} className="bl-featured-figure-link">
+              <Link href={`/blogs/${FEATURED.slug}`} className="bl-featured-figure-link">
                 <figure className="bl-featured-figure">
                   <div className="bl-featured-figure-mask">
                     <div className="bl-featured-image-wrap">
@@ -500,7 +500,7 @@ export default function BlogsPage() {
                     <span className="bl-post-read">{FEATURED.readTime}</span>
                   </div>
                   <h2 id="bl-featured-title" className="bl-featured-title">
-                    <Link href={`/blog/${FEATURED.slug}`} className="bl-featured-title-link">
+                    <Link href={`/blogs/${FEATURED.slug}`} className="bl-featured-title-link">
                       {FEATURED.title}
                     </Link>
                   </h2>
@@ -526,7 +526,7 @@ export default function BlogsPage() {
                     </div>
                   </div>
 
-                  <Link href={`/blog/${FEATURED.slug}`} className="bl-read-btn">
+                  <Link href={`/blogs/${FEATURED.slug}`} className="bl-read-btn">
                     <span className="bl-read-btn-label">Read article</span>
                     <span className="bl-read-btn-arrow" aria-hidden>
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -572,7 +572,7 @@ export default function BlogsPage() {
                             </div>
 
                             <h3 className="bl-stream-row-title">
-                              <Link href={`/blog/${post.slug}`} className="bl-stream-row-title-link">
+                              <Link href={`/blogs/${post.slug}`} className="bl-stream-row-title-link">
                                 {post.title}
                               </Link>
                             </h3>
@@ -587,13 +587,13 @@ export default function BlogsPage() {
                                   ))}
                                 </div>
                               </div>
-                              <Link href={`/blog/${post.slug}`} className="bl-stream-read" aria-label={`Read ${post.title}`}>
+                              <Link href={`/blogs/${post.slug}`} className="bl-stream-read" aria-label={`Read ${post.title}`}>
                                 Read article <span aria-hidden>→</span>
                               </Link>
                             </div>
                           </div>
 
-                          <Link href={`/blog/${post.slug}`} className="bl-stream-thumb-link" aria-label={`Open ${post.title}`}>
+                          <Link href={`/blogs/${post.slug}`} className="bl-stream-thumb-link" aria-label={`Open ${post.title}`}>
                             <figure className="bl-stream-thumb">
                               <Image
                                 src={visual.cover}
@@ -673,7 +673,7 @@ export default function BlogsPage() {
               <div className="bl-nl-latest-grid">
                 {LATEST_NEWS.map((item) => (
                   <article key={item.slug} className="bl-nl-latest-card">
-                    <Link href={`/blog/${item.slug}`} className="bl-nl-latest-thumb-link" aria-label={`Open ${item.title}`}>
+                    <Link href={`/blogs/${item.slug}`} className="bl-nl-latest-thumb-link" aria-label={`Open ${item.title}`}>
                       <figure className="bl-nl-latest-thumb">
                         <Image
                           src={item.image}
@@ -685,7 +685,7 @@ export default function BlogsPage() {
                       </figure>
                     </Link>
                     <h3 className="bl-nl-latest-title">
-                      <Link href={`/blog/${item.slug}`} className="bl-nl-latest-link">
+                      <Link href={`/blogs/${item.slug}`} className="bl-nl-latest-link">
                         {item.title}
                       </Link>
                     </h3>
