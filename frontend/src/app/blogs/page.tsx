@@ -232,16 +232,10 @@ export default function BlogsPage() {
         0
       );
       tl.fromTo(
-        ".bl-hero-eyebrow",
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
-        0.05
-      );
-      tl.fromTo(
         ".bl-hero-lead",
         { opacity: 0, y: 24 },
         { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
-        0.65
+        0.55
       );
       tl.fromTo(
         ".bl-hero-cats",
@@ -249,13 +243,6 @@ export default function BlogsPage() {
         { opacity: 1, y: 0, duration: 0.75, ease: "expo.out" },
         0.85
       );
-      tl.fromTo(
-        ".bl-hero-rule",
-        { scaleX: 0 },
-        { scaleX: 1, duration: 1.5, ease: "expo.inOut" },
-        0.3
-      );
-
       // hero parallax
       gsap.to(".bl-hero-bg-label", {
         yPercent: 28,
@@ -286,17 +273,6 @@ export default function BlogsPage() {
   // ── FEATURED REVEAL ──
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".bl-featured-label",
-        { opacity: 0, x: -20 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          ease: "expo.out",
-          scrollTrigger: { trigger: ".bl-featured", start: "top 80%", once: true },
-        }
-      );
       gsap.fromTo(
         ".bl-featured-card",
         { opacity: 0, y: 60 },
@@ -344,13 +320,6 @@ export default function BlogsPage() {
         );
       });
 
-      gsap.fromTo(".bl-grid-eyebrow--stream", { opacity: 0, y: 18 }, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "expo.out",
-        scrollTrigger: { trigger: ".bl-stream", start: "top 80%", once: true },
-      });
     });
     return () => ctx.revert();
   }, [activeCategory]);
@@ -460,11 +429,6 @@ export default function BlogsPage() {
 
           <div className="bl-hero-content">
             <div className="bl-hero-inner">
-              <span className="bl-hero-eyebrow" style={{ opacity: 0 }}>
-                <span className="bl-hero-eyebrow-dot" />
-                {HERO.eyebrow}
-              </span>
-
               <h1 id="bl-hero-title" className="bl-hero-title">
                 <span className="bl-hero-line">
                   {splitChars(HERO.headline1)}
@@ -481,8 +445,6 @@ export default function BlogsPage() {
               <p className="bl-hero-lead" style={{ opacity: 0 }}>
                 {HERO.lead}
               </p>
-
-              <div className="bl-hero-rule" />
             </div>
           </div>
         </section>
@@ -492,11 +454,6 @@ export default function BlogsPage() {
         ════════════════════════════════════════════════ */}
         <section className="bl-featured" aria-labelledby="bl-featured-title">
           <div className="bl-featured-inner">
-            <div className="bl-featured-label">
-              <span className="bl-featured-label-dot" aria-hidden />
-              <span>Featured</span>
-            </div>
-
             <article className="bl-featured-card">
               <Link href={`/blog/${FEATURED.slug}`} className="bl-featured-figure-link">
                 <figure className="bl-featured-figure">
@@ -571,15 +528,8 @@ export default function BlogsPage() {
         {/* ════════════════════════════════════════════════
             ARTICLES STREAM + STICKY RAIL
         ════════════════════════════════════════════════ */}
-        <section className="bl-stream" aria-labelledby="bl-stream-title">
+        <section className="bl-stream" aria-label="Recent articles">
           <div className="bl-stream-inner">
-            <div className="bl-stream-header">
-              <div className="bl-grid-eyebrow bl-grid-eyebrow--stream">
-                <span className="bl-grid-eyebrow-mark" aria-hidden />
-                <span id="bl-stream-title">Recent Articles</span>
-              </div>
-            </div>
-
             {filteredPosts.length === 0 ? (
               <div className="bl-empty">
                 <span className="bl-empty-label">No posts in this category yet.</span>
