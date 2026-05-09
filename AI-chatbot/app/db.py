@@ -13,9 +13,6 @@ _indexes_ready = False
 def _get_client() -> AsyncIOMotorClient:
     global _client
 
-    if not settings.mongodb_uri:
-        raise RuntimeError("MONGODB_URI is not configured.")
-
     if _client is None:
         _client = AsyncIOMotorClient(settings.mongodb_uri)
 

@@ -20,13 +20,34 @@ def _list_env(name: str, default: str) -> list[str]:
     return [item.strip() for item in raw.split(",") if item.strip()]
 
 
+def _read_required(name: str, missing: list[str]) -> str:
+    raw = os.getenv(name)
+    if raw is None or raw.strip() == "":
+        missing.append(name)
+        return ""
+    return raw.strip()
+
+
+_missing: list[str] = []
+_mongodb_uri = _read_required("MONGODB_URI", _missing)
+_mongodb_db_name = _read_required("MONGODB_DB_NAME", _missing)
+
+if _missing:
+    raise RuntimeError(
+        "Missing required environment variable(s): "
+        + ", ".join(_missing)
+        + ". Set them in AI-chatbot/.env for local development, or pass them via "
+        + "--env-file in docker run for production."
+    )
+
+
 @dataclass(frozen=True)
 class Settings:
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
     openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
-    mongodb_uri: str = os.getenv("MONGODB_URI", "")
-    mongodb_db_name: str = os.getenv("MONGODB_DB_NAME", "techbinaries")
+    mongodb_uri: str = _mongodb_uri
+    mongodb_db_name: str = _mongodb_db_name
 
     lead_notification_email: str = os.getenv("LEAD_NOTIFICATION_EMAIL", "")
     resend_api_key: str = os.getenv("RESEND_API_KEY", "")
