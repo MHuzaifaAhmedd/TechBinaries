@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import { getDb } from "./config/database";
+import newsRouter from "./routes/news";
 
 export const app = express();
 
@@ -10,6 +11,8 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+
+app.use("/api/news", newsRouter);
 
 app.get("/api/health", async (_req, res) => {
   try {

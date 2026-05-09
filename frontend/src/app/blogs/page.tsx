@@ -167,22 +167,39 @@ const NEWSLETTER = {
   cta: "Subscribe",
 };
 
-const LATEST_NEWS = [
-  {
-    title: "AI Governance Playbook for 2026 Product Teams",
-    brief: "A practical framework for shipping AI features with policy guardrails, audit trails, and clear ownership from day one.",
-    date: "May 02, 2026",
-    slug: "ai-governance-playbook-2026",
-    image: "/images/blog/post-cover-2.jpg",
-  },
-  {
-    title: "Serverless Cost Traps We Keep Seeing in New Builds",
-    brief: "The three architecture mistakes that quietly inflate cloud bills, plus the quick checks to catch them before launch.",
-    date: "Apr 30, 2026",
-    slug: "serverless-cost-traps-new-builds",
-    image: "/images/blog/post-cover-4.jpg",
-  },
-];
+type LiveNewsItem = {
+  title: string;
+  description: string;
+  url: string;
+  image: string | null;
+  source: string;
+  publishedAt: string;
+};
+
+function formatRelativeTime(iso: string): string {
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return "";
+  const diffMs = Date.now() - then;
+  const minutes = Math.floor(diffMs / 60000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  const weeks = Math.floor(days / 7);
+  if (weeks < 5) return `${weeks}w ago`;
+  return new Date(iso).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function faviconFor(domain: string, size = 64): string {
+  return `https://www.google.com/s2/favicons?sz=${size}&domain=${encodeURIComponent(
+    domain
+  )}`;
+}
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 
@@ -221,11 +238,49 @@ export default function BlogsPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [liveNews, setLiveNews] = useState<LiveNewsItem[]>([]);
+  const [newsLoading, setNewsLoading] = useState(true);
+  const [newsError, setNewsError] = useState(false);
+  const [brokenImages, setBrokenImages] = useState<Set<string>>(() => new Set());
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(() => new Set());
 
   const filteredPosts =
     activeCategory === "All"
       ? POSTS
       : POSTS.filter((p) => p.category === activeCategory);
+
+  // ── LIVE TECH NEWS FEED ──
+  useEffect(() => {
+    let alive = true;
+    const ctl = new AbortController();
+
+    (async () => {
+      try {
+        const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+        const endpoint = `${base.replace(/\/$/, "")}/api/news`;
+        const res = await fetch(endpoint, {
+          signal: ctl.signal,
+          cache: "no-store",
+        });
+        if (!res.ok) throw new Error(`status ${res.status}`);
+        const data = (await res.json()) as { items?: LiveNewsItem[] };
+        if (!alive) return;
+        setLiveNews(Array.isArray(data.items) ? data.items.slice(0, 3) : []);
+        setNewsError(false);
+      } catch (err) {
+        if (!alive) return;
+        if ((err as { name?: string })?.name === "AbortError") return;
+        setNewsError(true);
+      } finally {
+        if (alive) setNewsLoading(false);
+      }
+    })();
+
+    return () => {
+      alive = false;
+      ctl.abort();
+    };
+  }, []);
 
   // ── HERO ANIMATION ──
   useEffect(() => {
@@ -397,6 +452,37 @@ export default function BlogsPage() {
     });
     return () => ctx.revert();
   }, []);
+
+  // ── LATEST NEWS CARDS: smooth top-down stagger reveal ──
+  useEffect(() => {
+    if (newsLoading || liveNews.length === 0) return;
+
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray<HTMLElement>(
+        ".bl-nl-latest-card:not(.bl-nl-latest-card--skeleton)"
+      );
+      if (!cards.length) return;
+
+      gsap.set(cards, { y: -36, opacity: 0 });
+
+      gsap.to(cards, {
+        y: 0,
+        opacity: 1,
+        duration: 1.25,
+        stagger: 0.18,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".bl-nl-latest-grid",
+          start: "top 88%",
+          once: true,
+        },
+      });
+
+      ScrollTrigger.refresh();
+    });
+
+    return () => ctx.revert();
+  }, [newsLoading, liveNews]);
 
   // Fonts refresh
   useEffect(() => {
@@ -670,30 +756,132 @@ export default function BlogsPage() {
           <div className="bl-nl-inner">
             <div className="bl-nl-latest">
               <h2 id="bl-nl-title" className="bl-nl-latest-heading">Latest news</h2>
-              <div className="bl-nl-latest-grid">
-                {LATEST_NEWS.map((item) => (
-                  <article key={item.slug} className="bl-nl-latest-card">
-                    <Link href={`/blogs/${item.slug}`} className="bl-nl-latest-thumb-link" aria-label={`Open ${item.title}`}>
-                      <figure className="bl-nl-latest-thumb">
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          sizes="(max-width: 900px) 100vw, 240px"
-                          className="bl-nl-latest-thumb-img"
-                        />
-                      </figure>
-                    </Link>
-                    <h3 className="bl-nl-latest-title">
-                      <Link href={`/blogs/${item.slug}`} className="bl-nl-latest-link">
-                        {item.title}
-                      </Link>
-                    </h3>
-                    <p className="bl-nl-latest-brief">{item.brief}</p>
-                    <time className="bl-nl-latest-date">{item.date}</time>
-                  </article>
-                ))}
-              </div>
+
+              {newsError && liveNews.length === 0 ? (
+                <div className="bl-nl-latest-error">
+                  Couldn&apos;t load the live feed right now. Please refresh in a moment.
+                </div>
+              ) : (
+                <div className="bl-nl-latest-grid">
+                  {newsLoading && liveNews.length === 0
+                    ? Array.from({ length: 3 }).map((_, i) => (
+                        <article key={`sk-${i}`} className="bl-nl-latest-card bl-nl-latest-card--skeleton" aria-hidden>
+                          <div className="bl-nl-latest-thumb bl-skel" />
+                          <div className="bl-nl-latest-source bl-skel bl-skel--line" />
+                          <div className="bl-nl-latest-title bl-skel bl-skel--line bl-skel--line-lg" />
+                          <div className="bl-nl-latest-brief bl-skel bl-skel--line" />
+                          <div className="bl-nl-latest-brief bl-skel bl-skel--line bl-skel--line-sm" />
+                        </article>
+                      ))
+                    : liveNews.map((item) => {
+                        const imgKey = item.image ?? "";
+                        const showFallback =
+                          !item.image || brokenImages.has(imgKey);
+                        const isLoaded = loadedImages.has(imgKey);
+                        return (
+                        <article key={item.url} className="bl-nl-latest-card">
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bl-nl-latest-thumb-link"
+                            aria-label={`Open ${item.title} on ${item.source} (opens in new tab)`}
+                          >
+                            <figure className="bl-nl-latest-thumb">
+                              {!showFallback && item.image ? (
+                                <>
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img
+                                    src={item.image}
+                                    alt=""
+                                    className={`bl-nl-latest-thumb-img${
+                                      isLoaded ? " is-loaded" : ""
+                                    }`}
+                                    loading="lazy"
+                                    decoding="async"
+                                    referrerPolicy="no-referrer"
+                                    onLoad={() => {
+                                      setLoadedImages((prev) => {
+                                        if (prev.has(imgKey)) return prev;
+                                        const next = new Set(prev);
+                                        next.add(imgKey);
+                                        return next;
+                                      });
+                                    }}
+                                    onError={() => {
+                                      setBrokenImages((prev) => {
+                                        if (prev.has(imgKey)) return prev;
+                                        const next = new Set(prev);
+                                        next.add(imgKey);
+                                        return next;
+                                      });
+                                    }}
+                                  />
+                                  {!isLoaded && (
+                                    <div className="bl-nl-latest-thumb-shimmer" aria-hidden />
+                                  )}
+                                </>
+                              ) : (
+                                <div className="bl-nl-latest-thumb-fallback">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img
+                                    src={faviconFor(item.source, 128)}
+                                    alt=""
+                                    className="bl-nl-latest-thumb-favicon"
+                                    loading="lazy"
+                                    decoding="async"
+                                    referrerPolicy="no-referrer"
+                                  />
+                                  <span className="bl-nl-latest-thumb-domain">{item.source}</span>
+                                </div>
+                              )}
+                              <span className="bl-nl-latest-thumb-arrow" aria-hidden>
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                  <path
+                                    d="M5 11L11 5M11 5H6M11 5V10"
+                                    stroke="currentColor"
+                                    strokeWidth="1.6"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </span>
+                            </figure>
+                          </a>
+
+                          <div className="bl-nl-latest-source">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={faviconFor(item.source, 32)}
+                              alt=""
+                              className="bl-nl-latest-source-icon"
+                              loading="lazy"
+                              referrerPolicy="no-referrer"
+                            />
+                            <span className="bl-nl-latest-source-name">{item.source}</span>
+                          </div>
+
+                          <h3 className="bl-nl-latest-title">
+                            <a
+                              href={item.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bl-nl-latest-link"
+                            >
+                              {item.title}
+                            </a>
+                          </h3>
+                          {item.description && (
+                            <p className="bl-nl-latest-brief">{item.description}</p>
+                          )}
+                          <time className="bl-nl-latest-date" dateTime={item.publishedAt}>
+                            {formatRelativeTime(item.publishedAt)}
+                          </time>
+                        </article>
+                        );
+                      })}
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -1721,7 +1909,7 @@ export default function BlogsPage() {
         .bl-nl-inner {
           position: relative;
           z-index: 2;
-          max-width: 760px;
+          max-width: 1180px;
           margin: 0 auto;
           width: 100%;
           display: grid;
@@ -1741,15 +1929,148 @@ export default function BlogsPage() {
         }
         .bl-nl-latest-grid {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 10px;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: clamp(12px, 1.6vw, 18px);
         }
         .bl-nl-latest-card {
+          position: relative;
           padding: 10px;
           border-radius: 10px;
           border: 1px solid rgba(10,10,10,0.1);
           background: rgba(255,255,255,0.6);
-          // min-height: 360px;
+          display: flex;
+          flex-direction: column;
+          transition: border-color 0.28s ease, background 0.28s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease;
+          will-change: transform, opacity;
+        }
+        .bl-nl-latest-card:hover {
+          border-color: rgba(10,10,10,0.2);
+          background: rgba(255,255,255,0.8);
+          transform: translateY(-2px);
+          box-shadow: 0 18px 36px -28px rgba(10,10,10,0.35);
+        }
+        .bl-nl-latest-error {
+          padding: 18px 16px;
+          border-radius: 10px;
+          border: 1px dashed rgba(10,10,10,0.18);
+          background: rgba(255,255,255,0.5);
+          font-family: var(--font-mono);
+          font-size: 11px;
+          letter-spacing: 0.05em;
+          color: rgba(10,10,10,0.6);
+          text-align: center;
+        }
+        .bl-nl-latest-source {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          margin: 0 0 6px;
+          font-family: var(--font-mono);
+          font-size: 9.5px;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.62);
+        }
+        .bl-nl-latest-source-icon {
+          width: 14px;
+          height: 14px;
+          border-radius: 3px;
+          background: rgba(10,10,10,0.06);
+          object-fit: contain;
+          flex-shrink: 0;
+        }
+        .bl-nl-latest-source-name {
+          max-width: 22ch;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .bl-nl-latest-thumb-fallback {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          background:
+            radial-gradient(120% 80% at 30% 20%, rgba(255,255,255,0.7) 0%, transparent 60%),
+            linear-gradient(135deg, #ececea 0%, #d9d8d4 100%);
+        }
+        .bl-nl-latest-thumb-favicon {
+          width: 38px;
+          height: 38px;
+          border-radius: 8px;
+          background: rgba(255,255,255,0.85);
+          padding: 6px;
+          box-shadow: 0 4px 12px -6px rgba(10,10,10,0.3);
+          object-fit: contain;
+        }
+        .bl-nl-latest-thumb-domain {
+          font-family: var(--font-mono);
+          font-size: 9.5px;
+          font-weight: 600;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: rgba(10,10,10,0.55);
+          max-width: 80%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .bl-nl-latest-thumb-arrow {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          width: 26px;
+          height: 26px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background: rgba(10,10,10,0.78);
+          color: #fafaf9;
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          opacity: 0;
+          transform: translateY(-2px) scale(0.92);
+          transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.22,1,0.36,1);
+          pointer-events: none;
+        }
+        .bl-nl-latest-card:hover .bl-nl-latest-thumb-arrow,
+        .bl-nl-latest-card:focus-within .bl-nl-latest-thumb-arrow {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        .bl-skel {
+          position: relative;
+          overflow: hidden;
+          background: rgba(10,10,10,0.06);
+          border-radius: 6px;
+        }
+        .bl-skel::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+          transform: translateX(-100%);
+          animation: bl-skel-shimmer 1.5s ease-in-out infinite;
+        }
+        @keyframes bl-skel-shimmer {
+          100% { transform: translateX(100%); }
+        }
+        .bl-skel--line {
+          height: 11px;
+          margin: 6px 0 0;
+        }
+        .bl-skel--line-lg { height: 16px; margin-top: 10px; }
+        .bl-skel--line-sm { width: 60%; }
+        .bl-nl-latest-card--skeleton:hover {
+          transform: none;
+          box-shadow: none;
+          border-color: rgba(10,10,10,0.1);
+          background: rgba(255,255,255,0.6);
         }
         .bl-nl-latest-thumb-link {
           display: block;
@@ -1766,11 +2087,41 @@ export default function BlogsPage() {
           background: rgba(10,10,10,0.08);
         }
         .bl-nl-latest-thumb-img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
           object-fit: cover;
-          transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+          opacity: 0;
+          transition:
+            transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 0.4s ease;
         }
-        .bl-nl-latest-card:hover .bl-nl-latest-thumb-img {
+        .bl-nl-latest-thumb-img.is-loaded {
+          opacity: 1;
+        }
+        .bl-nl-latest-card:hover .bl-nl-latest-thumb-img.is-loaded {
           transform: scale(1.04);
+        }
+        .bl-nl-latest-thumb-shimmer {
+          position: absolute;
+          inset: 0;
+          background:
+            linear-gradient(135deg, #ececea 0%, #d9d8d4 100%);
+          overflow: hidden;
+        }
+        .bl-nl-latest-thumb-shimmer::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.55) 50%,
+            transparent 100%
+          );
+          transform: translateX(-100%);
+          animation: bl-skel-shimmer 1.5s ease-in-out infinite;
         }
         .bl-nl-latest-title {
           margin: 0 0 6px;
@@ -1942,6 +2293,11 @@ export default function BlogsPage() {
             align-items: stretch;
           }
         }
+        @media (max-width: 980px) {
+          .bl-nl-latest-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
         @media (max-width: 900px) {
           .bl-featured-card {
             grid-template-columns: 1fr;
@@ -1950,9 +2306,6 @@ export default function BlogsPage() {
           .bl-nl-inner {
             grid-template-columns: 1fr;
             gap: 22px;
-          }
-          .bl-nl-latest-grid {
-            grid-template-columns: 1fr;
           }
           .bl-stream-aside {
             grid-template-columns: 1fr;
@@ -1978,6 +2331,9 @@ export default function BlogsPage() {
           }
         }
         @media (max-width: 700px) {
+          .bl-nl-latest-grid {
+            grid-template-columns: 1fr;
+          }
           .bl-hero { padding: 0 16px; min-height: 74svh; }
           .bl-hero-title { font-size: clamp(44px, 13vw, 72px); }
           .bl-hero-cats-nav { gap: 6px; }
@@ -2020,6 +2376,7 @@ export default function BlogsPage() {
           .bl-featured-card:hover { transform: none; }
           .bl-nl-orb { animation: none; }
           .bl-hero-eyebrow-dot, .bl-featured-label-dot { animation: none; }
+          .bl-nl-latest-card { transform: none !important; opacity: 1 !important; }
         }
       `}</style>
     </>
