@@ -32,6 +32,26 @@ _missing: list[str] = []
 _mongodb_uri = _read_required("MONGODB_URI", _missing)
 _mongodb_db_name = _read_required("MONGODB_DB_NAME", _missing)
 
+
+def _normalize_mongodb_uri(uri: str) -> str:
+    """Strip whitespace and accidental outer quotes from docker / shell env."""
+    u = uri.strip()
+    if len(u) >= 2 and ((u[0] == u[-1] == '"') or (u[0] == u[-1] == "'")):
+        u = u[1:-1].strip()
+    return u
+
+
+if not _missing:
+    _mongodb_uri = _normalize_mongodb_uri(_mongodb_uri)
+    if not (
+        _mongodb_uri.startswith("mongodb://") or _mongodb_uri.startswith("mongodb+srv://")
+    ):
+        raise RuntimeError(
+            "MONGODB_URI must begin with 'mongodb://' or 'mongodb+srv://'. "
+            "Fix the AI chatbot container env (same Atlas URI as backend). "
+            f"First 80 chars received: {_mongodb_uri[:80]!r}"
+        )
+
 if _missing:
     raise RuntimeError(
         "Missing required environment variable(s): "

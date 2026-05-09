@@ -9,9 +9,20 @@ async def capture_qualified_lead(payload: dict) -> dict:
     except Exception as exc:
         return {"success": False, "message": f"Lead details are incomplete: {exc}"}
 
-    lead_id = await insert_lead(lead)
-    notification_results = await notify_qualified_lead(lead)
-    await mark_lead_notified(lead_id, notification_results)
+    try:
+        lead_id = await insert_lead(lead)
+    except Exception as exc:
+        return {"success": False, "message": f"Lead could not be saved to database: {exc}"}
+
+    try:
+        notification_results = await notify_qualified_lead(lead)
+        await mark_lead_notified(lead_id, notification_results)
+    except Exception as exc:
+        return {
+            "success": True,
+            "leadId": lead_id,
+            "message": f"Lead saved, but notifications failed: {exc}",
+        }
 
     any_notification_sent = notification_results["email"]["ok"] or notification_results["whatsapp"]["ok"]
     return {

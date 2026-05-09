@@ -19,17 +19,23 @@ class ChatRequest(BaseModel):
     messages: list[ChatMessage] = Field(default_factory=list, max_length=16)
 
 
+class ChatLeadCaptureRequest(BaseModel):
+    session_id: str | None = None
+    name: str = Field(min_length=1, max_length=200)
+    email: str = Field(min_length=3, max_length=320)
+    phone: str = Field(min_length=3, max_length=64)
+    messages: list[ChatMessage] = Field(default_factory=list, max_length=16)
+
+
 class LeadPayload(BaseModel):
     name: str
     email: str
-    phone: str
-    project_type: str = Field(alias="projectType")
-    goals: str
+    phone: str | None = None
+    summary: str
+    intent: Literal["hot", "warm", "cold"]
+    services_interested: str
     timeline: str
-    budget_range: str = Field(alias="budgetRange")
-    qualification_score: int = Field(alias="qualificationScore", ge=1, le=10)
-    conversation_summary: str = Field(alias="conversationSummary")
-    company: str | None = None
+    company: str | None
     source: str = "website-chat"
 
     @field_validator("*", mode="before")
@@ -46,6 +52,15 @@ class LeadPayload(BaseModel):
         if "@" not in email or "." not in email.rsplit("@", 1)[-1]:
             raise ValueError("Invalid lead email.")
         return email
+
+    @field_validator("source", mode="before")
+    @classmethod
+    def validate_source(cls, value: object) -> str:
+        allowed_values = {"website-chat"}
+        if not isinstance(value, str):
+            return "website-chat"
+        source = value.strip()
+        return source if source in allowed_values else "website-chat"
 
     def to_document(self) -> dict:
         now = datetime.now(timezone.utc)

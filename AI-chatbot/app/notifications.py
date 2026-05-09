@@ -13,14 +13,12 @@ def _lead_text(lead: LeadPayload) -> str:
             "New qualified chatbot lead",
             f"Name: {data['name']}",
             f"Email: {data['email']}",
-            f"Phone: {data['phone']}",
+            f"Phone: {data.get('phone') or 'Not shared'}",
             f"Company: {data.get('company') or 'Not shared'}",
-            f"Project: {data['projectType']}",
-            f"Goals: {data['goals']}",
+            f"Intent: {data['intent']}",
+            f"Service Interest: {data['services_interested']}",
             f"Timeline: {data['timeline']}",
-            f"Budget: {data['budgetRange']}",
-            f"Score: {data['qualificationScore']}/10",
-            f"Summary: {data['conversationSummary']}",
+            f"Summary: {data['summary']}",
         ]
     )
 
@@ -30,14 +28,12 @@ def _lead_html(lead: LeadPayload) -> str:
     rows = [
         ("Name", data["name"]),
         ("Email", data["email"]),
-        ("Phone", data["phone"]),
+        ("Phone", data.get("phone") or "Not shared"),
         ("Company", data.get("company") or "Not shared"),
-        ("Project", data["projectType"]),
-        ("Goals", data["goals"]),
+        ("Intent", data["intent"]),
+        ("Service Interest", data["services_interested"]),
         ("Timeline", data["timeline"]),
-        ("Budget", data["budgetRange"]),
-        ("Score", f"{data['qualificationScore']}/10"),
-        ("Summary", data["conversationSummary"]),
+        ("Summary", data["summary"]),
     ]
     rendered_rows = "".join(
         f"""

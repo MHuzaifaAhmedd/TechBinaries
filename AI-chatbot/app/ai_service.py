@@ -15,8 +15,8 @@ LEAD_TOOL = {
     "function": {
         "name": "capture_qualified_lead",
         "description": (
-            "Capture a qualified TechBinaries software development lead after name, email, phone, "
-            "project type, goals, timeline, and budget range have been collected."
+            "Capture a qualified Tech Binaries lead after name and email are confirmed, with "
+            "a sales-ready context summary and intent classification."
         ),
         "parameters": {
             "type": "object",
@@ -24,30 +24,33 @@ LEAD_TOOL = {
             "required": [
                 "name",
                 "email",
-                "phone",
-                "projectType",
-                "goals",
+                "summary",
+                "intent",
+                "services_interested",
                 "timeline",
-                "budgetRange",
-                "qualificationScore",
-                "conversationSummary",
+                "company",
             ],
             "properties": {
-                "name": {"type": "string", "description": "The prospect's full name."},
-                "email": {"type": "string", "description": "The prospect's work email."},
-                "phone": {"type": "string", "description": "The prospect's phone or WhatsApp number."},
-                "company": {"type": "string", "description": "The prospect's company, if shared."},
-                "projectType": {"type": "string", "description": "SaaS, web app, mobile app, cloud, or enterprise software."},
-                "goals": {"type": "string", "description": "Short summary of goals and project scope."},
-                "timeline": {"type": "string", "description": "Expected start or launch timeline."},
-                "budgetRange": {"type": "string", "description": "Budget range shared by the prospect."},
-                "qualificationScore": {
-                    "type": "integer",
-                    "minimum": 1,
-                    "maximum": 10,
-                    "description": "Lead quality from 1 to 10.",
+                "name": {"type": "string", "description": "The visitor's name exactly as shared."},
+                "email": {"type": "string", "description": "The visitor's email exactly as shared."},
+                "summary": {
+                    "type": "string",
+                    "description": "2-3 sentence sales-ready summary of needs, urgency, and context.",
                 },
-                "conversationSummary": {"type": "string", "description": "Concise handoff summary for the team."},
+                "intent": {
+                    "type": "string",
+                    "enum": ["hot", "warm", "cold"],
+                    "description": "Internal lead intent classification.",
+                },
+                "services_interested": {
+                    "type": "string",
+                    "description": "Inferred service interest, e.g. SaaS platform, mobile app, AI system.",
+                },
+                "timeline": {"type": "string", "description": "Expected start or launch timeline."},
+                "company": {
+                    "type": ["string", "null"],
+                    "description": "Company name if mentioned, else null.",
+                },
                 "source": {"type": "string", "description": "Use website-chat unless a better source is known."},
             },
         },
