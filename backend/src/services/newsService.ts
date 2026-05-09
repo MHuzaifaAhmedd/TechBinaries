@@ -31,12 +31,88 @@ const UPSTREAM_TIMEOUT_MS = 6_000;
 
 let cache: { payload: NewsPayload; expiresAt: number } | null = null;
 
+const TECH_INCLUDE_TERMS = [
+  "ai",
+  "artificial intelligence",
+  "machine learning",
+  "llm",
+  "openai",
+  "anthropic",
+  "software",
+  "software development",
+  "developer",
+  "programming",
+  "coding",
+  "typescript",
+  "javascript",
+  "python",
+  "react",
+  "next.js",
+  "api",
+  "cloud",
+  "aws",
+  "azure",
+  "gcp",
+  "devops",
+  "cybersecurity",
+  "data",
+  "startup",
+  "saas",
+  "enterprise tech",
+];
+
+const TECH_EXCLUDE_TERMS = [
+  "nintendo",
+  "resident evil",
+  "playstation",
+  "xbox",
+  "gaming",
+  "video game",
+  "esports",
+  "fortnite",
+  "call of duty",
+  "pokemon",
+];
+
 function safeHostname(url: string): string {
   try {
     return new URL(url).hostname.replace(/^www\./, "");
   } catch {
     return "";
   }
+}
+
+function normalizeText(input: string): string {
+  return input.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+function includesAny(text: string, terms: string[]): number {
+  let count = 0;
+  for (const term of terms) {
+    if (text.includes(term)) count += 1;
+  }
+  return count;
+}
+
+function isRelevantTechNews(item: NewsItem): boolean {
+  const text = normalizeText(
+    `${item.title} ${item.description} ${item.source} ${item.url}`
+  );
+  const includeHits = includesAny(text, TECH_INCLUDE_TERMS);
+  const excludeHits = includesAny(text, TECH_EXCLUDE_TERMS);
+
+  if (includeHits === 0) return false;
+  if (excludeHits > 0 && includeHits < 2) return false;
+  return true;
+}
+
+function uniqueByUrl(items: NewsItem[]): NewsItem[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    if (seen.has(item.url)) return false;
+    seen.add(item.url);
+    return true;
+  });
 }
 
 async function timedFetch(
@@ -93,7 +169,8 @@ async function fromGNews(): Promise<NewsItem[] | null> {
         image: a.image ?? null,
         source: a.source?.name ?? safeHostname(a.url!),
         publishedAt: a.publishedAt!,
-      }));
+      }))
+      .filter(isRelevantTechNews);
   } catch {
     return null;
   }
@@ -128,7 +205,8 @@ async function fromNewsApi(): Promise<NewsItem[] | null> {
         image: a.urlToImage ?? null,
         source: a.source?.name ?? safeHostname(a.url!),
         publishedAt: a.publishedAt!,
-      }));
+      }))
+      .filter(isRelevantTechNews);
   } catch {
     return null;
   }
@@ -172,7 +250,8 @@ async function fromHackerNews(): Promise<NewsItem[]> {
           publishedAt: h.created_at ?? new Date().toISOString(),
         };
       })
-      .filter((x): x is NewsItem => x !== null);
+      .filter((x): x is NewsItem => x !== null)
+      .filter(isRelevantTechNews);
   } catch {
     return [];
   }
@@ -190,7 +269,7 @@ export async function fetchLiveTechNews(): Promise<NewsPayload> {
     items = await fromHackerNews();
   }
 
-  const trimmed = items.slice(0, MAX_ITEMS);
+  const trimmed = uniqueByUrl(items).slice(0, MAX_ITEMS);
   const payload: NewsPayload = {
     items: trimmed,
     fetchedAt: new Date().toISOString(),
