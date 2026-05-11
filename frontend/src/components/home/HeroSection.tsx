@@ -1,33 +1,4 @@
-// "use client";
-
-// import { useEffect, useRef, useState, MutableRefObject } from "react";
-// import gsap from "gsap";
-// import { ScrollTrigger } from "gsap/ScrollTrigger";
-// import Link from "next/link";
-// import Lenis from "@studio-freight/lenis";
-// import { HERO_VERBS, BUILDING_NOW } from "@/data/home";
-
-// gsap.registerPlugin(ScrollTrigger);
-
-// // ── HeroSection ───────────────────────────────────────────────────────────────
-// // Full-viewport landing hero with:
-// //  - Animated character-split headline with rotating verb
-// //  - Parallax background glyph + dot grid
-// //  - 3D-tilting "live terminal" card on mouse move
-// //  - GSAP intro timeline + scroll-fade out
-// // ─────────────────────────────────────────────────────────────────────────────
-
-// interface HeroSectionProps {
-//   lenisRef: MutableRefObject<Lenis | null>;
-// }
-
-// export default function HeroSection({ lenisRef }: HeroSectionProps) {
-//   const heroRef = useRef<HTMLElement>(null);
-//   const heroTerminalRef = useRef<HTMLDivElement>(null);
-//   const [rotatingVerb, setRotatingVerb] = useState(0);
-
-//   // Rotating verb cycle
-//   useEffect(() => {
+// (legacy v1 implementation removed)
 //     const id = setInterval(() => {
 //       setRotatingVerb((v) => (v + 1) % HERO_VERBS.length);
 //     }, 2600);
@@ -454,12 +425,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import Link from "next/link";
 import { HERO_VERBS, BUILDING_NOW } from "@/data/home";
-
-gsap.registerPlugin(ScrollTrigger);
+import { loadGsap, loadGsapWithScrollTrigger, runAfterInteractive } from "@/lib/animation/loaders";
 
 // ── HeroSection ───────────────────────────────────────────────────────────────
 // Full-viewport landing hero with:
@@ -476,6 +445,7 @@ export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
   const heroTerminalRef = useRef<HTMLDivElement>(null);
   const [rotatingVerb, setRotatingVerb] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Rotating verb cycle
   useEffect(() => {
@@ -492,10 +462,21 @@ export default function HeroSection() {
     const terminal = heroTerminalRef.current;
     if (window.matchMedia("(max-width: 768px)").matches) return;
 
-    const termRY = terminal ? gsap.quickTo(terminal, "rotationY", { duration: 0.7, ease: "power3.out" }) : null;
-    const termRX = terminal ? gsap.quickTo(terminal, "rotationX", { duration: 0.7, ease: "power3.out" }) : null;
+    let cancelled = false;
+    let termRY: ((v: number) => void) | null = null;
+    let termRX: ((v: number) => void) | null = null;
 
-    if (terminal) gsap.set(terminal, { transformPerspective: 1400, transformStyle: "preserve-3d" });
+    runAfterInteractive(() => {
+      void (async () => {
+        const gsap = await loadGsap();
+        if (cancelled) return;
+        if (!terminal) return;
+
+        termRY = gsap.quickTo(terminal, "rotationY", { duration: 0.7, ease: "power3.out" });
+        termRX = gsap.quickTo(terminal, "rotationX", { duration: 0.7, ease: "power3.out" });
+        gsap.set(terminal, { transformPerspective: 1400, transformStyle: "preserve-3d" });
+      })();
+    });
 
     const onMove = (e: MouseEvent) => {
       const rect = hero.getBoundingClientRect();
@@ -507,63 +488,112 @@ export default function HeroSection() {
     };
 
     window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("mousemove", onMove);
+    };
   }, []);
 
   // GSAP intro timeline + scroll-driven fade
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const heroTl = gsap.timeline({ delay: 0.1 });
+    let cancelled = false;
+    let revert: (() => void) | undefined;
 
-      heroTl.fromTo(
-        gsap.utils.toArray<HTMLElement>(".hero-char"),
-        { yPercent: 110, rotateX: -35, opacity: 0 },
-        { yPercent: 0, rotateX: 0, opacity: 1, duration: 0.9, stagger: { each: 0.018, from: "start" }, ease: "power4.out" },
-        0
-      );
-      heroTl.fromTo(
-        ".hero-verb-mask",
-        { yPercent: 100 },
-        { yPercent: 0, duration: 0.85, ease: "power4.out" },
-        0.2
-      );
-      heroTl.fromTo(
-        ".hero-intro-col",
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" },
-        0.7
-      );
-      heroTl.fromTo(
-        ".hero-terminal",
-        { opacity: 0, y: 30, scale: 0.96 },
-        { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "power3.out" },
-        0.35
-      );
-      heroTl.fromTo(
-        ".hero-terminal-line",
-        { opacity: 0, x: -10 },
-        { opacity: 1, x: 0, duration: 0.4, stagger: 0.12, ease: "power2.out" },
-        0.65
-      );
-      heroTl.fromTo(
-        ".hero-scroll-hint",
-        { opacity: 0, y: 10 },
-        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-        1.5
-      );
+    runAfterInteractive(() => {
+      void (async () => {
+        const { gsap } = await loadGsapWithScrollTrigger();
+        if (cancelled) return;
 
-      if (heroRef.current) {
-        gsap.to(".hero-content-wrap", {
-          y: -80, opacity: 0.4, scale: 0.98, ease: "none",
-          scrollTrigger: { trigger: heroRef.current, start: "top top", end: "bottom top", scrub: true },
+        const ctx = gsap.context(() => {
+          const heroTl = gsap.timeline({ delay: 0.1 });
+
+          heroTl.fromTo(
+            gsap.utils.toArray(".hero-char"),
+            { yPercent: 110, rotateX: -35, opacity: 0 },
+            {
+              yPercent: 0,
+              rotateX: 0,
+              opacity: 1,
+              duration: 0.9,
+              stagger: { each: 0.018, from: "start" },
+              ease: "power4.out",
+            },
+            0
+          );
+          heroTl.fromTo(
+            ".hero-verb-mask",
+            { yPercent: 100 },
+            { yPercent: 0, duration: 0.85, ease: "power4.out" },
+            0.2
+          );
+          heroTl.fromTo(
+            ".hero-intro-col",
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" },
+            0.7
+          );
+          heroTl.fromTo(
+            ".hero-terminal",
+            { opacity: 0, y: 30, scale: 0.96 },
+            { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "power3.out" },
+            0.35
+          );
+          heroTl.fromTo(
+            ".hero-terminal-line",
+            { opacity: 0, x: -10 },
+            { opacity: 1, x: 0, duration: 0.4, stagger: 0.12, ease: "power2.out" },
+            0.65
+          );
+          heroTl.fromTo(
+            ".hero-scroll-hint",
+            { opacity: 0, y: 10 },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+            1.5
+          );
+
+          if (heroRef.current) {
+            gsap.to(".hero-content-wrap", {
+              y: -80,
+              opacity: 0.4,
+              scale: 0.98,
+              ease: "none",
+              scrollTrigger: {
+                trigger: heroRef.current,
+                start: "top top",
+                end: "bottom top",
+                scrub: true,
+              },
+            });
+            gsap.to(".hero-scroll-hint", {
+              opacity: 0,
+              y: 20,
+              ease: "none",
+              scrollTrigger: {
+                trigger: heroRef.current,
+                start: "top top",
+                end: "15% top",
+                scrub: true,
+              },
+            });
+          }
         });
-        gsap.to(".hero-scroll-hint", {
-          opacity: 0, y: 20, ease: "none",
-          scrollTrigger: { trigger: heroRef.current, start: "top top", end: "15% top", scrub: true },
-        });
-      }
+
+        revert = () => ctx.revert();
+      })();
     });
-    return () => ctx.revert();
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 768px)");
+    const syncMobile = () => setIsMobile(media.matches);
+    syncMobile();
+    media.addEventListener("change", syncMobile);
+    return () => media.removeEventListener("change", syncMobile);
   }, []);
 
   return (
@@ -575,28 +605,54 @@ export default function HeroSection() {
         overflow: "hidden",
       }}
     >
-      {/* Hero background video */}
-      <video
-        aria-hidden
-        className="hero-bg-video"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-          pointerEvents: "none",
-        }}
-      >
-        <source src="/videos/her-section-land.mp4" type="video/mp4" />
-      </video>
+      {/* Hero background media */}
+      {isMobile ? (
+        <Image
+          src="/images/hero-poster.jpg"
+          alt=""
+          className="hero-bg-poster"
+          fill
+          priority
+          sizes="100vw"
+          aria-hidden
+          style={{ objectFit: "cover", objectPosition: "center", zIndex: 0, pointerEvents: "none" }}
+        />
+      ) : (
+        <>
+          <Image
+            src="/images/hero-poster.jpg"
+            alt=""
+            className="hero-bg-poster"
+            fill
+            priority
+            sizes="100vw"
+            aria-hidden
+            style={{ objectFit: "cover", objectPosition: "center", zIndex: 0, pointerEvents: "none" }}
+          />
+          <video
+            aria-hidden
+            className="hero-bg-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="none"
+            poster="/images/hero-poster.jpg"
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              zIndex: 0,
+              pointerEvents: "none",
+            }}
+          >
+            <source src="/videos/her-section-land.mp4" type="video/mp4" />
+          </video>
+        </>
+      )}
 
       {/* Cinematic shade */}
       <div
@@ -968,6 +1024,11 @@ export default function HeroSection() {
          * Tablet / laptop / full-HD (≤1920): stronger zoom. Ultra-wide / large desktop (>1920): original framing.
          */
         @media (max-width: 1920px) and (min-width: 769px) {
+          .hero-bg-poster {
+            transform: scale(1.12);
+            transform-origin: 42% 34%;
+            will-change: transform;
+          }
           .hero-bg-video {
             transform: scale(1.12);
             transform-origin: 42% 34%;
@@ -975,6 +1036,10 @@ export default function HeroSection() {
           }
         }
         @media (max-width: 1280px) and (min-width: 769px) {
+          .hero-bg-poster {
+            transform: scale(1.17);
+            transform-origin: 40% 32%;
+          }
           .hero-bg-video {
             transform: scale(1.17);
             transform-origin: 40% 32%;
@@ -983,6 +1048,11 @@ export default function HeroSection() {
 
         /* ─── MOBILE ≤ 768px ─── */
         @media (max-width: 768px) {
+          .hero-bg-poster {
+            transform: scale(1.06);
+            transform-origin: 50% 38%;
+            will-change: transform;
+          }
           .hero-bg-video {
             transform: scale(1.06);
             transform-origin: 50% 38%;

@@ -1,7 +1,5 @@
 "use client";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useState } from "react";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -23,8 +21,6 @@ import { CwaGrowthSection } from "./CwaGrowthSection";
 import { CwaHeroSection } from "./CwaHeroSection";
 import { CwaProcessSection } from "./CwaProcessSection";
 import { CwaStackSection } from "./CwaStackSection";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export function CustomWebApplicationPageClient() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);

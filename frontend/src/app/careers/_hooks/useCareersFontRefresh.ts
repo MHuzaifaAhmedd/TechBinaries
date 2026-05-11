@@ -1,10 +1,23 @@
 import { useEffect } from "react";
-import { ScrollTrigger } from "../_lib/careers-gsap";
+import { runAfterInteractive } from "@/lib/animation/loaders";
+import { loadCareersGsap } from "../_lib/careers-gsap";
 
 export function useCareersFontRefresh() {
   useEffect(() => {
     const fonts = "fonts" in document ? document.fonts : undefined;
     if (!fonts?.ready) return;
-    fonts.ready.then(() => ScrollTrigger.refresh());
+    let cancelled = false;
+    fonts.ready.then(async () => {
+      if (cancelled) return;
+      runAfterInteractive(() => {
+        void loadCareersGsap().then(({ ScrollTrigger }) => {
+          if (cancelled) return;
+          ScrollTrigger.refresh();
+        });
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 }

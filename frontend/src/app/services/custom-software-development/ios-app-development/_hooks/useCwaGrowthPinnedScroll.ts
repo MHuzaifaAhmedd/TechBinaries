@@ -1,6 +1,5 @@
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState, type RefObject } from "react";
+import { loadGsapWithScrollTrigger, runAfterInteractive } from "@/lib/animation/loaders";
 
 export type UseCwaGrowthPinnedScrollResult = {
   activePillar: number;
@@ -23,14 +22,20 @@ export function useCwaGrowthPinnedScroll(): UseCwaGrowthPinnedScrollResult {
     const list = pillarListRef.current;
     if (!list) return;
 
-    const mm = gsap.matchMedia();
+    let cancelled = false;
+    let revert: (() => void) | undefined;
 
-    mm.add(
-      {
-        isDesktop: "(min-width: 1101px) and (hover: hover) and (pointer: fine)",
-        isTouchOrSmall: "(max-width: 1100px), (hover: none), (pointer: coarse)",
-      },
-      (context) => {
+    runAfterInteractive(() => {
+      void loadGsapWithScrollTrigger().then(({ gsap, ScrollTrigger }) => {
+        if (cancelled) return;
+        const mm = gsap.matchMedia();
+
+        mm.add(
+          {
+            isDesktop: "(min-width: 1101px) and (hover: hover) and (pointer: fine)",
+            isTouchOrSmall: "(max-width: 1100px), (hover: none), (pointer: coarse)",
+          },
+          (context) => {
         const { isDesktop, isTouchOrSmall } = context.conditions as {
           isDesktop: boolean;
           isTouchOrSmall: boolean;
@@ -147,10 +152,17 @@ export function useCwaGrowthPinnedScroll(): UseCwaGrowthPinnedScrollResult {
             trigger.kill();
           };
         }
-      }
-    );
+          }
+        );
 
-    return () => mm.revert();
+        revert = () => mm.revert();
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, []);
 
   return {

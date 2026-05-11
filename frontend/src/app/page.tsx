@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "@studio-freight/lenis";
+import type Lenis from "@studio-freight/lenis";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import CustomCursor from "@/components/shared/CustomCursor";
@@ -13,8 +11,7 @@ import CapabilitiesSection from "@/components/home/CapabilitiesSection";
 import GrowthBinarySection from "@/components/home/GrowthBinarySection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import CTASection from "@/components/home/CTASection";
-
-gsap.registerPlugin(ScrollTrigger);
+import { loadGsapWithScrollTrigger, loadLenisCtor, runAfterInteractive } from "@/lib/animation/loaders";
 
 // ── HomePage ──────────────────────────────────────────────────────────────────
 // Thin orchestrator: boots Lenis smooth-scroll, wires GSAP ScrollTrigger,
@@ -28,24 +25,50 @@ export default function HomePage() {
 
   // ── Lenis smooth-scroll ──
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      wheelMultiplier: 1,
-      touchMultiplier: 1.4,
-      smoothWheel: true,
-    });
-    lenisRef.current = lenis;
-    lenis.on("scroll", ScrollTrigger.update);
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
 
-    const ticker = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(ticker);
-    gsap.ticker.lagSmoothing(0);
+    const run = async () => {
+      const [LenisCtorUnknown, { gsap, ScrollTrigger }] = await Promise.all([
+        loadLenisCtor(),
+        loadGsapWithScrollTrigger(),
+      ]);
+
+      if (cancelled) return;
+
+      const LenisCtor = LenisCtorUnknown as unknown as new (opts: unknown) => Lenis;
+
+      const lenis = new LenisCtor({
+        duration: 1.1,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        wheelMultiplier: 1,
+        touchMultiplier: 1.4,
+        smoothWheel: true,
+      });
+
+      lenisRef.current = lenis as Lenis;
+      lenis.on("scroll", ScrollTrigger.update);
+
+      const ticker = (time: number) => lenis.raf(time * 1000);
+      gsap.ticker.add(ticker);
+      gsap.ticker.lagSmoothing(0);
+
+      cleanup = () => {
+        gsap.ticker.remove(ticker);
+        lenis.destroy();
+        lenisRef.current = null;
+      };
+    };
+
+    // Ensure these heavy libs load only after interactivity.
+    runAfterInteractive(() => {
+      // Ignore unhandled promise to keep effect signature clean.
+      void run();
+    });
 
     return () => {
-      gsap.ticker.remove(ticker);
-      lenis.destroy();
-      lenisRef.current = null;
+      cancelled = true;
+      cleanup?.();
     };
   }, []);
 
@@ -53,44 +76,77 @@ export default function HomePage() {
   // Stat count-ups and section tag fade-ins live here because they reference
   // CSS class names shared across multiple sections.
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Count-up numbers
-      gsap.utils.toArray<HTMLElement>(".stat-num").forEach((el) => {
-        const raw = el.dataset.val || "";
-        const m = raw.match(/^([\d.]+)(.*)$/);
-        if (!m) return;
-        const target = parseFloat(m[1]);
-        const suffix = m[2];
-        const isInt = Number.isInteger(target);
-        const obj = { v: 0 };
-        gsap.to(obj, {
-          v: target, duration: 1.6, ease: "power2.out",
-          scrollTrigger: { trigger: el, start: "top 85%" },
-          onUpdate: () => {
-            el.textContent = (isInt ? Math.round(obj.v).toString() : obj.v.toFixed(1)) + suffix;
-          },
+    let cancelled = false;
+    let revert: (() => void) | undefined;
+
+    const run = async () => {
+      const { gsap } = await loadGsapWithScrollTrigger();
+
+      if (cancelled) return;
+
+      const ctx = gsap.context(() => {
+        // Count-up numbers
+        gsap.utils.toArray<HTMLElement>(".stat-num").forEach((el: HTMLElement) => {
+          const raw = el.dataset.val || "";
+          const m = raw.match(/^([\d.]+)(.*)$/);
+          if (!m) return;
+          const target = parseFloat(m[1]);
+          const suffix = m[2];
+          const isInt = Number.isInteger(target);
+          const obj = { v: 0 };
+          gsap.to(obj, {
+            v: target,
+            duration: 1.6,
+            ease: "power2.out",
+            scrollTrigger: { trigger: el, start: "top 85%" },
+            onUpdate: () => {
+              el.textContent =
+                (isInt ? Math.round(obj.v).toString() : obj.v.toFixed(1)) + suffix;
+            },
+          });
+        });
+
+        // Section header fade-in
+        gsap.utils.toArray<HTMLElement>(".sh").forEach((el: HTMLElement) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 38 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.95,
+              ease: "power3.out",
+              scrollTrigger: { trigger: el, start: "top 88%" },
+            }
+          );
+        });
+
+        // Tag fade-in
+        gsap.utils.toArray<HTMLElement>(".tag").forEach((el: HTMLElement) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0 },
+            {
+              opacity: 1,
+              duration: 0.8,
+              ease: "power2.out",
+              scrollTrigger: { trigger: el, start: "top 92%" },
+            }
+          );
         });
       });
 
-      // Section header fade-in
-      gsap.utils.toArray<HTMLElement>(".sh").forEach((el) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 38 },
-          { opacity: 1, y: 0, duration: 0.95, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%" } }
-        );
-      });
+      revert = () => ctx.revert();
+    };
 
-      // Tag fade-in
-      gsap.utils.toArray<HTMLElement>(".tag").forEach((el) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.8, ease: "power2.out", scrollTrigger: { trigger: el, start: "top 92%" } }
-        );
-      });
+    runAfterInteractive(() => {
+      void run();
     });
-    return () => ctx.revert();
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, []);
 
   // ── Scroll restoration for browser back/forward ──
@@ -98,6 +154,10 @@ export default function HomePage() {
   // when restored from the browser cache. Treat any page-show as a fresh load.
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    let cancelled = false;
+
+    let ScrollTrigger: { refresh?: (safe?: boolean) => void; update?: () => void } | null = null;
 
     const previousScrollRestoration = window.history.scrollRestoration;
     window.history.scrollRestoration = "manual";
@@ -110,8 +170,8 @@ export default function HomePage() {
       lenis?.scrollTo(0, { immediate: true, force: true });
       lenis?.resize();
       requestAnimationFrame(() => {
-        ScrollTrigger.refresh(true);
-        ScrollTrigger.update();
+        ScrollTrigger?.refresh?.(true);
+        ScrollTrigger?.update?.();
         lenis?.start();
       });
     };
@@ -124,7 +184,15 @@ export default function HomePage() {
     window.addEventListener("pageshow", handlePageShow);
     window.addEventListener("pagehide", handlePageHide);
 
+    runAfterInteractive(() => {
+      void loadGsapWithScrollTrigger().then(({ ScrollTrigger: st }) => {
+        if (cancelled) return;
+        ScrollTrigger = st;
+      });
+    });
+
     return () => {
+      cancelled = true;
       window.removeEventListener("pageshow", handlePageShow);
       window.removeEventListener("pagehide", handlePageHide);
       window.history.scrollRestoration = previousScrollRestoration;
@@ -135,7 +203,15 @@ export default function HomePage() {
   useEffect(() => {
     const fonts = "fonts" in document ? document.fonts : undefined;
     if (!fonts?.ready) return;
-    fonts.ready.then(() => ScrollTrigger.refresh());
+    let cancelled = false;
+    fonts.ready.then(async () => {
+      if (cancelled) return;
+      const { ScrollTrigger } = await loadGsapWithScrollTrigger();
+      ScrollTrigger.refresh();
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (

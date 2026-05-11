@@ -1,5 +1,6 @@
 import { useEffect, type RefObject } from "react";
-import { gsap, ScrollTrigger } from "../_lib/careers-gsap";
+import { runAfterInteractive } from "@/lib/animation/loaders";
+import { loadCareersGsap } from "../_lib/careers-gsap";
 import { DNA } from "../_lib/careers-data";
 
 type SetActive = (idx: number) => void;
@@ -13,11 +14,19 @@ export function useCareersDnaScroll(
     const stage = dnaStageRef.current;
     if (!stage) return;
 
-    const mm = gsap.matchMedia();
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
 
-    mm.add(
-      "(min-width: 1101px) and (hover: hover) and (pointer: fine)",
-      () => {
+    runAfterInteractive(() => {
+      void (async () => {
+        const { gsap, ScrollTrigger } = await loadCareersGsap();
+        if (cancelled) return;
+
+        const mm = gsap.matchMedia();
+
+        mm.add(
+          "(min-width: 1101px) and (hover: hover) and (pointer: fine)",
+          () => {
         const totalScenes = DNA.values.length;
         const scrollPerScene = 1.0;
         const totalDistance = totalScenes * scrollPerScene;
@@ -178,37 +187,44 @@ export function useCareersDnaScroll(
           updateDnaCursorRing(lastDnaScrollProgress);
         });
 
-        return () => {
-          stage.removeEventListener("mousemove", onStageMove);
-          stage.removeEventListener("mouseleave", onStageLeave);
-          trigger.kill();
-        };
-      }
-    );
+            return () => {
+              stage.removeEventListener("mousemove", onStageMove);
+              stage.removeEventListener("mouseleave", onStageLeave);
+              trigger.kill();
+            };
+          }
+        );
 
-    mm.add(
-      "(max-width: 1100px), (hover: none), (pointer: coarse)",
-      () => {
-        const ctx = gsap.context(() => {
-          gsap.utils.toArray<HTMLElement>(".cr-dna-mobile-card").forEach((el, i) => {
-            gsap.fromTo(
-              el,
-              { opacity: 0, y: 32 },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.75,
-                ease: "power3.out",
-                delay: i * 0.05,
-                scrollTrigger: { trigger: el, start: "top 88%", once: true },
-              }
-            );
-          });
-        });
-        return () => ctx.revert();
-      }
-    );
+        mm.add(
+          "(max-width: 1100px), (hover: none), (pointer: coarse)",
+          () => {
+            const ctx = gsap.context(() => {
+              (gsap.utils.toArray(".cr-dna-mobile-card") as HTMLElement[]).forEach((el, i) => {
+                gsap.fromTo(
+                  el,
+                  { opacity: 0, y: 32 },
+                  {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.75,
+                    ease: "power3.out",
+                    delay: i * 0.05,
+                    scrollTrigger: { trigger: el, start: "top 88%", once: true },
+                  }
+                );
+              });
+            });
+            return () => ctx.revert();
+          }
+        );
 
-    return () => mm.revert();
+        cleanup = () => mm.revert();
+      })();
+    });
+
+    return () => {
+      cancelled = true;
+      cleanup?.();
+    };
   }, [dnaStageRef, dnaCursorRingRef, setActiveValue]);
 }

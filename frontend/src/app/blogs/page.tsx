@@ -37,14 +37,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-
-gsap.registerPlugin(ScrollTrigger);
+import { loadGsapWithScrollTrigger, runAfterInteractive } from "@/lib/animation/loaders";
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
 
@@ -284,209 +281,322 @@ export default function BlogsPage() {
 
   // ── HERO ANIMATION ──
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.15 });
-      const chars = gsap.utils.toArray<HTMLElement>(".bl-char");
-      tl.fromTo(
-        chars,
-        { yPercent: 115, opacity: 0, rotateZ: 3 },
-        {
-          yPercent: 0,
-          opacity: 1,
-          rotateZ: 0,
-          duration: 1.1,
-          stagger: { each: 0.016 },
-          ease: "expo.out",
-        },
-        0
-      );
-      tl.fromTo(
-        ".bl-hero-lead",
-        { opacity: 0, y: 24 },
-        { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
-        0.55
-      );
-      tl.fromTo(
-        ".bl-hero-cats",
-        { opacity: 0, y: 18 },
-        { opacity: 1, y: 0, duration: 0.75, ease: "expo.out" },
-        0.85
-      );
-      // hero parallax
-      gsap.to(".bl-hero-bg-label", {
-        yPercent: 28,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".bl-hero",
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.9,
-        },
-      });
-      gsap.to(".bl-hero-content", {
-        yPercent: -14,
-        opacity: 0,
-        filter: "blur(6px)",
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".bl-hero",
-          start: "30% top",
-          end: "bottom 20%",
-          scrub: true,
-        },
-      });
-    }, heroRef);
-    return () => ctx.revert();
+    let cancelled = false;
+    let revert: (() => void) | undefined;
+
+    runAfterInteractive(() => {
+      void (async () => {
+        const { gsap } = await loadGsapWithScrollTrigger();
+        if (cancelled) return;
+
+        const ctx = gsap.context(() => {
+          const tl = gsap.timeline({ delay: 0.15 });
+          const chars = gsap.utils.toArray(".bl-char") as HTMLElement[];
+          tl.fromTo(
+            chars,
+            { yPercent: 115, opacity: 0, rotateZ: 3 },
+            {
+              yPercent: 0,
+              opacity: 1,
+              rotateZ: 0,
+              duration: 1.1,
+              stagger: { each: 0.016 },
+              ease: "expo.out",
+            },
+            0
+          );
+          tl.fromTo(
+            ".bl-hero-lead",
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
+            0.55
+          );
+          tl.fromTo(
+            ".bl-hero-cats",
+            { opacity: 0, y: 18 },
+            { opacity: 1, y: 0, duration: 0.75, ease: "expo.out" },
+            0.85
+          );
+          // hero parallax
+          gsap.to(".bl-hero-bg-label", {
+            yPercent: 28,
+            ease: "none",
+            scrollTrigger: {
+              trigger: ".bl-hero",
+              start: "top top",
+              end: "bottom top",
+              scrub: 0.9,
+            },
+          });
+          gsap.to(".bl-hero-content", {
+            yPercent: -14,
+            opacity: 0,
+            filter: "blur(6px)",
+            ease: "none",
+            scrollTrigger: {
+              trigger: ".bl-hero",
+              start: "30% top",
+              end: "bottom 20%",
+              scrub: true,
+            },
+          });
+        }, heroRef);
+
+        revert = () => ctx.revert();
+      })();
+    });
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, []);
 
   // ── FEATURED REVEAL ──
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".bl-featured-card",
-        { opacity: 0, y: 60 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.2,
-          ease: "expo.out",
-          scrollTrigger: { trigger: ".bl-featured-card", start: "top 85%", once: true },
-        }
-      );
-      gsap.fromTo(
-        ".bl-featured-image",
-        { scale: 1.06 },
-        {
-          scale: 1,
-          duration: 1.4,
-          ease: "expo.out",
-          scrollTrigger: { trigger: ".bl-featured-card", start: "top 85%", once: true },
-        }
-      );
+    let cancelled = false;
+    let revert: (() => void) | undefined;
+
+    runAfterInteractive(() => {
+      void (async () => {
+        const { gsap } = await loadGsapWithScrollTrigger();
+        if (cancelled) return;
+
+        const ctx = gsap.context(() => {
+          gsap.fromTo(
+            ".bl-featured-card",
+            { opacity: 0, y: 60 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1.2,
+              ease: "expo.out",
+              scrollTrigger: {
+                trigger: ".bl-featured-card",
+                start: "top 85%",
+                once: true,
+              },
+            }
+          );
+          gsap.fromTo(
+            ".bl-featured-image",
+            { scale: 1.06 },
+            {
+              scale: 1,
+              duration: 1.4,
+              ease: "expo.out",
+              scrollTrigger: {
+                trigger: ".bl-featured-card",
+                start: "top 85%",
+                once: true,
+              },
+            }
+          );
+        });
+
+        revert = () => ctx.revert();
+      })();
     });
-    return () => ctx.revert();
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, []);
 
   // ── GRID POSTS REVEAL ──
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray<HTMLElement>(".bl-stream-row");
-      if (!cards.length) return;
+    let cancelled = false;
+    let revert: (() => void) | undefined;
 
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: 56 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.88,
-          stagger: 0.14,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: ".bl-stream-scroll-track",
-            start: "top 82%",
-            once: true,
-          },
-        }
-      );
+    runAfterInteractive(() => {
+      void (async () => {
+        const { gsap } = await loadGsapWithScrollTrigger();
+        if (cancelled) return;
 
+        const ctx = gsap.context(() => {
+          const cards = gsap.utils.toArray(".bl-stream-row") as HTMLElement[];
+          if (!cards.length) return;
+
+          gsap.fromTo(
+            cards,
+            { opacity: 0, y: 56 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.88,
+              stagger: 0.14,
+              ease: "expo.out",
+              scrollTrigger: {
+                trigger: ".bl-stream-scroll-track",
+                start: "top 82%",
+                once: true,
+              },
+            }
+          );
+        });
+
+        revert = () => ctx.revert();
+      })();
     });
-    return () => ctx.revert();
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, [activeCategory]);
 
   // ── STREAM PIN + INTERNAL SCROLL (desktop) ──
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 1101px) and (prefers-reduced-motion: no-preference)", () => {
-        const section = document.querySelector<HTMLElement>(".bl-stream");
-        const board = document.querySelector<HTMLElement>(".bl-stream-board");
-        const viewport = document.querySelector<HTMLElement>(".bl-stream-scroll-viewport");
-        const track = document.querySelector<HTMLElement>(".bl-stream-scroll-track");
+    let cancelled = false;
+    let revert: (() => void) | undefined;
 
-        if (!section || !board || !viewport || !track) return;
+    runAfterInteractive(() => {
+      void (async () => {
+        const { gsap, ScrollTrigger } = await loadGsapWithScrollTrigger();
+        if (cancelled) return;
 
-        const getScrollDistance = () => Math.max(0, track.scrollHeight - viewport.clientHeight);
-        const tween = gsap.fromTo(
-          track,
-          { y: 0 },
-          {
-            y: () => -getScrollDistance(),
-            duration: 1,
-            ease: "none",
-          }
-        );
+        const ctx = gsap.context(() => {
+          const mm = gsap.matchMedia();
+          mm.add("(min-width: 1101px) and (prefers-reduced-motion: no-preference)", () => {
+            const section = document.querySelector<HTMLElement>(".bl-stream");
+            const board = document.querySelector<HTMLElement>(".bl-stream-board");
+            const viewport = document.querySelector<HTMLElement>(".bl-stream-scroll-viewport");
+            const track = document.querySelector<HTMLElement>(".bl-stream-scroll-track");
 
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top top",
-          end: () => `+=${getScrollDistance() + window.innerHeight * 0.35}`,
-          pin: board,
-          pinSpacing: true,
-          scrub: true,
-          invalidateOnRefresh: true,
-          animation: tween,
-          anticipatePin: 1,
+            if (!section || !board || !viewport || !track) return;
+
+            const getScrollDistance = () => Math.max(0, track.scrollHeight - viewport.clientHeight);
+            const tween = gsap.fromTo(
+              track,
+              { y: 0 },
+              {
+                y: () => -getScrollDistance(),
+                duration: 1,
+                ease: "none",
+              }
+            );
+
+            ScrollTrigger.create({
+              trigger: section,
+              start: "top top",
+              end: () => `+=${getScrollDistance() + window.innerHeight * 0.35}`,
+              pin: board,
+              pinSpacing: true,
+              scrub: true,
+              invalidateOnRefresh: true,
+              animation: tween,
+              anticipatePin: 1,
+            });
+          });
         });
-      });
+
+        revert = () => ctx.revert();
+      })();
     });
 
-    return () => ctx.revert();
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, [activeCategory]);
 
   // ── NEWSLETTER REVEAL ──
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".bl-nl-inner",
-        { opacity: 0, scale: 0.96, y: 36 },
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          duration: 1.1,
-          ease: "expo.out",
-          scrollTrigger: { trigger: ".bl-nl", start: "top 80%", once: true },
-        }
-      );
+    let cancelled = false;
+    let revert: (() => void) | undefined;
+
+    runAfterInteractive(() => {
+      void (async () => {
+        const { gsap } = await loadGsapWithScrollTrigger();
+        if (cancelled) return;
+
+        const ctx = gsap.context(() => {
+          gsap.fromTo(
+            ".bl-nl-inner",
+            { opacity: 0, scale: 0.96, y: 36 },
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: 1.1,
+              ease: "expo.out",
+              scrollTrigger: { trigger: ".bl-nl", start: "top 80%", once: true },
+            }
+          );
+        });
+
+        revert = () => ctx.revert();
+      })();
     });
-    return () => ctx.revert();
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, []);
 
   // ── LATEST NEWS CARDS: smooth top-down stagger reveal ──
   useEffect(() => {
     if (newsLoading || liveNews.length === 0) return;
 
-    const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray<HTMLElement>(
-        ".bl-nl-latest-card:not(.bl-nl-latest-card--skeleton)"
-      );
-      if (!cards.length) return;
+    let cancelled = false;
+    let revert: (() => void) | undefined;
 
-      gsap.set(cards, { y: -36, opacity: 0 });
+    runAfterInteractive(() => {
+      void (async () => {
+        const { gsap, ScrollTrigger } = await loadGsapWithScrollTrigger();
+        if (cancelled) return;
 
-      gsap.to(cards, {
-        y: 0,
-        opacity: 1,
-        duration: 1.25,
-        stagger: 0.18,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".bl-nl-latest-grid",
-          start: "top 88%",
-          once: true,
-        },
-      });
+        const ctx = gsap.context(() => {
+          const cards = gsap.utils.toArray(
+            ".bl-nl-latest-card:not(.bl-nl-latest-card--skeleton)"
+          ) as HTMLElement[];
+          if (!cards.length) return;
 
-      ScrollTrigger.refresh();
+          gsap.set(cards, { y: -36, opacity: 0 });
+
+          gsap.to(cards, {
+            y: 0,
+            opacity: 1,
+            duration: 1.25,
+            stagger: 0.18,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".bl-nl-latest-grid",
+              start: "top 88%",
+              once: true,
+            },
+          });
+
+          ScrollTrigger.refresh();
+        });
+
+        revert = () => ctx.revert();
+      })();
     });
 
-    return () => ctx.revert();
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, [newsLoading, liveNews]);
 
   // Fonts refresh
   useEffect(() => {
-    document.fonts?.ready?.then(() => ScrollTrigger.refresh());
+    let cancelled = false;
+    const fonts = "fonts" in document ? document.fonts : undefined;
+    if (!fonts?.ready) return;
+
+    fonts.ready.then(async () => {
+      if (cancelled) return;
+      const { ScrollTrigger } = await loadGsapWithScrollTrigger();
+      ScrollTrigger.refresh();
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (

@@ -2,10 +2,7 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { loadGsapWithScrollTrigger, runAfterInteractive } from "@/lib/animation/loaders";
 
 // ── CTASection ────────────────────────────────────────────────────────────────
 // Full-width dark call-to-action block with discovery call copy,
@@ -20,14 +17,38 @@ const META_ITEMS = [
 
 export default function CTASection() {
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        "#cta-inner",
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: "#cta-inner", start: "top 85%" } }
-      );
+    let cancelled = false;
+    let revert: (() => void) | undefined;
+
+    runAfterInteractive(() => {
+      void (async () => {
+        const { gsap, ScrollTrigger } = await loadGsapWithScrollTrigger();
+        if (cancelled) return;
+
+        const ctx = gsap.context(() => {
+          gsap.fromTo(
+            "#cta-inner",
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              ease: "power3.out",
+              scrollTrigger: { trigger: "#cta-inner", start: "top 85%" },
+            }
+          );
+        });
+
+        // Ensure plugin stays referenced for this context’s lifetime.
+        void ScrollTrigger;
+        revert = () => ctx.revert();
+      })();
     });
-    return () => ctx.revert();
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, []);
 
   return (

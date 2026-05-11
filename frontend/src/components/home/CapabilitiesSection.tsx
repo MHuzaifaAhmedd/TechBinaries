@@ -2,12 +2,9 @@
 
 import { useEffect, useRef, useState, MutableRefObject } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "@studio-freight/lenis";
+import type Lenis from "@studio-freight/lenis";
 import { SERVICES } from "@/data/home";
-
-gsap.registerPlugin(ScrollTrigger);
+import { loadGsap, loadGsapWithScrollTrigger, runAfterInteractive } from "@/lib/animation/loaders";
 
 // ── CapabilitiesSection ───────────────────────────────────────────────────────
 // Desktop: pinned viewport with horizontal accordion slats (GSAP scrub).
@@ -21,7 +18,7 @@ interface CapabilitiesSectionProps {
 
 export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef }: CapabilitiesSectionProps) {
   const capabilitiesRef = useRef<HTMLElement>(null);
-  const capScrollTriggerRef = useRef<ScrollTrigger | null>(null);
+  const capScrollTriggerRef = useRef<unknown>(null);
   const [activeCapability, setActiveCapability] = useState(0);
   const [showCapabilityInterlude, setShowCapabilityInterlude] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -51,140 +48,181 @@ export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef
     if (lenisRef.current) {
       lenisRef.current.scrollTo(targetY, {
         duration,
-        easing: (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+        easing: (t: number) =>
+          t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
         onComplete: release,
       });
       setTimeout(release, duration * 1000 + 300);
-    } else {
+      return;
+    }
+
+    // Fallback: if Lenis isn't available, dynamically load GSAP for a one-off smooth scroll.
+    void (async () => {
+      const gsap = await loadGsap();
       gsap.to(window, {
         duration,
         scrollTo: { y: targetY, autoKill: false },
         ease: "power3.inOut",
         onComplete: release,
       });
-    }
+    })();
   };
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".cap-header",
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: ".cap-header", start: "top 85%" } }
-      );
+    let cancelled = false;
+    let revert: (() => void) | undefined;
 
-      const capSection = capabilitiesRef.current;
-      const capMM = gsap.matchMedia();
+    runAfterInteractive(() => {
+      void (async () => {
+        const { gsap, ScrollTrigger } = await loadGsapWithScrollTrigger();
+        if (cancelled) return;
 
-      capMM.add("(min-width: 901px)", () => {
-        if (!capSection) return;
+        const ctx = gsap.context(() => {
+          gsap.fromTo(
+            ".cap-header",
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.9,
+              ease: "power3.out",
+              scrollTrigger: { trigger: ".cap-header", start: "top 85%" },
+            }
+          );
 
-        const slatEls = gsap.utils.toArray<HTMLElement>(".cap-slat");
-        const slatCount = slatEls.length;
-        if (slatCount === 0) return;
+          const capSection = capabilitiesRef.current;
+          const capMM = gsap.matchMedia();
 
-        const FLEX_COLLAPSED = 1;
-        const FLEX_EXPANDED = 12;
+          capMM.add("(min-width: 901px)", () => {
+            if (!capSection) return;
 
-        const slatsContainer = capSection.querySelector<HTMLElement>(".cap-slats");
-        const computeExpandedWidth = () => {
-          if (!slatsContainer) return;
-          const containerW = slatsContainer.clientWidth;
-          const gap = 12;
-          const totalGap = gap * (slatCount - 1);
-          const expandedW =
-            ((containerW - totalGap) * FLEX_EXPANDED) /
-            (FLEX_EXPANDED + FLEX_COLLAPSED * (slatCount - 1));
-          slatEls.forEach((el) => {
-            el.style.setProperty("--cap-expanded-w", `${Math.floor(expandedW)}px`);
-          });
-        };
-        computeExpandedWidth();
-        ScrollTrigger.addEventListener("refreshInit", computeExpandedWidth);
+            const slatEls = gsap.utils.toArray(".cap-slat") as HTMLElement[];
+            const slatCount = slatEls.length;
+            if (slatCount === 0) return;
 
-        slatEls.forEach((el, i) => {
-          gsap.set(el, { flexGrow: i === 0 ? FLEX_EXPANDED : FLEX_COLLAPSED });
-          const collapsed = el.querySelector<HTMLElement>(".cap-slat-collapsed");
-          const expanded = el.querySelector<HTMLElement>(".cap-slat-expanded");
-          if (collapsed) gsap.set(collapsed, { autoAlpha: i === 0 ? 0 : 1 });
-          if (expanded) gsap.set(expanded, { autoAlpha: i === 0 ? 1 : 0, x: 0 });
-        });
+            const FLEX_COLLAPSED = 1;
+            const FLEX_EXPANDED = 12;
 
-        const totalScroll = () => window.innerHeight * slatCount;
-
-        const capST = ScrollTrigger.create({
-          trigger: capSection,
-          start: "top top",
-          end: () => `+=${totalScroll()}`,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          scrub: 0.5,
-          snap: {
-            snapTo: (value) => {
-              if (capProgrammaticScrollRef.current) return value;
-              return Math.round(value * (slatCount - 1)) / (slatCount - 1);
-            },
-            duration: { min: 0.2, max: 0.6 },
-            delay: 0.12,
-            ease: "power2.inOut",
-          },
-          onUpdate: (self) => {
-            const rawPos = self.progress * (slatCount - 1);
-            const distToNearestCapability = Math.abs(rawPos - Math.round(rawPos));
-            const interludeVisible = distToNearestCapability > 0.42 && distToNearestCapability < 0.58;
-            setShowCapabilityInterlude((prev) => prev === interludeVisible ? prev : interludeVisible);
+            const slatsContainer = capSection.querySelector<HTMLElement>(".cap-slats");
+            const computeExpandedWidth = () => {
+              if (!slatsContainer) return;
+              const containerW = slatsContainer.clientWidth;
+              const gap = 12;
+              const totalGap = gap * (slatCount - 1);
+              const expandedW =
+                ((containerW - totalGap) * FLEX_EXPANDED) /
+                (FLEX_EXPANDED + FLEX_COLLAPSED * (slatCount - 1));
+              slatEls.forEach((el: HTMLElement) => {
+                el.style.setProperty("--cap-expanded-w", `${Math.floor(expandedW)}px`);
+              });
+            };
+            computeExpandedWidth();
+            ScrollTrigger.addEventListener("refreshInit", computeExpandedWidth);
 
             slatEls.forEach((el, i) => {
-              const dist = Math.abs(i - rawPos);
-              const weight = Math.max(0, 1 - dist);
-              const eased = weight * weight * (3 - 2 * weight);
-              const flexVal = FLEX_COLLAPSED + (FLEX_EXPANDED - FLEX_COLLAPSED) * eased;
-              el.style.flexGrow = String(flexVal);
-
-              const collapsedOpacity = Math.min(1, Math.max(0, 1 - eased * 2.6));
-              const expandedOpacity  = Math.min(1, Math.max(0, (eased - 0.55) / 0.45));
-              const direction = i < rawPos ? -1 : 1;
-              const slide = (1 - expandedOpacity) * 32 * direction;
-
+              gsap.set(el, { flexGrow: i === 0 ? FLEX_EXPANDED : FLEX_COLLAPSED });
               const collapsed = el.querySelector<HTMLElement>(".cap-slat-collapsed");
               const expanded = el.querySelector<HTMLElement>(".cap-slat-expanded");
-              if (collapsed) {
-                collapsed.style.opacity = String(collapsedOpacity);
-                collapsed.style.visibility = collapsedOpacity < 0.01 ? "hidden" : "visible";
-              }
-              if (expanded) {
-                expanded.style.opacity = String(expandedOpacity);
-                expanded.style.transform = `translateX(${slide}px)`;
-                expanded.style.visibility = expandedOpacity < 0.01 ? "hidden" : "visible";
-              }
+              if (collapsed) gsap.set(collapsed, { autoAlpha: i === 0 ? 0 : 1 });
+              if (expanded) gsap.set(expanded, { autoAlpha: i === 0 ? 1 : 0, x: 0 });
             });
 
-            const idx = Math.round(rawPos);
-            setActiveCapability((prev) => (prev === idx ? prev : idx));
-          },
+            const totalScroll = () => window.innerHeight * slatCount;
+
+            const capST = ScrollTrigger.create({
+              trigger: capSection,
+              start: "top top",
+              end: () => `+=${totalScroll()}`,
+              pin: true,
+              pinSpacing: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              scrub: 0.5,
+              snap: {
+                snapTo: (value: number) => {
+                  if (capProgrammaticScrollRef.current) return value;
+                  return Math.round(value * (slatCount - 1)) / (slatCount - 1);
+                },
+                duration: { min: 0.2, max: 0.6 },
+                delay: 0.12,
+                ease: "power2.inOut",
+              },
+              onUpdate: (self: { progress: number; start: number; end: number }) => {
+                const rawPos = self.progress * (slatCount - 1);
+                const distToNearestCapability = Math.abs(rawPos - Math.round(rawPos));
+                const interludeVisible =
+                  distToNearestCapability > 0.42 && distToNearestCapability < 0.58;
+                setShowCapabilityInterlude((prev) =>
+                  prev === interludeVisible ? prev : interludeVisible
+                );
+
+                slatEls.forEach((el, i) => {
+                  const dist = Math.abs(i - rawPos);
+                  const weight = Math.max(0, 1 - dist);
+                  const eased = weight * weight * (3 - 2 * weight);
+                  const flexVal =
+                    FLEX_COLLAPSED + (FLEX_EXPANDED - FLEX_COLLAPSED) * eased;
+                  el.style.flexGrow = String(flexVal);
+
+                  const collapsedOpacity = Math.min(
+                    1,
+                    Math.max(0, 1 - eased * 2.6)
+                  );
+                  const expandedOpacity = Math.min(
+                    1,
+                    Math.max(0, (eased - 0.55) / 0.45)
+                  );
+                  const direction = i < rawPos ? -1 : 1;
+                  const slide = (1 - expandedOpacity) * 32 * direction;
+
+                  const collapsed = el.querySelector<HTMLElement>(".cap-slat-collapsed");
+                  const expanded = el.querySelector<HTMLElement>(".cap-slat-expanded");
+                  if (collapsed) {
+                    collapsed.style.opacity = String(collapsedOpacity);
+                    collapsed.style.visibility =
+                      collapsedOpacity < 0.01 ? "hidden" : "visible";
+                  }
+                  if (expanded) {
+                    expanded.style.opacity = String(expandedOpacity);
+                    expanded.style.transform = `translateX(${slide}px)`;
+                    expanded.style.visibility =
+                      expandedOpacity < 0.01 ? "hidden" : "visible";
+                  }
+                });
+
+                const idx = Math.round(rawPos);
+                setActiveCapability((prev) => (prev === idx ? prev : idx));
+              },
+            });
+
+            capScrollTriggerRef.current = capST;
+
+            gsap.to(".cap-progress-bar", {
+              scaleX: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: capSection,
+                start: "top top",
+                end: () => `+=${totalScroll()}`,
+                scrub: true,
+              },
+            });
+
+            return () => {
+              capScrollTriggerRef.current = null;
+              ScrollTrigger.removeEventListener("refreshInit", computeExpandedWidth);
+            };
+          });
         });
 
-        capScrollTriggerRef.current = capST;
-
-        gsap.to(".cap-progress-bar", {
-          scaleX: 1, ease: "none",
-          scrollTrigger: {
-            trigger: capSection,
-            start: "top top",
-            end: () => `+=${totalScroll()}`,
-            scrub: true,
-          },
-        });
-
-        return () => {
-          capScrollTriggerRef.current = null;
-          ScrollTrigger.removeEventListener("refreshInit", computeExpandedWidth);
-        };
-      });
+        revert = () => ctx.revert();
+      })();
     });
-    return () => ctx.revert();
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, [capProgrammaticScrollRef]);
 
   return (
@@ -308,7 +346,7 @@ export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef
                   key={s.num}
                   className={`cap-slat ${isActive ? "is-active" : ""}`}
                   onClick={() => {
-                    const st = capScrollTriggerRef.current;
+                    const st = capScrollTriggerRef.current as null | { start: number; end: number };
                     if (!st) return;
                     const slatCount = SERVICES.length;
                     const progressTarget = i / (slatCount - 1);

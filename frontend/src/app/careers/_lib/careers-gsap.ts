@@ -1,6 +1,5 @@
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { loadGsapWithScrollTrigger } from "@/lib/animation/loaders";
 
-gsap.registerPlugin(ScrollTrigger);
-
-export { gsap, ScrollTrigger };
+export async function loadCareersGsap() {
+  return await loadGsapWithScrollTrigger();
+}
