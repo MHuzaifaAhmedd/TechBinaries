@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { runAfterInteractive } from "@/lib/animation/loaders";
-import { loadCareersGsap } from "../_lib/careers-gsap";
+import { scheduleScrollTriggerRefresh } from "@/lib/animation/refreshScrollTrigger";
 
 export function useCareersFontRefresh() {
   useEffect(() => {
@@ -10,10 +10,8 @@ export function useCareersFontRefresh() {
     fonts.ready.then(async () => {
       if (cancelled) return;
       runAfterInteractive(() => {
-        void loadCareersGsap().then(({ ScrollTrigger }) => {
-          if (cancelled) return;
-          ScrollTrigger.refresh();
-        });
+        if (cancelled) return;
+        scheduleScrollTriggerRefresh();
       });
     });
     return () => {

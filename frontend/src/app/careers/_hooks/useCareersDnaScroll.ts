@@ -21,6 +21,19 @@ export function useCareersDnaScroll(
       void (async () => {
         const { gsap, ScrollTrigger } = await loadCareersGsap();
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduced) {
+          gsap.set(".cr-dna-full-card", {
+            xPercent: 0,
+            opacity: 1,
+            rotateY: 0,
+            scale: 1,
+            filter: "none",
+          });
+          gsap.set(".cr-dna-mobile-card", { opacity: 1, y: 0 });
+          setActiveValue(0);
+          return;
+        }
 
         const mm = gsap.matchMedia();
 

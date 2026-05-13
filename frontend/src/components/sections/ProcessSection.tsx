@@ -1,11 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PROCESS } from "@/data/home";
-
-gsap.registerPlugin(ScrollTrigger);
+import { loadGsapWithScrollTrigger } from "@/lib/animation/loaders";
 
 // ── ProcessSection ────────────────────────────────────────────────────────────
 // Horizontally-pinned scroll section showing the 4-phase delivery process.
@@ -15,28 +12,44 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function ProcessSection() {
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const processTrack = document.querySelector<HTMLElement>(".process-track");
-      const processPin = document.querySelector<HTMLElement>(".process-pin");
-      if (!processTrack || !processPin) return;
+    let cancelled = false;
+    let revert: (() => void) | undefined;
 
-      const getScrollDistance = () => processTrack.scrollWidth - window.innerWidth + 80;
+    const run = async () => {
+      const { gsap } = await loadGsapWithScrollTrigger();
+      if (cancelled) return;
 
-      gsap.to(processTrack, {
-        x: () => -getScrollDistance(),
-        ease: "none",
-        scrollTrigger: {
-          trigger: processPin,
-          start: "top top",
-          end: () => `+=${getScrollDistance()}`,
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.8,
-          invalidateOnRefresh: true,
-        },
+      const ctx = gsap.context(() => {
+        const processTrack = document.querySelector<HTMLElement>(".process-track");
+        const processPin = document.querySelector<HTMLElement>(".process-pin");
+        if (!processTrack || !processPin) return;
+
+        const getScrollDistance = () => processTrack.scrollWidth - window.innerWidth + 80;
+
+        gsap.to(processTrack, {
+          x: () => -getScrollDistance(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: processPin,
+            start: "top top",
+            end: () => `+=${getScrollDistance()}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.8,
+            invalidateOnRefresh: true,
+          },
+        });
       });
-    });
-    return () => ctx.revert();
+
+      revert = () => ctx.revert();
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, []);
 
   return (

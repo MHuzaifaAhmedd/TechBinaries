@@ -5,6 +5,7 @@ import {
   loadLenisCtor,
   runAfterInteractive,
 } from "@/lib/animation/loaders";
+import { DEFAULT_LENIS_OPTIONS } from "@/lib/animation/lenis-config";
 
 export type UseCwaLenisResult = {
   lenisRef: MutableRefObject<Lenis | null>;
@@ -22,11 +23,7 @@ export function useCwaLenis(): UseCwaLenisResult {
         ([LenisCtor, { gsap, ScrollTrigger }]) => {
           if (cancelled) return;
           const lenis = new LenisCtor({
-            duration: 1.1,
-            easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            wheelMultiplier: 1,
-            touchMultiplier: 1.4,
-            smoothWheel: true,
+            ...DEFAULT_LENIS_OPTIONS,
           }) as Lenis;
           lenisRef.current = lenis;
           lenis.on("scroll", () => ScrollTrigger.update());

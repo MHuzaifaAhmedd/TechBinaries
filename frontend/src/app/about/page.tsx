@@ -6,7 +6,9 @@ import type Lenis from "@studio-freight/lenis";
 import Image from "next/image";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { DEFAULT_LENIS_OPTIONS } from "@/lib/animation/lenis-config";
 import { loadGsapWithScrollTrigger, loadLenisCtor, runAfterInteractive } from "@/lib/animation/loaders";
+import { scheduleScrollTriggerRefresh } from "@/lib/animation/refreshScrollTrigger";
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
 
@@ -23,8 +25,8 @@ const HERO = {
     { n: "98%", l: "client retention" },
   ],
   videoSrc: "/videos/about/about-hero.mp4",
-  videoPoster: "/images/about/about-hero-mobile.jpg",
-  mobileImage: "/images/about/about-hero-mobile.jpg",
+  videoPoster: "/images/about/about-hero-mobile.webp",
+  mobileImage: "/images/about/about-hero-mobile.webp",
 };
 
 const PILLARS = {
@@ -181,11 +183,9 @@ export default function AboutPage() {
 
         const LenisCtor = LenisCtorUnknown as unknown as new (opts: unknown) => Lenis;
         const lenis = new LenisCtor({
+          ...DEFAULT_LENIS_OPTIONS,
+          // TODO: verify if this override is intentional
           duration: 1.2,
-          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          wheelMultiplier: 1,
-          touchMultiplier: 1.4,
-          smoothWheel: true,
         });
 
         lenisRef.current = lenis;
@@ -290,7 +290,7 @@ export default function AboutPage() {
               trigger: ".ab-hero",
               start: "top top",
               end: "bottom top",
-              scrub: true,
+              scrub: 1.0,
             },
           });
 
@@ -313,7 +313,7 @@ export default function AboutPage() {
               trigger: ".ab-hero",
               start: "20% top",
               end: "bottom 30%",
-              scrub: true,
+              scrub: 1.0,
             },
           });
 
@@ -430,11 +430,19 @@ export default function AboutPage() {
             window.matchMedia("(hover: hover) and (pointer: fine)").matches;
           if (!isFinePointer) return;
 
+          const listenerCleanup: Array<{
+            card: HTMLElement;
+            onMove: (e: MouseEvent) => void;
+            onLeave: () => void;
+          }> = [];
+
           cards.forEach((card) => {
             const inner = card.querySelector<HTMLElement>(".ab-pillar-inner");
             if (!inner) return;
 
             const onMove = (e: MouseEvent) => {
+              card.style.willChange = "transform";
+              inner.style.willChange = "transform";
               const rect = card.getBoundingClientRect();
               const x = (e.clientX - rect.left) / rect.width - 0.5;
               const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -449,6 +457,8 @@ export default function AboutPage() {
             };
 
             const onLeave = () => {
+              card.style.willChange = "auto";
+              inner.style.willChange = "auto";
               gsap.to(inner, {
                 rotationY: 0,
                 rotationX: 0,
@@ -459,7 +469,15 @@ export default function AboutPage() {
 
             card.addEventListener("mousemove", onMove);
             card.addEventListener("mouseleave", onLeave);
+            listenerCleanup.push({ card, onMove, onLeave });
           });
+
+          return () => {
+            listenerCleanup.forEach(({ card, onMove, onLeave }) => {
+              card.removeEventListener("mousemove", onMove);
+              card.removeEventListener("mouseleave", onLeave);
+            });
+          };
         });
 
         revert = () => ctx.revert();
@@ -862,7 +880,7 @@ export default function AboutPage() {
           }
         });
 
-        queueMicrotask(() => ScrollTrigger.refresh());
+        queueMicrotask(() => scheduleScrollTriggerRefresh());
 
         revert = () => ctx.revert();
       })();
@@ -881,8 +899,7 @@ export default function AboutPage() {
     let cancelled = false;
     fonts.ready.then(async () => {
       if (cancelled) return;
-      const { ScrollTrigger } = await loadGsapWithScrollTrigger();
-      ScrollTrigger.refresh();
+      scheduleScrollTriggerRefresh();
     });
     return () => {
       cancelled = true;
@@ -1032,6 +1049,7 @@ export default function AboutPage() {
                   alt="TechBinaries logo"
                   width={34}
                   height={34}
+                  sizes="34px"
                   className="ab-pillars-divider-logo"
                 />
               </span>
@@ -1792,7 +1810,6 @@ export default function AboutPage() {
         }
         .ab-pillar-card {
           position: relative;
-          will-change: transform, opacity;
           transform-style: preserve-3d;
           border-radius: 20px;
           aspect-ratio: 4 / 5;
@@ -1813,9 +1830,7 @@ export default function AboutPage() {
           min-width: 0;
           overflow: hidden;
           transition:
-            transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
             box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-          will-change: transform;
           transform-style: preserve-3d;
           background: transparent;
         }

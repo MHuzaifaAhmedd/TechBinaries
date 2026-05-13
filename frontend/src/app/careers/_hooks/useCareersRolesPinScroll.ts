@@ -11,6 +11,11 @@ export function useCareersRolesPinScroll() {
       void (async () => {
         const { gsap, ScrollTrigger } = await loadCareersGsap();
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduced) {
+          gsap.set(".cr-roles-scroll-track", { y: 0 });
+          return;
+        }
 
         const ctx = gsap.context(() => {
           const mm = gsap.matchMedia();
@@ -41,7 +46,7 @@ export function useCareersRolesPinScroll() {
               end: () => `+=${getScrollDistance() + window.innerHeight * 0.35}`,
               pin: board,
               pinSpacing: true,
-              scrub: true,
+              scrub: 1.2,
               invalidateOnRefresh: true,
               animation: tween,
               anticipatePin: 1,

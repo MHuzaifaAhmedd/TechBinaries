@@ -28,6 +28,12 @@ export function useCwaGrowthPinnedScroll(): UseCwaGrowthPinnedScrollResult {
     runAfterInteractive(() => {
       void loadGsapWithScrollTrigger().then(({ gsap, ScrollTrigger }) => {
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduced) {
+          gsap.set(".cwa-pillar-row", { opacity: 1, x: 0, y: 0 });
+          setActivePillar(0);
+          return;
+        }
         const mm = gsap.matchMedia();
 
         mm.add(

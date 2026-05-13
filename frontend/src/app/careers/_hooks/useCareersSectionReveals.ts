@@ -13,6 +13,13 @@ export function useCareersSectionReveals() {
       void (async () => {
         const { gsap, ScrollTrigger } = await loadCareersGsap();
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduced) {
+          gsap.set(".cr-sh", { opacity: 1, y: 0 });
+          gsap.set(".cr-filter-thead", { opacity: 1, y: 0 });
+          gsap.set(".cr-filter-row", { opacity: 1, y: 0 });
+          return;
+        }
 
         const ctx = gsap.context(() => {
           const setupBatch = (

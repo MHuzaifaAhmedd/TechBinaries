@@ -9,6 +9,26 @@ export function useCsdGsapPage(): void {
     runAfterInteractive(() => {
       void loadGsapWithScrollTrigger().then(({ gsap, ScrollTrigger }) => {
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduced) {
+          gsap.set(".csd-h1-lines-desktop .csd-h1-char, .csd-h1-lines-mobile .csd-h1-char", {
+            yPercent: 0,
+            opacity: 1,
+          });
+          gsap.set(".csd-hero-fade", { opacity: 1, y: 0 });
+          gsap.set(".csd-hero-form-shell", { opacity: 1, y: 0 });
+          gsap.set(".csd-hero-form-field", { opacity: 1, y: 0, scale: 1 });
+          gsap.set(".csd-hero-marquee-row", { opacity: 1 });
+          gsap.set(".csd-sh", { opacity: 1, y: 0 });
+          gsap.set(".csd-svc-card", { opacity: 1, y: 0 });
+          gsap.set(".csd-build-row", { opacity: 1, x: 0 });
+          gsap.set(".csd-vp-item", { opacity: 1, y: 0 });
+          gsap.set(".csd-result-card", { opacity: 1, y: 0 });
+          gsap.set(".csd-faq-row", { opacity: 1, y: 0 });
+          gsap.set(".csd-process-track", { x: 0 });
+          gsap.set(".csd-cta-inner", { opacity: 1, y: 0 });
+          return;
+        }
         const ctx = gsap.context(() => {
           const heroTl = gsap.timeline({ delay: 0.1 });
           const headlineChars = gsap.utils.toArray<HTMLElement>(

@@ -109,10 +109,10 @@ export function CareersHeroSection({ heroRef, tickerRef }: Props) {
         <picture>
           <source
             media="(max-width: 900px)"
-            srcSet="/images/careers/careers-hero-section-mobile.jpeg"
+            srcSet="/images/careers/careers-hero-section-mobile.webp"
           />
           <Image
-            src="/images/careers/careers-hero-section.jpeg"
+            src="/images/careers/careers-hero-section.webp"
             alt=""
             fill
             priority

@@ -12,6 +12,8 @@ import GrowthBinarySection from "@/components/home/GrowthBinarySection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import CTASection from "@/components/home/CTASection";
 import { loadGsapWithScrollTrigger, loadLenisCtor, runAfterInteractive } from "@/lib/animation/loaders";
+import { DEFAULT_LENIS_OPTIONS } from "@/lib/animation/lenis-config";
+import { scheduleScrollTriggerRefresh } from "@/lib/animation/refreshScrollTrigger";
 
 // ── HomePage ──────────────────────────────────────────────────────────────────
 // Thin orchestrator: boots Lenis smooth-scroll, wires GSAP ScrollTrigger,
@@ -39,11 +41,7 @@ export default function HomePage() {
       const LenisCtor = LenisCtorUnknown as unknown as new (opts: unknown) => Lenis;
 
       const lenis = new LenisCtor({
-        duration: 1.1,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        wheelMultiplier: 1,
-        touchMultiplier: 1.4,
-        smoothWheel: true,
+        ...DEFAULT_LENIS_OPTIONS,
       });
 
       lenisRef.current = lenis as Lenis;
@@ -206,8 +204,7 @@ export default function HomePage() {
     let cancelled = false;
     fonts.ready.then(async () => {
       if (cancelled) return;
-      const { ScrollTrigger } = await loadGsapWithScrollTrigger();
-      ScrollTrigger.refresh();
+      scheduleScrollTriggerRefresh();
     });
     return () => {
       cancelled = true;
@@ -253,12 +250,21 @@ export default function HomePage() {
         html, body { cursor: auto !important; background: #fafaf9; -webkit-font-smoothing: antialiased; }
         ::selection { background: #0a0a0a; color: #fafaf9; }
 
-        @keyframes pulse-ring {
-          0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.45); }
-          70%  { box-shadow: 0 0 0 8px rgba(22,163,74,0); }
-          100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
+        @keyframes pulse-ring-scale {
+          0%   { transform: scale(1); opacity: 0.45; }
+          70%  { transform: scale(1.8); opacity: 0; }
+          100% { transform: scale(1.8); opacity: 0; }
         }
-        .pulse-green { animation: pulse-ring 2s infinite; }
+        .pulse-green { position: relative; }
+        .pulse-green::before {
+          content: "";
+          position: absolute;
+          inset: -2px;
+          border-radius: 999px;
+          border: 2px solid rgba(22,163,74,0.45);
+          pointer-events: none;
+          animation: pulse-ring-scale 2s infinite;
+        }
 
         @keyframes caret-blink {
           0%, 50%   { opacity: 1; }

@@ -11,6 +11,14 @@ export function useCareersHeroAnimations(tickerRef: RefObject<HTMLDivElement | n
       void (async () => {
         const { gsap } = await loadCareersGsap();
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (prefersReduced) {
+          gsap.set(".cr-hero-char", { yPercent: 0, opacity: 1 });
+          gsap.set(".cr-hero-fade", { opacity: 1, y: 0 });
+          gsap.set(".cr-hero-bg", { yPercent: 0 });
+          return;
+        }
 
         const ctx = gsap.context(() => {
           const tl = gsap.timeline({ delay: 0.2 });

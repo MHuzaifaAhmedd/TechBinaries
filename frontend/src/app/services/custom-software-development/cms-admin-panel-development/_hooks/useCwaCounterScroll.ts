@@ -9,6 +9,17 @@ export function useCwaCounterScroll(): void {
     runAfterInteractive(() => {
       void loadGsapWithScrollTrigger().then(({ gsap, ScrollTrigger }) => {
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduced) {
+          const counters = gsap.utils.toArray<HTMLElement>(".cwa-count");
+          counters.forEach((el) => {
+            const target = parseFloat(el.dataset.target || "0");
+            const suffix = el.dataset.suffix || "";
+            const decimals = parseInt(el.dataset.decimals || "0", 10);
+            el.textContent = target.toFixed(decimals) + suffix;
+          });
+          return;
+        }
         const ctx = gsap.context(() => {
           const counters = gsap.utils.toArray<HTMLElement>(".cwa-count");
           counters.forEach((el) => {

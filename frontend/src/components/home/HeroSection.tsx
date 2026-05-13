@@ -503,6 +503,18 @@ export default function HeroSection() {
       void (async () => {
         const { gsap } = await loadGsapWithScrollTrigger();
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (prefersReduced) {
+          gsap.set(".hero-char", { yPercent: 0, rotateX: 0, opacity: 1 });
+          gsap.set(".hero-verb-mask", { yPercent: 0 });
+          gsap.set(".hero-intro-col", { opacity: 1, y: 0 });
+          gsap.set(".hero-terminal", { opacity: 1, y: 0, scale: 1 });
+          gsap.set(".hero-terminal-line", { opacity: 1, x: 0 });
+          gsap.set(".hero-scroll-hint", { opacity: 1, y: 0 });
+          gsap.set(".hero-content-wrap", { y: 0, opacity: 1, scale: 1 });
+          return;
+        }
 
         const ctx = gsap.context(() => {
           const heroTl = gsap.timeline({ delay: 0.1 });
@@ -561,7 +573,7 @@ export default function HeroSection() {
                 trigger: heroRef.current,
                 start: "top top",
                 end: "bottom top",
-                scrub: true,
+                scrub: 1.0,
               },
             });
             gsap.to(".hero-scroll-hint", {
@@ -572,7 +584,7 @@ export default function HeroSection() {
                 trigger: heroRef.current,
                 start: "top top",
                 end: "15% top",
-                scrub: true,
+                scrub: 1.0,
               },
             });
           }
@@ -608,11 +620,12 @@ export default function HeroSection() {
       {/* Hero background media */}
       {isMobile ? (
         <Image
-          src="/images/hero-poster.jpg"
+          src="/images/hero-poster.webp"
           alt=""
           className="hero-bg-poster"
           fill
           priority
+          fetchPriority="high"
           sizes="100vw"
           aria-hidden
           style={{ objectFit: "cover", objectPosition: "center", zIndex: 0, pointerEvents: "none" }}
@@ -620,11 +633,12 @@ export default function HeroSection() {
       ) : (
         <>
           <Image
-            src="/images/hero-poster.jpg"
+            src="/images/hero-poster.webp"
             alt=""
             className="hero-bg-poster"
             fill
             priority
+            fetchPriority="high"
             sizes="100vw"
             aria-hidden
             style={{ objectFit: "cover", objectPosition: "center", zIndex: 0, pointerEvents: "none" }}
@@ -637,7 +651,7 @@ export default function HeroSection() {
             loop
             playsInline
             preload="none"
-            poster="/images/hero-poster.jpg"
+            poster="/images/hero-poster.webp"
             style={{
               position: "absolute",
               inset: 0,

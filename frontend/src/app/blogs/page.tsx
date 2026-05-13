@@ -625,7 +625,7 @@ export default function BlogsPage() {
           <div className="bl-hero-bg" aria-hidden>
             <div className="bl-hero-media">
               <Image
-                src="/images/blogs/blogs-hero.png"
+                src="/images/blogs/blogs-hero.webp"
                 alt=""
                 fill
                 priority
@@ -904,6 +904,8 @@ export default function BlogsPage() {
                                   <img
                                     src={item.image}
                                     alt=""
+                                    width={400}
+                                    height={250}
                                     className={`bl-nl-latest-thumb-img${
                                       isLoaded ? " is-loaded" : ""
                                     }`}
@@ -937,6 +939,8 @@ export default function BlogsPage() {
                                   <img
                                     src={faviconFor(item.source, 128)}
                                     alt=""
+                                    width={16}
+                                    height={16}
                                     className="bl-nl-latest-thumb-favicon"
                                     loading="lazy"
                                     decoding="async"
@@ -964,6 +968,8 @@ export default function BlogsPage() {
                             <img
                               src={faviconFor(item.source, 32)}
                               alt=""
+                              width={16}
+                              height={16}
                               className="bl-nl-latest-source-icon"
                               loading="lazy"
                               referrerPolicy="no-referrer"

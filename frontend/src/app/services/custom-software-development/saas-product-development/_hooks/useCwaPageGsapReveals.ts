@@ -9,6 +9,23 @@ export function useCwaPageGsapReveals(): void {
     runAfterInteractive(() => {
       void loadGsapWithScrollTrigger().then(({ gsap, ScrollTrigger }) => {
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduced) {
+          gsap.set(".cwa-h1-char", { yPercent: 0, opacity: 1 });
+          gsap.set(".cwa-hero-fade", { opacity: 1, y: 0 });
+          gsap.set(".cwa-hero-copy", { opacity: 1, scale: 1 });
+          gsap.set(".csd-hero-form-shell", { opacity: 1, y: 0 });
+          gsap.set(".csd-hero-form-field", { opacity: 1, y: 0, scale: 1 });
+          gsap.set(".cwa-sh", { opacity: 1, y: 0 });
+          gsap.set(".cwa-faq-row", { opacity: 1, y: 0 });
+          gsap.set(".cwa-fail-card", { opacity: 1, y: 0 });
+          gsap.set(".cwa-process-line-fill", { scaleY: 1 });
+          gsap.set(".cwa-proc-step", { opacity: 1, x: 0 });
+          gsap.set(".cwa-stack-line", { opacity: 1, y: 0 });
+          gsap.set(".cwa-ncta-char", { yPercent: 0, opacity: 1 });
+          gsap.set(".cwa-ncta-fade", { opacity: 1, y: 0 });
+          return;
+        }
         const ctx = gsap.context(() => {
           const heroTl = gsap.timeline({ delay: 0.15 });
           const chars = gsap.utils.toArray<HTMLElement>(".cwa-h1-char");

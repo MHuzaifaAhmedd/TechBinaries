@@ -24,6 +24,12 @@ export default function CTASection() {
       void (async () => {
         const { gsap, ScrollTrigger } = await loadGsapWithScrollTrigger();
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (prefersReduced) {
+          gsap.set("#cta-inner", { opacity: 1, y: 0 });
+          return;
+        }
 
         const ctx = gsap.context(() => {
           gsap.fromTo(
@@ -76,10 +82,11 @@ export default function CTASection() {
         {/* Decorative image */}
         <div aria-hidden style={{ position: "absolute", right: 40, bottom: -40, width: "clamp(260px, 28vw, 440px)", opacity: 0.28, userSelect: "none", pointerEvents: "none" }}>
           <Image
-            src="/images/product-land.png"
+            src="/images/product-land.webp"
             alt=""
             width={1024}
             height={1024}
+            sizes="(max-width: 768px) 100vw, 50vw"
             draggable={false}
             style={{ display: "block", width: "100%", height: "auto" }}
           />

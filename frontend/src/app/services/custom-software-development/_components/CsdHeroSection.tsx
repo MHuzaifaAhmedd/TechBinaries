@@ -46,12 +46,12 @@ export function CsdHeroSection({ isMobile, heroMenu }: Props) {
         </video>
         <Image
           className="csd-hero-mobile-bg"
-          src="/images/services/custom-software-development/mobile-custom-software-service-hero.jpeg"
+          src="/images/services/custom-software-development/mobile-custom-software-service-hero.webp"
           alt=""
           fill
           sizes="100vw"
           decoding="async"
-          preload
+          priority
         />
         <div className="csd-hero-video-overlay" />
       </div>

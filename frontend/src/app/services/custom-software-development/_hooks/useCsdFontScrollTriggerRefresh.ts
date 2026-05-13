@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { loadGsapWithScrollTrigger, runAfterInteractive } from "@/lib/animation/loaders";
+import { scheduleScrollTriggerRefresh } from "@/lib/animation/refreshScrollTrigger";
 
 export function useCsdFontScrollTriggerRefresh(): void {
   useEffect(() => {
@@ -7,11 +8,11 @@ export function useCsdFontScrollTriggerRefresh(): void {
     if (!fonts?.ready) return;
     let cancelled = false;
     runAfterInteractive(() => {
-      void loadGsapWithScrollTrigger().then(({ ScrollTrigger }) => {
+      void loadGsapWithScrollTrigger().then(() => {
         if (cancelled) return;
         fonts.ready.then(() => {
           if (!cancelled) {
-            ScrollTrigger.refresh();
+            scheduleScrollTriggerRefresh();
           }
         });
       });

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type Lenis from "@studio-freight/lenis";
 import { loadLenisCtor, runAfterInteractive } from "@/lib/animation/loaders";
+import { DEFAULT_LENIS_OPTIONS } from "@/lib/animation/lenis-config";
 import { loadCareersGsap } from "../_lib/careers-gsap";
 
 export function useCareersLenis() {
@@ -22,11 +23,7 @@ export function useCareersLenis() {
         const LenisCtor = LenisCtorUnknown as unknown as new (opts: unknown) => Lenis;
 
         const lenis = new LenisCtor({
-          duration: 1.1,
-          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          wheelMultiplier: 1,
-          touchMultiplier: 1.4,
-          smoothWheel: true,
+          ...DEFAULT_LENIS_OPTIONS,
         });
 
         lenisRef.current = lenis;

@@ -29,6 +29,12 @@ export function useCsdTechMarquee(): UseCsdTechMarqueeResult {
       void loadGsap().then((gsap) => {
         if (cancelled) return;
         gsapRef.current = gsap;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduced) {
+          gsap.set(left, { xPercent: 0 });
+          gsap.set(right, { xPercent: -50 });
+          return;
+        }
         gsap.set(left, { xPercent: 0 });
         gsap.set(right, { xPercent: -50 });
 

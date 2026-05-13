@@ -76,6 +76,13 @@ export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef
       void (async () => {
         const { gsap, ScrollTrigger } = await loadGsapWithScrollTrigger();
         if (cancelled) return;
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (prefersReduced) {
+          gsap.set(".cap-header", { opacity: 1, y: 0 });
+          gsap.set(".cap-progress-bar", { scaleX: 1 });
+          return;
+        }
 
         const ctx = gsap.context(() => {
           gsap.fromTo(
@@ -204,7 +211,7 @@ export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef
                 trigger: capSection,
                 start: "top top",
                 end: () => `+=${totalScroll()}`,
-                scrub: true,
+                scrub: 0.8,
               },
             });
 
@@ -330,10 +337,11 @@ export default function CapabilitiesSection({ lenisRef, capProgrammaticScrollRef
               }}
             >
               <Image
-                src="/images/product-land.png"
+                src="/images/product-land.webp"
                 alt=""
                 width={1024}
                 height={1024}
+                sizes="(max-width: 768px) 100vw, 50vw"
                 draggable={false}
                 style={{ width: "min(66vw, 900px)", maxWidth: "100%", height: "auto", opacity: 0.36, filter: "brightness(1.12) contrast(1.12)", userSelect: "none" }}
               />

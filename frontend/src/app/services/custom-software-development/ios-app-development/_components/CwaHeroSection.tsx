@@ -32,7 +32,7 @@ export function CwaHeroSection({ isMobile, heroMenu, pickerDomIds }: Props) {
         </video>
         <Image
           className="cwa-hero-mobile-bg"
-          src="/images/services/custom-software-development/cwad-service-hero-mobile.jpeg"
+          src="/images/services/custom-software-development/cwad-service-hero-mobile.webp"
           alt=""
           fill
           sizes="(max-width: 900px) calc(100vw - 28px), 1px"

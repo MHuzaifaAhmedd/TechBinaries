@@ -26,9 +26,16 @@ if (missing.length > 0) {
 const portValue = Number(process.env.PORT ?? "5000");
 const nodeEnv = process.env.NODE_ENV ?? "development";
 
+const heroLeadSecretRaw = process.env.HERO_LEAD_INTERNAL_SECRET;
+const heroLeadInternalSecret =
+  typeof heroLeadSecretRaw === "string" && heroLeadSecretRaw.trim() !== ""
+    ? heroLeadSecretRaw.trim()
+    : undefined;
+
 export const env = {
   nodeEnv,
   port: Number.isNaN(portValue) ? 5000 : portValue,
   mongoUri,
   mongoDbName,
+  heroLeadInternalSecret,
 } as const;

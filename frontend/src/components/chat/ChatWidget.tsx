@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { FormEvent, KeyboardEvent as ReactKeyboardEvent, WheelEvent, useEffect, useMemo, useRef, useState } from "react";
 
 type ChatMessage = {
@@ -314,14 +315,14 @@ export function ChatWidget() {
         aria-label={isOpen ? "Close AI assistant" : "Open AI assistant"}
       >
         <span className="tb-chat__launcher-orb" aria-hidden="true">
-          <img
+          <Image
             className="tb-chat__launcher-logo"
-            src="/images/AI-Bot/ai-logo.png"
+            src="/images/AI-Bot/ai-logo.webp"
             alt=""
             width={32}
             height={32}
-            loading="lazy"
-            decoding="async"
+            sizes="32px"
+            priority
           />
         </span>
       </button>

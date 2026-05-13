@@ -63,6 +63,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`h-full ${plusJakartaSans.variable}`}>
+      <head>
+        <link rel="preload" href="/images/hero-poster.webp" as="image" />
+      </head>
       <body className="min-h-full flex flex-col antialiased">
         {children}
         <ChatWidget />
