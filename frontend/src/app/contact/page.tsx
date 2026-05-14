@@ -263,12 +263,11 @@ export default function ContactPage() {
                 <label className="contact-field">
                   <input
                     type="text"
-                    required
                     placeholder=" "
                     value={contactForm.company}
                     onChange={(e) => setContactForm((prev) => ({ ...prev, company: e.target.value }))}
                   />
-                  <span>Company / Organization *</span>
+                  <span>Company / Organization</span>
                 </label>
               </div>
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getDb } from "../config/database";
 import { env } from "../config/env";
-import { insertHeroLead } from "../services/heroLeadService";
+import { insertHeroLead } from "../services/leadService";
 
 const router = Router();
 

@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import { getDb } from "./config/database";
+import contactLeadsRouter from "./routes/contactLeads";
 import heroLeadsRouter from "./routes/heroLeads";
 import newsRouter from "./routes/news";
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use("/api/news", newsRouter);
 app.use("/api/hero-leads", heroLeadsRouter);
+app.use("/api/contact-leads", contactLeadsRouter);
 
 app.get("/api/health", async (_req, res) => {
   try {

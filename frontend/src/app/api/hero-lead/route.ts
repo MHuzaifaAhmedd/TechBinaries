@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { verifyHeroCaptchaChallenge } from "../_lib/hero-captcha-store";
-
-const internalBase =
-  typeof process.env.HERO_LEAD_INTERNAL_URL === "string" ? process.env.HERO_LEAD_INTERNAL_URL.trim() : "";
-const internalSecret =
-  typeof process.env.HERO_LEAD_INTERNAL_SECRET === "string" ? process.env.HERO_LEAD_INTERNAL_SECRET.trim() : "";
+import {
+  leadPersistenceRequiredInThisEnvironment,
+  postInternalLeadJson,
+  readInternalLeadEnv,
+} from "../_lib/internalLeadApi";
 
 type HeroLeadPayload = {
   firstName?: string;
@@ -57,51 +57,37 @@ export async function POST(request: Request) {
       return NextResponse.json({ message }, { status: 400 });
     }
 
-    if (internalBase && internalSecret) {
-      const base = internalBase.replace(/\/$/, "");
-      const upstream = await fetch(`${base}/api/hero-leads`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-hero-lead-internal-secret": internalSecret,
-        },
-        body: JSON.stringify({
-          channel: "csd-hero",
-          firstName: payload.firstName,
-          lastName: payload.lastName,
-          countryCode: payload.countryCode ?? "",
-          phoneNational: payload.phoneNational,
-          workEmail: payload.workEmail,
-          budgetRange: payload.budgetRange ?? "",
-          serviceInterest: payload.serviceInterest ?? "",
-          projectDetails: payload.projectDetails ?? "",
-        }),
-      });
-
-      const raw = await upstream.text();
-      let parsed: { message?: string } = {};
-      try {
-        parsed = JSON.parse(raw) as { message?: string };
-      } catch {
+    const cfg = readInternalLeadEnv();
+    if (!cfg) {
+      if (leadPersistenceRequiredInThisEnvironment()) {
         return NextResponse.json(
-          { message: "Lead service returned an invalid response. Please try again later." },
-          { status: 502 }
+          { message: "Lead intake is not configured on the server. Please try again later." },
+          { status: 503 }
         );
       }
-
-      if (!upstream.ok) {
-        return NextResponse.json(
-          { message: parsed.message ?? "Could not save your request. Please try again later." },
-          { status: upstream.status >= 400 && upstream.status < 600 ? upstream.status : 502 }
-        );
-      }
-    } else {
       console.info("Hero lead accepted (no HERO_LEAD_INTERNAL_URL/SECRET — not persisted)", {
         fullName: `${payload.firstName} ${payload.lastName}`.trim(),
         email: payload.workEmail,
         phone: `${payload.countryCode ?? ""}${payload.phoneNational ?? ""}`,
         service: payload.serviceInterest ?? "",
       });
+      return NextResponse.json({ message: "Consultation request submitted." }, { status: 200 });
+    }
+
+    const result = await postInternalLeadJson(cfg, "/api/hero-leads", {
+      channel: "csd-hero",
+      firstName: payload.firstName!.trim(),
+      lastName: payload.lastName!.trim(),
+      countryCode: (payload.countryCode ?? "").trim(),
+      phoneNational: payload.phoneNational!.trim(),
+      workEmail: payload.workEmail!.trim(),
+      budgetRange: (payload.budgetRange ?? "").trim(),
+      serviceInterest: (payload.serviceInterest ?? "").trim(),
+      projectDetails: (payload.projectDetails ?? "").trim(),
+    });
+
+    if (!result.ok) {
+      return NextResponse.json({ message: result.message }, { status: result.status });
     }
 
     return NextResponse.json({ message: "Consultation request submitted." }, { status: 200 });
