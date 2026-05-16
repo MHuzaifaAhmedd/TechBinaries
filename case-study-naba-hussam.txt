@@ -1,0 +1,489 @@
+**Project summary (3 sentences)**
+
+**Clothie** is a custom full-stack fashion e-commerce platform built for **Naba Hussam**, a Pakistani women’s apparel brand. It unifies **ready-to-wear** and **made-to-order** commerce in one stack: React storefront and admin, Express API, MongoDB Atlas, and AWS S3, with **COD**, bank transfer, guest checkout, and region-aware shipping (Karachi vs outside). The repo shows production deployment (Docker, Nginx, separate storefront/admin domains), GA4/GTM tracking, a COD operations console, and a recent **sale/discount** system—documented in depth in `Clothie_PROJECT_DOCUMENTATION.md`, `PROJECT_ANALYSIS.md`, and `caseStudyData.json`.
+
+---
+
+### A) `CASE_STUDY_BRIEF.md`
+
+# Naba Hussam — Custom Fashion Commerce Platform
+
+**Listing metadata**
+
+| Field | Value |
+|-------|--------|
+| slug | `naba-hussam-fashion-commerce` |
+| client | Naba Hussam |
+| title | Custom RTW + Made-to-Order Commerce for a Pakistani Fashion Brand |
+| category | E-Commerce |
+| year | 2024–2025 |
+| outcome | One platform for catalog, custom orders, and local payments |
+| outcomeValue | 3 services [FACT — deployable units; replace with business KPI when available] |
+| services | Web App, Admin Dashboard, Backend API, DevOps |
+| size | featured |
+| cover | Storefront homepage hero (`Home.jsx` + `Hero`) — wide lifestyle/product grid; filename: `naba-hussam-fashion-commerce-cover.jpg` |
+
+**[INFERRED] Project context (fill/confirm with Tech-binaries)**
+
+| Field | Suggested value |
+|-------|------------------|
+| Client / product | Naba Hussam / Clothie E-commerce Platform |
+| Our role | Full-stack product engineering (storefront, admin, API, deployment) |
+| Timeline | [INFERRED] Mid-2024 – Q2 2025 (git activity through May 2025; `caseStudyData.json` lists 2024–2025) |
+| Public naming | Yes — brand, domain, and social links are in `ecom-frontend/index.html` |
+| Do not mention | VPS IPs, registry tokens, env secrets, internal credentials (present in `Deployment/DEPLOYMENT.md` — redact before publish) |
+
+---
+
+### 1. Hero
+
+**Eyebrow:** Fashion · 2024–2025
+
+**Headline:** Commerce built for couture and cash on delivery.
+
+**Meta**
+
+- **Client:** Naba Hussam  
+- **Industry:** Fashion retail (Pakistan)  
+- **Year:** 2024–2025  
+- **Services:** Web App, Admin Dashboard, Backend API, DevOps, Analytics Integration  
+
+---
+
+### 2. Overview
+
+**Challenge**
+
+Naba Hussam needed more than a template shop: a single experience for **ready-to-wear** and **made-to-order** lines, with deposits, modification windows, and category-specific attributes—not a one-size-fits-all cart. The Pakistan market demanded **Cash on Delivery** and **bank transfer**, not card-only checkout, plus **guest checkout** so first-time buyers weren’t forced to register. Operations had to run on dynamic categories (e.g. Luxury Pret, Printed Coordes), Karachi vs outside-Karachi shipping, size charts, and reliable product imagery at scale—without a monolith that couldn’t evolve with the brand.
+
+**Approach**
+
+Tech-binaries delivered **Clothie**: three deployable surfaces—a customer **React + Vite** storefront, a dedicated **admin** app, and an **Express + MongoDB** API—containerized and fronted by **Nginx** with the API kept off the public internet. Product, cart, order, and settings domains share one data model but support **MTO vs RTW** flows, **COD management** (delivery assignment, attempts, analytics), and **S3-backed** media. We wired **GA4/GTM** e-commerce events and policy pages for trust, then shipped a **layered sale engine** (product, category, subcategory, and bulk product rules) with storefront badges and an admin sales overview—so merchandising doesn’t require developer deploys.
+
+---
+
+### 3. Metrics (“By the numbers”)
+
+| Value | Label | Source |
+|-------|--------|--------|
+| **3** | Production services (storefront, admin, API) | Architecture docs; Docker deployment |
+| **18** | Core platform capabilities shipped | `PROJECT_ANALYSIS.md` feature inventory |
+| **2** | Active local payment methods (COD, bank transfer) | `PROJECT_ANALYSIS.md` (Stripe/Razorpay integrated but disabled) |
+| **[ESTIMATE] 5** min | Typical container redeploy time | Docs claim deployment “minutes vs hours”; assumes Docker pull + restart on VPS—**confirm with team** |
+
+*No revenue, conversion, or traffic figures exist in the repo.*
+
+---
+
+### 4. Process (5 chapters)
+
+#### 01 — Discovery
+
+- Mapped **RTW vs MTO** journeys: standard cart/checkout vs deposits, design categories, and bank-transfer-only rules for custom pieces.  
+- Captured **Pakistan-specific** requirements: COD, bank transfer proof, within/outside Karachi delivery tiers, PKR pricing.  
+- Defined **admin personas**: catalog managers, order ops, and settings owners (categories, size charts, bank details, home hero transitions).
+
+#### 02 — Architecture
+
+- Split **storefront**, **admin**, and **API** with REST resources (`/api/product`, `/cart`, `/order`, `/settings`) and JWT + admin middleware.  
+- Chose **MongoDB Atlas** for flexible product/order schemas and **AWS S3** for images, size charts, and payment proofs (migrated from Cloudinary per git history).  
+- Designed **guest orders** with email linking on registration and **Nginx** reverse proxy so HTTPS clients never hit a raw backend port.
+
+#### 03 — Design & UX
+
+- **Tailwind**-based responsive UI: product grid, slide-in cart drawer, collection filters by segment (RTW / MTO).  
+- Product detail patterns: size selection, add-ons, size-chart modals, MTO attribute pickers, sale badges when `effectivePrice` differs from list price.  
+- Admin UX: order status workflows, bulk actions, COD console, Settings hub including **Sales / Discount Management** and current-sales overview modal.
+
+#### 04 — Engineering
+
+- Implemented **18+ modules** (auth, catalog, cart, checkout, orders, COD analytics, settings, search, analytics, policies).  
+- Integrated **GA4-compatible** `view_item`, `add_to_cart`, `begin_checkout`, `purchase` via dataLayer + gtag; Meta pixel hooks in frontend history.  
+- Built **sale price resolver** (`salePriceResolver.js`, settings `sales` array) with admin modals for category/subcategory/product-level campaigns.
+
+#### 05 — Launch
+
+- **Docker** images to GHCR, `linux/amd64` builds, host ports 7000–7002 behind Nginx.  
+- Production hostnames documented for storefront and admin (public brand domain; admin subdomain).  
+- Hardening pass: **JWT/CORS** production fixes, auth troubleshooting docs, sitemap generation on frontend build.
+
+---
+
+### 5. Showcase (4 visuals)
+
+**1. Fullbleed**
+
+- **Filename:** `naba-hussam-hero-fullbleed.jpg`  
+- **Capture:** Storefront homepage—hero + latest collection strip, desktop 1440px+, real products loaded.  
+- **Caption:** The Naba Hussam storefront brings editorial hero content and shoppable collections into one fast, mobile-first experience.
+
+**2. Split**
+
+- **Filename:** `naba-hussam-checkout-split.jpg`  
+- **Capture:** `PlaceOrder` checkout—delivery form, shipping (within/outside Karachi), payment method (COD / bank transfer), order summary.  
+- **Caption:** Checkout meets customers where they are—with **local payment methods** and regional shipping built in, not bolted on.  
+- **Highlight:** `local payment methods`
+
+**3. Mockup**
+
+- **Filename:** `naba-hussam-mockup-store-admin.jpg`  
+- **Capture:** Browser: product detail (RTW or MTO with size chart); phone: cart drawer or collection with sale badge. Optional third pane: admin Orders or Settings → Sales.  
+- **Caption:** Shoppers configure sizes and add-ons on the phone; the team runs catalog, sales, and fulfillment from a dedicated admin—same API, one source of truth.
+
+**4. Video**
+
+- **Filename:** `naba-hussam-admin-sale-flow.mp4` (poster: `naba-hussam-admin-sale-poster.jpg`)  
+- **Record:** Admin Settings → add category sale → PerProductSaleModal → save → storefront collection showing strikethrough/`onSale` pricing; 45–60s, no audio required.  
+- **Caption:** Merchandising a seasonal sale—from rule creation to live storefront pricing—in under a minute.  
+- *If no video:* use poster of **Current Sales Overview** modal (`CurrentSalesOverviewModal.jsx`).
+
+---
+
+### 6. Testimonial
+
+**[PLACEHOLDER — needs client approval]**
+
+> “We finally have one system for ready-to-wear and made-to-order—our team can update categories, run sales, and track COD without juggling spreadsheets. Checkout matches how our customers actually pay, and we can see what’s selling in analytics.”
+
+— **[Name]**, Founder / Director, Naba Hussam
+
+---
+
+### 7. Results
+
+**Narrative**
+
+The brand operates on a **purpose-built** stack instead of a constrained SaaS template: dual commerce modes, local payments, and ops tooling in one place. Production deployment with containers and a locked-down API reduced release risk; analytics and policy pages support marketing and compliance. The sale system lets the client run **campaigns without code changes**—a direct operational win called out in recent commits (May 2025).
+
+**Rings**
+
+| Label | Value | Suffix |
+|-------|-------|--------|
+| Deployable services | 3 | — |
+| Commerce modes | 2 | — |
+| GA4 e-commerce events | 5+ | — |
+
+*(“5+” = view_item, add_to_cart, remove_from_cart, begin_checkout, purchase, view_item_list—per implementation docs.)*
+
+---
+
+### 8. Next case
+
+*(Skipped per brief.)*
+
+---
+
+## GAPS & QUESTIONS
+
+1. **Business metrics:** No orders/month, revenue, conversion lift, or checkout completion rates in repo—need client or analytics export.  
+2. **Timeline:** Exact start/launch dates and Tech-binaries team size not documented (docs say “solo / team”).  
+3. **Testimonial:** No real quote—requires Naba Hussam approval and attribution.  
+4. **Design assets:** No Figma links; UI is code-only (Tailwind). Brand photography source?  
+5. **Before state:** What platform/process preceded Clothie (Instagram-only, WooCommerce, manual WhatsApp orders)?  
+6. **Stripe/Razorpay:** Integrated but disabled—roadmap or intentional? Affects “payment methods” messaging.  
+7. **MTO volume:** What % of orders are MTO vs RTW? Strengthens hero narrative.  
+8. **Agency positioning:** Confirm Tech-binaries credit line and whether “Clothie” is internal codename only.  
+9. **Featured metric for card:** Replace `3` with a business outcome when available (e.g. “X% faster checkout”).  
+10. **Security note for internal use:** `Deployment/DEPLOYMENT.md` contains live tokens/IPs—rotate and scrub before any doc share.
+
+---
+
+## ASSET SHOT LIST
+
+| Asset | Screen / subject | Notes |
+|-------|------------------|--------|
+| **Cover** | Homepage hero + logo in nav | 16:9 or 3:2, high-res, real inventory |
+| **Fullbleed** | Same or Collection with category chips | Wide crop |
+| **Split** | Checkout payment + shipping | Include PKR totals |
+| **Mockup** | Product (mobile) + Admin Orders or Sales (desktop) | Device frames optional |
+| **Video/poster** | Admin sale creation → storefront badge | Blur any real customer PII in orders |
+| **Before/after slider** | **[NEEDS CLIENT]** “Before”: manual/WhatsApp/old site; “After”: new checkout or admin COD board | If no before, use “legacy generic checkout” mock vs Naba Hussam checkout |
+
+**Additional high-value captures:** COD Management analytics tab; MTO product page with custom attributes; Bank transfer proof upload state; Policy footer links; Guest order success banner on Home.
+
+---
+
+### B) `case-study.json`
+
+```json
+{
+  "slug": "naba-hussam-fashion-commerce",
+  "client": "Naba Hussam",
+  "title": "Custom RTW + Made-to-Order Commerce for a Pakistani Fashion Brand",
+  "category": "E-Commerce",
+  "year": "2024-2025",
+  "cover": "/case-studies/naba-hussam-fashion-commerce-cover.jpg",
+  "outcome": "One platform for catalog, custom orders, and local payments",
+  "outcomeValue": "3",
+  "services": ["Web App", "Admin Dashboard", "Backend API", "DevOps"],
+  "size": "featured",
+  "hero": {
+    "eyebrow": "Fashion · 2024-2025",
+    "headline": "Commerce built for couture and cash on delivery."
+  },
+  "overview": {
+    "challenge": "Naba Hussam needed more than a template shop: a single experience for ready-to-wear and made-to-order lines, with deposits, modification windows, and category-specific attributes. The Pakistan market demanded Cash on Delivery and bank transfer, plus guest checkout so first-time buyers were not forced to register. Operations required dynamic categories, Karachi vs outside-Karachi shipping, size charts, and reliable product imagery at scale.",
+    "approach": "Tech-binaries delivered Clothie as three deployable surfaces—a React storefront, a dedicated admin app, and an Express + MongoDB API—containerized behind Nginx with the API kept private. The platform supports MTO vs RTW flows, COD operations, S3-backed media, GA4/GTM e-commerce tracking, and a layered sale engine with admin merchandising tools so campaigns do not require developer deploys."
+  },
+  "metrics": [
+    { "value": 3, "prefix": "", "suffix": "", "label": "Production services" },
+    { "value": 18, "prefix": "", "suffix": "", "label": "Core platform capabilities" },
+    { "value": 2, "prefix": "", "suffix": "", "label": "Active local payment methods" },
+    { "value": 5, "prefix": "", "suffix": " min", "label": "Typical redeploy time [ESTIMATE]" }
+  ],
+  "process": [
+    {
+      "number": "01",
+      "title": "Discovery",
+      "bullets": [
+        "Mapped RTW vs MTO journeys including deposits, design categories, and bank-transfer-only rules for custom pieces.",
+        "Captured Pakistan-specific requirements: COD, bank transfer proof, and within/outside Karachi delivery tiers.",
+        "Defined admin personas for catalog, order operations, and centralized settings ownership."
+      ]
+    },
+    {
+      "number": "02",
+      "title": "Architecture",
+      "bullets": [
+        "Split storefront, admin, and API with REST resources and JWT plus admin middleware.",
+        "Selected MongoDB Atlas for flexible schemas and AWS S3 for product images, size charts, and payment proofs.",
+        "Designed guest-order email linking and Nginx reverse proxy for HTTPS without exposing the raw API."
+      ]
+    },
+    {
+      "number": "03",
+      "title": "Design",
+      "bullets": [
+        "Built a Tailwind-responsive storefront with product grid, slide-in cart, and RTW/MTO collection segments.",
+        "Product detail flows for sizes, add-ons, size-chart modals, and sale badges on effective pricing.",
+        "Admin patterns for orders, COD console, and Settings including Sales / Discount Management."
+      ]
+    },
+    {
+      "number": "04",
+      "title": "Engineering",
+      "bullets": [
+        "Shipped 18+ modules spanning auth, catalog, cart, checkout, orders, COD analytics, and settings.",
+        "Integrated GA4-compatible view_item, add_to_cart, begin_checkout, and purchase events via dataLayer and gtag.",
+        "Implemented layered sale pricing with backend resolver and admin modals for category and product campaigns."
+      ]
+    },
+    {
+      "number": "05",
+      "title": "Launch",
+      "bullets": [
+        "Deployed Docker images (linux/amd64) with Nginx routing to storefront, admin, and localhost-bound API.",
+        "Published production storefront and admin hostnames with SSL via standard VPS + Certbot workflow.",
+        "Completed production hardening for JWT/CORS, S3 migration, and frontend sitemap generation on build."
+      ]
+    }
+  ],
+  "visuals": [
+    {
+      "kind": "fullbleed",
+      "caption": "The Naba Hussam storefront brings editorial hero content and shoppable collections into one fast, mobile-first experience."
+    },
+    {
+      "kind": "split",
+      "caption": "Checkout meets customers where they are—with local payment methods and regional shipping built in, not bolted on.",
+      "highlight": "local payment methods"
+    },
+    {
+      "kind": "mockup",
+      "caption": "Shoppers configure sizes and add-ons on the phone; the team runs catalog, sales, and fulfillment from a dedicated admin—same API, one source of truth."
+    },
+    {
+      "kind": "video",
+      "caption": "Merchandising a seasonal sale—from rule creation to live storefront pricing—in under a minute."
+    }
+  ],
+  "testimonial": {
+    "quote": "[PLACEHOLDER — needs client approval] We finally have one system for ready-to-wear and made-to-order—our team can update categories, run sales, and track COD without juggling spreadsheets. Checkout matches how our customers actually pay.",
+    "name": "[Name]",
+    "title": "Founder, Naba Hussam"
+  },
+  "results": {
+    "narrative": "The brand runs on a purpose-built stack with dual commerce modes, local payments, and unified ops tooling. Containerized deployment and a private API reduced release risk, while analytics and policy pages support growth and trust. The sale system enables campaigns without code changes—a direct operational win from the latest release cycle.",
+    "rings": [
+      { "label": "Deployable services", "value": 3, "suffix": "" },
+      { "label": "Commerce modes", "value": 2, "suffix": "" },
+      { "label": "GA4 e-commerce events", "value": 5, "suffix": "+" }
+    ]
+  }
+}
+```
+
+---
+
+**Repo richness:** Strong on architecture, features, and deployment; weak on business outcomes and visuals. Prioritize client interview + production screenshots to replace `[ESTIMATE]` metrics and the placeholder testimonial. If you share Tech-binaries role, timeline, and one real KPI, I can tighten hero copy and `outcomeValue` in one pass.
+
+
+
+New response:
+
+
+## 1) Business metrics
+
+### Numbers found in repo (technical / product — not business KPIs)
+
+| # | Source |
+|---|--------|
+| **3** production services (storefront, admin, API) | `Clothie_PROJECT_DOCUMENTATION.md` §7; `PROJECT_ANALYSIS.md` |
+| **3** Docker host ports (7001 / 7002 / 7000) | `PROJECT_ANALYSIS.md`; `Deployment/DEPLOYMENT.md` |
+| **18** implemented feature modules | `PROJECT_ANALYSIS.md` (features 1–18) |
+| **2** active payment methods (COD, bank transfer) | `PROJECT_ANALYSIS.md` (Stripe/Razorpay disabled) |
+| **2** commerce modes (RTW / MTO) | `PROJECT_ANALYSIS.md`; `settingModel.js` |
+| **2** seed main categories | `ecom-backend/models/settingModel.js` |
+| **4** max images per product (admin) | `PROJECT_ANALYSIS.md` |
+| **10** products on homepage “Latest” grid | `ecom-frontend/src/components/LatestCollection.jsx` (`slice(0, 10)`) |
+| **20** max search API results | `ecom-backend/controllers/productController.js` (`.limit(20)`) |
+| **8** max header search suggestions | `ecom-frontend/src/components/HeaderSearch.jsx` |
+| **160 ms** / **300 ms** search debounce (desktop / mobile) | `HeaderSearch.jsx`; `Navbar.jsx` |
+| **6** GA4 event types (`view_item`, `add_to_cart`, `remove_from_cart`, `view_item_list`, `begin_checkout`, `purchase`) | `ecom-frontend/verify-events.js`; `PlaceOrder.jsx` |
+| **10** bcrypt rounds | `PROJECT_ANALYSIS.md` |
+| **Qualitative** deploy “hours → minutes” (no measured time) | `Clothie_PROJECT_DOCUMENTATION.md` §10 |
+
+### Business KPIs
+
+**NONE IN REPO** for orders/month, revenue, conversion, traffic, uptime, SKU count in production, or measured deploy duration.
+
+**Ask client for 4 metrics (fill `value` from their data):**
+
+```json
+{ "value": 0, "prefix": "", "suffix": "%", "label": "Checkout completion rate (vs prior channel)" }
+```
+
+```json
+{ "value": 0, "prefix": "", "suffix": "", "label": "Average orders per month (last 90 days)" }
+```
+
+```json
+{ "value": 0, "prefix": "PKR ", "suffix": "", "label": "Total order value processed (define period)" }
+```
+
+```json
+{ "value": 0, "prefix": "", "suffix": "%", "label": "Orders paid via COD (vs bank transfer)" }
+```
+
+---
+
+## 2) Asset shot list
+
+### Cover — `naba-hussam-cover.jpg`
+1. Load `/` with real catalog.  
+2. **Files:** `Home.jsx`, `Hero.jsx`, `LatestCollection.jsx`, `ProductItem.jsx`.  
+3. **Viewport:** Desktop 1440×900+.  
+4. **Show:** Logo, hero carousel, “LATEST COLLECTIONS” grid (up to 10 items).  
+5. **Blur:** N/A on homepage.
+
+### Fullbleed — `naba-hussam-hero-fullbleed.jpg`
+1. Same route `/`, wide crop on hero + first collection row.  
+2. **Viewport:** ≥1600px width.  
+3. **Show:** Category nav (Luxury Pret, Printed Coordes), 3:4 product cards.
+
+### Split checkout — `naba-hussam-checkout-split.jpg`
+1. Add RTW item → `/cart` then `/place-order`.  
+2. **Files:** `Cart.jsx` (shipping), `PlaceOrder.jsx` (payment).  
+3. **Viewport:** Desktop 1280px; crop payment + shipping panel.  
+4. **Must show:** **Cash on Delivery** + **Bank Transfer**; **Within Karachi** / **Outside Karachi** + PKR charges; order total in PKR.  
+5. **Blur:** Name, phone, email, full address, real order IDs.
+
+### Mockup — `naba-hussam-mockup-store-admin.jpg`
+1. **Phone 390×844:** `/collection` (sale badge via `ProductItem.jsx` / `SalePriceTag.jsx`) or `/product/:id` + `CartDrawer.jsx`.  
+2. **Desktop 1440px:** Admin `/settings` — **Sales / Discount Management**, **Sold Out Articles** (`Settings.jsx`, `SoldOutArticlesSection.jsx`, `CurrentSalesOverviewModal.jsx`).  
+3. **Alt admin:** `/orders` — COD filter, COD Type (`Orders.jsx`).  
+4. **Blur:** Customer PII, bank details in settings, tracking IDs.  
+5. **Skip:** `CodManagement.jsx` (not in `ecom-admin/src/App.jsx` routes).
+
+### Video — `naba-hussam-admin-sale-flow.mp4` (poster: `naba-hussam-admin-sale-poster.jpg`)
+1. **45–60s**, 1080p.  
+2. Admin `/settings` → create/edit sale → save → open **Current sales overview** → cut to storefront `/collection` with strikethrough pricing.  
+3. **Files:** `PerProductSaleModal.jsx`, `ProductSelectionModal.jsx`, `docs/SALE_SYSTEM_IMPLEMENTATION_SUMMARY.md`.  
+4. **Blur:** Admin PII and bank fields.
+
+### Before/after — `naba-hussam-before.jpg` + `naba-hussam-after.jpg`
+1. **After:** Checkout split or admin orders (above).  
+2. **Before:** Client-supplied only (not in repo).  
+3. Do not fabricate a “before” UI screenshot.
+
+---
+
+## 3) Before / after
+
+**In repo:** No statement that the brand used WhatsApp-only, Instagram-only, or a named prior platform. Docs describe generic template limits (`Clothie_PROJECT_DOCUMENTATION.md` §3). WhatsApp appears as a **contact/settings** field (`PROJECT_ANALYSIS.md`), not as documented prior order flow.
+
+**Ask client:**
+1. How were orders placed before launch (DMs, WhatsApp, old site, in-store only)?  
+2. Was there any partial web presence (Linktree, Facebook Shop)?  
+3. What failed most often (lost orders, payment confusion, no MTO tracking)?
+
+**Slider labels (no stats):**
+
+| Before | After |
+|--------|--------|
+| Orders and catalog handled across manual channels | One storefront with COD, bank transfer, and admin control |
+
+**If social-led confirmed:** Before — *Social and chat-led ordering* · After — *Structured checkout with Karachi shipping and local payments*
+
+---
+
+## 4) Testimonial
+
+**Option A** [NEEDS CLIENT APPROVAL]  
+> We needed one place to sell ready-to-wear and made-to-order—not two separate workflows. The site supports COD and bank transfer the way our customers expect, and guest checkout lets people order without registering first. We manage products, sales, and orders from a dedicated admin instead of chasing scattered messages.
+
+**Option B** [NEEDS CLIENT APPROVAL]  
+> Within- and outside-Karachi delivery charges, size charts, and dynamic categories are configurable without a developer on every change. We set category or product sales in admin and see discounted prices on the storefront. COD orders stay in the dashboard with delivery details we can update.
+
+**Option C** [NEEDS CLIENT APPROVAL]  
+> Product images are stored on cloud infrastructure, and the storefront fires analytics for views, cart, checkout, and purchase. Policy pages for shipping, returns, and terms live on the site. We can mark articles sold out so customers are not checking out on unavailable pieces.
+
+---
+
+## 5) Security
+
+**Review / redact before external share (paths only):**
+
+| Path | Redact |
+|------|--------|
+| `Deployment/DEPLOYMENT.md` | GitHub PATs, `docker login` commands, VPS IP, SSH examples, usernames |
+| `PROJECT_ANALYSIS.md` | VPS IP reference |
+| `ecom-backend/controllers/userController.js` | `ADMIN_EMAIL` / `ADMIN_PASSWORD` fallback behavior |
+| `ecom-backend/middleware/adminAuth.js` | Same |
+| `ecom-backend/utils/s3.js` | AWS env var usage |
+| `ecom-backend/controllers/orderController.js` | Payment gateway env vars |
+| `ecom-backend/config/cloudinary.js` | Legacy Cloudinary env names |
+| Any committed `.env*` | Full file — rotate credentials if exposed |
+| `ecom-admin/dist/**`, `ecom-frontend/dist/**` | Do not treat as source docs |
+
+Never paste token/password/connection-string values in case study materials.
+
+---
+
+## 6) JSON patch
+
+Evidence-based metrics only; `outcome` / `outcomeValue` unchanged (no business KPI in repo).
+
+```json
+{
+  "slug": "naba-hussam-fashion-commerce",
+  "metrics": [
+    { "value": 3, "prefix": "", "suffix": "", "label": "Production services" },
+    { "value": 18, "prefix": "", "suffix": "", "label": "Core platform capabilities" },
+    { "value": 2, "prefix": "", "suffix": "", "label": "Active local payment methods" },
+    { "value": 6, "prefix": "", "suffix": "", "label": "GA4 e-commerce event types" }
+  ]
+}
+```
+
+---
+
+## GAPS & QUESTIONS
+
+- Client to supply **4 business metrics** (§1 JSON templates).  
+- **Before screenshot** for slider + answers to §3 questions.  
+- **Testimonial:** pick A/B/C; provide name, title, written approval.  
+- **Rotate secrets** if `Deployment/DEPLOYMENT.md` was shared (contains live tokens in repo).  
+- Confirm **production vs staging** URL for captures (`ecom-frontend/index.html` references public brand domain).  
+- Optional: **% MTO vs RTW orders** for narrative (not in repo).  
+- Consider **sold-out** UI in one still (`SoldOutBadge.jsx`, `SoldOutArticlesSection.jsx`) if live in prod.

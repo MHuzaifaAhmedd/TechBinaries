@@ -12,6 +12,7 @@ import GrowthBinarySection from "@/components/home/GrowthBinarySection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import CTASection from "@/components/home/CTASection";
 import { loadGsapWithScrollTrigger, loadLenisCtor, runAfterInteractive } from "@/lib/animation/loaders";
+import { setLenisInstance } from "@/lib/scroll-control";
 import { DEFAULT_LENIS_OPTIONS } from "@/lib/animation/lenis-config";
 import { scheduleScrollTriggerRefresh } from "@/lib/animation/refreshScrollTrigger";
 
@@ -46,6 +47,7 @@ export default function HomePage() {
 
       lenisRef.current = lenis as Lenis;
       lenis.on("scroll", ScrollTrigger.update);
+      setLenisInstance(lenis as Lenis);
 
       const ticker = (time: number) => lenis.raf(time * 1000);
       gsap.ticker.add(ticker);
@@ -55,6 +57,7 @@ export default function HomePage() {
         gsap.ticker.remove(ticker);
         lenis.destroy();
         lenisRef.current = null;
+        setLenisInstance(null);
       };
     };
 

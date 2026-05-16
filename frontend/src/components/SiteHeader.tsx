@@ -74,6 +74,7 @@ const NAV: NavItem[] = [
 ];
 
 const INSIGHTS_LINKS = [
+  { label: "Case studies", href: "/case-studies" },
   { label: "Blogs", href: "/blogs" },
 ];
 
@@ -88,6 +89,7 @@ export default function SiteHeader() {
   // Mobile-only: which category accordion is currently expanded inside the
   // drawer's Services section. -1 = none.
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobileInsightsOpen, setMobileInsightsOpen] = useState(false);
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState<number>(-1);
 
   // Hover-intent timer — keeps the menu open while the cursor travels
@@ -119,6 +121,7 @@ export default function SiteHeader() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setMegaOpen(false);
+        setInsightsOpen(false);
         setMobileOpen(false);
       }
     };
@@ -154,6 +157,8 @@ export default function SiteHeader() {
     (pathname === "/" ||
       pathname === "/about" ||
       pathname === "/blogs" ||
+      pathname === "/case-studies" ||
+      pathname.startsWith("/case-studies/") ||
       pathname.startsWith("/blog/") ||
       pathname === "/careers" ||
       pathname === "/services" ||
@@ -263,7 +268,11 @@ export default function SiteHeader() {
                         />
                       </svg>
                     </Link>
-                    <div className="site-header__mini-menu" data-open={insightsOpen ? "true" : "false"}>
+                    <div
+                      className="site-header__mini-menu"
+                      data-open={insightsOpen ? "true" : "false"}
+                      onMouseEnter={openInsights}
+                    >
                       <ul className="site-header__mini-menu-list" role="list">
                         {INSIGHTS_LINKS.map((link) => (
                           <li key={link.href}>
@@ -532,7 +541,16 @@ export default function SiteHeader() {
                     <button
                       type="button"
                       className="site-drawer__link"
-                      onClick={() => setMobileServicesOpen((v) => !v)}
+                      onClick={() => {
+                        setMobileServicesOpen((v) => {
+                          const next = !v;
+                          if (next) {
+                            setMobileInsightsOpen(false);
+                            setMobileCategoryOpen(-1);
+                          }
+                          return next;
+                        });
+                      }}
                       aria-expanded={mobileServicesOpen}
                       suppressHydrationWarning
                     >
@@ -615,6 +633,50 @@ export default function SiteHeader() {
                           </div>
                         );
                       })}
+                    </div>
+                  </div>
+                );
+              }
+              if (item.label === "Insights") {
+                return (
+                  <div key={item.label} className="site-drawer__group">
+                    <button
+                      type="button"
+                      className="site-drawer__link"
+                      onClick={() => {
+                        setMobileInsightsOpen((v) => {
+                          const next = !v;
+                          if (next) {
+                            setMobileServicesOpen(false);
+                            setMobileCategoryOpen(-1);
+                          }
+                          return next;
+                        });
+                      }}
+                      aria-expanded={mobileInsightsOpen}
+                      suppressHydrationWarning
+                    >
+                      <span>{item.label}</span>
+                      <span
+                        className="site-drawer__chev"
+                        data-open={mobileInsightsOpen ? "true" : "false"}
+                      >
+                        +
+                      </span>
+                    </button>
+                    <div
+                      className="site-drawer__sub"
+                      data-open={mobileInsightsOpen ? "true" : "false"}
+                    >
+                      <ul className="site-drawer__insights-list" role="list">
+                        {INSIGHTS_LINKS.map((link) => (
+                          <li key={link.href}>
+                            <a href={link.href} onClick={() => setMobileOpen(false)}>
+                              {link.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 );
@@ -1517,6 +1579,23 @@ export default function SiteHeader() {
           padding-top: 10px !important;
           border-top: 1px dashed rgba(10, 10, 10, 0.12);
           margin-top: 6px;
+        }
+
+        .site-drawer__insights-list {
+          list-style: none;
+          margin: 0;
+          padding: 0 0 12px 12px;
+        }
+        .site-drawer__insights-list a {
+          display: block;
+          padding: 10px 4px;
+          font-family: var(--font-body);
+          font-size: 15px;
+          color: rgba(10, 10, 10, 0.7);
+          text-decoration: none;
+        }
+        .site-drawer__insights-list a:hover {
+          color: var(--color-ink);
         }
 
         .site-drawer__foot {

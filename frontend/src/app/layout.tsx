@@ -29,6 +29,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { ChatWidget } from "@/components/chat/ChatWidget";
+import { PremiumScrollbar } from "@/components/PremiumScrollbar.client";
 import "./globals.css";
 import "@/components/chat/chat-widget.css";
 
@@ -68,6 +69,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col antialiased">
         {children}
+        <PremiumScrollbar />
         <ChatWidget />
       </body>
     </html>

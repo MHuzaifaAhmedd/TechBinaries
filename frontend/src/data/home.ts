@@ -137,7 +137,7 @@ export const FOOTER_NAV_COLS = [
   {
     heading: "Explore",
     links: [
-      { label: "Case Studies", href: "/place", ext: false },
+      { label: "Case studies", href: "/case-studies", ext: false },
       { label: "About Us", href: "/about", ext: false },
       { label: "Contact", href: "/contact", ext: false },
       { label: "Blogs", href: "/blogs", ext: false },
