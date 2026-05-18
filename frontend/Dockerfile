@@ -8,7 +8,9 @@ RUN apk add --no-cache libc6-compat
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+# Tailwind v4 / @tailwindcss/postcss needs lightningcss native bindings for Alpine (musl).
+RUN npm ci --include=optional \
+  && npm install --no-save lightningcss-linux-x64-musl@1.32.0
 
 FROM base AS builder
 WORKDIR /app
