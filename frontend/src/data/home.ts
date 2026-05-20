@@ -45,6 +45,8 @@ export const SERVICES = [
   },
 ];
 
+export type HomeCapabilityService = (typeof SERVICES)[number];
+
 export const PROCESS = [
   {
     num: "01",
