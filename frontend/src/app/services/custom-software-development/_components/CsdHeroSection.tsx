@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DESKTOP_MIN_WIDTH_MEDIA_QUERY } from "@/lib/breakpoints";
 import type { RefObject } from "react";
 import type { CsdHeroServiceValue } from "../_lib/csd-hero-service-types";
 import { CsdHeroLeadForm } from "./CsdHeroLeadForm";
@@ -41,7 +42,7 @@ export function CsdHeroSection({ isMobile, heroMenu }: Props) {
           <source
             src="/videos/hero-services-csds-video.mp4"
             type="video/mp4"
-            media="(min-width: 901px)"
+            media={DESKTOP_MIN_WIDTH_MEDIA_QUERY}
           />
         </video>
         <Image

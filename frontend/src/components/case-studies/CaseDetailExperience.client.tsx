@@ -32,7 +32,7 @@ interface Props {
 }
 
 export default function CaseDetailExperience({ c, next }: Props) {
-  useLenis();
+  useLenis({ duration: 1.2, orientation: "vertical", syncScrollControl: true });
   const router = useRouter();
   const rootRef = useRef<HTMLDivElement>(null);
 

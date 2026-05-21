@@ -1,5 +1,7 @@
 import Image from "next/image";
+import { AnimatedCharSpans } from "@/components/marketing/AnimatedCharSpans";
 import Link from "next/link";
+import { DESKTOP_MIN_WIDTH_MEDIA_QUERY } from "@/lib/breakpoints";
 import type { CsdHeroMenuProps } from "../../_components/CsdHeroSection";
 import type { CsdHeroPickerDomIds } from "../../_components/CsdHeroServicePickerPortal";
 import { CsdHeroLeadForm } from "../../_components/CsdHeroLeadForm";
@@ -27,7 +29,7 @@ export function CwaHeroSection({ isMobile, heroMenu, pickerDomIds }: Props) {
           <source
             src="/videos/services/Custom%20Software%20Development/custom-web-application-development/service-cwad-hero.mp4"
             type="video/mp4"
-            media="(min-width: 901px)"
+            media={DESKTOP_MIN_WIDTH_MEDIA_QUERY}
           />
         </video>
         <Image
@@ -51,49 +53,25 @@ export function CwaHeroSection({ isMobile, heroMenu, pickerDomIds }: Props) {
               <h1 id="cwa-hero-title" className="cwa-hero-title">
                 <span className="cwa-h1-lines-desktop" aria-hidden={isMobile}>
                   <span className="cwa-h1-line">
-                    {PAGE.headline1.split("").map((c, i) => (
-                      <span key={`a-${i}`} className="cwa-h1-char">
-                        {c === " " ? "\u00A0" : c}
-                      </span>
-                    ))}
+                    <AnimatedCharSpans text={PAGE.headline1} charClassName="cwa-h1-char" keyPrefix="a" />
                   </span>
                   <span className="cwa-h1-line">
-                    {PAGE.headline2.split("").map((c, i) => (
-                      <span key={`b-${i}`} className="cwa-h1-char">
-                        {c === " " ? "\u00A0" : c}
-                      </span>
-                    ))}
+                    <AnimatedCharSpans text={PAGE.headline2} charClassName="cwa-h1-char" keyPrefix="b" />
                   </span>
                   <span className="cwa-h1-line">
                     <span className="cwa-h1-italic">
-                      {PAGE.headlineItalic.split("").map((c, i) => (
-                        <span key={`c-${i}`} className="cwa-h1-char">
-                          {c === " " ? "\u00A0" : c}
-                        </span>
-                      ))}
+                      <AnimatedCharSpans text={PAGE.headlineItalic} charClassName="cwa-h1-char" keyPrefix="c" />
                     </span>
                   </span>
                 </span>
                 <span className="cwa-h1-lines-mobile" aria-hidden={!isMobile}>
                   <span className="cwa-h1-line cwa-h1-line-mobile">
-                    {`${PAGE.headline1} engineered`.split("").map((c, i) => (
-                      <span key={`m1-${i}`} className="cwa-h1-char">
-                        {c === " " ? "\u00A0" : c}
-                      </span>
-                    ))}
+                    <AnimatedCharSpans text={`${PAGE.headline1} engineered`} charClassName="cwa-h1-char" keyPrefix="m1" />
                   </span>
                   <span className="cwa-h1-line cwa-h1-line-mobile">
-                    {"for ".split("").map((c, i) => (
-                      <span key={`m2-${i}`} className="cwa-h1-char" style={{ whiteSpace: "pre" }}>
-                        {c === " " ? "\u00A0" : c}
-                      </span>
-                    ))}
+                    <AnimatedCharSpans text="for " charClassName="cwa-h1-char" keyPrefix="m2" charStyle={{ whiteSpace: "pre" }} />
                     <span className="cwa-h1-italic">
-                      {PAGE.headlineItalic.split("").map((c, i) => (
-                        <span key={`m3i-${i}`} className="cwa-h1-char">
-                          {c === " " ? "\u00A0" : c}
-                        </span>
-                      ))}
+                      <AnimatedCharSpans text={PAGE.headlineItalic} charClassName="cwa-h1-char" keyPrefix="m3i" />
                     </span>
                   </span>
                 </span>

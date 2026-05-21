@@ -31,7 +31,7 @@ interface Props {
 }
 
 export default function CaseStudiesExperience({ cases }: Props) {
-  useLenis();
+  useLenis({ duration: 1.2, orientation: "vertical", syncScrollControl: true });
 
   const rootRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<FilterCategory>("All");

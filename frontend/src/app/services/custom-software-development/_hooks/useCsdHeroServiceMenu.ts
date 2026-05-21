@@ -9,6 +9,7 @@ import {
   type RefObject,
   type SetStateAction,
 } from "react";
+import { HERO_NARROW_MAX_WIDTH_MEDIA_QUERY } from "@/lib/breakpoints";
 import type { CsdHeroServiceMenuBox, CsdHeroServiceValue } from "../_lib/csd-hero-service-types";
 
 export type UseCsdHeroServiceMenuParams = {
@@ -59,7 +60,8 @@ export function useCsdHeroServiceMenu({
 
   const openHeroServiceMenu = () => {
     const narrow =
-      typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
+      typeof window !== "undefined" &&
+      window.matchMedia(HERO_NARROW_MAX_WIDTH_MEDIA_QUERY).matches;
     setIsHeroNarrow(narrow);
     if (narrow) {
       setHeroServiceMenuBox(null);

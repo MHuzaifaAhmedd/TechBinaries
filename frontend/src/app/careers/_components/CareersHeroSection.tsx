@@ -1,5 +1,7 @@
 import type { RefObject } from "react";
 import Image from "next/image";
+import { AnimatedCharSpans } from "@/components/marketing/AnimatedCharSpans";
+import { MOBILE_MAX_WIDTH_MEDIA_QUERY } from "@/lib/breakpoints";
 import { HERO } from "../_lib/careers-data";
 
 const TICKER_LOGOS = [
@@ -89,14 +91,6 @@ function BrandLogo({ brand }: { brand: (typeof TICKER_LOGOS)[number] }) {
   );
 }
 
-function splitChars(text: string, keyPrefix: string) {
-  return text.split("").map((c, i) => (
-    <span key={`${keyPrefix}-${i}`} className="cr-hero-char">
-      {c === " " ? "\u00A0" : c}
-    </span>
-  ));
-}
-
 type Props = {
   heroRef: RefObject<HTMLElement | null>;
   tickerRef: RefObject<HTMLDivElement | null>;
@@ -108,7 +102,7 @@ export function CareersHeroSection({ heroRef, tickerRef }: Props) {
       <div className="cr-hero-bg" aria-hidden>
         <picture>
           <source
-            media="(max-width: 900px)"
+            media={MOBILE_MAX_WIDTH_MEDIA_QUERY}
             srcSet="/images/careers/careers-hero-section-mobile.webp"
           />
           <Image
@@ -134,10 +128,22 @@ export function CareersHeroSection({ heroRef, tickerRef }: Props) {
         </div>
 
         <h1 id="cr-hero-title" className="cr-hero-title">
-          <span className="cr-hero-line">{splitChars(HERO.headline1, "a")}</span>
           <span className="cr-hero-line">
-            {splitChars(HERO.headline2, "b")}{" "}
-            <span className="cr-hero-italic">{splitChars(HERO.headlineItalic, "c")}</span>
+            <AnimatedCharSpans
+              text={HERO.headline1}
+              charClassName="cr-hero-char"
+              keyPrefix="a"
+            />
+          </span>
+          <span className="cr-hero-line">
+            <AnimatedCharSpans text={HERO.headline2} charClassName="cr-hero-char" keyPrefix="b" />{" "}
+            <span className="cr-hero-italic">
+              <AnimatedCharSpans
+                text={HERO.headlineItalic}
+                charClassName="cr-hero-char"
+                keyPrefix="c"
+              />
+            </span>
           </span>
         </h1>
 

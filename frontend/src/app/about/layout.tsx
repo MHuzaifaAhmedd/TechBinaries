@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./_styles/about-page.css";
 
 export const metadata: Metadata = {
   title: "About",

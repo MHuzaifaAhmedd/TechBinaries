@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import "../_lib/careers-gsap";
-import { useCareersLenis } from "../_hooks/useCareersLenis";
+import { useLenis } from "@/hooks/useLenis";
 import { useCareersHeroAnimations } from "../_hooks/useCareersHeroAnimations";
 import { useCareersSectionReveals } from "../_hooks/useCareersSectionReveals";
 import { useCareersLifeMosaic } from "../_hooks/useCareersLifeMosaic";
@@ -21,7 +21,7 @@ import { CareersRolesSection } from "./CareersRolesSection";
 
 export function CareersPageClient() {
   const [activeValue, setActiveValue] = useState(0);
-  useCareersLenis();
+  useLenis();
 
   const heroRef = useRef<HTMLElement | null>(null);
   const tickerRef = useRef<HTMLDivElement | null>(null);

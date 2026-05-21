@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { AnimatedCharSpans } from "@/components/marketing/AnimatedCharSpans";
 import Link from "next/link";
 import { CTA } from "../_lib/cwa-data";
 
@@ -13,11 +14,7 @@ export function CwaFinalCtaSection() {
                 <Fragment key={`h-w-${wi}`}>
                   {wi > 0 ? <span className="cwa-ncta-char">{"\u00A0"}</span> : null}
                   <span className="cwa-ncta-word">
-                    {word.split("").map((c, i) => (
-                      <span key={`h-${wi}-${i}`} className="cwa-ncta-char">
-                        {c === " " ? "\u00A0" : c}
-                      </span>
-                    ))}
+                    <AnimatedCharSpans text={word} charClassName="cwa-ncta-char" keyPrefix={`h-${wi}`} />
                   </span>
                 </Fragment>
               ))}
@@ -29,11 +26,7 @@ export function CwaFinalCtaSection() {
                   <Fragment key={`i-w-${wi}`}>
                     {wi > 0 ? <span className="cwa-ncta-char">{"\u00A0"}</span> : null}
                     <span className="cwa-ncta-word">
-                      {word.split("").map((c, i) => (
-                        <span key={`i-${wi}-${i}`} className="cwa-ncta-char">
-                          {c === " " ? "\u00A0" : c}
-                        </span>
-                      ))}
+                      <AnimatedCharSpans text={word} charClassName="cwa-ncta-char" keyPrefix={`i-${wi}`} />
                     </span>
                   </Fragment>
                 ))}
