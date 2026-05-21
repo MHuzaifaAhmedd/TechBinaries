@@ -105,8 +105,11 @@ export function useCapabilitiesDesktopGsap({
               const expandedW =
                 ((containerW - totalGap) * SLAT_FLEX_EXPANDED) /
                 (SLAT_FLEX_EXPANDED + SLAT_FLEX_COLLAPSED * (slatCount - 1));
-              slatEls.forEach((el) => {
-                el.style.setProperty("--cap-expanded-w", `${Math.floor(expandedW)}px`);
+              const widthPx = `${Math.floor(expandedW)}px`;
+              requestAnimationFrame(() => {
+                slatEls.forEach((el) => {
+                  el.style.setProperty("--cap-expanded-w", widthPx);
+                });
               });
             };
             computeExpandedWidth();

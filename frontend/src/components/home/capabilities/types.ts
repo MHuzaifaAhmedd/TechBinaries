@@ -4,8 +4,8 @@ import type Lenis from "@studio-freight/lenis";
 export type { HomeCapabilityService } from "@/data/home";
 
 export interface CapabilitiesSectionProps {
-  lenisRef: MutableRefObject<Lenis | null>;
-  capProgrammaticScrollRef: MutableRefObject<boolean>;
+  lenisRef?: MutableRefObject<Lenis | null>;
+  capProgrammaticScrollRef?: MutableRefObject<boolean>;
 }
 
 /**

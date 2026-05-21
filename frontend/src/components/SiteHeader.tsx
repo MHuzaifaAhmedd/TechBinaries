@@ -187,8 +187,8 @@ export default function SiteHeader() {
                 fill
                 className="site-header__brand-logo"
                 sizes="(max-width: 480px) 170px, 220px"
-                priority
-                loading="eager"
+                priority={pathname !== "/"}
+                loading={pathname === "/" ? "lazy" : "eager"}
               />
             </span>
           </Link>

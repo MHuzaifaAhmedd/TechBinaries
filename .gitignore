@@ -3,6 +3,10 @@ Deployment/
 **/deployment*.md
 **/Deployment/*.md
 
+# Lighthouse performance reports (local benchmarks; stored under Codes/performance-optimization)
+Codes/performance-optimization/
+frontend/lighthouse*.json
+
 # Local environment files
 .env
 .env.local

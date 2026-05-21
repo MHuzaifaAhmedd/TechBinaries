@@ -1,44 +1,44 @@
-// import type { Metadata } from "next";
-// import "./globals.css";
-
-// export const metadata: Metadata = {
-//   title: "TechBinaries — Software Development Studio",
-//   description:
-//     "We partner with ambitious companies to design, build, and scale software products. From zero to production — and beyond.",
-// };
-
-// export default function RootLayout({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   return (
-//     <html lang="en" className="h-full">
-//       <head>
-//         <link rel="preconnect" href="https://fonts.googleapis.com" />
-//         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-//         <link
-//           href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
-//           rel="stylesheet"
-//         />
-//       </head>
-//       <body className="min-h-full flex flex-col antialiased">{children}</body>
-//     </html>
-//   );
-// }
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { ChatWidget } from "@/components/chat/ChatWidget";
-import { PremiumScrollbar } from "@/components/PremiumScrollbar.client";
+import { LayoutClientWidgets } from "@/components/LayoutClientWidgets";
 import "./globals.css";
-import "@/components/chat/chat-widget.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-jakarta",
+  adjustFontFallback: true,
+});
+
+const kamerik = localFont({
+  src: [
+    {
+      path: "../../public/fonts/kamerik-105-cyrillic-regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/kamerik-105-cyrillic-regular.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/kamerik-105-cyrillic-bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/kamerik-105-cyrillic-black.woff2",
+      weight: "800",
+      style: "normal",
+    },
+  ],
+  variable: "--font-kamerik",
+  display: "swap",
+  fallback: ["var(--font-jakarta)", "system-ui", "sans-serif"],
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -63,14 +63,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`h-full ${plusJakartaSans.variable}`}>
-      <head>
-        <link rel="preload" href="/images/hero-poster.webp" as="image" />
-      </head>
+    <html
+      lang="en"
+      className={`h-full ${plusJakartaSans.variable} ${kamerik.variable}`}
+    >
       <body className="min-h-full flex flex-col antialiased">
         {children}
-        <PremiumScrollbar />
-        <ChatWidget />
+        <LayoutClientWidgets />
       </body>
     </html>
   );

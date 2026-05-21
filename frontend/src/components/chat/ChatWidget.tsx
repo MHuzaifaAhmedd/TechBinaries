@@ -1,5 +1,6 @@
 "use client";
 
+import "./chat-widget.css";
 import Image from "next/image";
 import { FormEvent, KeyboardEvent as ReactKeyboardEvent, WheelEvent, useEffect, useMemo, useRef, useState } from "react";
 
@@ -334,14 +335,12 @@ export function ChatWidget() {
         aria-hidden={!isOpen}
       >
           <header className="tb-chat__header">
-            <img
+            <Image
               className="tb-chat__header-logo"
               src="/images/AI-Bot/chat-widget-header-cropped.png"
               alt="TechBinaries"
               width={220}
               height={40}
-              loading="lazy"
-              decoding="async"
             />
             <button className="tb-chat__close" type="button" onClick={() => setIsOpen(false)} aria-label="Close chat">
               ×

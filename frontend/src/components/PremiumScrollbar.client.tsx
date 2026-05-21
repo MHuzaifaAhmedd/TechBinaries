@@ -11,6 +11,7 @@ type ThumbState = {
   height: number;
   top: number;
   visible: boolean;
+  scrollPercent: number;
 };
 
 type ScrollMetrics = {
@@ -46,6 +47,7 @@ export function PremiumScrollbar() {
     height: 0,
     top: 0,
     visible: false,
+    scrollPercent: 0,
   });
   const [active, setActive] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -64,14 +66,17 @@ export function PremiumScrollbar() {
   const updateThumb = useCallback(() => {
     const metrics = getScrollMetrics();
     if (!metrics) {
-      setThumb({ height: 0, top: 0, visible: false });
+      setThumb({ height: 0, top: 0, visible: false, scrollPercent: 0 });
       return;
     }
 
     const { maxScroll, thumbHeight, trackHeight } = metrics;
-    const thumbTop = (getScrollY() / maxScroll) * trackHeight;
+    const scrollY = getScrollY();
+    const thumbTop = (scrollY / maxScroll) * trackHeight;
+    const scrollPercent =
+      maxScroll > 0 ? Math.round((scrollY / maxScroll) * 100) : 0;
 
-    setThumb({ height: thumbHeight, top: thumbTop, visible: true });
+    setThumb({ height: thumbHeight, top: thumbTop, visible: true, scrollPercent });
   }, []);
 
   const scrollFromClientY = useCallback((clientY: number) => {
@@ -89,11 +94,19 @@ export function PremiumScrollbar() {
 
   useEffect(() => {
     let raf = 0;
+    let resizeRaf = 0;
     let lastScrollY = -1;
+
+    const scheduleUpdateThumb = () => {
+      cancelAnimationFrame(resizeRaf);
+      resizeRaf = requestAnimationFrame(() => {
+        updateThumb();
+      });
+    };
 
     const onResize = () => {
       markActive();
-      updateThumb();
+      scheduleUpdateThumb();
     };
 
     const tick = () => {
@@ -106,7 +119,7 @@ export function PremiumScrollbar() {
       raf = requestAnimationFrame(tick);
     };
 
-    updateThumb();
+    scheduleUpdateThumb();
     window.addEventListener("resize", onResize);
 
     const resizeObserver = new ResizeObserver(onResize);
@@ -117,6 +130,7 @@ export function PremiumScrollbar() {
 
     return () => {
       cancelAnimationFrame(raf);
+      cancelAnimationFrame(resizeRaf);
       window.removeEventListener("resize", onResize);
       resizeObserver.disconnect();
       if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
@@ -189,12 +203,6 @@ export function PremiumScrollbar() {
 
   if (!thumb.visible) return null;
 
-  const metrics = getScrollMetrics();
-  const scrollPercent =
-    metrics && metrics.maxScroll > 0
-      ? Math.round((getScrollY() / metrics.maxScroll) * 100)
-      : 0;
-
   return (
     <div
       className="premium-scrollbar-rail"
@@ -205,7 +213,7 @@ export function PremiumScrollbar() {
         aria-label="Page scroll position"
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-valuenow={scrollPercent}
+        aria-valuenow={thumb.scrollPercent}
         tabIndex={0}
         className={[
           "premium-scrollbar-thumb",

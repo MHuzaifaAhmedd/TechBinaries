@@ -900,17 +900,15 @@ export default function BlogsPage() {
                             <figure className="bl-nl-latest-thumb">
                               {!showFallback && item.image ? (
                                 <>
-                                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                                  <img
+                                  <Image
                                     src={item.image}
                                     alt=""
                                     width={400}
                                     height={250}
+                                    unoptimized
                                     className={`bl-nl-latest-thumb-img${
                                       isLoaded ? " is-loaded" : ""
                                     }`}
-                                    loading="lazy"
-                                    decoding="async"
                                     referrerPolicy="no-referrer"
                                     onLoad={() => {
                                       setLoadedImages((prev) => {
@@ -935,15 +933,13 @@ export default function BlogsPage() {
                                 </>
                               ) : (
                                 <div className="bl-nl-latest-thumb-fallback">
-                                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                                  <img
+                                  <Image
                                     src={faviconFor(item.source, 128)}
                                     alt=""
                                     width={16}
                                     height={16}
+                                    unoptimized
                                     className="bl-nl-latest-thumb-favicon"
-                                    loading="lazy"
-                                    decoding="async"
                                     referrerPolicy="no-referrer"
                                   />
                                   <span className="bl-nl-latest-thumb-domain">{item.source}</span>
@@ -964,14 +960,13 @@ export default function BlogsPage() {
                           </a>
 
                           <div className="bl-nl-latest-source">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
+                            <Image
                               src={faviconFor(item.source, 32)}
                               alt=""
                               width={16}
                               height={16}
+                              unoptimized
                               className="bl-nl-latest-source-icon"
-                              loading="lazy"
                               referrerPolicy="no-referrer"
                             />
                             <span className="bl-nl-latest-source-name">{item.source}</span>

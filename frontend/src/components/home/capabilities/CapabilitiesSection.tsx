@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import { SERVICES } from "@/data/home";
+import { useHomeScrollRefs } from "@/components/home/HomeScrollProvider";
 import { CAP_SECTION_DOM_ID } from "./constants";
 import type { CapabilitiesSectionProps, CapabilitiesPinScrollTrigger } from "./types";
 import { CapabilityDesktopView } from "./CapabilityDesktopView";
@@ -12,9 +13,13 @@ import { useCapabilitiesIsMobile } from "./useCapabilitiesIsMobile";
 import { useScrollToSignalsSection } from "./useScrollToSignalsSection";
 
 export default function CapabilitiesSection({
-  lenisRef,
-  capProgrammaticScrollRef,
-}: CapabilitiesSectionProps) {
+  lenisRef: lenisRefProp,
+  capProgrammaticScrollRef: capProgrammaticScrollRefProp,
+}: Partial<CapabilitiesSectionProps> = {}) {
+  const { lenisRef: lenisRefCtx, capProgrammaticScrollRef: capScrollCtx } =
+    useHomeScrollRefs();
+  const lenisRef = lenisRefProp ?? lenisRefCtx;
+  const capProgrammaticScrollRef = capProgrammaticScrollRefProp ?? capScrollCtx;
   const sectionRef = useRef<HTMLElement>(null);
   const pinScrollTriggerRef = useRef<CapabilitiesPinScrollTrigger | null>(null);
 
