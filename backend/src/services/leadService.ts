@@ -8,6 +8,8 @@ export type HeroLeadInsertInput = {
   lastName: string;
   countryCode: string;
   phoneNational: string;
+  phoneE164: string;
+  phoneCountryIso2: string;
   workEmail: string;
   budgetRange: string;
   serviceInterest: string;
@@ -35,6 +37,8 @@ const LIMITS = {
   email: 254,
   countryCode: 8,
   phoneNational: 32,
+  phoneE164: 20,
+  phoneCountryIso2: 2,
   phone: 48,
   budgetRange: 120,
   serviceInterest: 512,
@@ -89,6 +93,8 @@ export async function insertHeroLead(db: Db, input: HeroLeadInsertInput): Promis
     lastName: trimMax(input.lastName, LIMITS.name),
     countryCode: trimMax(input.countryCode, LIMITS.countryCode),
     phoneNational: trimMax(input.phoneNational, LIMITS.phoneNational),
+    phoneE164: trimMax(input.phoneE164, LIMITS.phoneE164),
+    phoneCountryIso2: trimMax(input.phoneCountryIso2, LIMITS.phoneCountryIso2).toUpperCase(),
     workEmail: trimMax(input.workEmail, LIMITS.email).toLowerCase(),
     budgetRange: trimMax(input.budgetRange, LIMITS.budgetRange),
     serviceInterest: trimMax(input.serviceInterest, LIMITS.serviceInterest),

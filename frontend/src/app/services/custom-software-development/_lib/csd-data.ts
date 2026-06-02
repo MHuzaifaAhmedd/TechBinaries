@@ -1,3 +1,5 @@
+import { PHONE_COUNTRY_OPTIONS } from "@/lib/phone-country-options";
+
 export const SUB_SERVICES = [
   {
     num: "01",
@@ -138,6 +140,11 @@ export const FAQS = [
   { q: "Do you sign NDAs before discovery calls?", a: "Of course. Send us your NDA before the call and we'll have it back signed within the day. We also have a mutual NDA template if you'd prefer to use ours." },
 ];
 
-export const HERO_PHONE_COUNTRY_CODES = [
-  "+92", "+1", "+44", "+971", "+91", "+61", "+49", "+966", "+65", "+86",
-];
+export const HERO_PHONE_COUNTRY_OPTIONS = PHONE_COUNTRY_OPTIONS.map((option) => ({
+  code: option.dialCode,
+  flag: option.emojiFlag,
+  iso2: option.iso2.toLowerCase(),
+  country: option.countryName,
+}));
+
+export const HERO_PHONE_COUNTRY_CODES = HERO_PHONE_COUNTRY_OPTIONS.map((option) => option.code);

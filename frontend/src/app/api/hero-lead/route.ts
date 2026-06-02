@@ -1,60 +1,59 @@
 import { NextResponse } from "next/server";
 import { verifyHeroCaptchaChallenge } from "../_lib/hero-captcha-store";
 import {
+  HERO_LEAD_MAX_BODY_BYTES,
+  validateHeroLeadPayload,
+  type HeroLeadPayloadInput,
+} from "../_lib/hero-lead-validation";
+import {
   leadPersistenceRequiredInThisEnvironment,
   postInternalLeadJson,
   readInternalLeadEnv,
 } from "../_lib/internalLeadApi";
 
-type HeroLeadPayload = {
-  firstName?: string;
-  lastName?: string;
-  countryCode?: string;
-  phoneNational?: string;
-  workEmail?: string;
-  budgetRange?: string;
-  serviceInterest?: string;
-  projectDetails?: string;
-  challengeId?: string;
-  captchaAnswer?: string;
-};
-
-function isFilled(value: unknown): boolean {
-  return typeof value === "string" && value.trim().length > 0;
+function captchaErrorMessage(reason: "not_found" | "expired" | "invalid" | "locked"): string {
+  if (reason === "expired") return "Captcha expired. Please refresh the challenge.";
+  if (reason === "not_found") return "Captcha challenge is no longer valid. Please refresh and try again.";
+  if (reason === "locked") return "Too many failed attempts. Request a new captcha challenge.";
+  return "Incorrect captcha answer. Please try again.";
 }
 
 export async function POST(request: Request) {
   try {
-    const payload = (await request.json()) as HeroLeadPayload;
-
-    if (!isFilled(payload.firstName) || !isFilled(payload.lastName)) {
-      return NextResponse.json({ message: "Please add your full name." }, { status: 400 });
+    const contentLength = request.headers.get("content-length");
+    if (contentLength) {
+      const length = Number.parseInt(contentLength, 10);
+      if (Number.isFinite(length) && length > HERO_LEAD_MAX_BODY_BYTES) {
+        return NextResponse.json({ message: "Request payload is too large." }, { status: 413 });
+      }
     }
 
-    if (!isFilled(payload.phoneNational)) {
-      return NextResponse.json({ message: "Please add your contact number." }, { status: 400 });
+    const rawBody = await request.text();
+    if (rawBody.length > HERO_LEAD_MAX_BODY_BYTES) {
+      return NextResponse.json({ message: "Request payload is too large." }, { status: 413 });
     }
 
-    if (!isFilled(payload.workEmail)) {
-      return NextResponse.json({ message: "Please add your work email." }, { status: 400 });
+    let payload: HeroLeadPayloadInput;
+    try {
+      payload = JSON.parse(rawBody) as HeroLeadPayloadInput;
+    } catch {
+      return NextResponse.json({ message: "Invalid request payload." }, { status: 400 });
     }
 
-    const challengeId = payload.challengeId?.trim() ?? "";
-    const captchaAnswer = payload.captchaAnswer?.trim() ?? "";
-
-    if (!challengeId || !captchaAnswer) {
-      return NextResponse.json({ message: "Captcha challenge is required." }, { status: 400 });
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+      return NextResponse.json({ message: "Invalid request payload." }, { status: 400 });
     }
 
-    const verification = verifyHeroCaptchaChallenge(challengeId, captchaAnswer);
+    const validation = validateHeroLeadPayload(payload);
+    if (!validation.ok) {
+      return NextResponse.json({ message: validation.message }, { status: 400 });
+    }
+
+    const data = validation.data;
+
+    const verification = verifyHeroCaptchaChallenge(data.challengeId, data.captchaAnswer);
     if (!verification.ok) {
-      const message =
-        verification.reason === "expired"
-          ? "Captcha expired. Please refresh the challenge."
-          : verification.reason === "locked"
-            ? "Too many failed attempts. Request a new captcha challenge."
-            : "Incorrect captcha answer. Please try again.";
-      return NextResponse.json({ message }, { status: 400 });
+      return NextResponse.json({ message: captchaErrorMessage(verification.reason) }, { status: 400 });
     }
 
     const cfg = readInternalLeadEnv();
@@ -66,24 +65,25 @@ export async function POST(request: Request) {
         );
       }
       console.info("Hero lead accepted (no HERO_LEAD_INTERNAL_URL/SECRET — not persisted)", {
-        fullName: `${payload.firstName} ${payload.lastName}`.trim(),
-        email: payload.workEmail,
-        phone: `${payload.countryCode ?? ""}${payload.phoneNational ?? ""}`,
-        service: payload.serviceInterest ?? "",
+        channel: "csd-hero",
+        email: data.workEmail,
+        phoneCountryIso2: data.phoneCountryIso2,
       });
       return NextResponse.json({ message: "Consultation request submitted." }, { status: 200 });
     }
 
     const result = await postInternalLeadJson(cfg, "/api/hero-leads", {
       channel: "csd-hero",
-      firstName: payload.firstName!.trim(),
-      lastName: payload.lastName!.trim(),
-      countryCode: (payload.countryCode ?? "").trim(),
-      phoneNational: payload.phoneNational!.trim(),
-      workEmail: payload.workEmail!.trim(),
-      budgetRange: (payload.budgetRange ?? "").trim(),
-      serviceInterest: (payload.serviceInterest ?? "").trim(),
-      projectDetails: (payload.projectDetails ?? "").trim(),
+      firstName: data.firstName,
+      lastName: data.lastName,
+      countryCode: data.countryCode,
+      phoneNational: data.phoneNational,
+      phoneE164: data.phoneE164,
+      phoneCountryIso2: data.phoneCountryIso2,
+      workEmail: data.workEmail,
+      budgetRange: data.budgetRange,
+      serviceInterest: data.serviceInterest,
+      projectDetails: data.projectDetails,
     });
 
     if (!result.ok) {

@@ -8,9 +8,40 @@ type HeroCaptchaEntry = {
   attempts: number;
 };
 
+type IpRateBucket = {
+  count: number;
+  windowStart: number;
+};
+
+type HeroCaptchaRuntimeState = {
+  heroCaptchaStore: Map<string, HeroCaptchaEntry>;
+  ipRateBuckets: Map<string, IpRateBucket>;
+};
+
 const HERO_CAPTCHA_TTL_MS = 2 * 60 * 1000;
 const HERO_CAPTCHA_MAX_ATTEMPTS = 3;
-const heroCaptchaStore = new Map<string, HeroCaptchaEntry>();
+const HERO_CAPTCHA_MAX_STORE_SIZE = 5_000;
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const RATE_LIMIT_MAX_CHALLENGES_PER_IP = 20;
+
+function getRuntimeState(): HeroCaptchaRuntimeState {
+  const globalRef = globalThis as typeof globalThis & {
+    __heroCaptchaRuntimeState__?: HeroCaptchaRuntimeState;
+  };
+
+  if (!globalRef.__heroCaptchaRuntimeState__) {
+    globalRef.__heroCaptchaRuntimeState__ = {
+      heroCaptchaStore: new Map<string, HeroCaptchaEntry>(),
+      ipRateBuckets: new Map<string, IpRateBucket>(),
+    };
+  }
+
+  return globalRef.__heroCaptchaRuntimeState__;
+}
+
+const runtimeState = getRuntimeState();
+const heroCaptchaStore = runtimeState.heroCaptchaStore;
+const ipRateBuckets = runtimeState.ipRateBuckets;
 
 function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -45,12 +76,64 @@ function cleanupExpiredChallenges(now = Date.now()): void {
   }
 }
 
+function cleanupExpiredRateBuckets(now = Date.now()): void {
+  for (const [ip, bucket] of ipRateBuckets.entries()) {
+    if (now - bucket.windowStart >= RATE_LIMIT_WINDOW_MS) {
+      ipRateBuckets.delete(ip);
+    }
+  }
+}
+
+function evictOldestChallenges(count: number): void {
+  if (count <= 0) return;
+  const sorted = [...heroCaptchaStore.entries()].sort((a, b) => a[1].expiresAt - b[1].expiresAt);
+  for (let i = 0; i < count && i < sorted.length; i += 1) {
+    const id = sorted[i]?.[0];
+    if (id) heroCaptchaStore.delete(id);
+  }
+}
+
+function enforceStoreCap(): void {
+  if (heroCaptchaStore.size < HERO_CAPTCHA_MAX_STORE_SIZE) return;
+  cleanupExpiredChallenges();
+  if (heroCaptchaStore.size < HERO_CAPTCHA_MAX_STORE_SIZE) return;
+  const overflow = heroCaptchaStore.size - HERO_CAPTCHA_MAX_STORE_SIZE + 1;
+  evictOldestChallenges(overflow);
+}
+
+export type HeroCaptchaRateLimitResult =
+  | { allowed: true }
+  | { allowed: false; retryAfterSeconds: number };
+
+export function checkHeroCaptchaIssueRateLimit(clientIp: string, now = Date.now()): HeroCaptchaRateLimitResult {
+  cleanupExpiredRateBuckets(now);
+
+  const ip = clientIp.slice(0, 64) || "unknown";
+  const bucket = ipRateBuckets.get(ip);
+
+  if (!bucket || now - bucket.windowStart >= RATE_LIMIT_WINDOW_MS) {
+    ipRateBuckets.set(ip, { count: 1, windowStart: now });
+    return { allowed: true };
+  }
+
+  if (bucket.count >= RATE_LIMIT_MAX_CHALLENGES_PER_IP) {
+    const retryAfterSeconds = Math.max(1, Math.ceil((RATE_LIMIT_WINDOW_MS - (now - bucket.windowStart)) / 1000));
+    return { allowed: false, retryAfterSeconds };
+  }
+
+  bucket.count += 1;
+  ipRateBuckets.set(ip, bucket);
+  return { allowed: true };
+}
+
 export function issueHeroCaptchaChallenge(): {
   challengeId: string;
   challengeText: string;
   expiresAt: number;
 } {
   cleanupExpiredChallenges();
+  enforceStoreCap();
+
   const challengeId = crypto.randomUUID();
   const challenge = buildChallenge();
   const expiresAt = Date.now() + HERO_CAPTCHA_TTL_MS;

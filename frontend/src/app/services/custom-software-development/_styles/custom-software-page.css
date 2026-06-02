@@ -383,21 +383,25 @@
             margin: 0 10px 0 0;
             background: rgba(255,255,255,0.38);
           }
-          .csd-hero-form-field--phone .csd-hero-phone-cc,
+          .csd-hero-form-field--phone .csd-hero-phone-cc-trigger,
           .csd-hero-form-field--phone .csd-hero-phone-num {
             border-bottom: none !important;
             padding: 10px 0 14px !important;
           }
-          .csd-hero-form-field--phone .csd-hero-phone-cc {
-            min-width: 72px;
-            max-width: 96px;
-            padding-right: 22px !important;
-            color: rgba(255,255,255,0.72) !important;
-            background-position:
-              calc(100% - 2px) calc(1em + 6px),
-              calc(100% + 1px) calc(1em + 6px);
+          .csd-hero-form-field--phone .csd-hero-phone-cc-dd {
+            flex: 0 0 auto;
+            min-width: 104px;
+            max-width: 140px;
           }
-          .csd-hero-form-field--phone .csd-hero-phone-cc:focus,
+          .csd-hero-form-field--phone .csd-hero-phone-cc-trigger {
+            color: rgba(255,255,255,0.78) !important;
+          }
+          .csd-hero-form-field--phone .csd-hero-phone-cc-value {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .csd-hero-form-field--phone .csd-hero-phone-cc-trigger:focus,
           .csd-hero-form-field--phone .csd-hero-phone-num:focus {
             border-bottom: none !important;
           }
@@ -504,7 +508,7 @@
           flex-direction: column;
           gap: 8px;
         }
-        .csd-hero-form-field span {
+        .csd-hero-form-field > span {
           font-size: 11px;
           font-weight: 600;
           letter-spacing: 0.07em;
@@ -535,6 +539,84 @@
           background: rgba(255,255,255,0.38);
           flex-shrink: 0;
           margin: 0 10px 0 0;
+        }
+        .csd-hero-phone-cc-dd {
+          flex: 0 0 auto;
+          min-width: 116px;
+          max-width: 160px;
+        }
+        .csd-hero-phone-cc-trigger {
+          border-bottom: none !important;
+          padding: 10px 0 14px !important;
+          color: rgba(255,255,255,0.78) !important;
+        }
+        .csd-hero-phone-cc-value {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          min-width: 0;
+        }
+        .csd-hero-phone-flag {
+          width: 16px;
+          height: 12px;
+          border-radius: 2px;
+          object-fit: cover;
+          flex-shrink: 0;
+          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+        }
+        .csd-hero-phone-cc-option {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          min-width: 0;
+        }
+        .csd-hero-phone-cc-country {
+          color: rgba(10,10,10,0.72);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .csd-hero-phone-search-wrap {
+          position: relative;
+          z-index: 2;
+          background: #fff;
+          padding: 8px 10px 6px;
+          border-bottom: 1px solid rgba(10, 10, 10, 0.08);
+          flex-shrink: 0;
+        }
+        .csd-hero-phone-search-input {
+          width: 100%;
+          border: 1px solid rgba(10, 10, 10, 0.16);
+          border-radius: 8px;
+          padding: 7px 10px;
+          font-size: 13px;
+          color: #0a0a0a;
+          background: #fff;
+          outline: none;
+        }
+        .csd-hero-phone-search-input:focus {
+          border-color: rgba(59, 130, 246, 0.55);
+          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.14);
+        }
+        .csd-hero-phone-empty {
+          padding: 12px 14px;
+          color: rgba(10, 10, 10, 0.58);
+          font-size: 13px;
+        }
+        .csd-hero-phone-menu {
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          padding: 0;
+        }
+        .csd-hero-phone-menu-list {
+          flex: 1 1 auto;
+          min-height: 0;
+          overflow-y: auto;
+          overflow-x: hidden;
+          overscroll-behavior: contain;
+          -webkit-overflow-scrolling: touch;
+          padding: 6px 0 8px;
         }
 
         .csd-hero-form-field input,
@@ -672,15 +754,28 @@
           text-align: left;
           padding: 9px 14px;
           font-size: 13px;
+          font-weight: 400;
+          letter-spacing: normal;
+          text-transform: none;
           line-height: 1.35;
           color: #0a0a0a;
           cursor: pointer;
           transition: background 0.12s ease;
         }
+        .csd-hero-service-dd-option span {
+          font-size: inherit;
+          font-weight: inherit;
+          letter-spacing: inherit;
+          text-transform: none;
+          color: inherit;
+        }
         .csd-hero-service-dd-option:hover,
         .csd-hero-service-dd-option:focus-visible {
           background: rgba(59, 130, 246, 0.12);
           outline: none;
+        }
+        .csd-hero-service-dd-option--active {
+          background: rgba(59, 130, 246, 0.12);
         }
         .csd-hero-service-dd-option[aria-selected="true"] {
           background: rgba(59, 130, 246, 0.18);
@@ -759,7 +854,7 @@
           padding: 4px 0 12px;
         }
 
-        .csd-hero-form-field--phone .csd-hero-phone-cc,
+        .csd-hero-form-field--phone .csd-hero-phone-cc-trigger,
         .csd-hero-form-field--phone .csd-hero-phone-num {
           width: auto !important;
           border: none !important;
@@ -767,11 +862,13 @@
           background: transparent !important;
           box-shadow: none !important;
         }
-        .csd-hero-form-field--phone .csd-hero-phone-cc {
+        .csd-hero-form-field--phone .csd-hero-phone-cc-dd {
           flex: 0 0 auto;
-          min-width: 84px;
-          max-width: 110px;
-          padding: 10px 26px 14px 0 !important;
+          min-width: 104px;
+          max-width: 140px;
+        }
+        .csd-hero-form-field--phone .csd-hero-phone-cc-trigger {
+          padding: 10px 0 14px 0 !important;
           color: rgba(255,255,255,0.78) !important;
         }
         .csd-hero-form-field--phone .csd-hero-phone-num {
@@ -779,7 +876,7 @@
           min-width: 0;
           padding: 10px 0 14px 0 !important;
         }
-        .csd-hero-form-field--phone .csd-hero-phone-cc:focus,
+        .csd-hero-form-field--phone .csd-hero-phone-cc-trigger:focus,
         .csd-hero-form-field--phone .csd-hero-phone-num:focus {
           box-shadow: none !important;
           border: none !important;
@@ -812,9 +909,6 @@
           color: rgba(255, 255, 255, 0.95) !important;
         }
 
-        .csd-hero-form-field--phone .csd-hero-phone-cc:-webkit-autofill,
-        .csd-hero-form-field--phone .csd-hero-phone-cc:-webkit-autofill:hover,
-        .csd-hero-form-field--phone .csd-hero-phone-cc:-webkit-autofill:focus,
         .csd-hero-form-field--phone .csd-hero-phone-num:-webkit-autofill,
         .csd-hero-form-field--phone .csd-hero-phone-num:-webkit-autofill:hover,
         .csd-hero-form-field--phone .csd-hero-phone-num:-webkit-autofill:focus {
@@ -873,6 +967,10 @@
           margin: 2px 0 0;
           font-size: 12px;
           color: rgba(255,255,255,0.62);
+        }
+        .csd-hero-form-note--error {
+          margin-top: 6px;
+          color: #fca5a5;
         }
 
         /* HERO bottom marquee */
