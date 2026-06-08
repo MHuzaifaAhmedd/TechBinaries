@@ -2,12 +2,14 @@
 
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import Script from "next/script";
+import { CountryCode, parsePhoneNumberFromString } from "libphonenumber-js/min";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { ContactBudgetSelect } from "./_components/ContactBudgetSelect";
 import { ContactHearAboutSelect } from "./_components/ContactHearAboutSelect";
 import { formatContactHearAbout } from "@/lib/contact-hear-about-options";
 import { marketingBudgetLabel } from "@/lib/marketing-budget-ranges";
+import { PHONE_COUNTRY_OPTIONS } from "@/lib/phone-country-options";
 
 /** Pillar + sub-service labels (checkbox values). Labels are unique across groups. */
 const CONTACT_SERVICE_GROUPS = [
@@ -53,7 +55,9 @@ type ContactFormData = {
   company: string;
   website: string;
   email: string;
-  phone: string;
+  phoneCountryIso2: CountryCode | null;
+  countryCode: string;
+  phoneNational: string;
   budget: string;
   hearAboutChannel: string;
   hearAboutOther: string;
@@ -61,6 +65,10 @@ type ContactFormData = {
   services: string[];
   consent: boolean;
 };
+
+const PHONE_REQUIRED_ERROR = "Please add your contact number.";
+const PHONE_COUNTRY_REQUIRED_ERROR = "Please select your country code.";
+const PHONE_INVALID_ERROR = "Please enter a valid phone number for the selected country.";
 
 declare global {
   interface Window {
@@ -90,13 +98,16 @@ export default function ContactPage() {
   const [formError, setFormError] = useState("");
   const [formSuccess, setFormSuccess] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [phoneValidationMessage, setPhoneValidationMessage] = useState("");
   const [contactForm, setContactForm] = useState<ContactFormData>({
     firstName: "",
     lastName: "",
     company: "",
     website: "",
     email: "",
-    phone: "",
+    phoneCountryIso2: null,
+    countryCode: "",
+    phoneNational: "",
     budget: "",
     hearAboutChannel: "",
     hearAboutOther: "",
@@ -140,6 +151,7 @@ export default function ContactPage() {
     event.preventDefault();
     setFormError("");
     setFormSuccess("");
+    setPhoneValidationMessage("");
 
     if (!recaptchaSiteKey) {
       setFormError("reCAPTCHA site key is missing. Set NEXT_PUBLIC_RECAPTCHA_SITE_KEY.");
@@ -169,6 +181,22 @@ export default function ContactPage() {
       setFormError("Please provide consent to receive communication.");
       return;
     }
+    if (!contactForm.phoneCountryIso2 || !contactForm.countryCode) {
+      setPhoneValidationMessage(PHONE_COUNTRY_REQUIRED_ERROR);
+      return;
+    }
+    if (!contactForm.phoneNational.trim()) {
+      setPhoneValidationMessage(PHONE_REQUIRED_ERROR);
+      return;
+    }
+
+    const parsedPhone = parsePhoneNumberFromString(contactForm.phoneNational, contactForm.phoneCountryIso2);
+    if (!parsedPhone || !parsedPhone.isValid()) {
+      setPhoneValidationMessage(PHONE_INVALID_ERROR);
+      return;
+    }
+
+    const phoneE164 = parsedPhone.number;
 
     setSubmitting(true);
 
@@ -179,6 +207,7 @@ export default function ContactPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...contactRest,
+          phone: phoneE164,
           budget: marketingBudgetLabel(contactForm.budget),
           hearAbout: formatContactHearAbout(hearAboutChannel, hearAboutOther),
           captchaToken,
@@ -195,7 +224,9 @@ export default function ContactPage() {
         company: "",
         website: "",
         email: "",
-        phone: "",
+        phoneCountryIso2: null,
+        countryCode: "",
+        phoneNational: "",
         budget: "",
         hearAboutChannel: "",
         hearAboutOther: "",
@@ -291,15 +322,52 @@ export default function ContactPage() {
                   />
                   <span>Email Address *</span>
                 </label>
-                <label className="contact-field">
-                  <input
-                    type="tel"
-                    required
-                    placeholder=" "
-                    value={contactForm.phone}
-                    onChange={(e) => setContactForm((prev) => ({ ...prev, phone: e.target.value }))}
-                  />
+                <label className="contact-field contact-field--phone">
+                  <div className="contact-phone-row">
+                    <select
+                      className="contact-phone-code"
+                      required
+                      aria-label="Country calling code"
+                      value={contactForm.phoneCountryIso2 ?? ""}
+                      onChange={(e) => {
+                        const nextIso2 = (e.target.value || null) as CountryCode | null;
+                        const option =
+                          nextIso2
+                            ? PHONE_COUNTRY_OPTIONS.find((countryOption) => countryOption.iso2 === nextIso2) ?? null
+                            : null;
+                        setContactForm((prev) => ({
+                          ...prev,
+                          phoneCountryIso2: nextIso2,
+                          countryCode: option?.dialCode ?? "",
+                        }));
+                        setPhoneValidationMessage("");
+                      }}
+                    >
+                      <option value="">Code</option>
+                      {PHONE_COUNTRY_OPTIONS.map((option) => (
+                        <option key={option.iso2} value={option.iso2}>
+                          {option.emojiFlag} {option.dialCode}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="contact-phone-sep" aria-hidden />
+                    <input
+                      className="contact-phone-num"
+                      type="tel"
+                      required
+                      placeholder=" "
+                      autoComplete="tel-national"
+                      value={contactForm.phoneNational}
+                      onChange={(e) => {
+                        setContactForm((prev) => ({ ...prev, phoneNational: e.target.value }));
+                        setPhoneValidationMessage("");
+                      }}
+                    />
+                  </div>
                   <span>Phone Number *</span>
+                  {phoneValidationMessage ? (
+                    <p className="contact-field-note contact-field-note--error">{phoneValidationMessage}</p>
+                  ) : null}
                 </label>
               </div>
 
