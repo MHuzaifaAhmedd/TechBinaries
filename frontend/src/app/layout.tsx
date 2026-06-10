@@ -43,11 +43,11 @@ const kamerik = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "TechBinaries | Software Development Studio",
+    default: "TechBinaries | Expert Software Development Company",
     template: "%s | TechBinaries",
   },
   description:
-    "We partner with ambitious companies to design, build, and scale software products. From zero to production — and beyond.",
+    "Tech Binaries is a top-rated software development company. We deliver secure, scalable, and high-performance software solutions for modern businesses.",
   icons: {
     icon: "/images/favicon.png",
   },

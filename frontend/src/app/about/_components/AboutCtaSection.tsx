@@ -30,16 +30,18 @@ export function AboutCtaSection({ sectionRef, marqueeRef }: AboutCtaSectionProps
               keyPrefix="cta-h"
             />
           </span>
-          <span className="ab-cta-headline-line">
-            <span className="ab-italic-light">
-              <AnimatedCharSpans
-                text={CTA.headlineItalic}
-                charClassName="ab-cta-char"
-                wrapClassName="ab-cta-char-wrap"
-                keyPrefix="cta-i"
-              />
+          {CTA.headlineItalic ? (
+            <span className="ab-cta-headline-line">
+              <span className="ab-italic-light">
+                <AnimatedCharSpans
+                  text={CTA.headlineItalic}
+                  charClassName="ab-cta-char"
+                  wrapClassName="ab-cta-char-wrap"
+                  keyPrefix="cta-i"
+                />
+              </span>
             </span>
-          </span>
+          ) : null}
         </h2>
 
         <p className="ab-cta-after ab-cta-lead">{CTA.lead}</p>

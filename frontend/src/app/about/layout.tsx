@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import "./_styles/about-page.css";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: {
+    absolute: "Who We Are | TechBinaries Software Development Company USA",
+  },
   description:
-    "Learn about TechBinaries — who we are, how we work, and what we build with our partners.",
+    "TechBinaries is a results-driven software development company USA specializing in custom software, web, and mobile app development for businesses.",
 };
 
 export default function AboutLayout({

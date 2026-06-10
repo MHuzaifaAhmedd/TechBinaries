@@ -48,25 +48,33 @@ export function AboutHeroSection({ isMobile }: AboutHeroSectionProps) {
                 keyPrefix="h1"
               />
             </span>
-            <span className="ab-hero-line">
-              <AnimatedCharSpans
-                text={HERO.headline2}
-                charClassName="ab-hero-char"
-                wrapClassName="ab-hero-char-wrap"
-                keyPrefix="h2"
-              />
-              <span className="ab-hero-char-wrap">
-                <span className="ab-hero-char">{"\u00A0"}</span>
+            {(HERO.headline2 || HERO.headlineItalic) && (
+              <span className="ab-hero-line">
+                {HERO.headline2 ? (
+                  <AnimatedCharSpans
+                    text={HERO.headline2}
+                    charClassName="ab-hero-char"
+                    wrapClassName="ab-hero-char-wrap"
+                    keyPrefix="h2"
+                  />
+                ) : null}
+                {HERO.headline2 && HERO.headlineItalic ? (
+                  <span className="ab-hero-char-wrap">
+                    <span className="ab-hero-char">{"\u00A0"}</span>
+                  </span>
+                ) : null}
+                {HERO.headlineItalic ? (
+                  <span className="ab-hero-italic">
+                    <AnimatedCharSpans
+                      text={HERO.headlineItalic}
+                      charClassName="ab-hero-char"
+                      wrapClassName="ab-hero-char-wrap"
+                      keyPrefix="hi"
+                    />
+                  </span>
+                ) : null}
               </span>
-              <span className="ab-hero-italic">
-                <AnimatedCharSpans
-                  text={HERO.headlineItalic}
-                  charClassName="ab-hero-char"
-                  wrapClassName="ab-hero-char-wrap"
-                  keyPrefix="hi"
-                />
-              </span>
-            </span>
+            )}
           </h1>
 
           <div className="ab-hero-bottom">

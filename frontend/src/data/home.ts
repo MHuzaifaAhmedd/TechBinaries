@@ -5,7 +5,7 @@ export const SERVICES = [
     num: "01",
     title: "Custom Software Development",
     kicker: "Web, mobile, SaaS, and product UX delivery",
-    desc: "We design and build custom digital products from interface systems to production-ready applications tailored to your business goals.",
+    desc: "We engineer scalable, secure, and future-proof digital products and custom software solutions tailored to streamline operations and drive business growth.",
     deliverables: [
       "Custom Web Application Development",
       "Mobile App Development (iOS & Android)",
@@ -19,7 +19,7 @@ export const SERVICES = [
     num: "02",
     title: "Growth & Performance Engineering",
     kicker: "Conversion systems, analytics, and experimentation",
-    desc: "We build end-to-end growth systems that turn traffic into measurable revenue with better conversion paths, smarter tracking, and continuous experimentation.",
+    desc: "Maximize conversions with engineered landing systems, optimized funnel architectures, data tracking dashboards, and continuous A/B testing infrastructure built for scale.",
     deliverables: [
       "Conversion-Focused Landing Systems",
       "Funnel Architecture & Optimization",
@@ -33,7 +33,7 @@ export const SERVICES = [
     num: "03",
     title: "Search Visibility SEO",
     kicker: "Technical SEO and long-term organic growth",
-    desc: "We strengthen your search foundation with technical SEO, content architecture, and monitoring systems that compound organic visibility over time.",
+    desc: "Dominate search engine results and AI discovery tools with data-driven optimization strategies engineered to maximize your brand's organic traffic.",
     deliverables: [
       "Technical SEO Optimization",
       "Website Performance & Indexing Improvements",
@@ -112,13 +112,40 @@ export const TESTIMONIALS = [
   },
 ];
 
+export const HOME_FAQS = [
+  {
+    q: "How do you approach software development for startups with tight deadlines?",
+    a: "We focus on speed-to-market by building agile Minimum Viable Products (MVPs). This allows you to launch core features quickly, gather real user feedback, and scale your digital product efficiently without overextending your budget early on.",
+  },
+  {
+    q: "What makes Tech Binaries stand out among custom software development companies in the USA?",
+    a: "While many US software development companies charge premium rates with massive overhead, Tech Binaries delivers identical, top-tier engineering with transparent workflows. We combine high-end architecture with efficient sourcing to give you global tech capabilities without the inflated price tag.",
+  },
+  {
+    q: "How do the best custom software development companies ensure long-term product success?",
+    a: "The best software development firms prioritize scalable architecture and future-proof code over quick design hacks. At Tech Binaries, we engineer products with clean infrastructure, so your system can seamlessly adapt as your business grows.",
+  },
+  {
+    q: "What factors determine the overall software development cost for a new project?",
+    a: "The total software development cost depends heavily on your project's feature complexity, the number of third-party integrations, and your timeline. We provide upfront, detailed breakdowns so there are never any hidden pricing surprises.",
+  },
+  {
+    q: "Can we hire dedicated software developers from your team to integrate with our in-house staff?",
+    a: "Yes! When you hire dedicated software development consultants from Tech Binaries, they function as a seamless extension of your internal team. They align with your time zone, adopt your tools, and focus exclusively on executing your product roadmap.",
+  },
+  {
+    q: "Why should an early-stage company choose a specialized software development company for startups?",
+    a: "A dedicated custom software development company for startups understands that your requirements might evolve rapidly. We don't lock you into rigid corporate contracts; instead, we build flexible, cloud-native software that can pivot smoothly based on your market validation and investor demands.",
+  },
+];
+
 export const TECH = [
   "React", "TypeScript", "Node.js", "Python", "Go", "Rust",
   "AWS", "GCP", "Kubernetes", "PostgreSQL", "Redis", "GraphQL",
   "Next.js", "PyTorch", "Terraform", "Docker",
 ];
 
-export const HERO_VERBS = ["engineer", "ship", "craft", "architect", "scale"];
+export const HERO_VERBS = ["Scalable", "Data-Driven", "Turnkey"];
 
 export const BUILDING_NOW = [
   { tag: "SHIPPING", label: "FinEdge · v2.4 · Monday release" },

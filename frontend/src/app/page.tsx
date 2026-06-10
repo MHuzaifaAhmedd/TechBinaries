@@ -17,6 +17,10 @@ const TestimonialsSection = dynamic(
   () => import("@/components/home/TestimonialsSection"),
   { loading: () => null },
 );
+const HomeFaqSection = dynamic(
+  () => import("@/components/home/HomeFaqSection"),
+  { loading: () => null },
+);
 const CTASection = dynamic(() => import("@/components/home/CTASection"), {
   loading: () => null,
 });
@@ -41,6 +45,7 @@ export default function HomePage() {
         </div>
 
         <TestimonialsSection />
+        <HomeFaqSection />
         <CTASection />
         <SiteFooter />
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 // ── GrowthBinarySection ───────────────────────────────────────────────────────
-// "We turn market signals into measurable growth" section with the animated
+// "We Turn Raw Code Into Growth Engines" section with the animated
 // 10/01 binary mark, orbiting messages, and stat cards.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -67,16 +67,19 @@ export default function GrowthBinarySection() {
               lineHeight: 1.02, margin: "0 0 18px", maxWidth: 760,
             }}
           >
-            We turn market signals into{" "}
+            We Turn Raw Code Into{" "}
             <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(10,10,10,0.48)" }}>
-              measurable growth.
+              Growth Engines
             </span>
           </h2>
-          <p style={{ fontSize: "clamp(16px, 1.6vw, 20px)", lineHeight: 1.65, color: "rgba(10,10,10,0.62)", maxWidth: 650, margin: 0 }}>
-            Tech Binaries is built on the simplest operating principle in technology:
-            keep the signal, remove the waste. We map your funnel, instrument the
-            truth, ship experiments, and turn the winning moves into systems your
-            business can repeat.
+          <p style={{ fontSize: "clamp(15px, 1.5vw, 19px)", lineHeight: 1.65, color: "rgba(10,10,10,0.62)", maxWidth: 650, margin: 0 }}>
+            Tech Binaries is an agile software development company built to eliminate digital waste
+            and drive measurable growth. As a trusted enterprise software development company, we
+            provide end-to-end custom software development services that streamline your business
+            infrastructure. Whether you need a dedicated software development team to scale your
+            operations or a specialized SaaS development company to launch next-gen products, we
+            engineer secure, future-proof platforms. We transform complex engineering challenges
+            into clean digital solutions that deliver compounding value.
           </p>
 
           <div

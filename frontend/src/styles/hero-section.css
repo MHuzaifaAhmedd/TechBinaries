@@ -62,18 +62,78 @@
 }
 
 .hero-headline {
-  font-size: clamp(34px, 5vw, 80px);
+  font-size: clamp(30px, 3vw, 54px);
   margin: 0 0 48px;
 }
 
+.hero-headline-line {
+  display: block;
+  overflow-x: visible;
+  overflow-y: hidden;
+  padding-bottom: 0.2em;
+  white-space: nowrap;
+}
+
+.hero-headline-line:first-child {
+  padding-bottom: 0.16em;
+}
+
+.hero-headline-line--last {
+  padding-bottom: 0.28em;
+}
+
+.hero-headline-line--rotating {
+  white-space: nowrap;
+}
+
+.hero-headline-word {
+  display: inline-block;
+  vertical-align: baseline;
+  overflow-x: visible;
+  overflow-y: hidden;
+  padding-bottom: 0.14em;
+  margin-right: 0.22em;
+}
+
 .hero-verb-slot {
-  min-width: 7ch;
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+  min-width: 11.5ch;
+  height: 1.05em;
+  line-height: 1.05;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-verb-mask {
+  position: relative;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.hero-verb-item {
+  display: block;
+  height: 1.05em;
+  line-height: 1.05;
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: max-content;
+  min-width: 100%;
+  transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 .hero-desc {
   font-size: 17px;
   max-width: 480px;
-  line-height: 1.65;
+  line-height: 1.55;
   margin: 0 0 36px;
 }
 
@@ -253,14 +313,14 @@
   .hero-headline {
     font-size: clamp(28px, 8.5vw, 38px) !important;
     margin: 0 0 14px !important;
-    line-height: 0.98 !important;
+    line-height: 1.02 !important;
   }
 
   .hero-verb-slot {
-    min-width: 6ch !important;
+    min-width: 11ch !important;
   }
 
-  .hero-line-3 {
+  .hero-headline-line {
     white-space: normal !important;
   }
 

@@ -1,43 +1,130 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TESTIMONIALS } from "@/data/home";
 
 // ── TestimonialsSection ───────────────────────────────────────────────────────
-// Sliding testimonial carousel — auto-advances every 3.8 s with left/right
-// arrow controls. On mobile shows 1 card, on desktop shows 3.
+// 3D coverflow carousel — active card comes forward in Z-space; side cards sit
+// behind with rotateY depth. Glassmorphism styling, neutral palette.
 // ─────────────────────────────────────────────────────────────────────────────
 
 type ArrowButtonProps = {
   label: string;
   onClick: () => void;
-  char: string;
+  direction: "prev" | "next";
+  disabled?: boolean;
 };
 
-function ArrowBtn({ label, onClick, char }: ArrowButtonProps) {
+function ArrowBtn({ label, onClick, direction, disabled }: ArrowButtonProps) {
   return (
     <button
+      type="button"
+      className="t-nav-btn"
       aria-label={label}
       onClick={onClick}
+      disabled={disabled}
+      data-direction={direction}
       suppressHydrationWarning
-      style={{
-        width: 42, height: 42, borderRadius: "50%",
-        border: "1px solid rgba(0,0,0,0.2)",
-        background: "#fff", color: "#111",
-        fontSize: 20, lineHeight: 1, cursor: "pointer",
-        flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: 0,
-      }}
     >
-      {char}
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden>
+        <path
+          d={direction === "prev" ? "M9 2.5L4.5 7 9 11.5" : "M5 2.5L9.5 7 5 11.5"}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
     </button>
   );
 }
 
+function StarRating() {
+  return (
+    <div className="t-card__stars" aria-label="5 out of 5 stars">
+      {Array.from({ length: 5 }, (_, i) => (
+        <svg key={i} width="14" height="14" viewBox="0 0 14 14" aria-hidden>
+          <path
+            d="M7 1.2l1.54 3.12 3.44.5-2.49 2.43.59 3.43L7 9.38 3.92 10.68l.59-3.43L2.02 4.82l3.44-.5L7 1.2z"
+            fill="currentColor"
+          />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+function parseTitle(title: string) {
+  const comma = title.indexOf(",");
+  if (comma === -1) return { role: title, company: "" };
+  return {
+    role: title.slice(0, comma).trim(),
+    company: title.slice(comma + 1).trim(),
+  };
+}
+
+type TestimonialCardProps = {
+  quote: string;
+  name: string;
+  title: string;
+  initials: string;
+};
+
+function TestimonialCard({ quote, name, title, initials }: TestimonialCardProps) {
+  const { role, company } = parseTitle(title);
+
+  return (
+    <article className="t-card">
+      <div className="t-card__shine" aria-hidden />
+      <span className="t-card__quote-mark font-display" aria-hidden>
+        &ldquo;
+      </span>
+
+      <div className="t-card__top">
+        <StarRating />
+        <span className="t-card__verified">
+          <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden>
+            <path
+              d="M5 .5l1.1 2.23 2.46.36-1.78 1.73.42 2.45L5 6.12 2.8 7.27l.42-2.45L1.44 3.09l2.46-.36L5 .5z"
+              fill="currentColor"
+            />
+          </svg>
+          Verified client
+        </span>
+      </div>
+
+      <blockquote className="t-card__quote font-display">&ldquo;{quote}&rdquo;</blockquote>
+
+      <footer className="t-card__author">
+        <div className="t-card__avatar font-display" aria-hidden>
+          {initials}
+        </div>
+        <div className="t-card__author-text">
+          <div className="t-card__name">{name}</div>
+          <div className="t-card__meta">
+            <span>{role}</span>
+            {company ? <span className="t-card__company">{company}</span> : null}
+          </div>
+        </div>
+      </footer>
+    </article>
+  );
+}
+
+function getWrappedOffset(index: number, active: number, total: number) {
+  let diff = index - active;
+  const half = Math.floor(total / 2);
+  while (diff > half) diff -= total;
+  while (diff < -half) diff += total;
+  return diff;
+}
+
 export default function TestimonialsSection() {
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [startIndex, setStartIndex] = useState(0);
-  const [slideDirection, setSlideDirection] = useState<"next" | "prev" | null>(null);
-  const [animate, setAnimate] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -48,158 +135,130 @@ export default function TestimonialsSection() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  const visibleCount = isMobile ? 1 : 3;
-  const canSlide = TESTIMONIALS.length > visibleCount;
+  const total = TESTIMONIALS.length;
+  const canSlide = total > 1;
 
-  const getAt = (i: number) => TESTIMONIALS[(i + TESTIMONIALS.length) % TESTIMONIALS.length];
+  const slide = useCallback(
+    (direction: "next" | "prev") => {
+      if (!canSlide || isAnimating) return;
+      setIsAnimating(true);
+      setActiveIndex((prev) =>
+        direction === "next" ? (prev + 1) % total : (prev - 1 + total) % total
+      );
+    },
+    [canSlide, isAnimating, total]
+  );
 
-  const visibleCards = canSlide
-    ? Array.from({ length: visibleCount + 1 }, (_, i) =>
-        getAt(startIndex + i + (slideDirection === "prev" ? -1 : 0))
-      )
-    : TESTIMONIALS;
+  const goTo = useCallback(
+    (index: number) => {
+      if (!canSlide || isAnimating || index === activeIndex) return;
+      setIsAnimating(true);
+      setActiveIndex(index);
+    },
+    [canSlide, isAnimating, activeIndex]
+  );
 
-  const stepPercent = 100 / visibleCount;
-  const translate =
-    slideDirection === "prev"
-      ? animate ? 0 : -stepPercent
-      : slideDirection === "next" && animate
-        ? -stepPercent
-        : 0;
-
-  // Reset on breakpoint change
   useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      setAnimate(false);
-      setSlideDirection(null);
-      setStartIndex(0);
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [visibleCount]);
+    if (!isAnimating) return;
+    const id = window.setTimeout(() => setIsAnimating(false), 760);
+    return () => window.clearTimeout(id);
+  }, [isAnimating, activeIndex]);
 
-  // Auto-advance
   useEffect(() => {
-    if (!canSlide) return;
-    const id = setInterval(() => {
-      if (slideDirection) return;
-      setSlideDirection("next");
-      setAnimate(false);
-      requestAnimationFrame(() => setAnimate(true));
-    }, 3800);
+    if (!canSlide || isPaused || isAnimating) return;
+    const id = setInterval(() => slide("next"), 4500);
     return () => clearInterval(id);
-  }, [slideDirection, canSlide]);
-
-  const slideNext = () => {
-    if (!canSlide || slideDirection) return;
-    setSlideDirection("next");
-    setAnimate(false);
-    requestAnimationFrame(() => setAnimate(true));
-  };
-
-  const slidePrev = () => {
-    if (!canSlide || slideDirection) return;
-    setSlideDirection("prev");
-    setAnimate(false);
-    requestAnimationFrame(() => setAnimate(true));
-  };
-
-  const onTransitionEnd = () => {
-    if (!slideDirection) return;
-    setAnimate(false);
-    setStartIndex((prev) =>
-      slideDirection === "next"
-        ? (prev + 1) % TESTIMONIALS.length
-        : (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length
-    );
-    setSlideDirection(null);
-  };
+  }, [canSlide, isPaused, isAnimating, slide, activeIndex]);
 
   return (
     <section
       id="testimonials"
-      style={{ padding: "140px 20px", background: "#f5f5f4", borderTop: "1px solid rgba(0,0,0,0.06)" }}
+      className="t-section"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) setIsPaused(false);
+      }}
     >
-      <div style={{ maxWidth: 1220, margin: "0 auto" }}>
-        {/* Header */}
-        <div style={{ display: "flex", marginBottom: 42 }}>
-          <div style={{ maxWidth: 720, marginLeft: -6 }}>
-            <h2
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(32px, 3.8vw, 56px)",
-                fontWeight: 500, letterSpacing: "-0.032em", lineHeight: 1.02, margin: "0 0 16px",
-              }}
-            >
-              What our <span style={{ color: "rgba(0,0,0,0.52)", fontWeight: 400, fontStyle: "italic" }}>clients</span> say
-            </h2>
-            <p style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: "rgba(0,0,0,0.58)", maxWidth: 620 }}>
-              Real feedback from teams we have partnered with across product, platform, and AI delivery.
-            </p>
-          </div>
-        </div>
+      <div className="t-section__bg" aria-hidden />
+      <div className="t-section__inner">
+        <header className="t-header">
+          <p className="t-eyebrow">Client voices</p>
+          <h2 className="t-title font-display">
+            Stories Of <span className="t-title-muted">Measurable Growth</span>
+          </h2>
+          <p className="t-lead">
+            Real feedback from forward-thinking companies relying on our software development
+            services to scale their technical capabilities.
+          </p>
+        </header>
 
-        {/* Carousel */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <ArrowBtn label="Previous testimonial" onClick={slidePrev} char="<" />
+        <div className="t-carousel-3d">
+          <ArrowBtn
+            label="Previous testimonial"
+            onClick={() => slide("prev")}
+            direction="prev"
+            disabled={!canSlide || isAnimating}
+          />
 
-          <div style={{ overflow: "hidden", flex: 1 }}>
-            <div
-              style={{
-                display: "flex",
-                transform: `translateX(${translate}%)`,
-                transition: slideDirection && animate ? "transform 0.65s cubic-bezier(0.22,1,0.36,1)" : "none",
-              }}
-              onTransitionEnd={onTransitionEnd}
-            >
-              {(canSlide ? visibleCards : TESTIMONIALS).map((t, i) => (
-                <div
-                  key={`${t.initials}-${i}`}
-                  style={{ flex: `0 0 ${100 / visibleCount}%`, padding: "0 9px" }}
-                >
-                  <article
-                    style={{
-                      display: "flex", flexDirection: "column", justifyContent: "space-between",
-                      border: "1px solid rgba(0,0,0,0.1)",
-                      background: "#fafaf9", padding: "28px 26px",
-                      minHeight: 300, height: "100%",
-                    }}
+          <div className="t-stage" aria-live="polite">
+            <div className="t-ring">
+              {TESTIMONIALS.map((t, i) => {
+                const offset = getWrappedOffset(i, activeIndex, total);
+                const isActive = offset === 0;
+                const isHidden = isMobile && !isActive;
+
+                return (
+                  <div
+                    key={t.initials}
+                    className="t-slot"
+                    data-offset={offset}
+                    data-active={isActive ? "true" : "false"}
+                    data-settled={isActive && !isAnimating ? "true" : "false"}
+                    data-hidden={isHidden ? "true" : "false"}
+                    aria-hidden={!isActive}
                   >
-                    <blockquote
-                      style={{
-                        margin: 0, fontFamily: "var(--font-display)",
-                        fontSize: "clamp(17px, 1.65vw, 22px)",
-                        lineHeight: 1.45, letterSpacing: "-0.014em",
-                        color: "rgba(0,0,0,0.85)",
-                      }}
-                    >
-                      &ldquo;{t.quote}&rdquo;
-                    </blockquote>
-
-                    <div style={{ marginTop: 28, paddingTop: 20, borderTop: "1px solid rgba(0,0,0,0.09)", display: "flex", alignItems: "center", gap: 14 }}>
-                      <div
-                        style={{
-                          width: 42, height: 42, borderRadius: "50%",
-                          background: "#0a0a0a", color: "#fafaf9",
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          fontSize: 12, fontWeight: 500, letterSpacing: "0.05em",
-                          fontFamily: "var(--font-display)", flexShrink: 0,
-                        }}
-                      >
-                        {t.initials}
-                      </div>
-                      <div>
-                        <div style={{ fontSize: 14.5, fontWeight: 500, letterSpacing: "-0.005em", color: "#111" }}>{t.name}</div>
-                        <div style={{ fontSize: 13, color: "rgba(0,0,0,0.5)", marginTop: 2 }}>{t.title}</div>
-                      </div>
+                    <div className="t-card-face">
+                      <TestimonialCard
+                        quote={t.quote}
+                        name={t.name}
+                        title={t.title}
+                        initials={t.initials}
+                      />
                     </div>
-                  </article>
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          <ArrowBtn label="Next testimonial" onClick={slideNext} char=">" />
+          <ArrowBtn
+            label="Next testimonial"
+            onClick={() => slide("next")}
+            direction="next"
+            disabled={!canSlide || isAnimating}
+          />
         </div>
+
+        {canSlide ? (
+          <div className="t-dots" role="tablist" aria-label="Testimonial navigation">
+            {TESTIMONIALS.map((t, i) => (
+              <button
+                key={t.initials}
+                type="button"
+                role="tab"
+                className="t-dots__btn"
+                aria-label={`Go to testimonial from ${t.name}`}
+                aria-selected={i === activeIndex}
+                data-active={i === activeIndex ? "true" : "false"}
+                onClick={() => goTo(i)}
+                disabled={isAnimating}
+                suppressHydrationWarning
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
     </section>
   );

@@ -86,43 +86,27 @@ export default function HeroSection() {
                 style={{
                   fontFamily: "var(--font-display)",
                   fontWeight: 500,
-                  lineHeight: 0.96,
+                  lineHeight: 1.05,
                   letterSpacing: "-0.032em",
                   color: "#ffffff",
                   textShadow: "0 8px 28px rgba(0,0,0,0.35)",
                 }}
               >
-                <div
-                  style={{
-                    overflow: "hidden",
-                    paddingBottom: "0.08em",
-                    display: "flex",
-                    flexWrap: "nowrap",
-                    alignItems: "baseline",
-                    gap: "0.22em",
-                  }}
-                >
-                  <span style={{ display: "inline-flex", overflow: "hidden", flexShrink: 0 }}>{splitChars("We", "we")}</span>
+                <div className="hero-headline-line">
+                  {splitChars("Software Development", "l1")}
+                </div>
+
+                <div className="hero-headline-line">
+                  {splitChars("Company", "l2")}
+                </div>
+
+                <div className="hero-headline-line hero-headline-line--rotating">
+                  <span className="hero-headline-word">{splitChars("Building", "l3")}</span>
                   <HeroRotatingVerb />
                 </div>
 
-                <div style={{ overflow: "hidden", paddingBottom: "0.06em" }}>{splitChars("software for", "s")}</div>
-
-                <div className="hero-line-3" style={{ overflow: "hidden", whiteSpace: "nowrap" }}>
-                  {"ambitious teams.".split("").map((c, i) => (
-                    <span
-                      key={`a-${i}`}
-                      className="hero-char"
-                      style={{
-                        display: "inline-block",
-                        willChange: "transform",
-                        color: c === "." ? "rgba(255,255,255,0.55)" : "inherit",
-                        whiteSpace: "pre",
-                      }}
-                    >
-                      {c === " " ? "\u00A0" : c}
-                    </span>
-                  ))}
+                <div className="hero-headline-line hero-headline-line--last">
+                  {splitChars("Digital Products", "l4")}
                 </div>
               </h1>
 
@@ -135,9 +119,13 @@ export default function HeroSection() {
                   textShadow: "0 6px 22px rgba(0,0,0,0.32)",
                 }}
               >
-                A senior team of engineers, designers, and strategists partnering with startups and
-                scale-ups to design, build, and ship products that matter — from zero to production and
-                long after.
+                Our full-service software development Company delivers
+                <br />
+                cloud-native solutions that empower modern enterprises to
+                <br />
+                innovate faster and scale their digital infrastructure 
+                <br />
+                effortlessly.
               </p>
 
               <div className="hero-intro-col hero-cta" style={{ display: "flex", gap: 12, opacity: 0, flexWrap: "wrap" }}>
@@ -157,7 +145,7 @@ export default function HeroSection() {
                     overflow: "hidden",
                   }}
                 >
-                  <span style={{ position: "relative", zIndex: 2 }}>Start a project</span>
+                  <span style={{ position: "relative", zIndex: 2 }}>Let’s Talk Tech</span>
                   <svg
                     aria-hidden
                     width="12"

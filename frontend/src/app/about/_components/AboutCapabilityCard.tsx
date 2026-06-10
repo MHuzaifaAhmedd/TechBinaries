@@ -37,7 +37,7 @@ export function AboutCapabilityCard({ item, index }: AboutCapabilityCardProps) {
               <span className="ab-cap-card-rail-slash" aria-hidden>
                 /
               </span>
-              <span className="ab-cap-card-rail-practice">Practice {item.n}</span>
+              <span className="ab-cap-card-rail-practice">Pillar {item.n}</span>
             </div>
             <div className="ab-cap-card-stat-block">
               <span className="ab-cap-card-stat">{item.stat}</span>

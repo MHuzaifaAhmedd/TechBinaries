@@ -33,17 +33,17 @@ export function CapabilityDesktopHeading({
         <h2
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "clamp(36px, 4.6vw, 68px)",
+            fontSize: "clamp(32px, 3.8vw, 56px)",
             fontWeight: 500,
-            letterSpacing: "-0.035em",
-            lineHeight: 1,
+            letterSpacing: "-0.032em",
+            lineHeight: 1.02,
             margin: 0,
             whiteSpace: "nowrap",
           }}
         >
-          What we{" "}
+          Services We{" "}
           <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(0,0,0,0.55)" }}>
-            do best.
+            Excel At.
           </span>
         </h2>
       </div>

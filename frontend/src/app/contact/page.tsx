@@ -9,7 +9,7 @@ import { ContactBudgetSelect } from "./_components/ContactBudgetSelect";
 import { ContactHearAboutSelect } from "./_components/ContactHearAboutSelect";
 import { formatContactHearAbout } from "@/lib/contact-hear-about-options";
 import { marketingBudgetLabel } from "@/lib/marketing-budget-ranges";
-import { PHONE_COUNTRY_OPTIONS } from "@/lib/phone-country-options";
+import { ContactPhoneCountrySelect } from "./_components/ContactPhoneCountrySelect";
 
 /** Pillar + sub-service labels (checkbox values). Labels are unique across groups. */
 const CONTACT_SERVICE_GROUPS = [
@@ -324,32 +324,17 @@ export default function ContactPage() {
                 </label>
                 <label className="contact-field contact-field--phone">
                   <div className="contact-phone-row">
-                    <select
-                      className="contact-phone-code"
-                      required
-                      aria-label="Country calling code"
-                      value={contactForm.phoneCountryIso2 ?? ""}
-                      onChange={(e) => {
-                        const nextIso2 = (e.target.value || null) as CountryCode | null;
-                        const option =
-                          nextIso2
-                            ? PHONE_COUNTRY_OPTIONS.find((countryOption) => countryOption.iso2 === nextIso2) ?? null
-                            : null;
+                    <ContactPhoneCountrySelect
+                      valueIso2={contactForm.phoneCountryIso2}
+                      onChange={(nextIso2, nextDialCode) => {
                         setContactForm((prev) => ({
                           ...prev,
                           phoneCountryIso2: nextIso2,
-                          countryCode: option?.dialCode ?? "",
+                          countryCode: nextDialCode,
                         }));
                         setPhoneValidationMessage("");
                       }}
-                    >
-                      <option value="">Code</option>
-                      {PHONE_COUNTRY_OPTIONS.map((option) => (
-                        <option key={option.iso2} value={option.iso2}>
-                          {option.emojiFlag} {option.dialCode}
-                        </option>
-                      ))}
-                    </select>
+                    />
                     <span className="contact-phone-sep" aria-hidden />
                     <input
                       className="contact-phone-num"
@@ -408,15 +393,12 @@ export default function ContactPage() {
                       <div className="contact-service-group-heading">{group.title}</div>
                       <div className="contact-service-group-items">
                         {group.items.map((service) => (
-                          <label key={service} className="contact-check contact-check--nested">
+                          <label key={service} className="contact-check">
                             <input
                               type="checkbox"
                               checked={contactForm.services.includes(service)}
                               onChange={() => toggleService(service)}
                             />
-                            <span className="contact-service-glyph" aria-hidden>
-                              ›
-                            </span>
                             <span>{service}</span>
                           </label>
                         ))}

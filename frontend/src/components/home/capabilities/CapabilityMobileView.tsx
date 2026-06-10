@@ -18,7 +18,7 @@ export function CapabilityMobileView({
   return (
     <div className="cap-mobile">
       <div className="cap-mobile__header">
-        <div className="cap-mobile__eyebrow">What we do best</div>
+        <div className="cap-mobile__eyebrow">Services We Excel At</div>
         <h2 className="cap-mobile__title">
           Three service pillars.
           <br />

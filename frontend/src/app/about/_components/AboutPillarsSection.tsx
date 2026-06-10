@@ -62,17 +62,21 @@ export function AboutPillarsSection() {
                     <span className="ab-pillar-kicker">{item.kicker}</span>
                   </div>
                   <h3 className="ab-pillar-overlay-head">{item.head}</h3>
-                  <p className="ab-pillar-overlay-body">{item.body}</p>
-                  <ul className="ab-pillar-meta">
-                    {item.meta.map((meta) => (
-                      <li key={meta} className="ab-pillar-meta-item">
-                        <span className="ab-pillar-meta-mark" aria-hidden>
-                          ▸
-                        </span>
-                        {meta}
-                      </li>
-                    ))}
-                  </ul>
+                  {item.body ? (
+                    <p className="ab-pillar-overlay-body">{item.body}</p>
+                  ) : null}
+                  {item.meta.length > 0 ? (
+                    <ul className="ab-pillar-meta">
+                      {item.meta.map((meta) => (
+                        <li key={meta} className="ab-pillar-meta-item">
+                          <span className="ab-pillar-meta-mark" aria-hidden>
+                            ▸
+                          </span>
+                          {meta}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </div>
               </div>
             </article>

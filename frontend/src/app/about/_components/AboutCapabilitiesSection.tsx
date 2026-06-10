@@ -14,7 +14,12 @@ export function AboutCapabilitiesSection({
   activeIndex,
 }: AboutCapabilitiesSectionProps) {
   return (
-    <section ref={capRef} className="ab-cap" aria-labelledby="ab-cap-title">
+    <section
+      ref={capRef}
+      id="four-pillars"
+      className="ab-cap"
+      aria-labelledby="ab-cap-title"
+    >
       <div className="ab-cap-pin">
         <div className="ab-cap-pin-bg" aria-hidden>
           <div className="ab-cap-grain" />

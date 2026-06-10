@@ -108,8 +108,8 @@ export default function CTASection() {
           </h2>
 
           <p style={{ fontSize: 15, color: "rgba(255,255,255,0.58)", maxWidth: 500, lineHeight: 1.62, margin: "0 0 36px" }}>
-            Free 30-minute discovery call. You&apos;ll talk directly with an engineer
-            and a strategist. No sales pitch, just a real conversation about your problem.
+            Free 30-minute technical roadmap call. No sales pitch, just direct access to our core
+            engineering team for our expert software development solutions.
           </p>
 
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>

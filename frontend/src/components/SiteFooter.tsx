@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import FooterNewsletterForm from "@/components/FooterNewsletterForm";
 import { FOOTER_NAV_COLS, FOOTER_SOCIAL } from "@/data/home";
 
 // ── SiteFooter ────────────────────────────────────────────────────────────────
@@ -181,64 +182,7 @@ export default function SiteFooter() {
             <p style={{ color: "rgba(10,10,10,0.65)", fontSize: 16, lineHeight: 1.6, marginBottom: 18 }}>
               Monthly notes on growth bets, technical architecture, and what we&apos;re shipping next.
             </p>
-            <form
-              className="footer-newsletter-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const form = e.currentTarget;
-                const input = form.elements.namedItem("email") as HTMLInputElement | null;
-                const value = input?.value?.trim() || "";
-                const body = value
-                  ? `Please subscribe this email to The Dispatch:%0D%0A${encodeURIComponent(value)}`
-                  : "Please subscribe me to The Dispatch.";
-                window.location.href = `mailto:hello@techbinaries.com?subject=Subscribe%20to%20The%20Dispatch&body=${body}`;
-              }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                border: "1px solid rgba(10,10,10,0.16)",
-                borderRadius: 999,
-                padding: "7px 7px 7px 16px",
-                background: "rgba(10,10,10,0.025)",
-                transition: "border-color 0.25s, background 0.25s",
-              }}
-            >
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="you@company.com"
-                suppressHydrationWarning
-                style={{
-                  flex: 1,
-                  border: "none",
-                  background: "transparent",
-                  outline: "none",
-                  color: "#0a0a0a",
-                  fontSize: 14,
-                  fontFamily: "var(--font-body)",
-                }}
-              />
-              <button
-                className="footer-newsletter-btn"
-                type="submit"
-                suppressHydrationWarning
-                style={{
-                  border: "none",
-                  borderRadius: 999,
-                  padding: "10px 16px",
-                  background: "#0a0a0a",
-                  color: "#fafaf9",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  transition: "transform 0.22s, background 0.22s",
-                }}
-              >
-                Subscribe →
-              </button>
-            </form>
+            <FooterNewsletterForm />
           </div>
         </div>
 
