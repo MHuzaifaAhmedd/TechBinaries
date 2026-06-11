@@ -8,7 +8,7 @@ export function CsdCapabilitiesSection() {
         <div className="csd-sh csd-cap-header">
           <div>
             <h2 className="csd-cap-h2">
-              Six disciplines. <span className="csd-italic-mute">One senior team.</span>
+              Core Services. <span className="csd-italic-mute">One Expert Team.</span>
             </h2>
           </div>
         </div>

@@ -1,5 +1,7 @@
 import { useEffect } from "react";
+import { DESKTOP_MIN_WIDTH_MEDIA_QUERY } from "@/lib/breakpoints";
 import { loadGsapWithScrollTrigger, runAfterInteractive } from "@/lib/animation/loaders";
+import { scheduleScrollTriggerRefresh } from "@/lib/animation/refreshScrollTrigger";
 
 export function useCsdGsapPage(): void {
   useEffect(() => {
@@ -93,9 +95,15 @@ export function useCsdGsapPage(): void {
           const processTrack = document.querySelector<HTMLElement>(".csd-process-track");
           const processPin = document.querySelector<HTMLElement>(".csd-process-pin");
           const mm = gsap.matchMedia();
-          mm.add("(min-width: 769px)", () => {
+          mm.add(DESKTOP_MIN_WIDTH_MEDIA_QUERY, () => {
             if (!processTrack || !processPin) return;
-            const getScrollDistance = () => processTrack.scrollWidth - window.innerWidth + 80;
+            const getScrollDistance = () =>
+              Math.max(0, processTrack.scrollWidth - window.innerWidth + 80);
+            const resetTrack = () => {
+              gsap.set(processTrack, { x: 0 });
+            };
+            resetTrack();
+            ScrollTrigger.addEventListener("refreshInit", resetTrack);
             gsap.to(processTrack, {
               x: () => -getScrollDistance(),
               ease: "none",
@@ -105,11 +113,14 @@ export function useCsdGsapPage(): void {
                 end: () => `+=${getScrollDistance()}`,
                 pin: true,
                 pinSpacing: true,
-                anticipatePin: 1,
-                scrub: 0.8,
+                scrub: true,
+                fastScrollEnd: true,
                 invalidateOnRefresh: true,
               },
             });
+            return () => {
+              ScrollTrigger.removeEventListener("refreshInit", resetTrack);
+            };
           });
 
           gsap.fromTo(
@@ -125,6 +136,7 @@ export function useCsdGsapPage(): void {
           );
         });
         revert = () => ctx.revert();
+        scheduleScrollTriggerRefresh();
       });
     });
 

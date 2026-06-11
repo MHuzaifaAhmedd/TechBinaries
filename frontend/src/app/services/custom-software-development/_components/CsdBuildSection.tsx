@@ -25,8 +25,8 @@ export function CsdBuildSection({ build }: Props) {
                 Real products, <span className="csd-italic-mute">not slides.</span>
               </h2>
               <p className="csd-h2-lead csd-build-lead">
-                Service categories are abstract. Here&apos;s what they actually become in production — hover any row
-                to see it.
+                These bespoke software development services may sound complex, but here&apos;s how they come to life in
+                real use. Hover to see.
               </p>
             </div>
 

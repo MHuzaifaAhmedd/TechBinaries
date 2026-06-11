@@ -6,9 +6,9 @@ export function CsdValuePropsSection() {
     <section className="csd-vp-section" aria-labelledby="csd-vp-title">
       <div className="csd-vp-grid">
         <div className="csd-vp-content csd-sh">
-          <h2 id="csd-vp-title" className="csd-vp-h2">
-            Built for teams that <span className="csd-vp-h2-accent">measure outcomes.</span>
-          </h2>
+          <h3 id="csd-vp-title" className="csd-vp-h2">
+            Built to Deliver <span className="csd-vp-h2-accent">Real Outcomes</span>
+          </h3>
 
           <ul className="csd-vp-list" role="list">
             {VALUE_PROPS.map((v, i) => (
@@ -17,13 +17,7 @@ export function CsdValuePropsSection() {
                   <span style={{ fontFamily: "var(--font-mono)" }}>{String(i + 1).padStart(2, "0")}</span>
                 </div>
                 <div className="csd-vp-item-body">
-                  <div className="csd-vp-item-head">
-                    <h3 className="csd-vp-item-title">{v.title}</h3>
-                    <div className="csd-vp-item-metric">
-                      <span className="csd-vp-item-metric-value">{v.metric}</span>
-                      <span className="csd-vp-item-metric-label">{v.metricLabel}</span>
-                    </div>
-                  </div>
+                  <h3 className="csd-vp-item-title">{v.title}</h3>
                   <p className="csd-vp-item-desc">{v.desc}</p>
                 </div>
               </li>

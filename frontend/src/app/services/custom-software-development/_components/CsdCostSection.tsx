@@ -20,49 +20,51 @@ export function CsdCostSection() {
         </div>
 
         <div className="csd-cost-content csd-sh">
-          <h2 id="cost-heading" className="csd-cost-h2">
-            Why it <span className="csd-cost-h2-accent">matters.</span>
-          </h2>
+          <h3 id="cost-heading" className="csd-cost-h2">
+            Why Custom Software Development <span className="csd-cost-h2-accent">Matters?</span>
+          </h3>
 
           <p className="csd-cost-lead">
-            Even leading companies waste millions on apps that don&apos;t convert. The pattern is consistent — and
-            almost always preventable.
+            Even today, businesses lose millions on digital products that fail to perform. Without the right custom
+            software solutions, these challenges are common but entirely avoidable.
           </p>
 
           <ul className="csd-cost-list">
             <li>
               <span className="csd-cost-list-mark" />
               <div>
-                <strong>Cluttered interfaces</strong> frustrate users and drive them to competitors within the first
-                session.
+                <strong>Poor user experience</strong>
+                {" drives users away quickly, reducing engagement and conversions from the very first interaction."}
               </div>
             </li>
             <li>
               <span className="csd-cost-list-mark" />
               <div>
-                <strong>Slow performance</strong> kills retention — 53% of users abandon sites that take longer than
-                three seconds to load.
+                <strong>Slow, unoptimized systems</strong>
+                {" hurt retention and SEO rankings, causing users to abandon platforms that don't meet performance expectations."}
               </div>
             </li>
             <li>
               <span className="csd-cost-list-mark" />
               <div>
-                <strong>Poor integration</strong> with back-end systems creates silent operational drag and reduces team
-                efficiency.
+                <strong>Disconnected systems</strong>
+                {" create inefficiencies, limiting productivity and preventing seamless business operations across departments."}
               </div>
             </li>
             <li>
               <span className="csd-cost-list-mark" />
               <div>
-                <strong>Lack of analytics</strong> means decisions get made on guesswork instead of evidence — and the
-                roadmap suffers.
+                <strong>A lack of actionable insights</strong>
+                {" leads to poor decision-making, slows growth, and reduces overall return on investment."}
               </div>
             </li>
           </ul>
 
           <p className="csd-cost-close">
-            We design and engineer custom software to eliminate every one of these failure points — built for the
-            audience you actually serve, with adoption, engagement, and ROI as the brief.
+            A skilled custom software developer understands how to eliminate these challenges through scalable,
+            user-focused technology. As a results-driven custom software agency, we build high-performance digital
+            products designed for usability, integration, and long-term growth, so your business doesn&apos;t just
+            function, it thrives.
           </p>
         </div>
       </div>

@@ -9,12 +9,12 @@ type Props = {
 
 export function CsdFaqSection({ openFaq, setOpenFaq }: Props) {
   return (
-    <section className="csd-faq-section">
+    <section className="csd-faq-section" aria-labelledby="csd-faq-title">
       <div className="csd-faq-layout">
         <div className="csd-faq-aside csd-sh">
-          <h2 className="csd-h2">
-            Frequently <span className="csd-italic-mute">asked.</span>
-          </h2>
+          <h3 id="csd-faq-title" className="csd-h2">
+            FAQs
+          </h3>
           <p className="csd-h2-lead csd-faq-lead">
             Real questions from real prospects. If yours isn&apos;t here, send us a note — we answer every inquiry within
             24 hours.

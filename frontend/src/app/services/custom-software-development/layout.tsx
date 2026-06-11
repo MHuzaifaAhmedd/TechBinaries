@@ -3,9 +3,11 @@ import "./_styles/custom-software-page.css";
 import "./_styles/cwa-page.shared.css";
 
 export const metadata: Metadata = {
-  title: "Custom Software Development",
+  title: {
+    absolute: "TechBinaries Custom Software Development Services",
+  },
   description:
-    "Custom software, web apps, mobile, and product engineering — built for performance, scale, and maintainability.",
+    "Upgrade your business with custom software development services by TechBinaries. We build secure and user-centric solutions that drive growth.",
 };
 
 export default function CustomSoftwareDevelopmentLayout({

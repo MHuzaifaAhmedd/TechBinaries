@@ -65,13 +65,13 @@ export function CsdHeroSection({ isMobile, heroMenu }: Props) {
             <CsdHeroHeadline isMobile={isMobile} />
 
             <p className="csd-hero-fade csd-hero-lead" style={{ opacity: 0 }}>
-              We design, build, and modernize web apps, mobile apps, SaaS platforms, and internal tools that launch
-              fast, perform reliably, and stay easy to scale as your business grows.
+              Partner with a results-driven custom software development agency that creates intelligent, scalable
+              software solutions aligned with your business goals and future digital growth strategies.
             </p>
 
             <div className="csd-hero-fade csd-hero-cta-row" style={{ opacity: 0 }}>
               <Link href="/contact" className="csd-cta-primary">
-                <span style={{ position: "relative", zIndex: 2 }}>Plan my build</span>
+                <span style={{ position: "relative", zIndex: 2 }}>Build My Custom Solution</span>
                 <svg
                   aria-hidden
                   width="12"

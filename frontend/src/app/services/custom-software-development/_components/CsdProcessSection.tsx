@@ -5,6 +5,7 @@ type Props = { isMobile: boolean };
 export function CsdProcessSection({ isMobile }: Props) {
   return (
     <section
+      id="process"
       className="csd-process-pin"
       style={{
         padding: 0,
@@ -28,48 +29,19 @@ export function CsdProcessSection({ isMobile }: Props) {
           pointerEvents: "none",
         }}
       />
-      <div
-        style={{
-          position: "relative",
-          zIndex: 2,
-          flexShrink: 0,
-          padding: "clamp(80px, 12vh, 140px) 20px clamp(20px, 3vh, 40px)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          gap: 40,
-          flexWrap: "wrap",
-        }}
-      >
-        <div>
-          <h2
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(32px, 4.5vw, 72px)",
-              fontWeight: 500,
-              letterSpacing: "-0.035em",
-              lineHeight: 0.95,
-              margin: 0,
-            }}
-          >
-            Our{" "}
-            <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(255,255,255,0.6)" }}>process.</span>
-          </h2>
+
+      <div className="csd-process-header">
+        <div className="csd-process-title-row">
+          <h3 className="csd-process-h3">
+            Our <span className="csd-process-h3-accent">Development Process</span>
+          </h3>
+          <p className="csd-process-meta">
+            Six phases. One team. A way of working refined across 150+ shipped products.
+          </p>
         </div>
-        <p
-          style={{
-            fontSize: 14,
-            color: "rgba(255,255,255,0.5)",
-            maxWidth: 320,
-            lineHeight: 1.65,
-            margin: 0,
-            textAlign: "right",
-            flexShrink: 0,
-          }}
-        >
-          Six phases. One team. A way of working refined
-          <br />
-          across 150+ shipped products.
+        <p className="csd-process-lead">
+          A streamlined, proven approach designed to deliver scalable, high-performing custom software development
+          solutions with clarity, efficiency, and measurable business impact.
         </p>
       </div>
 

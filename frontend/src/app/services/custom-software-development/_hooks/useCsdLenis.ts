@@ -6,6 +6,7 @@ import {
   runAfterInteractive,
 } from "@/lib/animation/loaders";
 import { DEFAULT_LENIS_OPTIONS } from "@/lib/animation/lenis-config";
+import { scheduleScrollTriggerRefresh } from "@/lib/animation/refreshScrollTrigger";
 
 export type UseCsdLenisParams = {
   setHoveredBuild: Dispatch<SetStateAction<number>>;
@@ -52,6 +53,7 @@ export function useCsdLenis({ setHoveredBuild }: UseCsdLenisParams): UseCsdLenis
           const ticker = (time: number) => lenis.raf(time * 1000);
           gsap.ticker.add(ticker);
           gsap.ticker.lagSmoothing(0);
+          scheduleScrollTriggerRefresh();
           cleanup = () => {
             gsap.ticker.remove(ticker);
             if (hoverLockTimeoutRef.current) window.clearTimeout(hoverLockTimeoutRef.current);

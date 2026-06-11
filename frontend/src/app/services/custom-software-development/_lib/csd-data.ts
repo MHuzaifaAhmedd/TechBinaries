@@ -67,52 +67,44 @@ export const SUB_SERVICES = [
 ];
 
 export const WE_BUILD = [
-  { id: "saas", bin: "01", label: "SaaS Platforms", desc: "Multi-tenant products with billing, dashboards, and integrations." },
-  { id: "dashboard", bin: "10", label: "Business Dashboards", desc: "Real-time analytics surfaces wired to your live data." },
-  { id: "mobile", bin: "11", label: "Mobile Apps", desc: "Native iOS, Android, and cross-platform consumer apps." },
+  { id: "saas", bin: "01", label: "SaaS Platforms", desc: "Multi-tenant products with billing, dashboards, and integrations for custom fintech and retail software." },
+  { id: "dashboard", bin: "10", label: "Business Dashboards", desc: "Real-time analytics surfaces wired to your live data for custom healthcare software." },
+  { id: "mobile", bin: "11", label: "Mobile Apps", desc: "Native iOS, Android, and cross-platform consumer apps for custom real estate and custom educational software." },
   { id: "internal", bin: "00", label: "Internal Tools", desc: "Admin panels and ops tooling that replace spreadsheets." },
-  { id: "mvp", bin: "01", label: "MVPs", desc: "Ship-fast prototypes built on architecture that can scale." },
-  { id: "market", bin: "10", label: "Marketplaces", desc: "Two-sided platforms with payments, search, and trust systems." },
+  { id: "mvp", bin: "01", label: "MVPs", desc: "Ship-fast prototypes built on an architecture that can scale for custom logistics and custom manufacturing software." },
+  { id: "market", bin: "10", label: "Marketplaces", desc: "Two-sided platforms with payments, search, and trust systems for custom ecommerce app development." },
 ];
 
 export const VALUE_PROPS = [
   {
     id: "performance",
-    metric: "98%+",
-    metricLabel: "Avg Lighthouse",
-    title: "Performance that keeps users engaged",
-    desc: "Runtime budgets, stable interactions, and measurable gains across Lighthouse, Core Web Vitals, and real-device testing.",
+    title: "High-Performance That Engages Users",
+    desc: "We build fast, optimized platforms that keep users engaged, improve Core Web Vitals, and deliver measurable performance gains across all devices.",
   },
   {
     id: "architecture",
-    metric: "10×",
-    metricLabel: "Growth headroom",
-    title: "Architecture that scales as you grow",
-    desc: "Clear boundaries and observability let you ship faster with fewer incidents and less rework.",
+    title: "Scalable Architecture for Long-Term Growth",
+    desc: "Our software development solutions are designed to scale seamlessly, helping your business grow without technical limitations, downtime, or costly rebuilds in the future.",
   },
   {
     id: "design-system",
-    metric: "1 system",
-    metricLabel: "Design coverage",
-    title: "Design systems that reduce UX friction",
-    desc: "Tokens and reusable components keep web, mobile, and internal tools consistent as teams scale.",
+    title: "User-Centric Design That Converts",
+    desc: "We create intuitive, consistent design systems that reduce friction, enhance usability, and improve conversions across web, mobile, and digital platforms.",
   },
   {
     id: "delivery",
-    metric: "Weekly",
-    metricLabel: "Shipped iterations",
-    title: "Delivery cadence that accelerates momentum",
-    desc: "Weekly demos and feature-flagged releases help you learn quickly and reduce rollout risk.",
+    title: "Faster Delivery, Continuous Improvement",
+    desc: "With agile workflows and weekly iterations, we deliver faster releases, gather real feedback, and continuously improve your product for sustained business growth.",
   },
 ];
 
 export const PROCESS = [
-  { num: "01", title: "Discovery", desc: "Deep-dive into your business, users, and technical landscape to uncover what actually needs to be built.", points: ["Stakeholder interviews", "Technical audit", "Opportunity mapping"] },
-  { num: "02", title: "Design", desc: "We design the experience — flows, wireframes, and high-fidelity UI — before a single line of production code is written.", points: ["UX flows & wireframes", "High-fidelity UI", "Design tokens"] },
-  { num: "03", title: "Development", desc: "Agile sprints with weekly demos. You stay close to the work. We ship fast without cutting corners.", points: ["Weekly demos", "CI/CD pipeline", "Code review"] },
-  { num: "04", title: "Testing", desc: "Automated and manual QA across devices, browsers, and edge cases. Performance, accessibility, and security baked in.", points: ["Automated test suites", "Cross-device QA", "Performance budgets"] },
-  { num: "05", title: "Launch", desc: "Phased rollout with monitoring, observability, and rollback plans. We don't ship and pray.", points: ["Phased rollout", "Monitoring & alerts", "Rollback ready"] },
-  { num: "06", title: "Support", desc: "Post-launch support, iteration, and growth. We don't disappear after go-live.", points: ["SLA-backed support", "Continuous improvement", "Roadmap planning"] },
+  { num: "01", title: "Discovery & Strategy", desc: "We analyze your business goals, user needs, and technical requirements to define a clear roadmap aligned with long-term growth objectives.", points: ["Insightful", "Strategic", "Focused"] },
+  { num: "02", title: "Planning & Architecture", desc: "We structure scalable system architecture, define workflows, and select the right technology stack to ensure performance, flexibility, and future readiness.", points: ["Scalable", "Structured", "Reliable"] },
+  { num: "03", title: "UI/UX Design", desc: "We design intuitive, user-centric interfaces that enhance engagement, simplify interactions, and deliver seamless digital experiences across all devices and platforms.", points: ["Intuitive", "Engaging", "User-first"] },
+  { num: "04", title: "Development", desc: "Our expert developers build secure, high-performance applications using modern frameworks, ensuring clean code, scalability, and seamless functionality across all integrated systems.", points: ["Robust", "Efficient", "Scalable"] },
+  { num: "05", title: "Testing & Optimization", desc: "We rigorously test for performance, security, and usability, identifying issues early and optimizing the product to ensure a flawless, reliable user experience.", points: ["Thorough", "Reliable", "Optimized"] },
+  { num: "06", title: "Launch & Growth", desc: "We deploy your solution smoothly and provide continuous support, updates, and improvements to ensure long-term scalability, performance, and business success.", points: ["Seamless", "Adaptive", "Growth-driven"] },
 ];
 
 export const TECH = [
@@ -123,21 +115,65 @@ export const TECH = [
 ];
 
 export const RESULTS = [
-  { metric: "43%", label: "Faster page loads", project: "FinEdge · Trading dashboard", desc: "Migrated from a legacy SPA to an edge-rendered Next.js stack. LCP dropped from 3.4s to 1.9s in the first sprint." },
-  { metric: "2.4×", label: "Conversion lift", project: "NovaRetail · Checkout flow", desc: "Re-architected the checkout funnel with progressive enhancement and inline validation. Cart-to-purchase rate doubled." },
-  { metric: "$4M", label: "Annual savings", project: "ShipFast · Logistics engine", desc: "Replaced a hand-tuned routing heuristic with an ML-powered optimization service. Fuel + ops costs cut in year one." },
-  { metric: "2M+", label: "Users served", project: "MedCore · Patient platform", desc: "Designed a multi-region, HIPAA-compliant architecture from scratch. Scaled to 2M+ MAU without a single major incident." },
+  {
+    id: "performance-scores",
+    metric: "98%+",
+    project: "High-performance scores",
+    desc: "High-performance scores ensure fast, smooth, and reliable user experiences.",
+  },
+  {
+    id: "user-engagement",
+    metric: "3×",
+    project: "Increase in user engagement",
+    desc: "Increase in user engagement through optimized design and performance improvements.",
+  },
+  {
+    id: "load-times",
+    metric: "50%+",
+    project: "Reduction in load times",
+    desc: "Reduction in load times for faster, more responsive digital experiences.",
+  },
+  {
+    id: "system-uptime",
+    metric: "99.9%",
+    project: "System uptime",
+    desc: "System uptime ensures reliability, stability, and uninterrupted business operations.",
+  },
 ];
 
 export const FAQS = [
-  { q: "How much does custom software development cost?", a: "Most projects fall between $40K and $250K depending on scope, team size, and timeline. We provide fixed-price proposals after a paid discovery sprint so there are no surprises mid-build. For exploratory MVPs, we also offer time-and-materials engagements with weekly cost ceilings." },
-  { q: "How long does it take to build a custom application?", a: "MVPs typically take 8–12 weeks. Full production builds run 16–24 weeks. We share a detailed Gantt during the proposal phase, with weekly milestones you can hold us to. Tight deadlines are doable when scope is clear — we'll tell you honestly what fits." },
-  { q: "What technologies do you specialize in?", a: "Our default stack is TypeScript end-to-end (React, Next.js, Node), Postgres, and AWS or GCP. For mobile we ship native (Swift, Kotlin) when performance matters and React Native when speed-to-market wins. We choose tooling based on your problem, not because it's trendy." },
-  { q: "Do you handle the entire process or just one part?", a: "Both. We can own discovery → design → engineering → launch → support end-to-end, or we can plug into your existing team in any of those phases. Most clients start with a discovery sprint and expand the engagement based on what's working." },
-  { q: "What happens after the product launches?", a: "We offer SLA-backed maintenance retainers covering monitoring, security patches, bug fixes, and small feature work. Many clients keep us on as a fractional engineering team. You're never locked in — all code, infrastructure, and credentials transfer to you." },
-  { q: "Can you work with our existing team or codebase?", a: "Yes. We do legacy modernization, codebase audits, and team augmentation. We're comfortable inheriting messy code, untangling architecture, and shipping alongside your engineers. No ego, no rewrites for the sake of rewriting." },
-  { q: "How do you handle data security and compliance?", a: "SOC 2-aligned engineering practices by default. We've shipped HIPAA, PCI-DSS, and GDPR-compliant systems. Security reviews, penetration testing, and threat modeling are part of our standard delivery, not an upsell." },
-  { q: "Do you sign NDAs before discovery calls?", a: "Of course. Send us your NDA before the call and we'll have it back signed within the day. We also have a mutual NDA template if you'd prefer to use ours." },
+  {
+    q: "What is included in custom software development for startups?",
+    a: "Tailored software solutions for startups involve building tailored digital products designed to fit unique business models, helping startups launch faster, scale efficiently, and stay competitive.",
+  },
+  {
+    q: "What is the cost of custom software development?",
+    a: "Custom software development cost depends on project complexity, features, and timeline. Simple solutions cost less, while scalable, enterprise-level systems require higher investment.",
+  },
+  {
+    q: "Is custom software development suitable for small businesses?",
+    a: "Yes, custom software development for small businesses helps automate operations, improve efficiency, and create tailored solutions that support long-term growth and scalability. These can include custom application development.",
+  },
+  {
+    q: "How do I choose the best custom software development companies?",
+    a: "Look for experience, portfolio, client reviews, and technical expertise. The best custom enterprise software development companies align solutions with your business goals and growth plans.",
+  },
+  {
+    q: "Where can I find custom software development near me?",
+    a: "You can find custom software development near you through local agencies or global companies offering remote services with strong communication and proven delivery processes.",
+  },
+  {
+    q: "What makes top custom software development companies stand out?",
+    a: "Top custom software development companies stand out through innovation, scalability, strong technical teams, and the ability to deliver reliable, high-performance solutions consistently.",
+  },
+  {
+    q: "What is custom MVP development?",
+    a: "Custom MVP development focuses on building a minimum viable product with core features, allowing businesses to test ideas quickly and gather real user feedback before scaling.",
+  },
+  {
+    q: "Why should I outsource custom software development?",
+    a: "Outsource custom software development to reduce costs, access global talent, speed up delivery, and focus on core business operations while experts handle technical execution.",
+  },
 ];
 
 export const HERO_PHONE_COUNTRY_OPTIONS = PHONE_COUNTRY_OPTIONS.map((option) => ({

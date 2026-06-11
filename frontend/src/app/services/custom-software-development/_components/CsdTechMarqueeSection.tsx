@@ -38,7 +38,7 @@ export function CsdTechMarqueeSection({
         }}
       >
         <div>
-          <h2
+          <h3
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(32px, 3.8vw, 56px)",
@@ -48,11 +48,12 @@ export function CsdTechMarqueeSection({
               margin: 0,
             }}
           >
-            Tools we <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(0,0,0,0.55)" }}>trust.</span>
-          </h2>
+            Tools We{" "}
+            <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(0,0,0,0.55)" }}>Work With!</span>
+          </h3>
         </div>
         <p style={{ fontSize: 14, color: "rgba(0,0,0,0.55)", maxWidth: 380, lineHeight: 1.65, margin: 0 }}>
-          Mature, battle-tested tooling — picked for your problem, not because it&apos;s new.
+          We pick reliable, tested tools that fit your project, not trends.
         </p>
       </div>
       <div style={{ position: "relative" }}>

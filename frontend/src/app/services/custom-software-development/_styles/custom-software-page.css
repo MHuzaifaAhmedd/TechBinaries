@@ -220,7 +220,7 @@
 
         .csd-hero-title {
           font-family: var(--font-display);
-          font-size: clamp(40px, 4.5vw, 72px);
+          font-size: clamp(36px, 4vw, 64px);
           font-weight: 500;
           line-height: 0.98;
           letter-spacing: -0.045em;
@@ -291,7 +291,7 @@
             max-width: none;
           }
           .csd-hero-title {
-            font-size: clamp(30px, 7.2vw, 42px);
+            font-size: clamp(28px, 6.5vw, 38px);
             line-height: 1.02;
             margin-bottom: 16px;
           }
@@ -1279,9 +1279,55 @@
           max-width: 540px;
         }
 
-        /* ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
-           SECTION ÔÇö WHAT WE BUILD
-        ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ */
+        /* SECTION — PROCESS */
+        .csd-process-header {
+          position: relative;
+          z-index: 2;
+          flex-shrink: 0;
+          padding: clamp(80px, 12vh, 140px) 20px clamp(20px, 3vh, 36px);
+          display: flex;
+          flex-direction: column;
+          gap: clamp(14px, 2vh, 20px);
+        }
+        .csd-process-title-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: clamp(24px, 4vw, 48px);
+        }
+        .csd-process-h3 {
+          font-family: var(--font-display);
+          font-size: clamp(28px, 3.8vw, 64px);
+          font-weight: 500;
+          letter-spacing: -0.035em;
+          line-height: 0.98;
+          margin: 0;
+          flex: 1 1 auto;
+          min-width: 0;
+        }
+        .csd-process-h3-accent {
+          font-style: italic;
+          font-weight: 400;
+          color: rgba(255,255,255,0.6);
+        }
+        .csd-process-lead {
+          font-size: clamp(13px, 1.35vw, 15px);
+          color: rgba(255,255,255,0.62);
+          max-width: 560px;
+          line-height: 1.68;
+          margin: 0;
+        }
+        .csd-process-meta {
+          font-size: clamp(12px, 1.2vw, 13px);
+          color: rgba(255,255,255,0.42);
+          max-width: 280px;
+          line-height: 1.62;
+          margin: 0;
+          text-align: right;
+          flex: 0 1 280px;
+        }
+
+        /* SECTION — WHAT WE BUILD */
         .csd-build-section {
           padding: 140px 20px;
           background: #f5f5f4;
@@ -1514,14 +1560,13 @@
         .csd-vp-section {
           background: #fafaf9;
           border-top: 1px solid rgba(0,0,0,0.06);
-          padding-left: max(clamp(14px, 2.4vw, 32px), env(safe-area-inset-left, 0px));
-          padding-right: max(clamp(14px, 2.4vw, 32px), env(safe-area-inset-right, 0px));
+          padding: 140px 20px;
         }
 
         .csd-vp-grid {
           display: grid;
-          grid-template-columns: 1.05fr 0.95fr;
-          gap: 0;
+          grid-template-columns: 1fr 1.1fr;
+          gap: 80px;
           align-items: stretch;
           min-height: 620px;
           max-width: 1320px;
@@ -1531,11 +1576,13 @@
         }
 
         .csd-vp-content {
-          padding: clamp(56px, 7vw, 96px) clamp(32px, 5vw, 72px);
+          padding: 0;
           display: flex;
           flex-direction: column;
           justify-content: center;
           background: #fafaf9;
+          width: 100%;
+          min-width: 0;
         }
 
         .csd-vp-eyebrow {
@@ -1555,7 +1602,6 @@
           line-height: 1.02;
           margin: 0 0 26px;
           color: #0a0a0a;
-          max-width: 520px;
         }
         .csd-vp-h2-accent {
           font-style: italic;
@@ -1580,7 +1626,7 @@
           display: flex;
           flex-direction: column;
           gap: 10px;
-          max-width: 540px;
+          width: 100%;
         }
         .csd-vp-item {
           display: grid;
@@ -1615,15 +1661,10 @@
           content: none;
         }
         .csd-vp-item-body {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) auto;
-          column-gap: 20px;
-          row-gap: 8px;
-          align-items: start;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
           min-width: 0;
-        }
-        .csd-vp-item-head {
-          display: contents;
         }
         .csd-vp-item-title {
           font-family: var(--font-display);
@@ -1634,44 +1675,12 @@
           margin: 0;
           color: #0a0a0a;
           min-width: 0;
-          grid-column: 1;
-        }
-        .csd-vp-item-metric {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 3px;
-          flex-shrink: 0;
-          grid-column: 2;
-          grid-row: 1 / span 2;
-          margin-top: 2px;
-          text-align: right;
-          padding-left: 12px;
-        }
-        .csd-vp-item-metric-value {
-          font-family: var(--font-display);
-          font-size: 22px;
-          font-weight: 500;
-          letter-spacing: -0.03em;
-          color: #0a0a0a;
-          line-height: 1;
-          font-variant-numeric: tabular-nums;
-        }
-        .csd-vp-item-metric-label {
-          font-size: 8px;
-          font-weight: 700;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: rgba(10,10,10,0.45);
-          white-space: nowrap;
         }
         .csd-vp-item-desc {
           font-size: 14px;
           line-height: 1.52;
           color: rgba(10,10,10,0.62);
           margin: 0;
-          max-width: 42ch;
-          grid-column: 1;
         }
 
         /* RIGHT ÔÇö image */
@@ -1817,7 +1826,7 @@
           line-height: 0.92;
           color: #0a0a0a;
           font-variant-numeric: tabular-nums;
-          margin-bottom: 10px;
+          margin-bottom: 28px;
         }
         .csd-result-card-label {
           font-family: var(--font-display);
@@ -2030,7 +2039,7 @@
           line-height: 0.96;
           margin: 0 0 28px;
           color: #0a0a0a;
-          max-width: 640px;
+          max-width: 720px;
         }
         .csd-cta-h2-accent {
           font-style: italic;
@@ -2164,6 +2173,7 @@
           /* WHY TEAMS CHOOSE US */
           .csd-vp-grid {
             grid-template-columns: 1fr;
+            gap: 56px;
             min-height: auto;
           }
           .csd-vp-media {
@@ -2220,7 +2230,7 @@
           }
           .csd-hero-left { transform: none; }
           .csd-hero-title {
-            font-size: clamp(26px, 7vw, 38px);
+            font-size: clamp(24px, 6.5vw, 34px);
             max-width: 100%;
             margin-bottom: 16px;
             line-height: 1.03;
@@ -2257,6 +2267,7 @@
 
           .csd-cap-section,
           .csd-build-section,
+          .csd-vp-section,
           .csd-faq-section {
             padding-left: 14px;
             padding-right: 14px;
@@ -2306,32 +2317,16 @@
           .csd-build-frame-market    { width: 42%; }
 
           /* WHY TEAMS CHOOSE US */
-          .csd-vp-section {
-            padding-left: max(14px, env(safe-area-inset-left, 0px));
-            padding-right: max(14px, env(safe-area-inset-right, 0px));
+          .csd-vp-grid {
+            grid-template-columns: 1fr;
+            gap: 56px;
+            min-height: auto;
           }
-          .csd-vp-content { padding: 56px 0 64px; }
           .csd-vp-h2 { font-size: clamp(28px, 8vw, 38px); }
           .csd-vp-lead { font-size: 15px; }
           .csd-vp-list { gap: 12px; }
           .csd-vp-item { grid-template-columns: 14px 1fr; gap: 12px; padding: 14px 0; }
-          .csd-vp-item-body {
-            grid-template-columns: 1fr;
-            row-gap: 8px;
-          }
           .csd-vp-item-title { font-size: 17px; min-width: 0; }
-          .csd-vp-item-metric {
-            grid-column: 1;
-            grid-row: auto;
-            flex-direction: row;
-            align-items: baseline;
-            justify-content: flex-start;
-            gap: 8px;
-            padding-left: 0;
-            margin-top: 0;
-            text-align: left;
-          }
-          .csd-vp-item-metric-value { font-size: 16px; }
           .csd-vp-item-desc { max-width: 100%; }
           .csd-vp-media {
             min-height: 280px;
@@ -2359,7 +2354,20 @@
           .csd-faq-row[data-open="true"] .csd-faq-a-inner { padding-bottom: 22px; }
 
           .csd-process-pin { height: auto !important; overflow: visible !important; }
-          .csd-process-pin > div:first-of-type { padding: 80px 14px 32px !important; }
+          .csd-process-header {
+            padding: 80px 14px 28px !important;
+            gap: 16px;
+          }
+          .csd-process-title-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+          }
+          .csd-process-meta {
+            max-width: none;
+            text-align: left;
+            flex: none;
+          }
           .csd-process-track {
             flex-direction: column !important;
             padding: 0 14px 60px !important;

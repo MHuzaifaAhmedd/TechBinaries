@@ -41,6 +41,21 @@ const INPUT_STYLE: React.CSSProperties = {
   minWidth: 0,
 };
 
+const ELEVATED_INPUT_STYLE: React.CSSProperties = {
+  flex: 1,
+  border: "none",
+  background: "transparent",
+  outline: "none",
+  minWidth: 0,
+  color: "#ffffff",
+  fontSize: 16,
+  fontWeight: 700,
+  fontFamily: "var(--font-body)",
+  caretColor: "#ffffff",
+  letterSpacing: "0.01em",
+  WebkitTextFillColor: "#ffffff",
+};
+
 const BUTTON_STYLE: React.CSSProperties = {
   border: "none",
   borderRadius: 999,
@@ -71,6 +86,7 @@ type SubscribeFormProps = {
   inputRef: React.RefObject<HTMLInputElement | null>;
   success: boolean;
   fixedWidth?: number;
+  elevated?: boolean;
 };
 
 function SubscribeForm({
@@ -80,11 +96,17 @@ function SubscribeForm({
   inputRef,
   success,
   fixedWidth,
-}: SubscribeFormProps) {
+  elevated = false,
+  onInputFocus,
+}: SubscribeFormProps & { onInputFocus?: () => void }) {
   return (
     <motion.form
       layoutId={LAYOUT_ID}
-      className="footer-newsletter-form"
+      className={
+        elevated
+          ? "footer-newsletter-form footer-newsletter-form--elevated"
+          : "footer-newsletter-form"
+      }
       onSubmit={onSubmit}
       transition={{ layout: LAYOUT_SPRING }}
       style={{
@@ -99,9 +121,11 @@ function SubscribeForm({
         required
         value={email}
         onChange={(e) => onEmailChange(e.target.value)}
+        onFocus={onInputFocus}
         placeholder="you@company.com"
         suppressHydrationWarning
-        style={INPUT_STYLE}
+        style={elevated ? ELEVATED_INPUT_STYLE : INPUT_STYLE}
+        className={elevated ? "footer-newsletter-input--elevated" : undefined}
         aria-label="Email for The Dispatch newsletter"
       />
       <button
@@ -154,13 +178,18 @@ export default function FooterNewsletterForm() {
     return { width: formEl.offsetWidth, height: formEl.offsetHeight };
   }, []);
 
+  const elevateForm = useCallback(() => {
+    if (elevated) return;
+    const nextMetrics = measureForm();
+    if (nextMetrics) setMetrics(nextMetrics);
+    setElevated(true);
+  }, [elevated, measureForm]);
+
   const handleEmailChange = (value: string) => {
     setEmail(value);
 
     if (!elevated && value.length > 0) {
-      const nextMetrics = measureForm();
-      if (nextMetrics) setMetrics(nextMetrics);
-      setElevated(true);
+      elevateForm();
       return;
     }
 
@@ -169,6 +198,10 @@ export default function FooterNewsletterForm() {
       setMetrics(null);
     }
   };
+
+  const handleInputFocus = useCallback(() => {
+    elevateForm();
+  }, [elevateForm]);
 
   useEffect(() => {
     if (!elevated) return;
@@ -220,6 +253,7 @@ export default function FooterNewsletterForm() {
     inputRef,
     success,
     fixedWidth: metrics?.width,
+    onInputFocus: handleInputFocus,
   };
 
   return (
@@ -254,7 +288,7 @@ export default function FooterNewsletterForm() {
                   aria-hidden
                 />
                 <div className="footer-newsletter-focus-layer">
-                  <SubscribeForm {...sharedFormProps} />
+                  <SubscribeForm {...sharedFormProps} elevated />
                 </div>
               </>
             )}
@@ -270,9 +304,9 @@ export default function FooterNewsletterForm() {
           position: fixed;
           inset: 0;
           z-index: 9998;
-          background: rgba(10, 10, 10, 0.44);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
+          background: rgba(8, 8, 8, 0.45);
+          backdrop-filter: blur(40px) saturate(160%);
+          -webkit-backdrop-filter: blur(40px) saturate(160%);
           pointer-events: none;
         }
         .footer-newsletter-focus-layer {
@@ -286,6 +320,37 @@ export default function FooterNewsletterForm() {
         }
         .footer-newsletter-focus-layer .footer-newsletter-form {
           pointer-events: auto;
+        }
+        .footer-newsletter-form--elevated {
+          background: rgba(255, 255, 255, 0.14) !important;
+          border-color: rgba(255, 255, 255, 0.32) !important;
+          backdrop-filter: blur(64px) saturate(200%);
+          -webkit-backdrop-filter: blur(64px) saturate(200%);
+          box-shadow:
+            0 16px 48px rgba(0, 0, 0, 0.38),
+            inset 0 1px 0 rgba(255, 255, 255, 0.35),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+          isolation: isolate;
+        }
+        .footer-newsletter-input--elevated {
+          color: #ffffff !important;
+          -webkit-text-fill-color: #ffffff !important;
+          font-size: 16px !important;
+          font-weight: 700 !important;
+          caret-color: #ffffff !important;
+          text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+        }
+        .footer-newsletter-input--elevated::placeholder {
+          color: rgba(255, 255, 255, 0.5) !important;
+          -webkit-text-fill-color: rgba(255, 255, 255, 0.5) !important;
+          font-weight: 600 !important;
+          text-shadow: none;
+        }
+        .footer-newsletter-input--elevated:-webkit-autofill,
+        .footer-newsletter-input--elevated:-webkit-autofill:hover,
+        .footer-newsletter-input--elevated:-webkit-autofill:focus {
+          -webkit-text-fill-color: #ffffff;
+          transition: background-color 9999s ease-out 0s;
         }
       `}</style>
     </LayoutGroup>

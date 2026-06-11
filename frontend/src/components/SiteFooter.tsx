@@ -287,11 +287,13 @@ export default function SiteFooter() {
           max-width: 460px;
           margin-left: 28px;
         }
-        .footer-newsletter-form:focus-within {
+        .footer-newsletter-form:not(.footer-newsletter-form--elevated):focus-within {
           border-color: rgba(10,10,10,0.28) !important;
           background: rgba(10,10,10,0.04) !important;
         }
-        .footer-newsletter-form input::placeholder { color: rgba(10,10,10,0.4); }
+        .footer-newsletter-form:not(.footer-newsletter-form--elevated) input::placeholder {
+          color: rgba(10,10,10,0.4);
+        }
         .footer-newsletter-btn:hover {
           background: #1f1f1f !important;
           transform: translateX(2px);
