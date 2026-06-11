@@ -15,7 +15,7 @@ export function CwaFaqSection({ openFaq, setOpenFaq }: CwaFaqSectionProps) {
       <div className="cwa-faq-layout">
         <div className="cwa-faq-aside cwa-sh">
           <h2 id="cwa-faq-title" className="cwa-h2">
-            Frequently <span className="cwa-italic-mute">asked.</span>
+            FAQs
           </h2>
           <p className="cwa-h2-lead cwa-faq-lead">
             Real questions from real prospects. If yours isn&apos;t here, send us a note — we answer every inquiry

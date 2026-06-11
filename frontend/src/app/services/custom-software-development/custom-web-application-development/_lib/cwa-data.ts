@@ -1,9 +1,9 @@
 export const PAGE = {
-  headline1: "Web apps",
-  headline2: "engineered for",
-  headlineItalic: "performance.",
+  headline1: "Enterprise-Grade",
+  headline2: "Web Application",
+  headlineItalic: "Development Services",
   lead:
-    "Production-grade web applications built on modern stacks — Next.js, React, Node, Postgres — tuned for speed, resilience, and architecture that won't need a rewrite in two years.",
+    "TechBinaries is the premium web application development agency you need to transform complex operational challenges into smooth, highly scalable, and secure digital realities.",
 };
 
 export const HERO_PHONE_COUNTRY_CODES = [
@@ -12,46 +12,46 @@ export const HERO_PHONE_COUNTRY_CODES = [
 
 export const GROWTH = {
   kicker: "Why custom",
-  title: "A custom web app is a",
-  titleAccent: "growth engine.",
+  title: "Advanced Architecture for",
+  titleAccent: "Modern Web Apps",
   lead:
-    "Off-the-shelf software flattens you against competitors. A purpose-built web application becomes the operational backbone — faster to evolve, cheaper to scale, aligned to how your business actually works.",
+    "From intelligent automation to offline reliability, our web-based application development is done with the robust architecture required to power modern enterprise operations.",
   pillars: [
     {
       n: "01",
-      k: "Speed",
-      v: "Sub-second load",
-      d: "Edge-rendered pages, optimized bundles, and runtime budgets keep first interaction under a second on real devices.",
+      k: "AI-Assisted Workflow Automation",
+      v: "Safe AI integration",
+      d: "Streamline operations with AI-driven workflows safely integrated into your ERP, logistics, and internal systems, complete with built-in approvals, monitoring, and fallback controls.",
       image:
         "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80&auto=format&fit=crop",
-      imageAlt: "Performance metrics dashboard showing fast load times",
+      imageAlt: "AI workflow automation dashboard integrated with enterprise systems",
     },
     {
       n: "02",
-      k: "Scale",
-      v: "10× headroom",
-      d: "Stateless services, queue-backed workers, and observability from day one. Traffic spikes don't become incidents.",
+      k: "Reduced Tool Sprawl",
+      v: "Unified operations",
+      d: "Eliminate disconnected apps that slow your team down. We do integrated full-stack web app development that unifies fragmented data while optimizing cloud compute and data transfer costs.",
       image:
         "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1400&q=80&auto=format&fit=crop",
-      imageAlt: "Server infrastructure visualization showing distributed scale",
+      imageAlt: "Unified enterprise web application consolidating multiple business tools",
     },
     {
       n: "03",
-      k: "Ownership",
-      v: "Your code, your IP",
-      d: "Full source, infrastructure, credentials transfer to you. No vendor lock-in, no licensing tax, no surprises at renewal.",
+      k: "Offline-Ready Web Apps",
+      v: "Offline-first PWAs",
+      d: "Ensure field reliability under any condition. Our Progressive Web Apps development (PWAs) deliver offline-first functionality for seamless performance in warehouses and remote locations.",
       image:
         "https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=1400&q=80&auto=format&fit=crop",
-      imageAlt: "Source code on a developer's monitor representing code ownership",
+      imageAlt: "Progressive web app working offline in a warehouse field environment",
     },
     {
       n: "04",
-      k: "Velocity",
-      v: "Weekly releases",
-      d: "Feature-flagged deploys and CI/CD pipelines let your team ship to production every week without rollout anxiety.",
+      k: "Built-In Audit Trails",
+      v: "Compliance logging",
+      d: "Simplify compliance from day one. We engineer logistics and fintech dashboards featuring automated compliance logging and transparent data trails for effortless auditing.",
       image:
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1400&q=80&auto=format&fit=crop",
-      imageAlt: "CI/CD pipeline and code deployment workflow",
+      imageAlt: "Fintech and logistics dashboard with automated audit trail logging",
     },
   ],
 };
@@ -62,67 +62,97 @@ export const COST = {
   imageAlt:
     "Product owner reviewing web analytics and KPIs on a laptop after shipping a web application",
   kicker: "What goes wrong",
-  title: "The cost of getting it",
-  titleAccent: "wrong.",
+  title: "The True Expense Of",
+  titleAccent: "Compromise.",
   lead:
-    "Most failed web apps don't fail at launch — they fail in the first 90 days. The pattern is consistent and almost always preventable.",
+    "Most web applications don't break at launch; they break when it's time to scale and integrate. Budget overruns and architectural flaws follow a predictable pattern, yet they're almost always avoidable.",
   failures: [
     {
-      stat: "53%",
-      label: "Bounce above 3s",
-      h: "Bloated bundles",
-      d: "Megabytes of unused JavaScript collapse mobile performance and quietly kill conversion on slower networks.",
+      stat: "66%",
+      label: "Project Failure Rate",
+      h: "The Waste Factor",
+      d: "Two-thirds of technology projects end in partial or total failure across the industry, forcing teams to waste half their software budgets on fixing critical bugs rather than delivering business value.",
       image:
         "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=80&auto=format&fit=crop",
       imageAlt:
-        "Developer building a web application with HTML and JavaScript visible on a laptop screen",
+        "Developer reviewing a failed technology project on a laptop screen",
       theme: "perf",
     },
     {
-      stat: "4.2×",
-      label: "Slower velocity",
-      h: "Brittle architecture",
-      d: "Tightly coupled services and shared databases turn every new feature into a coordination tax.",
+      stat: "189%",
+      label: "Average Budget Overrun",
+      h: "The Budget Trap",
+      d: "When web and mobile app development are mismanaged or suffer from uncontrolled feature growth, challenged projects run nearly triple their initial cost estimates to cross the finish line.",
       image:
         "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900&q=80&auto=format&fit=crop",
       imageAlt:
-        "Engineering team collaborating on architecture and APIs for a web platform",
+        "Engineering team reviewing escalating project budget estimates",
       theme: "arch",
     },
     {
-      stat: "67%",
-      label: "Bugs found by users",
-      h: "Missing observability",
-      d: "Without structured logs, traces, and RUM, you discover regressions from customer tickets — not dashboards.",
+      stat: "56%",
+      label: "Originating Defects",
+      h: "Requirements Crisis",
+      d: "Skipping a thorough architectural planning phase to cut upfront costs backfires heavily. Over half of all critical software defects originate directly from poorly defined initial requirements.",
       image:
         "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop",
       imageAlt:
-        "Monitoring dashboard with charts for uptime and errors on a live web service",
+        "Planning dashboard highlighting software requirements and architectural defects",
       theme: "obs",
     },
     {
-      stat: "26%",
-      label: "Excluded users",
-      h: "No accessibility",
-      d: "Skipping WCAG and keyboard support narrows your audience and makes refactors dramatically more expensive.",
+      stat: "100×",
+      label: "Post-Release Cost Multiplier",
+      h: 'The "Fix It Later" Tax',
+      d: "Fixing a structural code defect or database flaw after your web application has been released to live users costs up to 100 times more than catching it during early design and prototyping.",
       image:
         "https://images.unsplash.com/photo-1574887427561-d3d5d58c9273?w=900&q=80&auto=format&fit=crop",
       imageAlt:
-        "Person using a refreshable braille display—assistive technology for accessing web and digital content",
+        "Engineer addressing a critical post-release software defect in production",
       theme: "a11y",
     },
   ],
   close:
-    "We engineer around every one of these failure modes — performance, architecture, observability, accessibility — as defaults, not upsells.",
+    "Our web app development company in the USA designs systems to eliminate these risks from the start, embedding performance, security, observability, and compliance as core fundamentals rather than optional add-ons.",
 };
 
 export const PROCESS = [
-  { num: "01", title: "Discovery & architecture",  d: "Stakeholder interviews, technical audit, written architecture brief.",   meta: "2 weeks · fixed price" },
-  { num: "02", title: "UX & interface design",      d: "Flows, wireframes, high-fidelity UI tied to a token-based design system.", meta: "2–4 weeks"            },
-  { num: "03", title: "Engineering sprints",        d: "Two-week sprints, weekly demos, CI/CD from day one. Working software every Friday.", meta: "8–16 weeks"   },
-  { num: "04", title: "QA & performance",           d: "Automated suites, cross-device QA, Lighthouse budgets, load testing before traffic.", meta: "Continuous" },
-  { num: "05", title: "Launch & monitor",           d: "Phased rollout with feature flags, real-user monitoring, rollback plan written before go-live.", meta: "1–2 weeks" },
-  { num: "06", title: "Iterate & support",          d: "SLA-backed retainer covering bug fixes, security patches, roadmap work.", meta: "Ongoing"               },
+  {
+    num: "01",
+    title: "Discovery & Strategy",
+    d: "We define your project scope, align business workflows, and map technical requirements to protect your capital.",
+    meta: "",
+  },
+  {
+    num: "02",
+    title: "Architecture & Design",
+    d: "Our team drafts database structures and human-centric UI/UX prototypes before a single line of code is written.",
+    meta: "",
+  },
+  {
+    num: "03",
+    title: "Agile Development",
+    d: "We build your platform in sprints, engineering clean, scalable, and highly secure software tailored to your goals.",
+    meta: "",
+  },
+  {
+    num: "04",
+    title: "Quality Assurance",
+    d: "Rigorous automated and manual testing eliminates structural defects, ensuring optimal performance and complete data transparency.",
+    meta: "",
+  },
+  {
+    num: "05",
+    title: "Deployment & Launch",
+    d: "We seamlessly transition your web application to a live, optimized cloud environment with zero operational disruption.",
+    meta: "",
+  },
+  {
+    num: "06",
+    title: "Maintenance & Scaling",
+    d: "We provide ongoing technical support, monitoring system health, and optimizing code as your business user base grows.",
+    meta: "",
+  },
 ];
 
 export const STACK = [
@@ -153,19 +183,34 @@ export const STACK = [
 ];
 
 export const FAQS = [
-  { q: "How much does a custom web application cost?", a: "Most builds fall between $40K and $180K depending on scope, integrations, and team size. We provide fixed-price proposals after a paid two-week discovery sprint, so the budget is locked before engineering begins." },
-  { q: "How long does it take to build?",              a: "MVPs typically take 8–12 weeks. Full production builds run 14–22 weeks. We share a detailed milestone schedule during proposal, with weekly demos you can hold us to." },
-  { q: "What stack do you use?",                       a: "TypeScript end-to-end is our default — React or Next.js on the frontend, Node on the backend, Postgres for data, AWS or GCP for infrastructure. We choose tooling based on your problem, not because it's trendy." },
-  { q: "Do you handle design too?",                    a: "Yes. UX flows, wireframes, high-fidelity UI, and a design token system are part of the standard engagement. If you have a design partner already, we plug in cleanly with Figma handoff." },
-  { q: "What happens after launch?",                   a: "We offer SLA-backed maintenance retainers covering monitoring, security patches, bug fixes, and feature work. Many clients keep us on as a fractional engineering team. All code and infrastructure transfer to you on day one." },
+  {
+    q: "How much does custom web application development cost?",
+    a: "The total custom web app development services cost depends heavily on features, third-party integrations, and complexity. We provide precise, transparent estimates during our discovery phase to ensure your budget aligns perfectly with your business goals.",
+  },
+  {
+    q: "What factors heavily influence web app development costs?",
+    a: "Primary drivers of web app development costs include the complexity of your business workflows, the number of user roles, database architecture, and required integrations (such as ERP or logistics systems). Investing in thorough architectural planning upfront significantly reduces these costs by eliminating mid-development changes and post-launch code rework.",
+  },
+  {
+    q: "What sets an enterprise web application development company apart?",
+    a: "A true enterprise web application development company prioritizes high scalability, robust security infrastructure, and seamless integration with existing core legacy systems. Our engineering process focuses on reducing tool sprawl, optimizing cloud compute waste, and building automated fallback controls so your software can safely handle massive user scaling.",
+  },
+  {
+    q: "Does your team handle specialized projects like healthcare web app development?",
+    a: "Yes. High-stakes industries require deep data transparency. When undertaking healthcare web app development or fintech projects, we build secure architectures equipped with automated audit trails and strict data compliance protocols from day one, ensuring your platform safely protects sensitive data while remaining audit-ready.",
+  },
+  {
+    q: "How can a progressive web app development company help our field workers?",
+    a: "As a web app development agency, we design applications with offline-first capabilities. These PWAs give field workers, warehouse staff, and teams in remote locations reliable access to workflows even under poor connectivity conditions, automatically syncing data back to your central systems once a connection is restored.",
+  },
 ];
 
 export const CTA = {
-  headline: "Let's build the web app",
-  headlineItalic: "you actually want.",
+  headline: "Ready To Eliminate",
+  headlineItalic: "Tool Sprawl?",
   lead:
-    "Free 30-minute discovery call. You'll talk directly with an engineer and a strategist — no sales pitch, just a real conversation about your problem and timeline.",
-  primaryCta: { label: "Book a discovery call", href: "/contact" },
+    "Tell us about the operational inefficiencies or fragmented tools slowing your team down, and our front-end and back-end development company will design the exact web application to solve them.",
+  primaryCta: { label: "Let's Map Out Your Product Roadmap", href: "/contact" },
   email: "hello@techbinaries.com",
   rows: [
     { k: "Response",    v: "Within 24h"      },

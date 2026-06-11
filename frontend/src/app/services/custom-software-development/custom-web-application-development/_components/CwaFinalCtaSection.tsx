@@ -18,19 +18,23 @@ export function CwaFinalCtaSection() {
                   </span>
                 </Fragment>
               ))}
-              <span className="cwa-ncta-head-gap" aria-hidden>
-                {"\u00A0"}
-              </span>
-              <span className="cwa-ncta-italic">
-                {CTA.headlineItalic.split(/\s+/).map((word, wi) => (
-                  <Fragment key={`i-w-${wi}`}>
-                    {wi > 0 ? <span className="cwa-ncta-char">{"\u00A0"}</span> : null}
-                    <span className="cwa-ncta-word">
-                      <AnimatedCharSpans text={word} charClassName="cwa-ncta-char" keyPrefix={`i-${wi}`} />
-                    </span>
-                  </Fragment>
-                ))}
-              </span>
+              {CTA.headlineItalic ? (
+                <>
+                  <span className="cwa-ncta-head-gap" aria-hidden>
+                    {"\u00A0"}
+                  </span>
+                  <span className="cwa-ncta-italic">
+                    {CTA.headlineItalic.split(/\s+/).map((word, wi) => (
+                      <Fragment key={`i-w-${wi}`}>
+                        {wi > 0 ? <span className="cwa-ncta-char">{"\u00A0"}</span> : null}
+                        <span className="cwa-ncta-word">
+                          <AnimatedCharSpans text={word} charClassName="cwa-ncta-char" keyPrefix={`i-${wi}`} />
+                        </span>
+                      </Fragment>
+                    ))}
+                  </span>
+                </>
+              ) : null}
             </span>
           </h2>
 

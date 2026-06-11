@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import "./_styles/cwa-hero-overrides.css";
 
-
-export const metadata: Metadata = {
-  title: "Custom Web Application Development",
+export const metadata: Metadata = {  title: {
+    absolute: "TechBinaries Secure Web App Development Services",
+  },
   description:
-    "Production-grade web applications on modern stacks — engineered for speed, resilience, and architecture that lasts.",
+    "TechBinaries is your trusted partner for custom web app development. We transform your complex business ideas into seamless digital realities.",
 };
 
 export default function CustomWebApplicationDevelopmentLayout({

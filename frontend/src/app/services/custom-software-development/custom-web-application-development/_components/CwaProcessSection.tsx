@@ -9,7 +9,7 @@ export function CwaProcessSection() {
             How we build — <span className="cwa-italic-light">six phases, one team.</span>
           </h2>
           <p className="cwa-h2-lead cwa-h2-lead-light">
-            A delivery rhythm refined across 150+ shipped products. No surprises, no shipping and praying.
+            Our web application development solutions combine strategic architectural planning with agile execution to turn your complex operational challenges into scalable, high-performance digital realities.
           </p>
         </div>
 
@@ -27,7 +27,7 @@ export function CwaProcessSection() {
                 <div className="cwa-proc-step-card">
                   <div className="cwa-proc-step-head">
                     <h3 className="cwa-proc-step-title">{s.title}</h3>
-                    <span className="cwa-proc-step-meta">{s.meta}</span>
+                    {s.meta ? <span className="cwa-proc-step-meta">{s.meta}</span> : null}
                   </div>
                   <p className="cwa-proc-step-desc">{s.d}</p>
                 </div>
