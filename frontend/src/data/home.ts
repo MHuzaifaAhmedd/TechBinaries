@@ -183,7 +183,7 @@ export const FOOTER_SOCIAL = [
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com",
+    href: "https://www.linkedin.com/company/techbinaries/",
     svgPath: "M4.98 3.5a2.5 2.5 0 110 5 2.5 2.5 0 010-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.53-1 1.83-2.1 3.77-2.1 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.5c0-1.3-.02-2.98-1.82-2.98-1.82 0-2.1 1.42-2.1 2.88V21H9z",
   },
   {
@@ -193,12 +193,12 @@ export const FOOTER_SOCIAL = [
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com",
+    href: "https://www.instagram.com/tech.binaries",
     svgPath: "M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.8A3.95 3.95 0 003.8 7.75v8.5a3.95 3.95 0 003.95 3.95h8.5a3.95 3.95 0 003.95-3.95v-8.5a3.95 3.95 0 00-3.95-3.95h-8.5zm8.95 1.45a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.8A3.2 3.2 0 1015.2 12 3.2 3.2 0 0012 8.8z",
   },
   {
     label: "Facebook",
-    href: "https://www.facebook.com",
+    href: "https://www.facebook.com/share/1CLwj8rCJh/",
     svgPath: "M13.5 21v-7.2H16l.4-3h-2.9V8.9c0-.87.24-1.47 1.49-1.47H16.5V4.74c-.27-.04-1.2-.12-2.28-.12-2.26 0-3.82 1.38-3.82 3.92v2.26H8v3h2.4V21h3.1z",
   },
 ];
