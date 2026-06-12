@@ -21,7 +21,7 @@ export function AboutCtaSection({ sectionRef, marqueeRef }: AboutCtaSectionProps
       <span className="ab-cta-frame ab-cta-frame--top" aria-hidden />
 
       <div className="ab-cta-inner">
-        <h2 id="ab-cta-title" className="ab-cta-headline">
+        <h3 id="ab-cta-title" className="ab-cta-headline">
           <span className="ab-cta-headline-line">
             <AnimatedCharSpans
               text={CTA.headline}
@@ -42,7 +42,7 @@ export function AboutCtaSection({ sectionRef, marqueeRef }: AboutCtaSectionProps
               </span>
             </span>
           ) : null}
-        </h2>
+        </h3>
 
         <p className="ab-cta-after ab-cta-lead">{CTA.lead}</p>
 

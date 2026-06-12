@@ -10,10 +10,10 @@ export function AboutPillarsSection() {
 
       <div className="ab-pillars-inner">
         <div className="ab-pillars-head">
-          <h2 id="ab-pillars-title" className="ab-h2">
+          <h3 id="ab-pillars-title" className="ab-h2">
             {PILLARS.title}{" "}
             <span className="ab-italic-mute">{PILLARS.titleAccent}</span>
-          </h2>
+          </h3>
           <p className="ab-h2-lead">{PILLARS.lead}</p>
         </div>
 

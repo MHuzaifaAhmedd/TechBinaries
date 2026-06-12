@@ -26,10 +26,10 @@ export function AboutCapabilitiesSection({
         </div>
 
         <div className="ab-cap-header">
-          <h2 id="ab-cap-title" className="ab-cap-h2">
+          <h3 id="ab-cap-title" className="ab-cap-h2">
             {CAPABILITIES.title}{" "}
             <span className="ab-italic-mute">{CAPABILITIES.titleAccent}</span>
-          </h2>
+          </h3>
           <p className="ab-cap-lead">{CAPABILITIES.lead}</p>
         </div>
 
