@@ -234,10 +234,13 @@ export default function SiteFooter() {
 
             <span style={{ width: 1, height: 16, background: "rgba(10,10,10,0.14)", margin: "0 2px" }} />
 
-            {["Privacy", "Terms", "Cookies"].map((item, idx) => (
-              <span key={item} style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
+            {[
+              { label: "Privacy", href: "/privacy-policy" },
+              { label: "Terms", href: "/terms-of-service" },
+            ].map((item, idx, arr) => (
+              <span key={item.label} style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
                 <a
-                  href="#"
+                  href={item.href}
                   className="footer-legal-link"
                   style={{
                     textDecoration: "none",
@@ -246,9 +249,9 @@ export default function SiteFooter() {
                     transition: "color 0.22s",
                   }}
                 >
-                  {item}
+                  {item.label}
                 </a>
-                {idx < 2 && (
+                {idx < arr.length - 1 && (
                   <span
                     style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(10,10,10,0.28)" }}
                   />
