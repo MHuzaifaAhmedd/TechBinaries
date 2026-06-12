@@ -93,7 +93,7 @@ export default function CTASection() {
         </div>
 
         <div style={{ position: "relative", zIndex: 1, maxWidth: 760 }}>
-          <h2
+          <h3
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(40px, 6.2vw, 88px)",
@@ -105,7 +105,7 @@ export default function CTASection() {
             <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(255,255,255,0.6)" }}>
               Let&apos;s talk.
             </span>
-          </h2>
+          </h3>
 
           <p style={{ fontSize: 15, color: "rgba(255,255,255,0.58)", maxWidth: 500, lineHeight: 1.62, margin: "0 0 36px" }}>
             Free 30-minute technical roadmap call. No sales pitch, just direct access to our core

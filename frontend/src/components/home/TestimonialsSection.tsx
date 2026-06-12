@@ -185,9 +185,9 @@ export default function TestimonialsSection() {
       <div className="t-section__inner">
         <header className="t-header">
           <p className="t-eyebrow">Client voices</p>
-          <h2 className="t-title font-display">
+          <h3 className="t-title font-display">
             Stories Of <span className="t-title-muted">Measurable Growth</span>
-          </h2>
+          </h3>
           <p className="t-lead">
             Real feedback from forward-thinking companies relying on our software development
             services to scale their technical capabilities.

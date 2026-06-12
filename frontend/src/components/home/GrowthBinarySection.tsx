@@ -59,7 +59,7 @@ export default function GrowthBinarySection() {
       <div className="growth-binary-grid" style={{ maxWidth: 1320, margin: "0 auto", position: "relative", zIndex: 1 }}>
         {/* Left: copy + stats */}
         <div>
-          <h2
+          <h3
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(32px, 3.8vw, 56px)",
@@ -71,7 +71,7 @@ export default function GrowthBinarySection() {
             <span style={{ fontStyle: "italic", fontWeight: 400, color: "rgba(10,10,10,0.48)" }}>
               Growth Engines
             </span>
-          </h2>
+          </h3>
           <p style={{ fontSize: "clamp(15px, 1.5vw, 19px)", lineHeight: 1.65, color: "rgba(10,10,10,0.62)", maxWidth: 650, margin: 0 }}>
             Tech Binaries is an agile software development company built to eliminate digital waste
             and drive measurable growth. As a trusted enterprise software development company, we
