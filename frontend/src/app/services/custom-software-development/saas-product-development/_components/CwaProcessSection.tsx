@@ -5,11 +5,11 @@ export function CwaProcessSection() {
     <section id="process" className="cwa-process-section" aria-labelledby="cwa-process-title">
       <div className="cwa-process-inner">
         <div className="cwa-sh cwa-section-head cwa-section-head--light">
-          <h2 id="cwa-process-title" className="cwa-h2 cwa-h2-light">
-            How we build — <span className="cwa-italic-light">six phases, one team.</span>
-          </h2>
+          <h3 id="cwa-process-title" className="cwa-h2 cwa-h2-light">
+            How We Build — <span className="cwa-italic-light">Six Phases, One Team.</span>
+          </h3>
           <p className="cwa-h2-lead cwa-h2-lead-light">
-            A delivery rhythm refined across 150+ shipped products. No surprises, no shipping and praying.
+            Our saas platform development services combine strategic architectural planning with agile execution to turn your complex operational challenges into scalable, high-performance digital realities.
           </p>
         </div>
 
