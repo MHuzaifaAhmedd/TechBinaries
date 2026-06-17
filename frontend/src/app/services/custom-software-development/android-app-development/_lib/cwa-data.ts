@@ -1,9 +1,9 @@
 export const PAGE = {
-  headline1: "Android apps",
-  headline2: "built for",
-  headlineItalic: "scale.",
+  headline1: "High-Performance",
+  headline2: "Android App Development",
+  headlineItalic: "Services",
   lead:
-    "Kotlin-first Android development for products that need broad device coverage, strong performance on mid-range phones, and release discipline that keeps Play Store ratings high.",
+    "TechBinaries is a premier Android app development company, developing custom, top-tier mobile applications that deliver flawless performance and exceptional user engagement.",
 };
 
 export const HERO_PHONE_COUNTRY_CODES = [
@@ -12,46 +12,47 @@ export const HERO_PHONE_COUNTRY_CODES = [
 
 export const GROWTH = {
   kicker: "Why Android",
-  title: "Android done right becomes a",
-  titleAccent: "growth engine.",
+  title: "End-to-End Android Mobile App",
+  titleLine2: "Development Solutions",
+  titleAccent: "Built for Growth",
   lead:
-    "Android gives you global reach, but only if the product performs across fragmented devices and networks. Custom engineering helps you acquire broadly without sacrificing quality.",
+    "From concept to deployment, we build secure, scalable Android development services that optimize business efficiency and deliver exceptional digital experiences.",
   pillars: [
     {
       n: "01",
-      k: "Device reach",
-      v: "Wide compatibility",
-      d: "We tune rendering, memory usage, and app size for budget and flagship devices so your product feels reliable across the Android ecosystem.",
+      k: "Custom Android App Development",
+      v: "Cutting-edge apps",
+      d: "Our expert developers build custom, cutting-edge Android apps focused on flawless performance, advanced features, and exceptional user accessibility.",
       image:
         "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80&auto=format&fit=crop",
-      imageAlt: "Android app preview across multiple phone form factors",
+      imageAlt: "Custom Android app development with polished mobile interface",
     },
     {
       n: "02",
-      k: "Performance",
-      v: "Low ANR rates",
-      d: "Profiling, lazy loading, and robust background-work strategies keep frame drops and ANRs under control as feature depth increases.",
+      k: "Cross-Platform Solutions",
+      v: "Flutter & Ionic",
+      d: "Reach a broader audience with high-performance apps built on frameworks like Flutter and Ionic, tailored to meet your unique business demands.",
       image:
         "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1400&q=80&auto=format&fit=crop",
-      imageAlt: "Android performance dashboard showing frame and ANR stability",
+      imageAlt: "Cross-platform mobile app development across Android devices",
     },
     {
       n: "03",
-      k: "Release cadence",
-      v: "Predictable updates",
-      d: "CI/CD, staged rollouts, and feature flags make it safer to ship frequently without breaking critical user flows.",
+      k: "Mobile Prototyping & Enterprise Solutions",
+      v: "Enterprise-ready",
+      d: "Validate your vision with custom enterprise mobile apps. Our strategic prototyping services optimize user experience and streamline your business operations.",
       image:
         "https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=1400&q=80&auto=format&fit=crop",
-      imageAlt: "Android release pipeline with staged rollout controls",
+      imageAlt: "Enterprise mobile app prototyping and strategic planning session",
     },
     {
       n: "04",
-      k: "Resilience",
-      v: "Offline-aware UX",
-      d: "We design fail-safe states for unstable networks so users can continue key actions even with intermittent connectivity.",
+      k: "Wearable & IoT Innovation",
+      v: "IoT & wearables",
+      d: "Stay ahead with next-gen IoT and wearable applications that enhance connectivity, offer advanced data processing, and elevate user experience.",
       image:
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1400&q=80&auto=format&fit=crop",
-      imageAlt: "Android app operating smoothly in low-connectivity conditions",
+      imageAlt: "Wearable and IoT application development with connected devices",
     },
   ],
 };
@@ -62,67 +63,89 @@ export const COST = {
   imageAlt:
     "Product owner reviewing web analytics and KPIs on a laptop after shipping a web application",
   kicker: "What hurts adoption",
-  title: "The cost of shipping Android",
-  titleAccent: "wrong.",
+  title: "The True Cost of Getting Android App Development",
+  titleAccent: "Wrong",
   lead:
-    "Android products usually lose momentum through quality drift, not bad ideas. Early technical shortcuts often become expensive within the first few release cycles.",
+    "Choosing a cheap Android application development company or cutting corners on your mobile strategy isn't just a minor setback; it's an expensive corporate hazard.",
   failures: [
     {
-      stat: "53%",
-      label: "Uninstalls in week one",
-      h: "Heavy first install",
-      d: "Large binaries and unoptimized assets increase drop-off before users even complete onboarding.",
+      stat: "100×",
+      label: "Post-launch repair penalty",
+      d: "Fixing bugs post-launch costs up to 100x more than catching them during discovery.",
       image:
         "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=80&auto=format&fit=crop",
-      imageAlt:
-        "Developer building a web application with HTML and JavaScript visible on a laptop screen",
+      imageAlt: "Android development team reviewing code during discovery phase",
       theme: "perf",
     },
     {
-      stat: "4.2×",
-      label: "Regression risk",
-      h: "Weak module boundaries",
-      d: "When app layers are tightly coupled, each new feature increases QA cost and slows team velocity.",
+      stat: "70%",
+      label: "Uninstalls in week one",
+      d: "70% of users uninstall apps within 48 hours if performance is poor or unstable.",
       image:
         "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900&q=80&auto=format&fit=crop",
-      imageAlt:
-        "Engineering team collaborating on architecture and APIs for a web platform",
+      imageAlt: "Engineering team monitoring Android app performance and stability",
       theme: "arch",
     },
     {
-      stat: "67%",
-      label: "Play Store complaints",
-      h: "No runtime monitoring",
-      d: "Without crash and ANR diagnostics, quality issues surface publicly before engineering can respond.",
+      stat: "32%",
+      label: "Play Store complaints & loss",
+      d: "68% abandon apps after two bugs; 32% stop engaging with the brand entirely.",
       image:
         "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop",
-      imageAlt:
-        "Monitoring dashboard with charts for uptime and errors on a live web service",
+      imageAlt: "Play Store analytics dashboard showing user complaints and churn",
       theme: "obs",
     },
     {
-      stat: "26%",
-      label: "Audience excluded",
-      h: "Accessibility ignored",
-      d: "Skipping TalkBack support, contrast checks, and scalable typography limits adoption and increases long-term rework.",
+      stat: "80%",
+      label: "Audience excluded & debt",
+      d: "Poor architecture can consume 60–80% of budgets on fixes instead of new features.",
       image:
         "https://images.unsplash.com/photo-1574887427561-d3d5d58c9273?w=900&q=80&auto=format&fit=crop",
-      imageAlt:
-        "Person using a refreshable braille display—assistive technology for accessing web and digital content",
+      imageAlt: "Development team addressing technical debt in Android codebase",
       theme: "a11y",
     },
   ],
   close:
-    "We engineer around every one of these failure modes — performance, architecture, observability, accessibility — as defaults, not upsells.",
+    "When you partner with the wrong Android software development company, hidden technical debt and unoptimized code will quietly sink your digital investment.",
 };
 
 export const PROCESS = [
-  { num: "01", title: "Market + product discovery", d: "Define key Android cohorts, network constraints, and feature priorities before build.", meta: "1-2 weeks" },
-  { num: "02", title: "Android UX blueprint", d: "Design navigation and interaction patterns optimized for varied screen sizes and hardware classes.", meta: "2-3 weeks" },
-  { num: "03", title: "Kotlin engineering", d: "Implement clean architecture, typed networking, and testable modules in sprint cycles.", meta: "8-14 weeks" },
-  { num: "04", title: "Fragmentation QA", d: "Run validation on diverse Android versions, OEM devices, and constrained connectivity scenarios.", meta: "Continuous" },
-  { num: "05", title: "Play Store rollout", d: "Prepare staged rollouts, monitoring thresholds, and rollback strategy before production traffic.", meta: "1-2 weeks" },
-  { num: "06", title: "Optimize + expand", d: "Use crash, retention, and conversion data to prioritize roadmap and improve app quality each release.", meta: "Ongoing" },
+  {
+    num: "01",
+    title: "Discovery & Strategy",
+    d: "We define your project scope, align business workflows, and map technical requirements to protect your capital.",
+    meta: "",
+  },
+  {
+    num: "02",
+    title: "Architecture & Design",
+    d: "Our team drafts database structures and human-centric UI/UX prototypes before a single line of code is written.",
+    meta: "",
+  },
+  {
+    num: "03",
+    title: "Agile Development",
+    d: "We build your platform in sprints, engineering clean, scalable, and highly secure apps tailored to your goals.",
+    meta: "",
+  },
+  {
+    num: "04",
+    title: "Quality Assurance",
+    d: "Rigorous automated and manual testing eliminates structural defects, ensuring optimal performance and complete data transparency.",
+    meta: "",
+  },
+  {
+    num: "05",
+    title: "Deployment & Launch",
+    d: "We seamlessly transition your Android application to a live, optimized cloud environment with zero operational disruption.",
+    meta: "",
+  },
+  {
+    num: "06",
+    title: "Maintenance & Scaling",
+    d: "We provide ongoing technical support, monitoring system health, and optimizing code as your business user base grows.",
+    meta: "",
+  },
 ];
 
 export const STACK = [
@@ -153,18 +176,49 @@ export const STACK = [
 ];
 
 export const FAQS = [
-  { q: "Do you support both native Android and cross-platform?", a: "Yes. Native Kotlin is best when performance and deep platform integration are priorities. For shared iOS/Android velocity, we also design React Native architectures with native modules where required." },
-  { q: "How do you handle Android device fragmentation?", a: "We define target device tiers early, then validate rendering, memory, and performance on representative real devices throughout development, not just at launch." },
-  { q: "Can you improve an existing Android app?", a: "Absolutely. We audit architecture, crash patterns, and Play Store feedback, then ship a prioritized stabilization and modernization roadmap." },
-  { q: "How quickly can we launch an MVP?", a: "Most Android MVPs land in 10-14 weeks with focused scope. Broader feature sets and multi-role products usually run 16-24 weeks." },
-  { q: "Do you manage release operations after launch?", a: "Yes. We support staged rollouts, quality monitoring, hotfix protocols, and ongoing optimization against business KPIs." },
+  {
+    q: "What is the typical Android app development cost?",
+    a: "There is no one-size-fits-all price for software creation. The overall cost of Android application development services depends entirely on your project's unique scope, functional requirements, and system complexity. Contact our team today for a tailored, complimentary estimate based on your specific business goals.",
+  },
+  {
+    q: "What factors influence an Android app development price?",
+    a: "The final price depends on several variable factors, including the complexity of your features, custom UI/UX design requirements, third-party API integrations, and backend infrastructure needs. Reach out to our specialists to map out your requirements and receive an accurate price breakdown.",
+  },
+  {
+    q: "How do I hire Android developer talent with the right expertise?",
+    a: "Hire Android app developers or teams with a strong portfolio in native ecosystems such as Kotlin or in versatile cross-platform frameworks like Flutter. At TechBinaries, you gain access to an entire vetted engineering team equipped with dedicated project managers and quality assurance specialists.",
+  },
+  {
+    q: "Why should I partner with a custom Android app development company?",
+    a: "Off-the-shelf templates limit your brand's growth and compromise security. A specialized Android mobile app development company builds your software architecture from the ground up, ensuring the final product matches your exact workflows, scales seamlessly, and stands out on the Google Play Store.",
+  },
+  {
+    q: "Does TechBinaries offer Android app development USA solutions?",
+    a: "Yes. We deliver world-class custom android application development solutions built to comply with top international design benchmarks, strict security standards, and high-performance metrics required by modern digital businesses globally.",
+  },
+  {
+    q: "Why choose an agency over a freelancer for Android app development in the USA markets?",
+    a: "Competing in top-tier global markets demands exceptional UI/UX design, strict data security, and rigid quality control. An established Android app development agency provides a comprehensive, end-to-end team that eliminates the reliability risks, communication barriers, and technical debt often associated with solo freelancers.",
+  },
+  {
+    q: "Do you provide both iOS and Android app development?",
+    a: "Absolutely. We do Android native app development for both ecosystems individually or deploy efficient cross-platform solutions using frameworks like Flutter and Ionic. This allows you to launch on both the Apple App Store and Google Play Store simultaneously from a unified codebase.",
+  },
+  {
+    q: "What compliance standards do you follow for Android healthcare app development?",
+    a: "Healthcare applications require maximum data security. Our Android mobile development process prioritizes end-to-end data encryption, secure API integrations, and strict compliance with international privacy standards (such as HIPAA guidelines) to safely protect sensitive patient information.",
+  },
+  {
+    q: "Is it safe to outsource Android app development?",
+    a: "Yes, provided you partner with a structured, transparent Android development company. We mitigate outsourcing risks by utilizing agile project tracking, clear milestones, regular video updates, and comprehensive non-disclosure agreements (NDAs) to keep your intellectual property fully secure.",
+  },
 ];
 
 export const CTA = {
-  headline: "Let's launch an Android app",
-  headlineItalic: "that scales globally.",
+  headline: "Skip the technical debt.",
+  headlineItalic: "Let's build it right.",
   lead:
-    "Book a technical discovery call and we will map architecture, rollout strategy, and a realistic Android launch path aligned to your market.",
+    "Connect with our specialists to engineer a flawless, launch-ready application that drives user engagement.",
   primaryCta: { label: "Book a discovery call", href: "/contact" },
   email: "hello@techbinaries.com",
   rows: [

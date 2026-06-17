@@ -10,11 +10,11 @@ export function CwaStackSection() {
     <section className="cwa-stack-section" aria-labelledby="cwa-stack-title">
       <div className="cwa-stack-inner">
         <div className="cwa-sh cwa-section-head">
-          <h2 id="cwa-stack-title" className="cwa-h2">
-            Tooling we <span className="cwa-italic-mute">trust.</span>
-          </h2>
+          <h3 id="cwa-stack-title" className="cwa-h2">
+            Tech We <span className="cwa-italic-mute">Trust.</span>
+          </h3>
           <p className="cwa-h2-lead">
-            Mature, production-ready stacks — picked for your problem, not because they&apos;re new.
+            Battle-tested, production-ready Android stacks, chosen to solve your specific performance needs.
           </p>
         </div>
 

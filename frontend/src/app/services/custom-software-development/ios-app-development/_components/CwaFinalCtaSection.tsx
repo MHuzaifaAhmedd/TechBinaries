@@ -8,7 +8,7 @@ export function CwaFinalCtaSection() {
     <section className="cwa-ncta" aria-labelledby="cwa-ncta-title">
       <div className="cwa-ncta-inner">
         <div className="cwa-ncta-card">
-          <h2 id="cwa-ncta-title" className="cwa-ncta-title">
+          <h3 id="cwa-ncta-title" className="cwa-ncta-title">
             <span className="cwa-ncta-head">
               {CTA.headline.split(/\s+/).map((word, wi) => (
                 <Fragment key={`h-w-${wi}`}>
@@ -18,21 +18,35 @@ export function CwaFinalCtaSection() {
                   </span>
                 </Fragment>
               ))}
-              <span className="cwa-ncta-head-gap" aria-hidden>
-                {"\u00A0"}
-              </span>
-              <span className="cwa-ncta-italic">
-                {CTA.headlineItalic.split(/\s+/).map((word, wi) => (
-                  <Fragment key={`i-w-${wi}`}>
-                    {wi > 0 ? <span className="cwa-ncta-char">{"\u00A0"}</span> : null}
-                    <span className="cwa-ncta-word">
-                      <AnimatedCharSpans text={word} charClassName="cwa-ncta-char" keyPrefix={`i-${wi}`} />
-                    </span>
-                  </Fragment>
-                ))}
-              </span>
+              {CTA.headlineItalic ? (
+                <>
+                  <span className="cwa-ncta-head-gap" aria-hidden>
+                    {"\u00A0"}
+                  </span>
+                  <span className="cwa-ncta-italic">
+                    {CTA.headlineItalic.split(/\s+/).map((word, wi) => (
+                      <Fragment key={`i-w-${wi}`}>
+                        {wi > 0 ? <span className="cwa-ncta-char">{"\u00A0"}</span> : null}
+                        <span className="cwa-ncta-word">
+                          <AnimatedCharSpans text={word} charClassName="cwa-ncta-char" keyPrefix={`i-${wi}`} />
+                        </span>
+                      </Fragment>
+                    ))}
+                  </span>
+                </>
+              ) : null}
+              {CTA.headlineSuffix
+                ? CTA.headlineSuffix.split(/\s+/).map((word, wi) => (
+                    <Fragment key={`s-w-${wi}`}>
+                      <span className="cwa-ncta-char">{"\u00A0"}</span>
+                      <span className="cwa-ncta-word">
+                        <AnimatedCharSpans text={word} charClassName="cwa-ncta-char" keyPrefix={`s-${wi}`} />
+                      </span>
+                    </Fragment>
+                  ))
+                : null}
             </span>
-          </h2>
+          </h3>
 
           <p className="cwa-ncta-lead cwa-ncta-fade">{CTA.lead}</p>
 

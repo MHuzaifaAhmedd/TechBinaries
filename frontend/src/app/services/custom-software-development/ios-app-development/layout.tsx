@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-
+import "./_styles/cwa-hero-overrides.css";
 
 export const metadata: Metadata = {
-  title: "iOS App Development",
+  title: {
+    absolute: "TechBinaries Full-Cycle iOS App Development Services",
+  },
   description:
-    "Native iOS app development with Swift and SwiftUI focused on retention, performance, and App Store-ready delivery.",
+    "Tech Binaries offers full-cycle iOS app development services for startups and enterprises. We build powerful apps that top the App Store charts.",
 };
 
 export default function IosAppDevelopmentLayout({

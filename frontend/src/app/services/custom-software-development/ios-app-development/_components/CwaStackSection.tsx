@@ -10,11 +10,11 @@ export function CwaStackSection() {
     <section className="cwa-stack-section" aria-labelledby="cwa-stack-title">
       <div className="cwa-stack-inner">
         <div className="cwa-sh cwa-section-head">
-          <h2 id="cwa-stack-title" className="cwa-h2">
+          <h3 id="cwa-stack-title" className="cwa-h2">
             Tooling we <span className="cwa-italic-mute">trust.</span>
-          </h2>
+          </h3>
           <p className="cwa-h2-lead">
-            Mature, production-ready stacks — picked for your problem, not because they&apos;re new.
+            Reliable, production-ready stacks, selected to solve your specific problems, not because they are trendy.
           </p>
         </div>
 

@@ -5,11 +5,11 @@ export function CwaProcessSection() {
     <section id="process" className="cwa-process-section" aria-labelledby="cwa-process-title">
       <div className="cwa-process-inner">
         <div className="cwa-sh cwa-section-head cwa-section-head--light">
-          <h2 id="cwa-process-title" className="cwa-h2 cwa-h2-light">
+          <h3 id="cwa-process-title" className="cwa-h2 cwa-h2-light">
             How we build — <span className="cwa-italic-light">six phases, one team.</span>
-          </h2>
+          </h3>
           <p className="cwa-h2-lead cwa-h2-lead-light">
-            A delivery rhythm refined across 150+ shipped products. No surprises, no shipping and praying.
+            Our iOS mobile app development solutions combine strategic architectural planning with agile execution to turn your complex operational challenges into scalable, high-performance digital realities.
           </p>
         </div>
 
@@ -27,7 +27,7 @@ export function CwaProcessSection() {
                 <div className="cwa-proc-step-card">
                   <div className="cwa-proc-step-head">
                     <h3 className="cwa-proc-step-title">{s.title}</h3>
-                    <span className="cwa-proc-step-meta">{s.meta}</span>
+                    {s.meta ? <span className="cwa-proc-step-meta">{s.meta}</span> : null}
                   </div>
                   <p className="cwa-proc-step-desc">{s.d}</p>
                 </div>
