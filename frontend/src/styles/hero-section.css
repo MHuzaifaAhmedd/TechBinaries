@@ -74,6 +74,11 @@
   white-space: nowrap;
 }
 
+.hero-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .hero-headline-line:first-child {
   padding-bottom: 0.16em;
 }
@@ -311,9 +316,16 @@
   }
 
   .hero-headline {
-    font-size: clamp(28px, 8.5vw, 38px) !important;
+    font-size: clamp(26px, 7.8vw, 36px) !important;
     margin: 0 0 14px !important;
-    line-height: 1.02 !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.028em !important;
+    max-width: 100%;
+  }
+
+  .hero-left {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .hero-verb-slot {
@@ -322,6 +334,8 @@
 
   .hero-headline-line {
     white-space: normal !important;
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
   .hero-desc {
@@ -430,7 +444,7 @@
 
 @media (max-width: 380px) {
   .hero-headline {
-    font-size: 26px !important;
+    font-size: clamp(24px, 7.2vw, 26px) !important;
   }
 
   .hero-desc {

@@ -8,7 +8,17 @@ import "@/styles/hero-section.css";
 function splitChars(text: string, keyPrefix: string) {
   return text.split("").map((c, i) => (
     <span key={`${keyPrefix}-${i}`} className="hero-char" style={{ display: "inline-block", willChange: "transform" }}>
-      {c === " " ? "\u00A0" : c}
+      {c}
+    </span>
+  ));
+}
+
+function splitLine(text: string, keyPrefix: string) {
+  const words = text.split(" ");
+  return words.map((word, wi) => (
+    <span key={`${keyPrefix}-w-${wi}`} className="hero-word">
+      {splitChars(word, `${keyPrefix}-w-${wi}`)}
+      {wi < words.length - 1 ? "\u00A0" : null}
     </span>
   ));
 }
@@ -93,11 +103,11 @@ export default function HeroSection() {
                 }}
               >
                 <div className="hero-headline-line">
-                  {splitChars("Software Development", "l1")}
+                  {splitLine("Software Development", "l1")}
                 </div>
 
                 <div className="hero-headline-line">
-                  {splitChars("Company", "l2")}
+                  {splitLine("Company", "l2")}
                 </div>
 
                 <div className="hero-headline-line hero-headline-line--rotating">
@@ -106,7 +116,7 @@ export default function HeroSection() {
                 </div>
 
                 <div className="hero-headline-line hero-headline-line--last">
-                  {splitChars("Digital Products", "l4")}
+                  {splitLine("Digital Products", "l4")}
                 </div>
               </h1>
 
