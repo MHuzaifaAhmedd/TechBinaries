@@ -56,9 +56,7 @@ export function CwaHeroSection({ isMobile, heroMenu, pickerDomIds }: Props) {
                     <AnimatedCharSpans text={PAGE.headline1} charClassName="cwa-h1-char" keyPrefix="a" />
                   </span>
                   <span className="cwa-h1-line">
-                    <AnimatedCharSpans text={PAGE.headline2} charClassName="cwa-h1-char" keyPrefix="b" />
-                  </span>
-                  <span className="cwa-h1-line">
+                    <AnimatedCharSpans text={PAGE.headline2} charClassName="cwa-h1-char" keyPrefix="b" charStyle={{ whiteSpace: "pre" }} />
                     <span className="cwa-h1-italic">
                       <AnimatedCharSpans text={PAGE.headlineItalic} charClassName="cwa-h1-char" keyPrefix="c" />
                     </span>
@@ -66,10 +64,10 @@ export function CwaHeroSection({ isMobile, heroMenu, pickerDomIds }: Props) {
                 </span>
                 <span className="cwa-h1-lines-mobile" aria-hidden={!isMobile}>
                   <span className="cwa-h1-line cwa-h1-line-mobile">
-                    <AnimatedCharSpans text={`${PAGE.headline1} engineered`} charClassName="cwa-h1-char" keyPrefix="m1" />
+                    <AnimatedCharSpans text={PAGE.headline1} charClassName="cwa-h1-char" keyPrefix="m1" />
                   </span>
                   <span className="cwa-h1-line cwa-h1-line-mobile">
-                    <AnimatedCharSpans text="for " charClassName="cwa-h1-char" keyPrefix="m2" charStyle={{ whiteSpace: "pre" }} />
+                    <AnimatedCharSpans text={PAGE.headline2} charClassName="cwa-h1-char" keyPrefix="m2" charStyle={{ whiteSpace: "pre" }} />
                     <span className="cwa-h1-italic">
                       <AnimatedCharSpans text={PAGE.headlineItalic} charClassName="cwa-h1-char" keyPrefix="m3i" />
                     </span>
@@ -83,7 +81,7 @@ export function CwaHeroSection({ isMobile, heroMenu, pickerDomIds }: Props) {
 
               <div className="cwa-hero-fade cwa-hero-cta-row" style={{ opacity: 0 }}>
                 <Link href="/contact" className="csd-cta-primary">
-                  <span style={{ position: "relative", zIndex: 2 }}>Plan my build</span>
+                  <span style={{ position: "relative", zIndex: 2 }}>Build My Custom Solution</span>
                   <svg
                     aria-hidden
                     width="12"

@@ -1,0 +1,23 @@
+/* UI/UX Design Systems — cost section heading overrides */
+
+.cwa-cost-content .cwa-h2 {
+  font-size: clamp(26px, 3.2vw, 44px);
+  line-height: 1.08;
+  max-width: 620px;
+}
+
+.cwa-cost-content .cwa-h2-lead {
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+@media (max-width: 900px) {
+  .cwa-cost-content .cwa-h2 {
+    font-size: clamp(24px, 5.8vw, 34px);
+  }
+
+  .cwa-cost-content .cwa-h2-lead {
+    font-size: 14px;
+    line-height: 1.62;
+  }
+}

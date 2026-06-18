@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-
+import "./_styles/cwa-hero-overrides.css";
 
 export const metadata: Metadata = {
-  title: "UI/UX Design Systems",
+  title: {
+    absolute: "TechBinaries UI UX Design Services for Modern Apps",
+  },
   description:
-    "Scalable UI/UX design systems with tokens, reusable components, and governance that accelerate product delivery.",
+    "Drive engagement and retention. TechBinaries offers premium UI UX design services that align your business goals with seamless, intuitive user journeys.",
 };
 
 export default function UiUxDesignSystemsLayout({

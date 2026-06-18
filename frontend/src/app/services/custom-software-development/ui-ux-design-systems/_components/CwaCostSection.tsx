@@ -7,9 +7,15 @@ export function CwaCostSection() {
       <div className="cwa-cost-inner">
         <div className="cwa-cost-split">
           <div className="cwa-cost-content cwa-sh">
-            <h2 id="cwa-cost-title" className="cwa-h2">
-              {COST.title} <span className="cwa-italic-mute">{COST.titleAccent}</span>
-            </h2>
+            <h3 id="cwa-cost-title" className="cwa-h2">
+              {COST.title}
+              {COST.titleAccent ? (
+                <>
+                  {" "}
+                  <span className="cwa-italic-mute">{COST.titleAccent}</span>
+                </>
+              ) : null}
+            </h3>
             <p className="cwa-h2-lead">{COST.lead}</p>
 
             <p className="cwa-cost-close">{COST.close}</p>
@@ -30,7 +36,7 @@ export function CwaCostSection() {
 
         <div className="cwa-fail-grid">
           {COST.failures.map((f) => (
-            <article key={f.h} className="cwa-fail-card" data-theme={f.theme}>
+            <article key={`${f.stat}-${f.label}`} className="cwa-fail-card" data-theme={f.theme}>
               <div className="cwa-fail-card-visual">
                 <Image
                   src={f.image}
@@ -50,7 +56,6 @@ export function CwaCostSection() {
                   <span className="cwa-fail-card-stat">{f.stat}</span>
                   <span className="cwa-fail-card-label">{f.label}</span>
                 </div>
-                <h3 className="cwa-fail-card-h">{f.h}</h3>
                 <p className="cwa-fail-card-d">{f.d}</p>
               </div>
             </article>
