@@ -1,9 +1,9 @@
 export const PAGE = {
-  headline1: "CMS & admin",
-  headline2: "platforms for",
-  headlineItalic: "operations.",
+  headline1: "Custom CMS Development",
+  headline2: "Company That Drives",
+  headlineItalic: "Performance",
   lead:
-    "We build content systems and admin panels that help teams publish faster, manage workflows safely, and operate complex products without engineering bottlenecks.",
+    "TechBinaries delivers expert CMS website development services that transform your digital presence, offering lightning-fast workflows and robust security custom-built to give your team total control and superior digital performance.",
 };
 
 export const HERO_PHONE_COUNTRY_CODES = [
@@ -12,15 +12,43 @@ export const HERO_PHONE_COUNTRY_CODES = [
 
 export const GROWTH = {
   kicker: "Why internal platforms",
-  title: "A strong admin layer is an",
-  titleAccent: "execution engine.",
+  title: "Future-Proof CMS",
+  titleAccent: "Architecture & Support",
   lead:
-    "Most teams lose speed in day-to-day operations, not product ideas. Purpose-built CMS and admin tools reduce manual work, improve governance, and unlock faster iteration.",
+    "Accelerate your digital growth with TechBinaries. We provide full-cycle custom CMS solutions engineered for high performance, seamless integration, and scalability.",
   pillars: [
-    { n: "01", k: "Publishing velocity", v: "Faster updates", d: "Structured content models and approval workflows help teams publish confidently without waiting on developers.", image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1400&q=80&auto=format&fit=crop", imageAlt: "Content team publishing updates through a structured CMS" },
-    { n: "02", k: "Operational control", v: "Role-based access", d: "Granular permissions, audit logs, and action safeguards reduce risk in high-impact internal operations.", image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1400&q=80&auto=format&fit=crop", imageAlt: "Admin dashboard with role-based permissions and workflow states" },
-    { n: "03", k: "Workflow automation", v: "Less manual overhead", d: "Custom automations and bulk actions eliminate repetitive tasks and keep teams focused on higher-value work.", image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1400&q=80&auto=format&fit=crop", imageAlt: "Operations workflow automation displayed in an admin interface" },
-    { n: "04", k: "Data visibility", v: "Real-time oversight", d: "Embedded analytics and status panels provide operational clarity for product, support, and leadership teams.", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80&auto=format&fit=crop", imageAlt: "Admin analytics panel showing key operational metrics" },
+    {
+      n: "01",
+      k: "Headless CMS Development",
+      v: "Scalable performance",
+      d: "Enhance growth with scalable headless CMS development services. TechBinaries delivers superior performance, flexible integrations, expert support, and complete user experience control.",
+      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1400&q=80&auto=format&fit=crop",
+      imageAlt: "Headless CMS architecture powering flexible content delivery",
+    },
+    {
+      n: "02",
+      k: "CMS Integration",
+      v: "Seamless connectivity",
+      d: "Stay competitive with our seamless CMS integration services. We link your platform with Salesforce, social media, and custom .NET modules.",
+      image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1400&q=80&auto=format&fit=crop",
+      imageAlt: "CMS platform integrated with Salesforce and third-party services",
+    },
+    {
+      n: "03",
+      k: "CMS Update & Migration",
+      v: "Zero traffic loss",
+      d: "Migrate to modern technology without losing traffic. Our seamless CMS updates improve security, boost SEO, and maximize platform speed performance.",
+      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1400&q=80&auto=format&fit=crop",
+      imageAlt: "CMS migration workflow preserving traffic and SEO performance",
+    },
+    {
+      n: "04",
+      k: "CMS Support and Maintenance",
+      v: "Long-term reliability",
+      d: "Protect your website with our dedicated CMS support. We provide regular patches, bug fixes, and maintenance for optimal long-term performance.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80&auto=format&fit=crop",
+      imageAlt: "CMS support team monitoring platform health and applying updates",
+    },
   ],
 };
 
@@ -28,25 +56,83 @@ export const COST = {
   image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1400&q=80&auto=format&fit=crop",
   imageAlt: "Operations team reviewing inefficient manual admin workflows",
   kicker: "What slows teams down",
-  title: "The cost of weak admin",
-  titleAccent: "infrastructure.",
-  lead: "When internal tools are generic or fragmented, teams waste time, create errors, and struggle to scale operations.",
+  title: "The True Cost of a Broken",
+  titleAccent: "CMS Setup",
+  lead: "Postponing a system upgrade or partnering with an inexperienced CMS development company isn't just an operational bottleneck; it is a direct drain on your bottom line.",
   failures: [
-    { stat: "31%", label: "Time lost weekly", h: "Manual workflows", d: "Teams spend hours on repetitive tasks that should be automated through admin tooling.", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&q=80&auto=format&fit=crop", imageAlt: "Operations team performing repetitive manual admin tasks", theme: "perf" },
-    { stat: "2.8x", label: "More production errors", h: "Missing guardrails", d: "Without validations and permission controls, high-impact mistakes become frequent and costly.", image: "https://images.unsplash.com/photo-1551817958-20204f19c8e1?w=900&q=80&auto=format&fit=crop", imageAlt: "Admin interface showing error-prone input and missing validations", theme: "arch" },
-    { stat: "47%", label: "Delayed content ops", h: "Rigid CMS model", d: "Poor content architecture forces engineering support for simple editorial changes.", image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=900&q=80&auto=format&fit=crop", imageAlt: "Content team blocked by inflexible CMS setup", theme: "obs" },
-    { stat: "24%", label: "Audit gaps", h: "No traceability", d: "Lack of change history and accountability increases compliance and governance risk.", image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80&auto=format&fit=crop", imageAlt: "Compliance checklist and audit logs for admin actions", theme: "a11y" },
+    {
+      stat: "66%",
+      label: "Project Budget Overruns",
+      d: "Industry data from McKinsey reveals that the vast majority of major software development projects significantly exceed their budgets or miss deadlines completely due to poor planning.",
+      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&q=80&auto=format&fit=crop",
+      imageAlt: "Software project budget planning and overrun analysis",
+      theme: "perf",
+    },
+    {
+      stat: "$5.05M",
+      label: "Average Breach Cost",
+      d: "According to IBM's report, data breaches occurring across integrated multi-cloud and poorly configured CMS environments cost companies millions per incident.",
+      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=900&q=80&auto=format&fit=crop",
+      imageAlt: "Cybersecurity breach monitoring across cloud and CMS infrastructure",
+      theme: "arch",
+    },
+    {
+      stat: "241 Days",
+      label: "To Contain Threats",
+      d: "Stolen or compromised credentials account for nearly 19% of all breaches, requiring months to simply identify and fully isolate within compromised backend infrastructure.",
+      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=900&q=80&auto=format&fit=crop",
+      imageAlt: "Security team investigating compromised backend credentials",
+      theme: "obs",
+    },
+    {
+      stat: "60%",
+      label: "Permanent Business Closures",
+      d: "In extreme scenarios where data and SEO mapping management fail during botched platform migrations, more than half of affected businesses close down permanently within six months.",
+      image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80&auto=format&fit=crop",
+      imageAlt: "Business impact assessment after a failed CMS platform migration",
+      theme: "a11y",
+    },
   ],
-  close: "We design CMS and admin ecosystems around your workflows, governance model, and team structure so operations become faster and safer.",
+  close: "When a Content Management System is poorly engineered, insecure, or fundamentally misaligned with your business objectives, the financial repercussions accumulate rapidly.",
 };
 
 export const PROCESS = [
-  { num: "01", title: "Workflow discovery", d: "Map content, support, and operations flows to identify bottlenecks and risk points.", meta: "1-2 weeks" },
-  { num: "02", title: "System blueprint", d: "Design content schema, admin IA, permissions model, and workflow states.", meta: "2-3 weeks" },
-  { num: "03", title: "Platform build", d: "Implement CMS APIs, admin UI modules, and operational automation in iterative sprints.", meta: "8-14 weeks" },
-  { num: "04", title: "Quality + controls", d: "Validate edge cases, role boundaries, and operational safeguards before rollout.", meta: "Continuous" },
-  { num: "05", title: "Rollout + onboarding", d: "Launch in phases and train internal teams for smooth adoption and minimal disruption.", meta: "1-2 weeks" },
-  { num: "06", title: "Optimize operations", d: "Refine workflows using analytics and team feedback to continuously improve throughput.", meta: "Ongoing" },
+  {
+    num: "01",
+    title: "Analysis & Strategizing",
+    d: "Aligning business objectives with actionable technical roadmaps to guarantee a highly successful project foundation.",
+    meta: "",
+  },
+  {
+    num: "02",
+    title: "Architecture & UI/UX Design",
+    d: "Engineering robust system structures alongside intuitive user interfaces to maximize long-term digital engagement.",
+    meta: "",
+  },
+  {
+    num: "03",
+    title: "Development & Quality Assurance",
+    d: "Writing clean, scalable code backed by rigorous testing cycles to ensure ironclad software security.",
+    meta: "",
+  },
+  {
+    num: "04",
+    title: "Deployment & Launch",
+    d: "Executing a seamless live environment rollout with specialized protocols to guarantee zero business downtime.",
+    meta: "",
+  },
+  {
+    num: "05",
+    title: "Optimization & Post-Launch Review",
+    d: "Analyzing initial user performance data and fine-tuning system configurations for peak operational efficiency.",
+    meta: "",
+  },
+  {
+    num: "06",
+    title: "Project Handover & Support",
+    d: "Delivering complete assets alongside continuous maintenance frameworks to power your future digital growth.",
+    meta: "",
+  },
 ];
 
 export const STACK = [
@@ -57,17 +143,44 @@ export const STACK = [
 ];
 
 export const FAQS = [
-  { q: "Can you build custom admin panels for complex workflows?", a: "Yes. We design admin tooling around your exact workflows, not generic templates, including role-based controls and operation-specific safeguards." },
-  { q: "Do you integrate with headless CMS platforms?", a: "Yes. We can implement custom CMS solutions or integrate platforms like Sanity, Contentful, and Strapi based on your content and governance needs." },
-  { q: "How do you handle permissions and security?", a: "We implement robust RBAC, audit logs, approval states, and action-level safeguards to keep sensitive operations controlled and traceable." },
-  { q: "Can internal teams use it without engineering help?", a: "That is a core goal. We optimize for operational autonomy so marketing, support, and product ops can execute safely without constant developer involvement." },
-  { q: "Will this replace our spreadsheets and disconnected tools?", a: "In most cases, yes. We consolidate fragmented workflows into a unified operational interface with automation where it matters most." },
+  {
+    q: "Why should our business invest in custom CMS development services instead of using a standard off-the-shelf template?",
+    a: "Standard templates often come with restrictive design boundaries, bloated code that slows down your site, and rigid security vulnerabilities. Our custom CMS development services ensure that your platform is engineered completely around your specific business operations, workflow automation, and unique brand design.",
+  },
+  {
+    q: "What exactly makes TechBinaries a premier headless CMS development company?",
+    a: "As an experienced headless CMS development company, we decouple your backend content management from the frontend presentation layer. By serving content seamlessly through modern, high-performance APIs, we build lightning-fast web applications that allow your team to publish once and instantly push content to websites, mobile apps, smart displays, and IoT platforms.",
+  },
+  {
+    q: "What core technologies do you specialize in for content management system development?",
+    a: "Our approach to content management system development spans a highly versatile stack tailored to your ecosystem. We specialize in robust, enterprise-grade frameworks, including custom .NET architecture, scalable PHP-based environments, and modern JavaScript-driven headless solutions.",
+  },
+  {
+    q: "How does partnering with a specialized CMS web development company protect our search engine rankings during a launch?",
+    a: "When you choose an expert custom CMS development services company like TechBinaries, we include rigorous SEO mapping and schema architecture directly in the platform's foundation. We ensure clean code structures, lightning-fast loading speeds, and systematic URL redirection loops to ensure your organic traffic remains safe.",
+  },
+  {
+    q: "How does your enterprise CMS development address complex multi-tier user governance and compliance?",
+    a: "Our specialized enterprise CMS development builds granular, role-based permission settings (RBAC) and ironclad security parameters into your architecture. We integrate advanced content auditing logs, multi-tenant workspace setups, and single sign-on (SSO) systems to confidently support thousands of internal team members and contributors.",
+  },
+  {
+    q: "Can your custom CMS solutions seamlessly integrate with our existing legacy CRM and ERP software?",
+    a: "Absolutely. Our custom CMS development services are built with high-speed API accessibility in mind. Whether you use Salesforce, HubSpot, or a completely proprietary internal enterprise database, we cleanly build smooth data pipelines to eliminate administrative silos.",
+  },
+  {
+    q: "Will our non-technical team members be able to manage the platform without writing code?",
+    a: "Yes, absolutely. Our specialized admin panel development focuses entirely on creating a user-friendly experience for your team. We build a highly intuitive backend admin panel that simplifies content updates, user permissions, and data tracking. With a tailored admin control panel in place, your administrative staff can effortlessly manage complex site operations, publish new marketing media, and view real-time analytics dashboards without needing any technical or engineering background.",
+  },
+  {
+    q: "Can we track real-time business metrics and user data directly within our content system?",
+    a: "Yes. Our custom admin dashboard development focuses on transforming raw database analytics into visual, actionable insights. Through tailored custom dashboard development, we build interactive charts, sales funnels, and performance trackers right into your system. This allows your leadership and marketing teams to monitor key business KPIs and user activity at a single glance, without switching between external analytics tools.",
+  },
 ];
 
 export const CTA = {
-  headline: "Let's build your CMS & admin",
-  headlineItalic: "for real operations.",
-  lead: "Schedule a discovery call and we will map your workflow bottlenecks, governance requirements, and the fastest path to a high-impact internal platform.",
+  headline: "Own Your Content.",
+  headlineItalic: "Own Your Market.",
+  lead: "Deploy a high-performance, CMS web development service engineered by TechBinaries to scale your business and dominate your digital market.",
   primaryCta: { label: "Book a discovery call", href: "/contact" },
   email: "hello@techbinaries.com",
   rows: [

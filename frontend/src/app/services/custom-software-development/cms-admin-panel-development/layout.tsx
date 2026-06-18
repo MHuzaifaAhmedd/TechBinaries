@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-
+import "./_styles/cwa-hero-overrides.css";
 
 export const metadata: Metadata = {
-  title: "CMS & Admin Panel Development",
+  title: {
+    absolute: "TechBinaries Web & CMS Development Services",
+  },
   description:
-    "Custom CMS and admin panel development for operational control, publishing speed, and secure internal workflows.",
+    "Get secure, high-performance CMS development services from TechBinaries. We build custom platforms that grow alongside your business.",
 };
 
 export default function CmsAdminPanelDevelopmentLayout({
