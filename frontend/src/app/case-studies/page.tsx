@@ -3,12 +3,13 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import CaseStudiesExperience from "@/components/case-studies/CaseStudiesExperience.client";
 import { CASE_STUDIES } from "@/lib/case-studies";
+import { withCanonical } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withCanonical("/case-studies", {
   title: "Case studies",
   description:
     "Selected work from our team — products we've designed and engineered for FinTech, HealthTech, SaaS, AI, and enterprise teams.",
-};
+});
 
 export default function CaseStudiesPage() {
   return (

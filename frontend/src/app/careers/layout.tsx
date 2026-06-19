@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { withCanonical } from "@/lib/page-metadata";
 import "./_styles/careers-page.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withCanonical("/careers", {
   title: "Tech Binaries Careers | Software Developer Jobs",
   description:
     "Skip the corporate bureaucracy. TechBinaries is hiring engineers who want true product autonomy, remote flexibility, and zero fluff. Apply today!",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     description:
       "Skip the corporate bureaucracy. TechBinaries is hiring engineers who want true product autonomy, remote flexibility, and zero fluff. Apply today!",
   },
-};
+});
 
 export default function CareersLayout({
   children,

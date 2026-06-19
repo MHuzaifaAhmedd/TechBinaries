@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { withCanonical } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withCanonical("/careers/positions", {
   title: { absolute: "Open Positions | TechBinaries" },
   description:
     "Current openings and how to apply at Tech Binaries. No listed role? We still read every serious introduction sent to careers@techbinaries.com.",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     description:
       "Current openings at Tech Binaries and how to get in touch about engineering roles.",
   },
-};
+});
 
 export default function CareersPositionsLayout({
   children,

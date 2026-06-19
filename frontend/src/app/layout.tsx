@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { LayoutClientWidgets } from "@/components/LayoutClientWidgets";
+import { INDEX_FOLLOW_ROBOTS } from "@/lib/page-metadata";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -42,6 +44,7 @@ const kamerik = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: "TechBinaries | Expert Software Development Company",
     template: "%s | TechBinaries",
@@ -51,10 +54,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/images/favicon.png",
   },
-  robots: {
-    index: false,
-    follow: false,
-  },
+  robots: INDEX_FOLLOW_ROBOTS,
 };
 
 export default function RootLayout({

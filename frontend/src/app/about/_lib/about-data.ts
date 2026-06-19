@@ -27,23 +27,23 @@ export const GROWTH_INTRO = {
   highlights: [
     {
       label: "Custom Software Development",
-      href: "/services/custom-software-development",
+      href: "/custom-software-development",
     },
     {
       label: "Custom Web Application Development",
-      href: "/services/custom-software-development/custom-web-application-development",
+      href: "/custom-web-application-development",
     },
     {
       label: "SaaS Product Development",
-      href: "/services/custom-software-development/saas-product-development",
+      href: "/saas-product-development",
     },
     {
       label: "iOS App Development",
-      href: "/services/custom-software-development/ios-app-development",
+      href: "/ios-app-development",
     },
     {
       label: "Android App Development",
-      href: "/services/custom-software-development/android-app-development",
+      href: "/android-app-development",
     },
   ],
 } as const;

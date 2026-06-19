@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { SERVICE_CATEGORIES } from "@/data/serviceCategories";
+import { isServicePagePath } from "@/lib/service-routes";
 
 /* ──────────────────────────────────────────────────────────────────────────
    SiteHeader  ·  v3 (categorised mega-menu)
@@ -67,7 +68,7 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "Services", href: "/services", mega: true },
+  { label: "Services", href: "/custom-software-development", mega: true },
   { label: "Insights", href: "/blogs" },
   { label: "About", href: "/about" },
   { label: "Careers", href: "/careers" },
@@ -193,8 +194,7 @@ export default function SiteHeader() {
       pathname.startsWith("/case-studies/") ||
       pathname.startsWith("/blog/") ||
       pathname === "/careers" ||
-      pathname === "/services" ||
-      pathname.startsWith("/services/")) &&
+      isServicePagePath(pathname)) &&
     !scrolled;
 
   return (
@@ -404,7 +404,7 @@ export default function SiteHeader() {
                   Six core capabilities, delivered by a senior team that owns the
                   work from discovery to production — and stays after launch.
                 </p>
-                <a href="/services" className="site-header__mega-all">
+                <a href="/custom-software-development" className="site-header__mega-all">
                   All capabilities
                   <svg aria-hidden width="12" height="12" viewBox="0 0 12 12">
                     <path
@@ -605,7 +605,7 @@ export default function SiteHeader() {
                     >
                       <div className="site-drawer__sub-inner">
                       <a
-                        href="/services"
+                        href="/custom-software-development"
                         className="site-drawer__sub-link"
                         onClick={closeMobileMenu}
                       >

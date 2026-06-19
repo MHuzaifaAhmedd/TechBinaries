@@ -158,9 +158,9 @@ export const FOOTER_NAV_COLS = [
   {
     heading: "Services",
     links: [
-      { label: "Custom Software Development", href: "/services/custom-software-development", ext: false },
-      { label: "Growth & Performance Engineering", href: "/services/growth-performance-engineering", ext: false },
-      { label: "Search Visibility SEO", href: "/services/search-visibility-seo", ext: false },
+      { label: "Custom Software Development", href: "/custom-software-development", ext: false },
+      { label: "Growth & Performance Engineering", href: "/growth-performance-engineering", ext: false },
+      { label: "Search Visibility SEO", href: "/search-visibility-seo", ext: false },
     ],
   },
   {

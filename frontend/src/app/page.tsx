@@ -1,9 +1,11 @@
 import dynamic from "next/dynamic";
+import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import HeroSection from "@/components/home/HeroSection";
 import { HomeScrollProvider } from "@/components/home/HomeScrollProvider";
 import { HomePageDecor } from "@/components/home/HomePageDecor";
 import GrainOverlay from "@/components/shared/GrainOverlay";
+import { withCanonical } from "@/lib/page-metadata";
 import "@/styles/home-page.css";
 
 const CapabilitiesSection = dynamic(
@@ -27,6 +29,8 @@ const CTASection = dynamic(() => import("@/components/home/CTASection"), {
 const SiteFooter = dynamic(() => import("@/components/SiteFooter"), {
   loading: () => null,
 });
+
+export const metadata: Metadata = withCanonical("/");
 
 export default function HomePage() {
   return (

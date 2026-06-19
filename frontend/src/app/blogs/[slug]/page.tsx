@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { withCanonical } from "@/lib/page-metadata";
 
 const BLOG = {
   slug: "state-of-software-development-2026",
@@ -38,6 +40,23 @@ const FAQS = [
       "AI-augmented workflows and platform engineering are likely to have the biggest practical impact because they directly improve developer speed, consistency, and delivery quality across multiple teams.",
   },
 ];
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+
+  if (slug !== BLOG.slug) {
+    return withCanonical("/blogs", { title: "Blog post" });
+  }
+
+  return withCanonical(`/blogs/${slug}`, {
+    title: BLOG.title,
+    description: BLOG.intro,
+  });
+}
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
