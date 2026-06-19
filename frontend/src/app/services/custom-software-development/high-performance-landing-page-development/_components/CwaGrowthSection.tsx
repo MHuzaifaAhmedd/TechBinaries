@@ -15,7 +15,13 @@ export function CwaGrowthSection({ activePillar, stageRef, pillarListRef }: CwaG
         <div className="cwa-growth-inner">
           <div className="cwa-sh cwa-section-head cwa-growth-head-inline">
             <h2 id="cwa-growth-title" className="cwa-h2">
-              {GROWTH.title} <span className="cwa-italic-mute">{GROWTH.titleAccent}</span>
+              {GROWTH.title}
+              {GROWTH.titleAccent ? (
+                <>
+                  {" "}
+                  <span className="cwa-italic-mute">{GROWTH.titleAccent}</span>
+                </>
+              ) : null}
             </h2>
             <p className="cwa-h2-lead">{GROWTH.lead}</p>
           </div>

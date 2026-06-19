@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-
+import "./_styles/cwa-hero-overrides.css";
 
 export const metadata: Metadata = {
-  title: "High-Performance Landing Pages",
+  title: {
+    absolute: "TechBinaries High-Converting Landing Page Design Services",
+  },
   description:
-    "Conversion-focused high-performance landing page development with Core Web Vitals optimization and experiment-ready architecture.",
+    "Get responsive, high-performance web pages. TechBinaries offers expert landing page design services tailored to your technical requirements. Learn more!",
 };
 
 export default function HighPerformanceLandingPagesLayout({

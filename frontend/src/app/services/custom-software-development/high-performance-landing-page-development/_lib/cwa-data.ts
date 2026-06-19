@@ -1,9 +1,9 @@
 export const PAGE = {
-  headline1: "Landing pages",
-  headline2: "optimized for",
-  headlineItalic: "conversion.",
+  headline1: "The Tech-First",
+  headline2: "Landing Page",
+  headlineItalic: "Design Agency",
   lead:
-    "We design and build high-performance landing pages that load fast, rank well, and convert consistently across paid campaigns, organic traffic, and product launches.",
+    "TechBinaries combines stunning UI/UX with premium landing page development services to build fast, high-converting digital experiences that turn your traffic into revenue.",
 };
 
 export const HERO_PHONE_COUNTRY_CODES = [
@@ -12,15 +12,44 @@ export const HERO_PHONE_COUNTRY_CODES = [
 
 export const GROWTH = {
   kicker: "Why performance pages",
-  title: "A fast landing page is a",
-  titleAccent: "revenue engine.",
+  title: "Features Built for",
+  titleLine2: "",
+  titleAccent: "Maximum ROI",
   lead:
-    "In paid traffic environments, milliseconds and messaging clarity directly affect CPA and conversion. High-performance landing pages compound acquisition efficiency over time.",
+    "Our high-converting landing page design elements combine to optimize your traffic and maximize revenue.",
   pillars: [
-    { n: "01", k: "Speed", v: "Core Web Vitals first", d: "Optimized rendering, image strategy, and script discipline keep pages responsive on real devices and networks.", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80&auto=format&fit=crop", imageAlt: "Landing page performance dashboard with Core Web Vitals metrics" },
-    { n: "02", k: "Conversion", v: "CRO-ready structure", d: "Clear hierarchy, persuasive copy framing, and behavioral UX patterns reduce friction in high-intent funnels.", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=80&auto=format&fit=crop", imageAlt: "Conversion funnel analysis for a landing page campaign" },
-    { n: "03", k: "Experimentation", v: "A/B test capable", d: "Modular sections and event tracking make iterative experimentation straightforward for growth teams.", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1400&q=80&auto=format&fit=crop", imageAlt: "A/B testing workflow for landing page variants" },
-    { n: "04", k: "Search visibility", v: "SEO embedded", d: "Technical SEO foundations and semantic content structure improve discoverability without hurting performance.", image: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1400&q=80&auto=format&fit=crop", imageAlt: "SEO and page performance strategy for campaign pages" },
+    {
+      n: "01",
+      k: "Visual & Engaging Page Design",
+      v: "High-impact visuals",
+      d: "We blend high-impact imagery and engaging short videos to tell your brand story faster, boosting user engagement and landing page conversions.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80&auto=format&fit=crop",
+      imageAlt: "Visual landing page design with high-impact imagery and engaging media",
+    },
+    {
+      n: "02",
+      k: "Conversion-Focused Design",
+      v: "Clear CTAs & copy",
+      d: "We craft compelling headlines, clear subheadlines, and prominent calls-to-action that seamlessly guide your visitors toward a single, high-value conversion goal.",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=80&auto=format&fit=crop",
+      imageAlt: "Conversion-focused landing page layout with headlines and calls-to-action",
+    },
+    {
+      n: "03",
+      k: "Lead Capture Page Design",
+      v: "Optimized lead forms",
+      d: "Our strategically structured, high-converting lead generation landing page design features optimized input fields and forms designed to capture emails, registrations, or qualified project inquiries.",
+      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1400&q=80&auto=format&fit=crop",
+      imageAlt: "Lead capture landing page with optimized registration and inquiry forms",
+    },
+    {
+      n: "04",
+      k: "Social Proof Integration",
+      v: "Trust & credibility",
+      d: "We strategically embed client testimonials, industry trust badges, and partner logos to build immediate credibility and maximize your page's conversion rates.",
+      image: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1400&q=80&auto=format&fit=crop",
+      imageAlt: "Landing page social proof with client testimonials and trust badges",
+    },
   ],
 };
 
@@ -28,25 +57,85 @@ export const COST = {
   image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1400&q=80&auto=format&fit=crop",
   imageAlt: "Marketing team reviewing underperforming campaign landing pages",
   kicker: "Where campaigns fail",
-  title: "The cost of weak landing",
-  titleAccent: "execution.",
-  lead: "Most campaign pages lose efficiency through preventable issues in speed, clarity, and tracking instrumentation.",
+  title: 'Why "Cheap" Landing Pages',
+  titleAccent: "Fail?",
+  lead:
+    "Many companies treat landing page design as an afterthought, using rigid templates or low-cost agencies.",
   failures: [
-    { stat: "53%", label: "Visitors drop", h: "Slow page load", d: "Heavy scripts and unoptimized assets increase bounce before users even consume your value proposition.", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop", imageAlt: "Analytics chart showing high bounce rate from slow page speed", theme: "perf" },
-    { stat: "2.1x", label: "Higher CPA", h: "Weak message hierarchy", d: "If offers and proof points are unclear, paid traffic gets wasted on confused visitors.", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80&auto=format&fit=crop", imageAlt: "Paid campaign dashboard with rising cost per acquisition", theme: "arch" },
-    { stat: "46%", label: "Missed insights", h: "Bad tracking setup", d: "Without event instrumentation, teams cannot diagnose where conversion funnels break.", image: "https://images.unsplash.com/photo-1551817958-20204f19c8e1?w=900&q=80&auto=format&fit=crop", imageAlt: "Event analytics panel showing incomplete funnel tracking", theme: "obs" },
-    { stat: "29%", label: "Accessibility risk", h: "Non-inclusive UX", d: "Ignoring accessibility and mobile readability reduces reachable audience and conversion potential.", image: "https://images.unsplash.com/photo-1574887427561-d3d5d58c9273?w=900&q=80&auto=format&fit=crop", imageAlt: "Accessible mobile landing page design review", theme: "a11y" },
+    {
+      stat: "400%",
+      label: "Conversion gap",
+      d: "The massive conversion rate increase engineered UI/UX layouts achieve over standard, unoptimized pages.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop",
+      imageAlt: "Conversion rate analytics comparing optimized and unoptimized landing page layouts",
+      theme: "perf",
+    },
+    {
+      stat: "30%",
+      label: "Abandonment rate",
+      d: "The immediate visitor abandonment rate if your landing page takes longer than six seconds to load.",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80&auto=format&fit=crop",
+      imageAlt: "Landing page load performance metrics and visitor bounce analytics",
+      theme: "arch",
+    },
+    {
+      stat: "34%",
+      label: "Sales opportunity",
+      d: "Drop in average conversion potential when dropping or neglecting strategically placed client trust signals.",
+      image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900&q=80&auto=format&fit=crop",
+      imageAlt: "Client trust signals and social proof elements on a high-converting landing page",
+      theme: "obs",
+    },
+    {
+      stat: "266%",
+      label: "Lead drop",
+      d: "Lead growth generated by using a single, dedicated call-to-action instead of multiple competing navigation links.",
+      image: "https://images.unsplash.com/photo-1574887427561-d3d5d58c9273?w=900&q=80&auto=format&fit=crop",
+      imageAlt: "Single call-to-action landing page design focused on lead generation",
+      theme: "a11y",
+    },
   ],
-  close: "We combine performance engineering, conversion psychology, and instrumentation so every campaign page is measurable and built to improve over time.",
+  close:
+    "But skimping on intentional UI/UX layout and optimized performance doesn't save money; it directly subsidizes your competitors and burns your ad budget.",
 };
 
 export const PROCESS = [
-  { num: "01", title: "Campaign discovery", d: "Align offer, audience intent, and acquisition channel goals before page structure is defined.", meta: "3-5 days" },
-  { num: "02", title: "Conversion UX design", d: "Design message hierarchy, social proof positioning, and CTA flow for high-intent journeys.", meta: "1-2 weeks" },
-  { num: "03", title: "Performance build", d: "Implement fast-loading sections, responsive media handling, and analytics-ready components.", meta: "2-4 weeks" },
-  { num: "04", title: "QA + instrumentation", d: "Validate device behavior, event tracking, and conversion path reliability before launch.", meta: "Continuous" },
-  { num: "05", title: "Launch + monitor", d: "Release with baseline dashboards and segment-level performance views for immediate feedback.", meta: "2-4 days" },
-  { num: "06", title: "Optimize loop", d: "Run A/B experiments and incremental content/performance improvements from real conversion data.", meta: "Ongoing" },
+  {
+    num: "01",
+    title: "Strategic Discovery",
+    d: "Provide your campaign objectives, audience demographics, unique value proposition, and key performance metrics. We align these with your brand guidelines to map out an engineering plan tailored specifically for your target market.",
+    meta: "",
+  },
+  {
+    num: "02",
+    title: "Architecture & Wireframing",
+    d: "We conduct deep competitor analysis and user behavioral research to inform our layout choices. From there, we build comprehensive structural wireframes that explicitly map out content hierarchy, visual flow, and friction-free user journeys.",
+    meta: "",
+  },
+  {
+    num: "03",
+    title: "High-Fidelity UI/UX Design",
+    d: "We craft custom, modern, creative landing page design interfaces utilizing psychological color theory, clean layouts, and intuitive interface design. Every element is strategically positioned to capture user attention and reduce cognitive load.",
+    meta: "",
+  },
+  {
+    num: "04",
+    title: "High-Performance Engineering",
+    d: "We, as a landing page development agency, translate the approved visuals into clean, production-grade code. We prioritize fast-loading landing pages, flawless cross-browser compatibility, and pixel-perfect responsiveness across all devices.",
+    meta: "",
+  },
+  {
+    num: "05",
+    title: "Rigorous QA & Optimization",
+    d: "Before the deployment phase, we execute comprehensive SEO landing page design testing. We audit form integrations, tracking scripts, mobile responsive breakpoints, and speed optimizations to guarantee an absolute zero-error launch.",
+    meta: "",
+  },
+  {
+    num: "06",
+    title: "Deployment & Analytics Monitoring",
+    d: "Post-launch, we actively track user behaviors, bounce rates, and total conversions. You receive comprehensive, data-backed performance reports along with clear optimization insights to continually scale your conversions.",
+    meta: "",
+  },
 ];
 
 export const STACK = [
@@ -57,17 +146,45 @@ export const STACK = [
 ];
 
 export const FAQS = [
-  { q: "How fast can you deliver a campaign landing page?", a: "Most high-quality pages launch in 2-4 weeks depending on design complexity, integrations, and tracking requirements." },
-  { q: "Do you handle both design and development?", a: "Yes. We own conversion strategy, UX design, implementation, and instrumentation so performance can be optimized as one system." },
-  { q: "Can you integrate with ad and analytics platforms?", a: "Absolutely. We configure measurement for GA4, Meta, Google Ads, and custom event layers to support reliable attribution." },
-  { q: "Do you support A/B testing workflows?", a: "Yes. We structure page architecture and tracking so growth teams can run controlled experiments without engineering rework each time." },
-  { q: "Will the page be SEO friendly too?", a: "Yes. We balance technical SEO, semantic markup, and speed optimization so pages rank while preserving conversion outcomes." },
+  {
+    q: "What dictates the baseline landing page design cost?",
+    a: "There is no single flat fee because every business brings unique criteria. The final investment depends entirely on your project's scope, custom visual assets, layout complexity, and the integration of systems. To get an accurate custom quote aligned with your exact goals, reach out to contact our team.",
+  },
+  {
+    q: "How do you determine your landing page design price?",
+    a: "Our packaging is never rigid because we don't use generic, cookie-cutter templates. Pricing depends on multiple dynamic factors, including advanced feature integrations, responsive breakpoints, and custom copywriting. Contact our team to receive a tailored, transparent estimate built for your technical requirements.",
+  },
+  {
+    q: "What design framework creates a truly high-converting landing page design?",
+    a: "It requires balancing a fast code stack, an intentional above-the-fold value proposition, single-goal user paths, and strategic social proof for a high-converting landing page design. Removing distracting secondary links ensures your visitors stay focused exclusively on your primary conversion goal.",
+  },
+  {
+    q: "How do you approach B2B landing page design differently from B2C layouts?",
+    a: "Business-to-business layouts prioritize friction-free lead qualification and deep professional credibility. We minimize cognitive load while integrating deep educational depth, corporate trust signals, and structured form captures to successfully turn business traffic into verified sales pipeline inquiries.",
+  },
+  {
+    q: "What elements are mandatory in a real estate landing page design?",
+    a: "High-performance property and community layouts must prioritize immersive, fast-loading visual imagery, hyper-clear unit layout options, interactive asset maps, and highly accessible scheduling fields. This clear structure makes it easy for premium buyers to book direct construction site visits or request pricing documentation effortlessly.",
+  },
+  {
+    q: "Why does a PPC landing page design require a specialized layout structure?",
+    a: "Paid campaigns demand tight message match consistency between your active advertisement and your page's H1 headline. In our PPC landing page design, by eliminating distracting global navigation menus and streamlining your form fields, we drastically reduce immediate bounce rates and preserve your ad spend budget.",
+  },
+  {
+    q: "What is the fastest strategy to improve landing page conversion rate metrics?",
+    a: "With our conversion rate optimization landing page services, we start by resolving technical speed bottlenecks, shaving down loading times by optimizing code and compressing assets. Follow up by stripping away non-essential input fields from your capture forms, deploying high-impact video elements, and executing precise visual A/B tests to optimize your revenue potential.",
+  },
+  {
+    q: "How does a strategic Google Ads landing page design lower your cost-per-click?",
+    a: "Google rewards highly relevant pages with a strong Quality Score, directly lowering your acquisition costs. We align your primary headline perfectly with your active ad copy, eliminate distracting site navigation, and optimize mobile performance to ensure you convert maximum traffic while preserving your ad spend budget.",
+  },
 ];
 
 export const CTA = {
-  headline: "Let's launch landing pages",
-  headlineItalic: "that convert at speed.",
-  lead: "Book a growth-focused discovery call to map offer, messaging, funnel instrumentation, and the fastest path to a high-performing campaign page.",
+  headline: "Stop Bleeding",
+  headlineItalic: "Ad Spend.",
+  lead:
+    "Optimize your marketing funnel with premium code and data-driven custom landing page design built to maximize your ROI.",
   primaryCta: { label: "Book a discovery call", href: "/contact" },
   email: "hello@techbinaries.com",
   rows: [

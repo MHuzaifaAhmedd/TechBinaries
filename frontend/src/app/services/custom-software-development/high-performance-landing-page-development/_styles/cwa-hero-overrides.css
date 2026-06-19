@@ -1,0 +1,132 @@
+/* High-Performance Landing Page — hero layout & heading overrides */
+
+.cwa-hero-copy {
+  max-width: 100%;
+}
+
+.cwa-hero .cwa-hero-title {
+  font-size: clamp(32px, 3.2vw, 56px);
+  line-height: 1.04;
+  letter-spacing: -0.038em;
+  margin-bottom: 20px;
+  max-width: 100%;
+}
+
+@media (min-width: 901px) {
+  .cwa-hero .csd-hero-main {
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 520px);
+    gap: clamp(52px, 6vw, 96px);
+  }
+
+  .cwa-hero .csd-hero-left {
+    max-width: 660px;
+    padding-right: clamp(20px, 2.5vw, 40px);
+  }
+
+  .cwa-hero .cwa-hero-lead {
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 1440px) and (min-width: 901px) {
+  .cwa-hero .csd-hero-left {
+    max-width: 620px;
+  }
+
+  .cwa-hero .cwa-hero-title {
+    font-size: clamp(30px, 3vw, 52px);
+  }
+
+  .cwa-hero .cwa-hero-lead {
+    max-width: 440px;
+  }
+}
+
+@media (max-width: 1280px) and (min-width: 901px) {
+  .cwa-hero .csd-hero-left {
+    max-width: 580px;
+  }
+
+  .cwa-hero .cwa-hero-title {
+    font-size: clamp(28px, 2.8vw, 48px);
+  }
+}
+
+@media (max-width: 900px) {
+  .cwa-hero .csd-hero-main {
+    grid-template-columns: 1fr;
+    gap: 0;
+    min-height: auto;
+  }
+
+  .cwa-hero .csd-hero-left {
+    max-width: none;
+    padding-right: 0;
+    transform: none;
+  }
+
+  .cwa-hero .cwa-hero-title {
+    font-size: clamp(28px, 6.5vw, 38px);
+    line-height: 1.03;
+    margin-bottom: 16px;
+  }
+
+  .cwa-hero .cwa-hero-lead {
+    max-width: none;
+  }
+
+  .cwa-h1-lines-mobile .cwa-h1-line {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 480px) {
+  .cwa-hero .cwa-hero-title {
+    font-size: clamp(24px, 6.5vw, 32px);
+    line-height: 1.06;
+  }
+}
+
+/* Growth section — single-line H2 */
+.cwa-growth-head-inline .cwa-h2 {
+  font-size: clamp(24px, 2.8vw, 40px);
+  line-height: 1.1;
+  flex: 0 1 52%;
+  max-width: none;
+  white-space: nowrap;
+}
+
+.cwa-growth-head-inline .cwa-h2-lead {
+  flex: 0 1 42%;
+  min-width: 260px;
+}
+
+@media (max-width: 900px) {
+  .cwa-growth-head-inline .cwa-h2 {
+    white-space: normal;
+  }
+}
+
+/* Cost section — long H3 heading */
+.cwa-cost-content .cwa-h2 {
+  font-size: clamp(26px, 3.2vw, 44px);
+  line-height: 1.08;
+  max-width: 620px;
+}
+
+.cwa-cost-content .cwa-h2-lead {
+  font-size: 14.5px;
+  line-height: 1.65;
+  max-width: 520px;
+}
+
+@media (max-width: 900px) {
+  .cwa-cost-content .cwa-h2 {
+    font-size: clamp(24px, 5.8vw, 34px);
+  }
+
+  .cwa-cost-content .cwa-h2-lead {
+    font-size: 14px;
+    line-height: 1.62;
+  }
+}
