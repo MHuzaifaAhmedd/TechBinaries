@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./_styles/careers-page.css";
 
 export const metadata: Metadata = {
-  title: "Careers",
+  title: "Tech Binaries Careers | Software Developer Jobs",
   description:
-    "Join Tech Binaries — a deliberate team of engineers and builders who ship with ownership, precision, and honest craft. See how we hire and what it's like to work here.",
+    "Skip the corporate bureaucracy. TechBinaries is hiring engineers who want true product autonomy, remote flexibility, and zero fluff. Apply today!",
   keywords: [
     "Tech Binaries careers",
     "software engineering jobs",
@@ -13,16 +13,16 @@ export const metadata: Metadata = {
     "product engineering team",
   ],
   openGraph: {
-    title: "Careers | TechBinaries",
+    title: "Tech Binaries Careers | Software Developer Jobs",
     description:
-      "We're not looking for people who want a job — we're looking for people who want ownership. Explore careers at Tech Binaries.",
+      "Skip the corporate bureaucracy. TechBinaries is hiring engineers who want true product autonomy, remote flexibility, and zero fluff. Apply today!",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Careers | TechBinaries",
+    title: "Tech Binaries Careers | Software Developer Jobs",
     description:
-      "Join a team that treats every line of code like it has our name on it — because it does.",
+      "Skip the corporate bureaucracy. TechBinaries is hiring engineers who want true product autonomy, remote flexibility, and zero fluff. Apply today!",
   },
 };
 

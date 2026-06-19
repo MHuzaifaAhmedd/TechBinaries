@@ -6,9 +6,9 @@ export function CareersLifeSection() {
     <section className="cr-life" aria-labelledby="cr-life-title">
       <div className="cr-life-inner">
         <div className="cr-sh cr-section-head">
-          <h2 id="cr-life-title" className="cr-h2">
+          <h3 id="cr-life-title" className="cr-h2">
             {LIFE.title} <span className="cr-italic-mute">{LIFE.titleAccent}</span>
-          </h2>
+          </h3>
           <p className="cr-h2-lead">{LIFE.lead}</p>
         </div>
 

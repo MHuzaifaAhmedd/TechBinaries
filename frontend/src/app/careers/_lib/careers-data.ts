@@ -1,11 +1,11 @@
 export const HERO = {
-  headline1: "Is your best",
-  headline2: "actually",
-  headlineItalic: "your best?",
+  headline1: "We Build Teams",
+  headline2: "To Ship",
+  headlineItalic: "Clean Code.",
   lead:
-    "Most software shops take your brief, disappear for weeks, and deliver something that needs fixing before it's even live. Tech Binaries works differently. We're a team of engineers and builders who treat every line of code like it has our name on it — because it does.",
+    "At TechBinaries, we are actively hiring software developers who want to step out of bureaucratic cycles and into high-impact product ownership. If you are looking to build a career around solving complex architectural problems, we offer elite software engineer career opportunities that challenge your limits and reward your execution.",
   pullQuote:
-    "We're not looking for people who want a job. We're looking for people who want ownership.",
+    "Forget standard software development jobs where you're just a ticket-closer. Join a product squad that gives you absolute autonomy from discovery to deployment.",
   ticker: [
     "Ownership",
     "Precision",
@@ -19,79 +19,91 @@ export const HERO = {
 } as const;
 
 export const FILTER = {
-  title: "We hire",
-  titleAccent: "deliberately.",
+  title: "We Scale By Impact,",
+  titleAccent: "Not By Headcount.",
   lead:
-    "We're a small, deliberate team. That means one wrong hire costs more than one open seat. We'd rather run lean with people who care than scale fast with people who don't.",
+    "We are highly selective, standing out among the sea of software companies hiring today because we refuse to dilute our talent pool. Whether you excel in an office environment or thrive in a modern software developer work-from-home ecosystem, your value is measured by the elegant systems you deploy, not the hours you log.",
   yes: {
-    label: "You'll fit right in if",
+    label: "The Tech Binaries Mindset",
     items: [
-      "You obsess over clean architecture",
-      "You lose sleep over broken builds",
-      "You get genuinely annoyed when something ships half-baked",
-      "You prefer hard truths over comfortable nonsense",
-      "You ship — and you stand behind what you ship",
+      {
+        text: "Pursuing meaningful software developer careers where engineering decisions drive business outcomes.",
+        emphasis: "software developer careers",
+      },
+      {
+        text: "Forging lifelong software engineer careers by tackling distributed data structures and custom SaaS engines.",
+        emphasis: "software engineer careers",
+      },
+      {
+        text: "Actively hunting for software developer jobs near me or internationally to build alongside vetted, high-performing engineers.",
+        emphasis: "software developer jobs near me",
+      },
     ],
   },
   no: {
-    label: "This isn't for you if",
+    label: "The Traditional Agency Way",
     items: [
-      "You're looking for a place to coast",
-      "You think 'good enough' is good enough",
-      "You'd rather be busy than effective",
-      "You expect titles to do the work for you",
-      "You're allergic to feedback",
+      {
+        text: "Taking generic entry-level software engineer jobs just to sit on the bench and look busy.",
+        emphasis: "software engineer jobs",
+      },
+      {
+        text: 'Settling for "good enough" web templates that crack under basic production traffic.',
+      },
+      {
+        text: "Hiding inside dense corporate layers where your individual impact is completely invisible.",
+      },
     ],
   },
 } as const;
 
 export const DNA = {
-  title: "The Tech Binaries",
-  titleAccent: "standard.",
+  title: "The TechBinaries",
+  titleAccent: "Standard",
   lead:
-    "Five non-negotiables. They're not posters on a wall — they're how we hire, how we ship, and how we tell each other the truth.",
+    "Five non-negotiables. They're how we hire, how we ship, and how we tell each other the truth.",
   values: [
     {
       n: "I",
-      kicker: "Quality is the default",
-      head: "Precision over speed",
-      body: "We move fast, but we don't move sloppy.",
+      kicker: "ENGINEERING INTEGRITY",
+      head: "Architecture built to last",
+      body: "We don't slap patches on broken systems just to hit an arbitrary deadline. Our team builds clean, scalable foundations from day one because technical debt is a choice we refuse to make.",
       visual:
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=900&q=80&auto=format&fit=crop",
       visualAlt: "Developer focused on code quality at a workstation",
     },
     {
       n: "II",
-      kicker: "Solve, don't close",
-      head: "Own the problem",
-      body: "Your job isn't to close tickets. It's to solve what's actually broken.",
+      kicker: "PRODUCT LEADERSHIP",
+      head: "Think like a founder, code like an artist",
+      body: "You aren't here to just close Jira tickets blindly. We expect our engineers to understand the user's pain points, challenge weak requirements, and take absolute pride in the final product.",
       visual:
         "https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&q=80&auto=format&fit=crop",
       visualAlt: "Team collaborating at a table with laptops",
     },
     {
       n: "III",
-      kicker: "Best idea wins",
-      head: "No rank, just results",
-      body: "The best idea wins — junior engineers push back on architecture here.",
+      kicker: "ZERO HAND-HOLDING",
+      head: "Autonomy is earned through execution",
+      body: "We don't micro-manage, track your screen, or count your keystrokes. We give you clear goals, total trust, and the freedom to execute—and we expect you to own the outcomes.",
       visual:
         "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=900&q=80&auto=format&fit=crop",
       visualAlt: "Team in a meeting discussing ideas together",
     },
     {
       n: "IV",
-      kicker: "Compound or fade",
-      head: "Sharpen or stagnate",
-      body: "The industry moves. Either you're keeping up or you're falling behind.",
+      kicker: "GROWTH ACCELERATION",
+      head: "Continuous upward trajectory",
+      body: "Complacency is where talent goes to die. Whether you join us via junior software developer jobs or come in as a veteran architect, you will be pushed to master new stacks and refine your craft daily.",
       visual:
         "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=900&q=80&auto=format&fit=crop",
       visualAlt: "Open book and notes representing continuous learning",
     },
     {
       n: "V",
-      kicker: "Direct, not diplomatic",
-      head: "Say it straight",
-      body: "No politics, no sugarcoating. Direct feedback is a sign of respect.",
+      kicker: "UNCOMPROMISING CANDOR",
+      head: "Direct feedback, zero politics",
+      body: "We save time by telling the truth. If a design is flawed or a codebase is getting messy, we speak up immediately and constructively. No egos, no corporate gymnastics—just pure engineering.",
       visual:
         "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&q=80&auto=format&fit=crop",
       visualAlt: "Colleagues having a direct, candid conversation",
@@ -100,46 +112,46 @@ export const DNA = {
 } as const;
 
 export const LIFE = {
-  title: "Working here,",
-  titleAccent: "honestly.",
+  title: "Perks Without",
+  titleAccent: "The Fluff",
   lead:
     "A short list because we'd rather over-deliver than over-promise. These are the things we actually do — not the things every careers page says.",
   benefits: [
     {
-      h: "Real projects, real stakes",
-      d: "You'll work on software that actual businesses depend on. Production systems, real users, real revenue. Not internal tools no one uses.",
+      h: "High-impact production systems",
+      d: "Forget playground staging environments or internal administration tools that gather dust. As a full-stack software engineer, you will build, optimize, and maintain live software that actively drives operational revenue and handles heavy traffic daily.",
       visual:
         "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&q=80&auto=format&fit=crop",
-      visualAlt: "Team collaborating on production software",
+      visualAlt: "Engineers collaborating on high-impact production software",
     },
     {
-      h: "We pay for your growth",
-      d: "Courses, certifications, conferences. If it makes you better, we'll back it. Our budget for learning isn't a perk — it's a line item.",
+      h: "Uncapped professional development",
+      d: "If a technical certification, specialized deep-dive course, or major industry convention expands your engineering toolkit, we foot the bill. Whether you're a frontend software engineer, backend software engineer, or iOS engineer, continuous learning isn't a reward here; it's a foundational requirement.",
       visual:
         "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1200&q=80&auto=format&fit=crop",
-      visualAlt: "Books and notebooks for continued learning",
+      visualAlt: "Professional development resources for software engineers",
     },
     {
-      h: "Competitive salary + bonuses",
-      d: "Good work gets rewarded. Performance bonuses are paid against shipped outcomes — not just at annual reviews when budgets allow.",
+      h: "Merit-driven compensation",
+      d: "We track execution and technical contribution, not arbitrary tenure. As a senior software engineer, exceptional architecture and reliable deployment translate directly into financial milestones and project-based bonuses, independent of yearly corporate cycles in tech jobs in the USA.",
       visual:
         "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&q=80&auto=format&fit=crop",
-      visualAlt: "Financial reward and compensation",
+      visualAlt: "Merit-driven compensation for software engineers",
     },
     {
-      h: "Work that respects your life",
-      d: "High standards during work hours. Your time outside them is yours. We don't message on weekends and we don't make heroes out of people who burn out.",
+      h: "Hard boundaries, zero hustle-culture",
+      d: "We advocate for intense focus and crisp execution during your working hours so you can step away completely when you are off the clock. No midnight pings, no unexpected weekend crunches, and no celebrating toxic burnout.",
       visual:
         "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&q=80&auto=format&fit=crop",
-      visualAlt: "Quiet workspace with natural light",
+      visualAlt: "Balanced workspace with healthy work-life boundaries",
     },
   ],
 } as const;
 
 export const OPENINGS = {
-  title: "Open positions,",
-  titleAccent: "active now.",
-  lead: "Every opening below is live and tied to current delivery work. Pick the role that matches your strengths and apply directly.",
+  title: "Choose Your Engineering Track",
+  titleAccent: "",
+  lead: "We don't care where you sit, as long as your code is rock solid. If you have been tracking software development jobs near me or want to push your technical bounds, explore our open tracks below:",
   roles: [
     {
       id: "senior-fullstack",

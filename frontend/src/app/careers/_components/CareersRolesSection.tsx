@@ -13,9 +13,9 @@ export function CareersRolesSection() {
       <div className="cr-roles-inner">
         <div className="cr-roles-board">
           <aside className="cr-roles-aside" aria-label="Open roles summary">
-            <h2 id="cr-roles-title" className="cr-h2">
-              {OPENINGS.title} <span className="cr-italic-mute">{OPENINGS.titleAccent}</span>
-            </h2>
+            <h3 id="cr-roles-title" className="cr-h2">
+              {OPENINGS.title}
+            </h3>
             <p className="cr-h2-lead">{OPENINGS.lead}</p>
             <div className="cr-roles-stat">
               <span className="cr-roles-stat-label">Open roles</span>

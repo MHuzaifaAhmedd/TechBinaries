@@ -16,9 +16,9 @@ export function CareersDnaSection({ dnaStageRef, activeValue }: Props) {
       <div className="cr-dna-stage" ref={dnaStageRef}>
         <div className="cr-dna-inner">
           <div className="cr-sh cr-section-head cr-dna-header">
-            <h2 id="cr-dna-title" className="cr-h2 cr-h2--light">
+            <h3 id="cr-dna-title" className="cr-h2 cr-h2--light">
               {DNA.title} <span className="cr-italic-light">{DNA.titleAccent}</span>
-            </h2>
+            </h3>
             <p className="cr-h2-lead cr-h2-lead--light cr-dna-header-lead">{DNA.lead}</p>
           </div>
 
