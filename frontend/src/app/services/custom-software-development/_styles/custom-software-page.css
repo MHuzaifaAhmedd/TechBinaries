@@ -2082,7 +2082,7 @@
           transition: color 0.2s;
         }
         .csd-cta-mail-k {
-          color: rgba(255,255,255,0.42);
+          color: rgba(255,255,255,0.58);
           font-size: 13px;
         }
         .csd-cta-mail-v {
@@ -2108,6 +2108,7 @@
           border-top: 1px solid rgba(255,255,255,0.12);
         }
         .csd-cta-meta-item {
+          min-width: 0;
           padding: 0 clamp(16px, 2.5vw, 28px);
           border-right: 1px solid rgba(255,255,255,0.1);
         }
@@ -2131,7 +2132,8 @@
           letter-spacing: -0.018em;
           color: #fafaf9;
           margin: 0;
-          line-height: 1.25;
+          line-height: 1.3;
+          overflow-wrap: break-word;
         }
 
         .marquee-track { will-change: transform; }
@@ -2200,23 +2202,27 @@
             gap: 14px;
           }
 
-          /* CTA */
+          /* CTA — 2×2 metric grid */
           .csd-cta-meta {
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            row-gap: 24px;
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.1);
           }
           .csd-cta-meta-item {
-            padding: 0 16px;
-            border-right: 0;
+            margin: 0;
+            min-width: 0;
+            padding: 18px 20px;
+            border: none;
+            background: #0a0a0a;
           }
-          .csd-cta-meta-item:nth-child(odd) {
-            padding-left: 0;
-            border-right: 1px solid rgba(255,255,255,0.1);
-          }
-          .csd-cta-meta-item:nth-child(even) { padding-right: 0; }
+          .csd-cta-meta-item:first-child,
+          .csd-cta-meta-item:nth-child(odd),
+          .csd-cta-meta-item:nth-child(even),
           .csd-cta-meta-item:nth-child(3),
-          .csd-cta-meta-item:nth-child(4) {
-            padding-top: 4px;
+          .csd-cta-meta-item:nth-child(4),
+          .csd-cta-meta-item:last-child {
+            padding: 18px 20px;
+            border: none;
           }
 
           .csd-faq-layout { grid-template-columns: 1fr; gap: 48px; }
@@ -2390,15 +2396,33 @@
             height: auto !important;
             min-height: 320px !important;
           }
-          /* CTA */
-          .csd-cta-section { padding: 72px 14px 88px; }
-          .csd-cta-inner {
-            padding: 32px 22px 28px;
-            border-radius: 20px;
-            gap: 28px;
+          /* CTA mobile */
+          .csd-cta-section {
+            padding: clamp(48px, 10vw, 72px) 14px clamp(56px, 11vw, 88px);
           }
-          .csd-cta-h2 { font-size: clamp(26px, 7.5vw, 36px); }
-          .csd-cta-lead { font-size: 15px; max-width: none; }
+          .csd-cta-inner {
+            padding: clamp(24px, 5.5vw, 32px) clamp(18px, 4.5vw, 22px) clamp(22px, 5vw, 28px);
+            border-radius: clamp(16px, 4vw, 20px);
+            gap: clamp(22px, 5vw, 28px);
+          }
+          .csd-cta-body { max-width: none; }
+          .csd-cta-h2 {
+            font-size: clamp(22px, 5.8vw, 32px);
+            line-height: 1.14;
+            margin-bottom: 16px;
+            overflow-wrap: break-word;
+          }
+          .csd-cta-h2-accent {
+            display: block;
+            margin-top: 0.14em;
+            color: rgba(255,255,255,0.72);
+          }
+          .csd-cta-lead {
+            font-size: 14.5px;
+            line-height: 1.62;
+            margin-bottom: 22px;
+            max-width: none;
+          }
           .csd-cta-actions {
             flex-direction: column;
             align-items: stretch;
@@ -2406,22 +2430,94 @@
           }
           .csd-cta-primary-light {
             width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
             white-space: normal;
-            text-align: center;
+            line-height: 1.35;
+            text-align: left;
+            justify-content: space-between;
+            padding: 15px 18px 15px 20px;
           }
           .csd-cta-mail {
-            justify-content: center;
+            align-self: flex-start;
+            justify-content: flex-start;
             flex-wrap: wrap;
+            text-align: left;
+            gap: 6px 8px;
+            color: rgba(255,255,255,0.88);
           }
+          .csd-cta-mail-v {
+            font-size: 15px;
+            overflow-wrap: anywhere;
+          }
+          .csd-cta-meta {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            padding-top: 22px;
+          }
+          .csd-cta-meta-item {
+            margin: 0;
+            min-width: 0;
+            padding: 14px 16px;
+            border: none;
+            background: #0a0a0a;
+          }
+          .csd-cta-meta-item:first-child,
+          .csd-cta-meta-item:nth-child(odd),
+          .csd-cta-meta-item:nth-child(even),
+          .csd-cta-meta-item:nth-child(3),
+          .csd-cta-meta-item:nth-child(4),
+          .csd-cta-meta-item:last-child {
+            padding: 14px 16px;
+            border: none;
+          }
+          .csd-cta-meta-item dd {
+            font-size: 15px;
+            line-height: 1.3;
+            overflow-wrap: break-word;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .csd-cta-inner {
+            padding: 22px 16px 24px;
+          }
+          .csd-cta-h2 {
+            font-size: clamp(20px, 5.4vw, 28px);
+          }
+          .csd-cta-lead {
+            font-size: 14px;
+            margin-bottom: 18px;
+          }
+          .csd-cta-primary-light {
+            font-size: 13px;
+            padding: 14px 14px 14px 16px;
+          }
+        }
+
+        @media (max-width: 380px) {
           .csd-cta-meta {
             grid-template-columns: 1fr;
             gap: 0;
-            padding-top: 24px;
+            background: transparent;
           }
           .csd-cta-meta-item {
             padding: 14px 0;
-            border-right: 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: transparent;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           }
-          .csd-cta-meta-item:last-child { border-bottom: 0; }
+          .csd-cta-meta-item:first-child,
+          .csd-cta-meta-item:nth-child(odd),
+          .csd-cta-meta-item:nth-child(even),
+          .csd-cta-meta-item:nth-child(3),
+          .csd-cta-meta-item:nth-child(4) {
+            padding: 14px 0;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          }
+          .csd-cta-meta-item:last-child {
+            border-bottom: 0;
+            padding-bottom: 4px;
+          }
         }

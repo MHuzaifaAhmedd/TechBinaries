@@ -116,6 +116,38 @@ export default function SiteHeader() {
     }
   }, [mobileOpen]);
 
+  // Collapse mobile accordions when the drawer closes
+  useEffect(() => {
+    if (mobileOpen) return;
+    setMobileServicesOpen(false);
+    setMobileInsightsOpen(false);
+    setMobileCategoryOpen(-1);
+  }, [mobileOpen]);
+
+  const closeMobileMenu = () => setMobileOpen(false);
+
+  const toggleMobileServices = () => {
+    setMobileServicesOpen((v) => {
+      const next = !v;
+      if (next) {
+        setMobileInsightsOpen(false);
+        setMobileCategoryOpen(-1);
+      }
+      return next;
+    });
+  };
+
+  const toggleMobileInsights = () => {
+    setMobileInsightsOpen((v) => {
+      const next = !v;
+      if (next) {
+        setMobileServicesOpen(false);
+        setMobileCategoryOpen(-1);
+      }
+      return next;
+    });
+  };
+
   // Close drawers on Escape
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -505,7 +537,7 @@ export default function SiteHeader() {
         data-open={mobileOpen ? "true" : "false"}
         aria-hidden={!mobileOpen}
       >
-        <div className="site-drawer__scrim" onClick={() => setMobileOpen(false)} />
+        <div className="site-drawer__scrim" onClick={closeMobileMenu} />
         <div
           className="site-drawer__panel"
           role="dialog"
@@ -515,7 +547,7 @@ export default function SiteHeader() {
           <button
             type="button"
             className="site-drawer__close"
-            onClick={() => setMobileOpen(false)}
+            onClick={closeMobileMenu}
             aria-label="Close menu"
           >
             <svg
@@ -540,26 +572,30 @@ export default function SiteHeader() {
                   <div key={item.label} className="site-drawer__group">
                     <button
                       type="button"
-                      className="site-drawer__link"
-                      onClick={() => {
-                        setMobileServicesOpen((v) => {
-                          const next = !v;
-                          if (next) {
-                            setMobileInsightsOpen(false);
-                            setMobileCategoryOpen(-1);
-                          }
-                          return next;
-                        });
-                      }}
+                      className="site-drawer__split-row site-drawer__split-row--top site-drawer__split-trigger"
+                      onClick={toggleMobileServices}
                       aria-expanded={mobileServicesOpen}
+                      aria-label={`${mobileServicesOpen ? "Hide" : "Show"} service categories`}
+                      data-open={mobileServicesOpen ? "true" : "false"}
                       suppressHydrationWarning
                     >
-                      <span>{item.label}</span>
+                      <span className="site-drawer__split-link site-drawer__split-link--top">
+                        {item.label}
+                      </span>
                       <span
-                        className="site-drawer__chev"
-                        data-open={mobileServicesOpen ? "true" : "false"}
+                        className="site-drawer__split-toggle site-drawer__split-toggle--top"
+                        aria-hidden
                       >
-                        +
+                        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
+                          <path
+                            d="M3 4.5 L6 7.5 L9 4.5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.4"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
                       </span>
                     </button>
 
@@ -567,32 +603,42 @@ export default function SiteHeader() {
                       className="site-drawer__sub"
                       data-open={mobileServicesOpen ? "true" : "false"}
                     >
+                      <div className="site-drawer__sub-inner">
+                      <a
+                        href="/services"
+                        className="site-drawer__sub-link"
+                        onClick={closeMobileMenu}
+                      >
+                        All capabilities
+                        <span className="site-drawer__sub-link-arrow" aria-hidden>
+                          →
+                        </span>
+                      </a>
+
                       {SERVICE_CATEGORIES.map((cat, idx) => {
                         const isOpen = mobileCategoryOpen === idx;
                         return (
                           <div key={cat.id} className="site-drawer__cat">
-                            <button
-                              type="button"
-                              className="site-drawer__cat-head"
-                              aria-expanded={isOpen}
-                              onClick={() =>
-                                setMobileCategoryOpen(isOpen ? -1 : idx)
-                              }
-                              suppressHydrationWarning
-                            >
-                              <span
-                                className="site-drawer__cat-dot"
-                                style={{ background: cat.accent }}
-                              />
-                              <span className="site-drawer__cat-title">
-                                {cat.title}
-                              </span>
-                              <span
-                                className="site-drawer__cat-chev"
-                                data-open={isOpen ? "true" : "false"}
-                                aria-hidden
+                            <div className="site-drawer__cat-row">
+                              <Link
+                                href={cat.href}
+                                className="site-drawer__cat-link"
+                                onClick={closeMobileMenu}
                               >
-                                <svg width="12" height="12" viewBox="0 0 12 12">
+                                {cat.title}
+                              </Link>
+                              <button
+                                type="button"
+                                className="site-drawer__cat-toggle"
+                                aria-expanded={isOpen}
+                                aria-label={`${isOpen ? "Hide" : "Show"} ${cat.title} offerings`}
+                                data-open={isOpen ? "true" : "false"}
+                                onClick={() =>
+                                  setMobileCategoryOpen(isOpen ? -1 : idx)
+                                }
+                                suppressHydrationWarning
+                              >
+                                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
                                   <path
                                     d="M3 4.5 L6 7.5 L9 4.5"
                                     fill="none"
@@ -602,37 +648,31 @@ export default function SiteHeader() {
                                     strokeLinejoin="round"
                                   />
                                 </svg>
-                              </span>
-                            </button>
+                              </button>
+                            </div>
                             <div
                               className="site-drawer__cat-panel"
                               data-open={isOpen ? "true" : "false"}
                             >
+                              <div className="site-drawer__cat-panel-inner">
                               <ul role="list">
                                 {cat.links.map((l) => (
                                   <li key={l.href}>
                                     <a
                                       href={l.href}
-                                      onClick={() => setMobileOpen(false)}
+                                      onClick={closeMobileMenu}
                                     >
                                       {l.label}
                                     </a>
                                   </li>
                                 ))}
-                                <li>
-                                  <a
-                                    href={cat.href}
-                                    className="site-drawer__cat-all"
-                                    onClick={() => setMobileOpen(false)}
-                                  >
-                                    All {cat.title.toLowerCase()} →
-                                  </a>
-                                </li>
                               </ul>
+                              </div>
                             </div>
                           </div>
                         );
                       })}
+                      </div>
                     </div>
                   </div>
                 );
@@ -642,41 +682,42 @@ export default function SiteHeader() {
                   <div key={item.label} className="site-drawer__group">
                     <button
                       type="button"
-                      className="site-drawer__link"
-                      onClick={() => {
-                        setMobileInsightsOpen((v) => {
-                          const next = !v;
-                          if (next) {
-                            setMobileServicesOpen(false);
-                            setMobileCategoryOpen(-1);
-                          }
-                          return next;
-                        });
-                      }}
+                      className="site-drawer__split-row site-drawer__split-trigger"
+                      onClick={toggleMobileInsights}
                       aria-expanded={mobileInsightsOpen}
+                      aria-label={`${mobileInsightsOpen ? "Hide" : "Show"} insights links`}
+                      data-open={mobileInsightsOpen ? "true" : "false"}
                       suppressHydrationWarning
                     >
-                      <span>{item.label}</span>
-                      <span
-                        className="site-drawer__chev"
-                        data-open={mobileInsightsOpen ? "true" : "false"}
-                      >
-                        +
+                      <span className="site-drawer__split-link">{item.label}</span>
+                      <span className="site-drawer__split-toggle" aria-hidden>
+                        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
+                          <path
+                            d="M3 4.5 L6 7.5 L9 4.5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.4"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
                       </span>
                     </button>
                     <div
                       className="site-drawer__sub"
                       data-open={mobileInsightsOpen ? "true" : "false"}
                     >
+                      <div className="site-drawer__sub-inner">
                       <ul className="site-drawer__insights-list" role="list">
                         {INSIGHTS_LINKS.map((link) => (
                           <li key={link.href}>
-                            <a href={link.href} onClick={() => setMobileOpen(false)}>
+                            <a href={link.href} onClick={closeMobileMenu}>
                               {link.label}
                             </a>
                           </li>
                         ))}
                       </ul>
+                      </div>
                     </div>
                   </div>
                 );
@@ -686,7 +727,7 @@ export default function SiteHeader() {
                   key={item.label}
                   href={item.href}
                   className="site-drawer__link"
-                  onClick={() => setMobileOpen(false)}
+                  onClick={closeMobileMenu}
                 >
                   <span>{item.label}</span>
                   <span className="site-drawer__arrow" aria-hidden>
@@ -698,7 +739,7 @@ export default function SiteHeader() {
             <a
               href="/contact"
               className="site-drawer__link"
-              onClick={() => setMobileOpen(false)}
+              onClick={closeMobileMenu}
             >
               <span>Contact us</span>
               <span className="site-drawer__arrow" aria-hidden>
@@ -708,7 +749,20 @@ export default function SiteHeader() {
           </nav>
 
           <div className="site-drawer__foot">
-            <a href="mailto:hello@techbinaries.com" className="site-drawer__cta">
+            <Link href="/contact" className="site-drawer__cta" onClick={closeMobileMenu}>
+              Start a project
+              <svg aria-hidden width="12" height="12" viewBox="0 0 12 12">
+                <path
+                  d="M2.5 6h7M6 2.5L9.5 6 6 9.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+            <a href="mailto:hello@techbinaries.com" className="site-drawer__mail">
               hello@techbinaries.com
             </a>
           </div>
@@ -942,9 +996,9 @@ export default function SiteHeader() {
           height: 1.5px;
           background: var(--color-ink);
           border-radius: 2px;
-          transition: transform 0.35s cubic-bezier(0.22,1,0.36,1),
-                      opacity 0.2s ease,
-                      top 0.35s cubic-bezier(0.22,1,0.36,1);
+          transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+                      opacity 0.28s ease,
+                      top 0.42s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .site-header[data-theme="dark"][data-scrolled="false"] .site-header__burger {
           border-color: rgba(255, 255, 255, 0.24);
@@ -1410,31 +1464,74 @@ export default function SiteHeader() {
           pointer-events: none;
         }
         .site-drawer[data-open="true"] { pointer-events: auto; }
+
         .site-drawer__scrim {
           position: absolute;
           inset: 0;
-          background: rgba(10, 10, 10, 0.35);
+          background: rgba(10, 10, 10, 0.42);
           opacity: 0;
-          transition: opacity 0.3s ease;
+          backdrop-filter: blur(0px);
+          -webkit-backdrop-filter: blur(0px);
+          transition:
+            opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+            backdrop-filter 0.65s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .site-drawer[data-open="true"] .site-drawer__scrim { opacity: 1; }
+        .site-drawer[data-open="true"] .site-drawer__scrim {
+          opacity: 1;
+          backdrop-filter: blur(16px) saturate(140%);
+          -webkit-backdrop-filter: blur(16px) saturate(140%);
+        }
 
         .site-drawer__panel {
           position: absolute;
           top: 0; right: 0; bottom: 0;
-          width: min(440px, 100%);
-          background: var(--color-paper);
-          border-left: 1px solid var(--color-line);
-          padding: calc(var(--header-height-compact) + 16px) 24px 24px;
+          width: min(420px, 100%);
+          background:
+            linear-gradient(
+              165deg,
+              rgba(255, 255, 255, 0.38) 0%,
+              rgba(255, 255, 255, 0.24) 42%,
+              rgba(250, 250, 249, 0.18) 100%
+            );
+          backdrop-filter: blur(52px) saturate(195%) brightness(1.05);
+          -webkit-backdrop-filter: blur(52px) saturate(195%) brightness(1.05);
+          border: none;
+          box-shadow: -28px 0 90px -24px rgba(10, 10, 10, 0.28);
+          padding:
+            calc(var(--header-height-compact) + 12px)
+            24px
+            max(28px, calc(env(safe-area-inset-bottom, 0px) + 20px));
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          transform: translateX(100%);
-          transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+          gap: 20px;
+          transform: translate3d(104%, 0, 0);
+          opacity: 0.96;
+          transition:
+            transform 0.78s cubic-bezier(0.16, 1, 0.3, 1),
+            opacity 0.55s ease;
           overflow-y: auto;
+          overflow-x: hidden;
+          -webkit-overflow-scrolling: touch;
+          will-change: transform;
+          isolation: isolate;
+        }
+        .site-drawer__panel::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.22) 0%,
+            rgba(255, 255, 255, 0.06) 14%,
+            transparent 32%
+          );
+          z-index: 0;
         }
         .site-drawer[data-open="true"] .site-drawer__panel {
-          transform: translateX(0);
+          transform: translate3d(0, 0, 0);
+          opacity: 1;
         }
 
         .site-drawer__close {
@@ -1447,168 +1544,388 @@ export default function SiteHeader() {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          border: 1px solid var(--color-line);
+          border: 1px solid rgba(255, 255, 255, 0.55);
           border-radius: 50%;
-          background: var(--color-paper);
+          background: rgba(255, 255, 255, 0.3);
+          backdrop-filter: blur(16px) saturate(170%);
+          -webkit-backdrop-filter: blur(16px) saturate(170%);
           color: var(--color-ink);
           cursor: pointer;
+          box-shadow:
+            0 10px 28px -16px rgba(10, 10, 10, 0.32),
+            inset 0 1px 0 rgba(255, 255, 255, 0.78);
           -webkit-tap-highlight-color: transparent;
-          transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+          opacity: 0;
+          transform: scale(0.88) rotate(-12deg);
+          transition:
+            opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.18s,
+            transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.18s,
+            background 0.2s ease,
+            border-color 0.2s ease;
+        }
+        .site-drawer[data-open="true"] .site-drawer__close {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
         }
         .site-drawer__close:hover {
-          background: rgba(10, 10, 10, 0.06);
-          border-color: rgba(10, 10, 10, 0.2);
+          background: rgba(255, 255, 255, 0.42);
+          border-color: rgba(255, 255, 255, 0.68);
         }
         .site-drawer__close:active {
-          background: rgba(10, 10, 10, 0.1);
+          background: rgba(255, 255, 255, 0.5);
+        }
+        .site-drawer[data-open="true"] .site-drawer__close:active {
+          transform: scale(0.94) rotate(0deg);
         }
 
-        .site-drawer__nav { display: flex; flex-direction: column; }
+        .site-drawer__nav {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          padding-top: 4px;
+        }
+
+        .site-drawer__nav > .site-drawer__link,
+        .site-drawer__nav > .site-drawer__group {
+          opacity: 0;
+          transform: translate3d(18px, 0, 0);
+          transition:
+            opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .site-drawer[data-open="true"] .site-drawer__nav > .site-drawer__link,
+        .site-drawer[data-open="true"] .site-drawer__nav > .site-drawer__group {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+        .site-drawer[data-open="true"] .site-drawer__nav > :nth-child(1) { transition-delay: 0.1s; }
+        .site-drawer[data-open="true"] .site-drawer__nav > :nth-child(2) { transition-delay: 0.16s; }
+        .site-drawer[data-open="true"] .site-drawer__nav > :nth-child(3) { transition-delay: 0.22s; }
+        .site-drawer[data-open="true"] .site-drawer__nav > :nth-child(4) { transition-delay: 0.28s; }
+        .site-drawer[data-open="true"] .site-drawer__nav > :nth-child(5) { transition-delay: 0.34s; }
+        .site-drawer[data-open="true"] .site-drawer__nav > :nth-child(6) { transition-delay: 0.4s; }
 
         .site-drawer__link {
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 12px;
-          padding: 18px 4px;
+          padding: 16px 12px;
           font-family: var(--font-display);
           font-size: 26px;
           font-weight: 500;
           letter-spacing: -0.02em;
           color: var(--color-ink);
           border: 0;
-          border-bottom: 1px solid var(--color-line);
+          border-radius: 14px;
           background: transparent;
           text-decoration: none;
           text-align: left;
           cursor: pointer;
           width: 100%;
+          transition: background 0.22s ease, transform 0.22s ease;
+        }
+        .site-drawer__link:active {
+          background: rgba(255, 255, 255, 0.28);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          transform: translateX(2px);
+        }
+        .site-drawer__group {
+          border-radius: 0;
+          border: none;
+        }
+        .site-drawer__group:has(.site-drawer__sub[data-open="true"]) {
+          background: transparent;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          border-color: transparent;
+          box-shadow: none;
+        }
+        .site-drawer__group:has(.site-drawer__sub[data-open="true"]) .site-drawer__split-row {
+          padding-bottom: 14px;
+          border-bottom: 1px solid rgba(10, 10, 10, 0.07);
         }
         .site-drawer__arrow {
-          font-size: 18px;
-          color: rgba(10, 10, 10, 0.3);
+          font-size: 16px;
+          color: rgba(10, 10, 10, 0.45);
+          transition: transform 0.25s ease, color 0.25s ease;
         }
-        .site-drawer__chev {
-          width: 28px; height: 28px;
+        .site-drawer__link:active .site-drawer__arrow {
+          transform: translateX(3px);
+          color: rgba(10, 10, 10, 0.65);
+        }
+
+        .site-drawer__split-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 16px 12px;
+        }
+        .site-drawer__split-trigger {
+          width: 100%;
+          margin: 0;
+          border: 0;
+          background: transparent;
+          cursor: pointer;
+          text-align: left;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .site-drawer__split-trigger:focus {
+          outline: none;
+        }
+        .site-drawer__split-row--top {
+          padding: 16px 12px;
+        }
+        .site-drawer__split-link {
+          flex: 1;
+          min-width: 0;
+          font-family: var(--font-display);
+          font-size: 22px;
+          font-weight: 500;
+          letter-spacing: -0.02em;
+          color: var(--color-ink);
+          text-decoration: none;
+          transition: color 0.2s ease;
+        }
+        .site-drawer__split-link--top {
+          font-size: 26px;
+        }
+        .site-drawer__split-trigger:active .site-drawer__split-link {
+          color: rgba(10, 10, 10, 0.62);
+        }
+        .site-drawer__split-toggle,
+        .site-drawer__cat-toggle {
+          flex-shrink: 0;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          border: 1px solid var(--color-line);
-          border-radius: 50%;
-          font-size: 16px;
-          font-weight: 400;
-          color: var(--color-ink);
-          transition: transform 0.3s ease, background 0.2s ease, color 0.2s ease;
+          width: auto;
+          height: auto;
+          min-width: 16px;
+          padding: 0;
+          border: 0;
+          border-radius: 0;
+          background: transparent;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          color: rgba(10, 10, 10, 0.52);
+          cursor: pointer;
+          -webkit-tap-highlight-color: transparent;
+          box-shadow: none;
+          transition:
+            transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+            color 0.25s ease;
         }
-        .site-drawer__chev[data-open="true"] {
-          transform: rotate(45deg);
-          background: var(--color-ink);
-          color: var(--color-paper);
+        .site-drawer__split-toggle svg,
+        .site-drawer__cat-toggle svg {
+          display: block;
+          width: 16px;
+          height: 16px;
+        }
+        .site-drawer__split-toggle:focus,
+        .site-drawer__cat-toggle:focus {
+          outline: none;
+        }
+        .site-drawer__split-toggle--top {
+          width: auto;
+          height: auto;
+        }
+        .site-drawer__split-trigger[data-open="true"] .site-drawer__split-toggle,
+        .site-drawer__cat-toggle[data-open="true"] {
+          transform: rotate(180deg);
+          background: transparent;
+          border-color: transparent;
+          color: rgba(10, 10, 10, 0.62);
+          box-shadow: none;
+        }
+        .site-drawer__split-toggle:active,
+        .site-drawer__cat-toggle:active {
+          color: rgba(10, 10, 10, 0.72);
+        }
+        .site-drawer__split-trigger[data-open="true"]:active .site-drawer__split-toggle,
+        .site-drawer__cat-toggle[data-open="true"]:active {
+          transform: rotate(180deg);
+          color: rgba(10, 10, 10, 0.72);
         }
 
-        /* Services section: holds category accordions */
         .site-drawer__sub {
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+          display: grid;
+          grid-template-rows: 0fr;
+          transition: grid-template-rows 0.58s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .site-drawer__sub[data-open="true"] {
-          max-height: 2400px;
+          grid-template-rows: 1fr;
+        }
+        .site-drawer__sub-inner {
+          overflow: hidden;
+          min-height: 0;
+        }
+        .site-drawer__sub[data-open="true"] .site-drawer__sub-inner {
+          margin: 0;
+          padding: 2px 0 4px 14px;
+          border-radius: 0;
+          background: transparent;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          border: none;
+          box-shadow: none;
+        }
+
+        .site-drawer__sub-link {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 10px 12px 12px 2px;
+          margin: 0 0 10px;
+          font-family: var(--font-body);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(10, 10, 10, 0.72);
+          text-decoration: none;
+          border-bottom: 1px solid rgba(10, 10, 10, 0.12);
+          transition: color 0.2s ease;
+        }
+        .site-drawer__sub-link:active {
+          color: var(--color-ink);
+        }
+        .site-drawer__sub-link-arrow {
+          font-size: 13px;
+          color: rgba(10, 10, 10, 0.5);
         }
 
         .site-drawer__cat {
-          border-bottom: 1px solid var(--color-line);
+          margin: 0;
+          border-radius: 0;
+          border: none;
         }
-        .site-drawer__cat-head {
+        .site-drawer__cat:has(.site-drawer__cat-panel[data-open="true"]) {
+          background: transparent;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          border-color: transparent;
+          box-shadow: none;
+        }
+        .site-drawer__cat + .site-drawer__cat {
+          margin-top: 0;
+          border-top: 1px solid rgba(10, 10, 10, 0.06);
+        }
+        .site-drawer__cat-row {
           display: flex;
           align-items: center;
+          justify-content: space-between;
           gap: 12px;
-          width: 100%;
-          padding: 14px 4px;
-          background: transparent;
-          border: 0;
-          color: var(--color-ink);
-          cursor: pointer;
-          text-align: left;
+          padding: 0 10px 0 2px;
+        }
+        .site-drawer__cat-link {
+          flex: 1;
+          min-width: 0;
+          display: block;
+          padding: 14px 0;
           font-family: var(--font-body);
           font-size: 15px;
           font-weight: 500;
           letter-spacing: -0.005em;
-        }
-        .site-drawer__cat-dot {
-          width: 8px; height: 8px;
-          border-radius: 50%;
-          flex-shrink: 0;
-        }
-        .site-drawer__cat-title { flex: 1; }
-        .site-drawer__cat-chev {
-          color: rgba(10, 10, 10, 0.4);
-          transition: transform 0.3s ease, color 0.2s ease;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .site-drawer__cat-chev[data-open="true"] {
-          transform: rotate(180deg);
+          line-height: 1.35;
           color: var(--color-ink);
+          text-decoration: none;
+          transition: color 0.2s ease;
+        }
+        .site-drawer__cat-link:active {
+          color: rgba(10, 10, 10, 0.75);
         }
 
         .site-drawer__cat-panel {
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+          display: grid;
+          grid-template-rows: 0fr;
+          transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .site-drawer__cat-panel[data-open="true"] { max-height: 600px; }
+        .site-drawer__cat-panel[data-open="true"] {
+          grid-template-rows: 1fr;
+        }
+        .site-drawer__cat-panel-inner {
+          overflow: hidden;
+          min-height: 0;
+        }
         .site-drawer__cat-panel ul {
           list-style: none;
-          margin: 0;
-          padding: 0 0 12px 20px;
+          margin: 0 0 6px;
+          padding: 0 0 8px 14px;
+          border-left: 2px solid rgba(10, 10, 10, 0.18);
         }
         .site-drawer__cat-panel a {
           display: block;
-          padding: 8px 4px;
+          padding: 9px 8px 9px 10px;
           font-family: var(--font-body);
           font-size: 14px;
-          color: rgba(10, 10, 10, 0.7);
+          font-weight: 500;
+          line-height: 1.4;
+          color: var(--color-ink);
           text-decoration: none;
+          border-radius: 8px;
+          transition: color 0.2s ease, background 0.2s ease;
         }
-        .site-drawer__cat-panel a:hover { color: var(--color-ink); }
-        .site-drawer__cat-all {
-          font-weight: 500 !important;
-          color: var(--color-ink) !important;
-          padding-top: 10px !important;
-          border-top: 1px dashed rgba(10, 10, 10, 0.12);
-          margin-top: 6px;
+        .site-drawer__cat-panel a:active {
+          color: var(--color-ink);
+          background: rgba(10, 10, 10, 0.05);
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
         }
 
         .site-drawer__insights-list {
           list-style: none;
           margin: 0;
-          padding: 0 0 12px 12px;
+          padding: 4px 0 8px 14px;
+          border-left: 2px solid rgba(10, 10, 10, 0.18);
         }
         .site-drawer__insights-list a {
           display: block;
-          padding: 10px 4px;
+          padding: 10px 8px;
           font-family: var(--font-body);
           font-size: 15px;
-          color: rgba(10, 10, 10, 0.7);
-          text-decoration: none;
-        }
-        .site-drawer__insights-list a:hover {
+          font-weight: 500;
           color: var(--color-ink);
+          text-decoration: none;
+          border-radius: 10px;
+          transition: color 0.2s ease, background 0.2s ease;
+        }
+        .site-drawer__insights-list a:active {
+          color: var(--color-ink);
+          background: rgba(10, 10, 10, 0.05);
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
         }
 
         .site-drawer__foot {
-          padding-top: 24px;
+          position: relative;
+          z-index: 1;
+          padding-top: 12px;
+          margin-top: 4px;
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 12px;
+          opacity: 0;
+          transform: translateY(12px);
+          transition:
+            opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.42s,
+            transform 0.62s cubic-bezier(0.16, 1, 0.3, 1) 0.42s;
+        }
+        .site-drawer[data-open="true"] .site-drawer__foot {
+          opacity: 1;
+          transform: translateY(0);
         }
         .site-drawer__cta {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          padding: 14px 22px;
+          gap: 8px;
+          padding: 15px 22px;
           background: var(--color-ink);
           color: var(--color-paper);
           border-radius: 999px;
@@ -1616,6 +1933,47 @@ export default function SiteHeader() {
           font-size: 14px;
           font-weight: 500;
           text-decoration: none;
+          box-shadow: 0 16px 36px -18px rgba(10, 10, 10, 0.55);
+          transition: transform 0.25s ease, background 0.2s ease;
+        }
+        .site-drawer__cta:active {
+          transform: scale(0.98);
+          background: #1a1a1a;
+        }
+        .site-drawer__cta svg {
+          transition: transform 0.25s ease;
+        }
+        .site-drawer__cta:active svg {
+          transform: translateX(2px);
+        }
+        .site-drawer__mail {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 10px 4px 2px;
+          font-family: var(--font-body);
+          font-size: 13px;
+          font-weight: 500;
+          color: rgba(10, 10, 10, 0.78);
+          text-decoration: none;
+          transition: color 0.2s ease;
+        }
+        .site-drawer__mail:active {
+          color: var(--color-ink);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .site-drawer__scrim,
+          .site-drawer__panel,
+          .site-drawer__close,
+          .site-drawer__nav > .site-drawer__link,
+          .site-drawer__nav > .site-drawer__group,
+          .site-drawer__foot,
+          .site-drawer__sub,
+          .site-drawer__cat-panel {
+            transition-duration: 0.01ms !important;
+            transition-delay: 0ms !important;
+          }
         }
 
         /* ── Responsive ── */
@@ -1661,11 +2019,39 @@ export default function SiteHeader() {
           }
           /* Drawer takes over on mobile */
           .site-header__mega { display: none; }
+          .site-drawer__panel {
+            padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 24px));
+          }
+          .site-drawer__foot {
+            margin-bottom: 10px;
+          }
         }
         @media (max-width: 480px) {
           .site-header__brand-logo-wrap {
             width: 208px;
             height: 44px;
+          }
+          .site-drawer__panel {
+            padding-left: 18px;
+            padding-right: 18px;
+            padding-bottom: max(44px, calc(env(safe-area-inset-bottom, 0px) + 36px));
+          }
+          .site-drawer__link {
+            font-size: 24px;
+            padding: 14px 10px;
+          }
+          .site-drawer__split-row,
+          .site-drawer__split-row--top {
+            padding: 14px 10px;
+          }
+          .site-drawer__split-link--top {
+            font-size: 24px;
+          }
+          .site-drawer__split-link {
+            font-size: 20px;
+          }
+          .site-drawer__cat-link {
+            font-size: 14px;
           }
         }
       `}</style>

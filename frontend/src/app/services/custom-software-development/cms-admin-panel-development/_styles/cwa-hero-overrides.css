@@ -1,15 +1,5 @@
 /* CMS & Admin Panel Development — hero layout & heading overrides */
 
-.cwa-hero .csd-hero-main {
-  grid-template-columns: minmax(0, 1fr) minmax(420px, 520px);
-  gap: clamp(52px, 6vw, 96px);
-}
-
-.cwa-hero .csd-hero-left {
-  max-width: 660px;
-  padding-right: clamp(20px, 2.5vw, 40px);
-}
-
 .cwa-hero-copy {
   max-width: 100%;
 }
@@ -22,8 +12,20 @@
   max-width: 100%;
 }
 
-.cwa-hero .cwa-hero-lead {
-  max-width: 480px;
+@media (min-width: 901px) {
+  .cwa-hero .csd-hero-main {
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 520px);
+    gap: clamp(52px, 6vw, 96px);
+  }
+
+  .cwa-hero .csd-hero-left {
+    max-width: 660px;
+    padding-right: clamp(20px, 2.5vw, 40px);
+  }
+
+  .cwa-hero .cwa-hero-lead {
+    max-width: 480px;
+  }
 }
 
 @media (max-width: 1440px) and (min-width: 901px) {
@@ -51,9 +53,30 @@
 }
 
 @media (max-width: 900px) {
+  .cwa-hero .csd-hero-main {
+    grid-template-columns: 1fr;
+    gap: 0;
+    min-height: auto;
+  }
+
+  .cwa-hero .csd-hero-left {
+    max-width: none;
+    padding-right: 0;
+    transform: none;
+  }
+
   .cwa-hero .cwa-hero-title {
-    font-size: clamp(26px, 6.2vw, 36px);
-    line-height: 1.05;
+    font-size: clamp(28px, 6.5vw, 38px);
+    line-height: 1.03;
+    margin-bottom: 16px;
+  }
+
+  .cwa-hero .cwa-hero-lead {
+    max-width: none;
+  }
+
+  .cwa-h1-lines-mobile .cwa-h1-line {
+    white-space: normal;
   }
 }
 
