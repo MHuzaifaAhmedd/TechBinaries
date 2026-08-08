@@ -57,105 +57,119 @@ const CATEGORIES = ["All", "Engineering", "Product", "Performance", "Growth", "C
 
 const FEATURED = {
   category: "Newsroom",
-  readTime: "9 min read",
+  readTime: "12 min read",
   date: "May 8, 2026",
-  title: "The State of Software Development in 2026: Trends, Challenges, and Opportunities",
+  title: "What Is Vibe Coding? The Guide for Founders Deciding How to Build",
   excerpt:
-    "Software development is entering an AI-augmented era. This report explores the biggest trends, required skills, and strategic opportunities shaping engineering in 2026.",
+    "Vibe coding means describing what you want in plain language and letting an AI model write the code. It is fast for prototypes, and increasingly risky once real users, real data, or real money are involved.",
   author: {
     name: "Senior Content Strategist",
     role: "Tech Binaries Editorial",
     avatar: "/images/blog/author-zain.jpg",
   },
-  cover: "/images/blogs/state-of-software-development-2026/title.jpg",
+  cover: "/blogs/what-is-vibe-coding.jpg",
   slug: "state-of-software-development-2026",
-  tags: ["AI Development", "Cloud", "Engineering Trends"],
+  tags: ["Vibe Coding", "AI Development", "Engineering"],
 };
 
 const POSTS = [
   {
     n: "01",
-    category: "Performance",
-    readTime: "6 min",
-    date: "Apr 14, 2026",
-    title: "Getting sub-1s LCP on a content-heavy Next.js site",
+    category: "Engineering",
+    readTime: "10 min",
+    date: "May 15, 2026",
+    title: "Vibe Coding Pros and Cons in 2026: What Businesses Need to Know Before They Build",
     excerpt:
-      "A field guide to the three changes that moved our median LCP from 2.4s to 0.88s — without touching the design.",
-    author: { name: "Sana Qureshi", role: "Frontend Lead" },
-    cover: "/images/blog/post-cover-1.jpg",
-    slug: "sub-1s-lcp-nextjs",
-    tags: ["Next.js", "CWV", "Edge"],
+      "Vibe coding lets you build software by describing what you want in plain language instead of writing every line yourself. It is fast, it is cheap, and in 2026 it is everywhere. But speed and reliability rarely arrive together, and that tension is exactly what this article breaks down. Vibe coding is excellent for prototypes and internal tools, but it becomes a liability the moment real users, real data, or real money enter the picture. For anything in that second category, you need engineering discipline behind the AI, not just the AI itself.",
+    author: { name: "Senior Content Strategist", role: "Tech Binaries Editorial" },
+    cover: "/blogs/vibe-coding-pros-and-cons-2026.jpg",
+    slug: "vibe-coding-pros-and-cons-2026",
+    tags: ["Vibe Coding", "AI Development", "Business"],
     accent: "#b8c4d4",
   },
   {
     n: "02",
-    category: "Product",
-    readTime: "8 min",
-    date: "Apr 02, 2026",
-    title: "The product brief that killed a bad idea in 20 minutes",
+    category: "Engineering",
+    readTime: "11 min",
+    date: "May 22, 2026",
+    title: "Vibe Coding vs. Custom Software Development: What the 2026 Data Actually Shows",
     excerpt:
-      "We shipped a one-page decision framework that stops features from being built for the wrong reasons. Here's the template.",
-    author: { name: "Omar Siddiqui", role: "Product Director" },
-    cover: "/images/blog/post-cover-2.jpg",
-    slug: "product-brief-killed-bad-idea",
-    tags: ["Product", "Frameworks", "Decisions"],
+      "Ninety-two percent of developers in the US now use AI coding tools every day. Only 29 to 33 percent of them actually trust the code those tools produce. That gap is not a footnote. It is the defining fact of software development in 2026, and it is the reason vibe coding versus custom software development has become one of the most practical questions a founder or business owner can ask before starting a build.",
+    author: { name: "Senior Content Strategist", role: "Tech Binaries Editorial" },
+    cover: "/blogs/vibe-coding-vs-custom-software-development.jpg",
+    slug: "vibe-coding-vs-custom-software-development-2026",
+    tags: ["Vibe Coding", "Custom Software", "AI Development"],
     accent: "#d4c4a8",
   },
   {
     n: "03",
     category: "Engineering",
-    readTime: "11 min",
-    date: "Mar 22, 2026",
-    title: "tRPC in production: the things no tutorial tells you",
+    readTime: "12 min",
+    date: "May 29, 2026",
+    title: "Can You Build a Production-Ready SaaS With Vibe Coding Alone?",
     excerpt:
-      "After running tRPC in four different codebases, we've hit every edge case. Here's what actually breaks and how to handle it.",
-    author: { name: "Zain Mirza", role: "Lead Engineer" },
-    cover: "/images/blog/post-cover-3.jpg",
-    slug: "trpc-in-production",
-    tags: ["tRPC", "TypeScript", "API"],
+      "Ask any founder in 2026 whether AI can build their SaaS product, and the answer sounds like an easy yes. Ninety-two percent of developers in the United States now use AI coding tools daily. Look past the adoption numbers, though, and a different picture appears. Only 29 percent of developers say they actually trust the code these tools produce.",
+    author: { name: "Senior Content Strategist", role: "Tech Binaries Editorial" },
+    cover: "/blogs/production-ready-saas-vibe-coding.jpg",
+    slug: "production-ready-saas-vibe-coding",
+    tags: ["Vibe Coding", "SaaS", "AI Development"],
     accent: "#c4b8a8",
   },
   {
     n: "04",
-    category: "Growth",
-    readTime: "7 min",
-    date: "Mar 10, 2026",
-    title: "Attribution is broken. Here's how we work around it.",
+    category: "Engineering",
+    readTime: "10 min",
+    date: "Jun 5, 2026",
+    title: "Vibe Coding for Non-Developers: What You Can Build, What You Can't, and When to Call an Agency",
     excerpt:
-      "Multi-touch attribution models sound scientific. They're mostly fiction. We rebuilt our decision-making around what actually holds up.",
-    author: { name: "Hira Baig", role: "Growth Lead" },
-    cover: "/images/blog/post-cover-4.jpg",
-    slug: "attribution-is-broken",
-    tags: ["Analytics", "Growth", "Data"],
+      "A few months ago, a wellness writer with no formal programming background sat down at her laptop, described the app she wanted to Claude, and had a working tool before the rest of her household woke up. She did not hire a developer. Stories like hers are why vibe coding has stopped sounding like a niche experiment.",
+    author: { name: "Senior Content Strategist", role: "Tech Binaries Editorial" },
+    cover: "/blogs/vibe-coding-for-non-developers-2026.jpg",
+    slug: "vibe-coding-for-non-developers-2026",
+    tags: ["Vibe Coding", "Non-Developers", "AI Development"],
     accent: "#a8b8c4",
   },
   {
     n: "05",
-    category: "Culture",
-    readTime: "5 min",
-    date: "Feb 28, 2026",
-    title: "How we run async standups for a team across four timezones",
+    category: "Engineering",
+    readTime: "11 min",
+    date: "Jun 12, 2026",
+    title: "The Hidden Costs of Vibe-Coded Apps (What You Don't See Until It's Expensive)",
     excerpt:
-      "Synchronous standups were eating 30 minutes a day and producing nothing. Our async system costs five minutes and produces actual context.",
-    author: { name: "Sana Qureshi", role: "Frontend Lead" },
-    cover: "/images/blog/post-cover-5.jpg",
-    slug: "async-standups-four-timezones",
-    tags: ["Culture", "Process", "Remote"],
+      "Vibe coding made software feel free. You describe what you want, the AI writes it, and a working app appears in an afternoon. It didn't drop the cost — it moved. The cost of a vibe-coded app doesn't disappear; it relocates to month three, month six, or the day a paying customer's data leaks.",
+    author: { name: "Senior Content Strategist", role: "Tech Binaries Editorial" },
+    cover: "/blogs/hidden-costs-vibe-coded-apps-2026.jpg",
+    slug: "hidden-costs-vibe-coded-apps-2026",
+    tags: ["Vibe Coding", "Technical Debt", "Security"],
     accent: "#b8a8c4",
   },
   {
     n: "06",
     category: "Engineering",
     readTime: "10 min",
-    date: "Feb 15, 2026",
-    title: "Postgres query tuning: five patterns that fixed our p95",
+    date: "Jun 19, 2026",
+    title: "When Vibe Coding Is Enough vs. When You Need a Real Dev Team",
     excerpt:
-      "We went from 800ms p95 to 95ms on a query serving 40k requests/day. Five patterns, no schema changes, no cache layer added.",
-    author: { name: "Zain Mirza", role: "Lead Engineer" },
-    cover: "/images/blog/post-cover-6.jpg",
-    slug: "postgres-query-tuning-p95",
-    tags: ["Postgres", "Performance", "DB"],
-    accent: "#c4d4b8",
+      "AI coding tools have crossed a strange threshold. Ninety-two percent of US developers now use them every day, but trust in the code they produce has fallen from 77% in 2023 to 60% in 2026. This piece is a guide to knowing where your own project sits on that line — and when you need a real development team.",
+    author: { name: "Senior Content Strategist", role: "Tech Binaries Editorial" },
+    cover: "/blogs/vibe-coding-vs-real-dev-team-2026.jpg",
+    slug: "vibe-coding-vs-real-dev-team-2026",
+    tags: ["Vibe Coding", "Dev Team", "Decision Framework"],
+    accent: "#c4b8a8",
+  },
+  {
+    n: "07",
+    category: "Engineering",
+    readTime: "11 min",
+    date: "Jun 26, 2026",
+    title: "We Tested Vibe Coding Tools to Build an MVP — Here's What Actually Shipped",
+    excerpt:
+      "We built a real MVP using three of the most talked-about vibe coding tools of 2026: Lovable, Replit, and the Cursor plus Claude Code combination. All three tools got us to a working demo within a single day. None of them got us to something we would put in front of paying users without an engineer reviewing every line first.",
+    author: { name: "Senior Content Strategist", role: "Tech Binaries Editorial" },
+    cover: "/blogs/tested-vibe-coding-tools-mvp-2026.jpg",
+    slug: "tested-vibe-coding-tools-mvp-2026",
+    tags: ["Vibe Coding", "MVP", "Tool Comparison"],
+    accent: "#b8c4d4",
   },
 ];
 
@@ -208,7 +222,6 @@ function splitChars(str: string) {
   ));
 }
 
-const STREAM_RANDOM_COVERS = [FEATURED.cover, ...POSTS.map((post) => post.cover)];
 const STREAM_IMAGE_POSITIONS = ["50% 50%", "50% 28%", "50% 70%", "28% 50%", "72% 50%"];
 
 function hashString(input: string) {
@@ -220,10 +233,10 @@ function hashString(input: string) {
   return Math.abs(hash);
 }
 
-function pickPostVisual(slug: string) {
+function pickPostVisual(slug: string, cover: string) {
   const seed = hashString(slug);
   return {
-    cover: STREAM_RANDOM_COVERS[seed % STREAM_RANDOM_COVERS.length],
+    cover,
     objectPosition: STREAM_IMAGE_POSITIONS[seed % STREAM_IMAGE_POSITIONS.length],
   };
 }
@@ -380,10 +393,10 @@ export default function BlogsPage() {
           );
           gsap.fromTo(
             ".bl-featured-image",
-            { scale: 1.06 },
+            { opacity: 0.72 },
             {
-              scale: 1,
-              duration: 1.4,
+              opacity: 1,
+              duration: 1.1,
               ease: "expo.out",
               scrollTrigger: {
                 trigger: ".bl-featured-card",
@@ -751,7 +764,7 @@ export default function BlogsPage() {
                   <div className="bl-stream-scroll-viewport">
                     <div className="bl-stream-scroll-track">
                       {filteredPosts.map((post) => {
-                        const visual = pickPostVisual(post.slug);
+                        const visual = pickPostVisual(post.slug, post.cover);
                         return (
                         <article
                           key={post.slug}
@@ -1358,16 +1371,16 @@ export default function BlogsPage() {
           50% { box-shadow: 0 0 0 7px rgba(10,10,10,0.02); }
         }
         .bl-featured-card {
-          display: grid;
-          grid-template-columns: 1.15fr 1fr;
+          display: flex;
+          flex-direction: row;
+          align-items: stretch;
           border-radius: 16px;
           border: 1px solid rgba(10,10,10,0.1);
           background: #fff;
           overflow: hidden;
           box-shadow:
             0 1px 0 rgba(255,255,255,0.9) inset,
-            0 32px 72px -40px rgba(10,10,10,0.18);
-          min-height: 500px;
+            0 28px 64px -36px rgba(10,10,10,0.16);
           transition:
             box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
             transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1375,20 +1388,24 @@ export default function BlogsPage() {
         .bl-featured-card:hover {
           box-shadow:
             0 1px 0 rgba(255,255,255,0.9) inset,
-            0 48px 96px -40px rgba(10,10,10,0.26);
-          transform: translateY(-3px);
+            0 40px 80px -36px rgba(10,10,10,0.22);
+          transform: translateY(-2px);
         }
         .bl-featured-figure-link {
-          display: block;
-          height: 100%;
+          position: relative;
+          flex: 1.65 1 0;
+          min-width: 0;
+          aspect-ratio: 16 / 9;
           text-decoration: none;
+          background: #0b0f14;
         }
         .bl-featured-figure {
-          position: relative;
+          position: absolute;
+          inset: 0;
           margin: 0;
+          width: 100%;
           height: 100%;
-          min-height: 400px;
-          background: #1a1a1a;
+          background: #0b0f14;
           overflow: hidden;
         }
         .bl-featured-figure-mask {
@@ -1402,28 +1419,21 @@ export default function BlogsPage() {
         }
         .bl-featured-image {
           object-fit: cover;
-          object-position: center;
-          transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-          filter: saturate(0.85);
-        }
-        .bl-featured-card:hover .bl-featured-image {
-          transform: scale(1.04);
+          object-position: center center;
         }
         .bl-featured-figure-overlay {
           position: absolute;
           inset: 0;
-          background:
-            linear-gradient(180deg, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.55) 100%),
-            linear-gradient(90deg, rgba(10,10,10,0.4) 0%, transparent 60%);
+          background: linear-gradient(180deg, transparent 55%, rgba(10,10,10,0.4) 100%);
           pointer-events: none;
         }
         .bl-featured-figure-meta {
           position: absolute;
-          bottom: 20px;
-          left: 20px;
+          bottom: 14px;
+          left: 14px;
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
           z-index: 2;
         }
         .bl-featured-figure-meta .bl-tag {
@@ -1450,28 +1460,31 @@ export default function BlogsPage() {
           align-items: center;
         }
         .bl-featured-sheet {
-          padding: clamp(32px, 3.5vw, 52px);
+          flex: 0.9 1 0;
+          min-width: 260px;
+          max-width: 380px;
+          padding: 20px 22px 18px;
           display: flex;
           flex-direction: column;
-          gap: clamp(20px, 2.2vw, 28px);
-          justify-content: space-between;
+          gap: 10px;
+          justify-content: center;
         }
         .bl-featured-sheet-head {
           display: flex;
           flex-direction: column;
-          gap: 16px;
+          gap: 8px;
         }
         .bl-featured-meta-row {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
         }
         .bl-featured-title {
           font-family: var(--font-display);
-          font-size: clamp(24px, 2.6vw, 38px);
+          font-size: clamp(20px, 1.9vw, 28px);
           font-weight: 500;
-          letter-spacing: -0.034em;
-          line-height: 1.1;
+          letter-spacing: -0.03em;
+          line-height: 1.15;
           margin: 0;
           color: #0a0a0a;
         }
@@ -1482,34 +1495,37 @@ export default function BlogsPage() {
         }
         .bl-featured-title-link:hover { opacity: 0.72; }
         .bl-featured-excerpt {
-          font-size: clamp(14px, 1.1vw, 16px);
-          line-height: 1.68;
+          font-size: 13.5px;
+          line-height: 1.55;
           color: rgba(10,10,10,0.62);
           margin: 0;
-          max-width: 52ch;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
         }
         .bl-featured-tags {
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
+          gap: 6px;
         }
         .bl-featured-footer {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 16px;
-          padding-top: clamp(16px, 2vw, 24px);
+          gap: 12px;
+          padding-top: 12px;
           border-top: 1px solid rgba(10,10,10,0.1);
           flex-wrap: wrap;
         }
         .bl-author {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
         }
         .bl-author-avatar {
-          width: 40px;
-          height: 40px;
+          width: 34px;
+          height: 34px;
           border-radius: 50%;
           background: linear-gradient(135deg, #1a1a1a, #333);
           display: flex;
@@ -1544,6 +1560,11 @@ export default function BlogsPage() {
           letter-spacing: 0.1em;
           text-transform: uppercase;
           color: rgba(10,10,10,0.5);
+        }
+        .bl-featured-footer .bl-read-btn {
+          padding: 10px 16px;
+          font-size: 13px;
+          gap: 8px;
         }
         .bl-read-btn {
           display: inline-flex;
@@ -2393,8 +2414,11 @@ export default function BlogsPage() {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
           }
-          .bl-featured-card {
-            grid-template-columns: 1fr 1fr;
+          .bl-featured-figure-link {
+            flex: 1.35 1 0;
+          }
+          .bl-featured-sheet {
+            max-width: 340px;
           }
           .bl-hero-panel-cta {
             width: 100%;
@@ -2411,9 +2435,17 @@ export default function BlogsPage() {
         }
         @media (max-width: 900px) {
           .bl-featured-card {
-            grid-template-columns: 1fr;
+            flex-direction: column;
           }
-          .bl-featured-figure { min-height: 300px; }
+          .bl-featured-figure-link {
+            flex: none;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+          }
+          .bl-featured-sheet {
+            max-width: none;
+            width: 100%;
+          }
           .bl-nl-inner {
             grid-template-columns: 1fr;
             gap: 22px;
